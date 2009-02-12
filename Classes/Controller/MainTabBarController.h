@@ -15,6 +15,7 @@
 
 + (UIColor *)yammerGray;
 + (UIColor *)yammerBlue;
++ (UIColor *)privateGray;
 
 + (void)setBackButton:(UIViewController *)view;
 

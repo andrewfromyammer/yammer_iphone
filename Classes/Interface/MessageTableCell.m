@@ -7,6 +7,7 @@
 //
 
 #import "MessageTableCell.h"
+#import "MainTabBarController.h"
 
 @interface MessageTableCell()
 - (UILabel *)newLabelWithPrimaryColor:(UIColor *)primaryColor selectedColor:(UIColor *)selectedColor fontSize:(CGFloat)fontSize bold:(BOOL)bold;
@@ -61,6 +62,10 @@
 //  return time;
 
 - (void)setMessage:(NSMutableDictionary *)message {  
+  self.contentView.backgroundColor = [UIColor whiteColor];
+  previewLabel.backgroundColor = [UIColor whiteColor];
+  fromLabel.backgroundColor = [UIColor whiteColor];
+  timeLabel.backgroundColor = [UIColor whiteColor];
   
   NSMutableDictionary *body = [message objectForKey:@"body"];
   
@@ -75,8 +80,13 @@
   self.priv_lock = false;
   if ([[message objectForKey:@"group_privacy"] isEqualToString:@"private"])
     self.priv_lock = true;
-  if ([message objectForKey:@"direct_to_id"])
+  if ([message objectForKey:@"direct_to_id"]) {
     self.priv_lock = true;
+    self.contentView.backgroundColor = [MainTabBarController privateGray];
+    previewLabel.backgroundColor = [MainTabBarController privateGray];    
+    fromLabel.backgroundColor = [MainTabBarController privateGray];  
+    timeLabel.backgroundColor = [MainTabBarController privateGray];  
+  }
   
   [self setNeedsDisplay];
 }

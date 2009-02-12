@@ -23,6 +23,10 @@
   return [UIColor colorWithRed:0.44 green:0.80 blue:0.94 alpha:1.0];
 }
 
++ (UIColor *)privateGray {
+  return [UIColor colorWithRed:0.90 green:0.90 blue:0.90 alpha:1.0];
+}
+
 + (void)setBackButton:(UIViewController *)view {
   UIBarButtonItem *temporaryBarButtonItem=[[UIBarButtonItem alloc] init];
   temporaryBarButtonItem.title=@"Back";
