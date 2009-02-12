@@ -94,12 +94,25 @@
     if (groupRef) {
       [message setObject:[groupRef objectForKey:@"name"] forKey:@"group_name"];
       [message setObject:[groupRef objectForKey:@"privacy"] forKey:@"group_privacy"];
+      if ([[groupRef objectForKey:@"privacy"] isEqualToString:@"private"])
+        [message setObject:[NSString stringWithFormat:@"%@ (private)", [groupRef objectForKey:@"name"]] forKey:@"group_name"];        
     }
     
+    referencesById = [referencesByType objectForKey:@"user"];
+    NSMutableDictionary *directRef = [referencesById objectForKey:[message objectForKey:@"direct_to_id"]];
+            
     NSString *fromLine  = [message objectForKey:@"sender"];
     NSString *replyName = [message objectForKey:@"reply_name"];
-    if (replyName)
-      fromLine = [NSString stringWithFormat:@"%@ re: %@", fromLine, replyName];
+    
+    if (directRef)
+      fromLine = [NSString stringWithFormat:@"%@ to: %@ (Private)", [message objectForKey:@"sender"], [directRef objectForKey:@"name"]];
+    
+    if (replyName && directRef == nil)
+      fromLine = [NSString stringWithFormat:@"%@ re: %@", [message objectForKey:@"sender"], replyName];
+    if (replyName && directRef != nil)
+      fromLine = [NSString stringWithFormat:@"%@ re: %@ (Private)", [message objectForKey:@"sender"], replyName];
+    
+    
     [message setObject:fromLine forKey:@"fromLine"];
     
     NSString *createdAt = [message objectForKey:@"created_at"];
