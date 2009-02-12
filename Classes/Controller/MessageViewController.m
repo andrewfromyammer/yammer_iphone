@@ -170,6 +170,7 @@
   [fromLine release];
   [timeLine release];
   [image release];
+  [lockImage release];
   [super dealloc];
 }
 
