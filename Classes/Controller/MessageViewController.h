@@ -16,6 +16,7 @@
   UISegmentedControl *upDownArrows;
   
   UIImageView *image;
+  UIImageView *lockImage;
   UILabel *fromLine;
   UILabel *timeLine;  
 }
@@ -25,6 +26,7 @@
 @property (nonatomic,retain) UISegmentedControl *upDownArrows;
 @property int theIndex;
 @property (nonatomic,retain) UIImageView *image;
+@property (nonatomic,retain) UIImageView *lockImage;
 @property (nonatomic,retain) UILabel *fromLine;
 @property (nonatomic,retain) UILabel *timeLine;
 

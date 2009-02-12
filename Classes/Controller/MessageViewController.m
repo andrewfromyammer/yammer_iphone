@@ -22,15 +22,23 @@
 @synthesize fromLine;
 @synthesize timeLine;
 @synthesize image;
+@synthesize lockImage;
 
 - (void)displayMessage {
   self.title = [NSString stringWithFormat:@"%d of %d", theIndex+1, [theList count]];
   NSMutableDictionary *message = [theList objectAtIndex:theIndex];
-  [webView setHTML:message];
   
   fromLine.text = [message objectForKey:@"fromLine"];
   timeLine.text = [message objectForKey:@"timeLine"];
   image.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+  lockImage.image = nil;
+  if ([message objectForKey:@"lock"])
+    lockImage.image = [UIImage imageNamed:@"lock.png"];
+  
+  if ([message objectForKey:@"lockColor"])  
+    [webView setHTML:message bgcolor:@"#DEDEDE"];
+  else
+    [webView setHTML:message bgcolor:@"#FFFFFF"];
 }
 
 - (void)setupToolbar:(BOOL)showTheadIcon {
@@ -101,11 +109,13 @@
   self.fromLine = [[UILabel alloc] initWithFrame:CGRectMake(55, 0, 260, 20)];
   [fromLine setFont:[UIFont boldSystemFontOfSize:16]];
   [self.view addSubview:fromLine];
-  self.timeLine = [[UILabel alloc] initWithFrame:CGRectMake(55, 25, 260, 15)];
+  self.timeLine = [[UILabel alloc] initWithFrame:CGRectMake(75, 25, 240, 15)];
   [timeLine setFont:[UIFont systemFontOfSize:12]];
   [self.view addSubview:timeLine];  
   self.image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
   [self.view addSubview:image];
+  self.lockImage = [[UIImageView alloc] initWithFrame:CGRectMake(55, 25, 16, 16)];
+  [self.view addSubview:lockImage];
     
   [self setupToolbar:showTheadIcon]; 
   [self displayMessage];

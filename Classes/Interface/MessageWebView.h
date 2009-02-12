@@ -14,6 +14,7 @@
 }
 
 - (id)init;
-- (void)setHTML:(NSMutableDictionary *)message;
+- (void)setHTML:(NSMutableDictionary *)message bgcolor:(NSString *)bgcolor;
+
 
 @end

@@ -78,9 +78,9 @@
     self.paperclip = true;
   
   self.priv_lock = false;
-  if ([[message objectForKey:@"group_privacy"] isEqualToString:@"private"])
+  if ([message objectForKey:@"lock"])
     self.priv_lock = true;
-  if ([message objectForKey:@"direct_to_id"]) {
+  if ([message objectForKey:@"lockColor"]) {
     self.priv_lock = true;
     self.contentView.backgroundColor = [MainTabBarController privateGray];
     previewLabel.backgroundColor = [MainTabBarController privateGray];    

@@ -30,7 +30,7 @@
  possible regex: /((http(s?))\:\/\/)([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]+)?(\/([\w#!:.?+=&%@~*\';,\-\/\$])*)?/g;
  or  /((?:http(?:s?)\:\/\/|www\.[^\.])\S+[A-z0-9\/])/g;
  */
-- (void)setHTML:(NSMutableDictionary *)message {
+- (void)setHTML:(NSMutableDictionary *)message bgcolor:(NSString *)bgcolor {
   NSMutableDictionary *body = [message objectForKey:@"body"];
   NSString *plain = [body objectForKey:@"plain"];
   
@@ -111,7 +111,8 @@
     [buff appendString:@"</a></p>"];
   }  
   
-  [self loadHTMLString:[NSString stringWithFormat:@"<html><body style=\"font-size: 16px; font-family: arial;\">%@</body></html>", 
+  [self loadHTMLString:[NSString stringWithFormat:@"<html><body bgcolor=\"%@\" style=\"font-size: 16px; font-family: arial;\">%@</body></html>", 
+                       bgcolor,
                        buff] 
                baseURL:[NSURL URLWithString:@"file://message"]];  
 }
