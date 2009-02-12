@@ -14,7 +14,9 @@
   UILabel *previewLabel;
   UILabel *timeLabel;
   UIImageView *paperclip_image;
-  bool paperclip;  
+  UIImageView *lock_image;
+  bool paperclip;
+  bool priv_lock;
   int length;
 }
 
@@ -22,7 +24,9 @@
 @property (nonatomic, retain) UILabel *previewLabel;
 @property (nonatomic, retain) UILabel *timeLabel;
 @property (nonatomic, retain) UIImageView *paperclip_image;
+@property (nonatomic, retain) UIImageView *lock_image;
 @property bool paperclip;
+@property bool priv_lock;
 @property int length;
 
 

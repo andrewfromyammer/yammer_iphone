@@ -41,6 +41,7 @@
 		00808FBF0F37ABA8004AB665 /* thread_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00808FBD0F37ABA8004AB665 /* thread_gray.png */; };
 		00808FC00F37ABA8004AB665 /* user_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00808FBE0F37ABA8004AB665 /* user_gray.png */; };
 		00808FC70F37AD0D004AB665 /* ReplyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00808FC60F37AD0D004AB665 /* ReplyViewController.m */; };
+		008EBC570F439F85000A6C6D /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = 008EBC560F439F85000A6C6D /* lock.png */; };
 		009BA0670F33EAC000C6A098 /* NSDate-Ago.m in Sources */ = {isa = PBXBuildFile; fileRef = 009BA0660F33EAC000C6A098 /* NSDate-Ago.m */; };
 		009BA07A0F33ED6600C6A098 /* paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = 009BA0790F33ED6600C6A098 /* paperclip.png */; };
 		009C14E10F2FDB5400489B43 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 009C14E00F2FDB5400489B43 /* Icon.png */; };
@@ -143,6 +144,7 @@
 		00808FBE0F37ABA8004AB665 /* user_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = user_gray.png; path = Images/user_gray.png; sourceTree = "<group>"; };
 		00808FC50F37AD0D004AB665 /* ReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReplyViewController.h; path = Controller/ReplyViewController.h; sourceTree = "<group>"; };
 		00808FC60F37AD0D004AB665 /* ReplyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReplyViewController.m; path = Controller/ReplyViewController.m; sourceTree = "<group>"; };
+		008EBC560F439F85000A6C6D /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lock.png; path = Images/lock.png; sourceTree = "<group>"; };
 		009BA0650F33EAC000C6A098 /* NSDate-Ago.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate-Ago.h"; path = "Util/NSDate-Ago.h"; sourceTree = "<group>"; };
 		009BA0660F33EAC000C6A098 /* NSDate-Ago.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate-Ago.m"; path = "Util/NSDate-Ago.m"; sourceTree = "<group>"; };
 		009BA0790F33ED6600C6A098 /* paperclip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = paperclip.png; path = Images/paperclip.png; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 		00D521550F2FBDCB00FB3A8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				008EBC560F439F85000A6C6D /* lock.png */,
 				00B48D7C0F38FFC100499D40 /* no_photo_small.png */,
 				00808FBD0F37ABA8004AB665 /* thread_gray.png */,
 				00808FBE0F37ABA8004AB665 /* user_gray.png */,
@@ -480,6 +483,7 @@
 				00808FC00F37ABA8004AB665 /* user_gray.png in Resources */,
 				00B48D7D0F38FFC100499D40 /* no_photo_small.png in Resources */,
 				00B48DEB0F3913B200499D40 /* dist.plist in Resources */,
+				008EBC570F439F85000A6C6D /* lock.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

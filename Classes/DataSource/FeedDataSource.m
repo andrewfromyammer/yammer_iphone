@@ -91,8 +91,10 @@
     referencesById = [referencesByType objectForKey:@"group"];
     NSMutableDictionary *groupRef = [referencesById objectForKey:[message objectForKey:@"group_id"]];
     
-    if (groupRef)
+    if (groupRef) {
       [message setObject:[groupRef objectForKey:@"name"] forKey:@"group_name"];
+      [message setObject:[groupRef objectForKey:@"privacy"] forKey:@"group_privacy"];
+    }
     
     NSString *fromLine  = [message objectForKey:@"sender"];
     NSString *replyName = [message objectForKey:@"reply_name"];

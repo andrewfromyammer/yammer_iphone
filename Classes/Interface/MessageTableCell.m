@@ -20,6 +20,8 @@
 @synthesize length;
 @synthesize paperclip_image;
 @synthesize paperclip;
+@synthesize lock_image;
+@synthesize priv_lock;
 
 - (id)initWithFrame:(CGRect)frame reuseIdentifier:(NSString *)reuseIdentifier {
   if (self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier]) {
@@ -35,16 +37,19 @@
 		self.timeLabel.textAlignment = UITextAlignmentLeft; // default
 
     self.paperclip_image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"paperclip.png"]];
+    self.lock_image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lock.png"]];
 
 		[myContentView addSubview:self.fromLabel];
 		[myContentView addSubview:self.previewLabel];
 		[myContentView addSubview:self.timeLabel];
     [myContentView addSubview:self.paperclip_image];
+    [myContentView addSubview:self.lock_image];
 
 		[self.fromLabel release];  
 		[self.previewLabel release];  
 		[self.timeLabel release];
 		[self.paperclip_image release];
+    [self.lock_image release];
   }
   
   return self;
@@ -67,6 +72,12 @@
   if ([[message objectForKey:@"attachments"] count] > 0)
     self.paperclip = true;
   
+  self.priv_lock = false;
+  if ([[message objectForKey:@"group_privacy"] isEqualToString:@"private"])
+    self.priv_lock = true;
+  if ([message objectForKey:@"direct_to_id"])
+    self.priv_lock = true;
+  
   [self setNeedsDisplay];
 }
 
@@ -80,6 +91,7 @@
   
   frame = CGRectMake(-20, -20, 6, 12);
   self.paperclip_image.frame = frame;
+  self.lock_image.frame = frame;
   
   int preview_x = 65;
   int preview_width = 230;
@@ -89,6 +101,24 @@
     preview_width = 220;
     frame = CGRectMake(65, 18, 6, 12);
     self.paperclip_image.frame = frame;
+  }
+  
+  if (self.priv_lock) {
+    preview_x = 85;
+    preview_width = 210;
+    frame = CGRectMake(63, 16, 16, 16);
+    self.lock_image.frame = frame;    
+  }
+  
+  if (self.paperclip && self.priv_lock) {
+    preview_x = 95;
+    preview_width = 200;
+
+    frame = CGRectMake(83, 19, 6, 12);
+    self.paperclip_image.frame = frame;
+
+    frame = CGRectMake(63, 16, 16, 16);
+    self.lock_image.frame = frame;
   }
   
   if (length > 50) {
@@ -129,6 +159,7 @@
   [previewLabel release];
   [timeLabel release];
   [paperclip_image release];
+  [lock_image release];
   [super dealloc];
 }
 
