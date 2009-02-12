@@ -66,21 +66,21 @@
 
   i=0;
   for (; i < [tempMessages count]; i++) {
+    @try {
     NSMutableDictionary *message = [tempMessages objectAtIndex:i];
     NSMutableDictionary *referencesById = [referencesByType objectForKey:[message objectForKey:@"sender_type"]];
-    NSMutableDictionary *userOrGuide = [referencesById objectForKey:[message objectForKey:@"sender_id"]];
+    NSMutableDictionary *actor = [referencesById objectForKey:[message objectForKey:@"sender_id"]];
     
-    [message setObject:[userOrGuide objectForKey:@"name"] forKey:@"sender"];    
-    [message setObject:[ImageCache getImageAndSave:[userOrGuide objectForKey:@"mugshot_url"] user_id:[userOrGuide objectForKey:@"id"] type:[userOrGuide objectForKey:@"type"]] forKey:@"imageData"];
+    [message setObject:[actor objectForKey:@"name"] forKey:@"sender"];    
+    [message setObject:[ImageCache getImageAndSave:[actor objectForKey:@"mugshot_url"] user_id:[actor objectForKey:@"id"] type:[actor objectForKey:@"type"]] forKey:@"imageData"];
     
     referencesById = [referencesByType objectForKey:@"message"];
     NSMutableDictionary *messageRef = [referencesById objectForKey:[message objectForKey:@"replied_to_id"]];
     
     if (messageRef) {
       referencesById = [referencesByType objectForKey:[messageRef objectForKey:@"sender_type"]];
-      NSMutableDictionary *userOrGuide = [referencesById objectForKey:[messageRef objectForKey:@"sender_id"]];
-      
-      [message setObject:[userOrGuide objectForKey:@"name"] forKey:@"reply_name"];
+      NSMutableDictionary *actor = [referencesById objectForKey:[messageRef objectForKey:@"sender_id"]];
+      [message setObject:[actor objectForKey:@"name"] forKey:@"reply_name"];
 
       referencesById = [referencesByType objectForKey:@"thread"];
       NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
@@ -129,6 +129,7 @@
     if (groupName)
       timeLine = [NSString stringWithFormat:@"%@ in %@", timeLine, groupName];
     [message setObject:timeLine forKey:@"timeLine"];
+    } @catch (NSException *theErr) {}
   }    
   [self.messages addObjectsFromArray:tempMessages];
 }
