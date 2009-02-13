@@ -19,7 +19,7 @@
   self.wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   wrapper.backgroundColor = [UIColor whiteColor];
   
-  spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(95, 140, 40, 40)];
+  spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(103, 141, 30, 30)];
   spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
   
   loading = [[UILabel alloc] initWithFrame:CGRectMake(145, 140, 100, 30)];
