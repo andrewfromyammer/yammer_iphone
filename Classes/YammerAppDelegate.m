@@ -14,6 +14,7 @@
 @implementation YammerAppDelegate
 
 @synthesize window;
+@synthesize launchURL;
 @synthesize mainView;
 
 - (void)askLoginOrSignup {
@@ -30,13 +31,22 @@
   [window addSubview:mainView.view];
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+   self.launchURL = [url description];
+   return true;
+ }
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
+  [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
+}
+
+- (void)postFinishLaunch {
   [window setBackgroundColor:[UIColor whiteColor]];
     
   // OAuth stores an access token on local hard drive, if there, user is already authenticated
   if ([LocalStorage getAccessToken]) {
     [self setupMainView];
-  } else if ([LocalStorage getRequestToken] && [OAuthGateway getAccessToken]) {
+  } else if ([LocalStorage getRequestToken] && [OAuthGateway getAccessToken:self.launchURL]) {
     [self setupMainView];
   } else {
     [LocalStorage removeRequestToken];

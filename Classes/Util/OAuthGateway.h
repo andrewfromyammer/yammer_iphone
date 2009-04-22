@@ -14,7 +14,7 @@
 }
 
 + (void)getRequestToken:(BOOL)createNewAccount;
-+ (BOOL)getAccessToken;
++ (BOOL)getAccessToken:(NSString *)launchURL;
 + (NSString *)httpGet:(NSString *)path;
 + (NSString *)baseURL;
 + (void)logout;

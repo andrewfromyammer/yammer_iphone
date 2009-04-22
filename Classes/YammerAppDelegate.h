@@ -13,13 +13,16 @@
                                          UIActionSheetDelegate> {
   UIWindow *window;
   UIViewController *mainView;
+  NSString *launchURL;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) NSString *launchURL;
 @property (nonatomic, retain) IBOutlet UIViewController *mainView;
 
 + (void)showError:(NSString *)error;
 - (void)teleportToUserFeed:(FeedMessageList *)feed;
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url;
 
 @end
 

@@ -22,7 +22,8 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   if (url)
     return url;
 
-//  return @"http://aa.com:3000";  
+  //return @"http://aa.com:3000";  
+  //return @"http://localhost:3000";  
   return @"https://www.yammer.com";  
 }
 
@@ -74,7 +75,8 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   }
 }
 
-+ (BOOL)getAccessToken {
++ (BOOL)getAccessToken:(NSString *)launchURL {
+
   OAToken *requestToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getRequestToken]];  
   OAConsumer *consumer = [[OAConsumer alloc] initWithKey:OAUTH_KEY
                                                   secret:OAUTH_SECRET];
@@ -88,7 +90,15 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
                                                         signatureProvider:nil];
   
   [request setHTTPMethod:@"POST"];
+  request.HTTPShouldHandleCookies = NO;
+  NSArray *parts = [launchURL componentsSeparatedByString:@"="];
+	
+  NSMutableArray *oauthParams = [NSMutableArray array];
+  [oauthParams addObject:[[OARequestParameter alloc] initWithName:@"callback_token" value:[parts objectAtIndex:2]]];
+	
+  [request setParameters:oauthParams];  	
   [request prepare];
+	
   
   NSURLResponse *response;
   NSError *error;
