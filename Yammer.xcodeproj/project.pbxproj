@@ -36,6 +36,7 @@
 		006335C30F30F08600B4F38F /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335C00F30F08600B4F38F /* SBJSON.m */; };
 		006335F20F30F9D500B4F38F /* SpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335F10F30F9D500B4F38F /* SpinnerViewController.m */; };
 		0063362C0F31160C00B4F38F /* FeedsTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 0063362B0F31160C00B4F38F /* FeedsTableDataSource.m */; };
+		0077C1BE0F9FD1290097605D /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0077C1BD0F9FD1290097605D /* Entitlements.plist */; };
 		007BE6390F336CE5006C79D1 /* DirectoryTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 007BE6380F336CE5006C79D1 /* DirectoryTableDataSource.m */; };
 		0080512E0F3371BC00592204 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0080512D0F3371BC00592204 /* ImageCache.m */; };
 		00808FBF0F37ABA8004AB665 /* thread_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00808FBD0F37ABA8004AB665 /* thread_gray.png */; };
@@ -136,6 +137,7 @@
 		006335F10F30F9D500B4F38F /* SpinnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpinnerViewController.m; path = Controller/SpinnerViewController.m; sourceTree = "<group>"; };
 		0063362A0F31160C00B4F38F /* FeedsTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedsTableDataSource.h; path = DataSource/FeedsTableDataSource.h; sourceTree = "<group>"; };
 		0063362B0F31160C00B4F38F /* FeedsTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedsTableDataSource.m; path = DataSource/FeedsTableDataSource.m; sourceTree = "<group>"; };
+		0077C1BD0F9FD1290097605D /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		007BE6370F336CE5006C79D1 /* DirectoryTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DirectoryTableDataSource.h; path = DataSource/DirectoryTableDataSource.h; sourceTree = "<group>"; };
 		007BE6380F336CE5006C79D1 /* DirectoryTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DirectoryTableDataSource.m; path = DataSource/DirectoryTableDataSource.m; sourceTree = "<group>"; };
 		0080512C0F3371BC00592204 /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageCache.h; path = Util/ImageCache.h; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				0077C1BD0F9FD1290097605D /* Entitlements.plist */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 				00B48D7D0F38FFC100499D40 /* no_photo_small.png in Resources */,
 				00B48DEB0F3913B200499D40 /* dist.plist in Resources */,
 				008EBC570F439F85000A6C6D /* lock.png in Resources */,
+				0077C1BE0F9FD1290097605D /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,7 +610,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_ENTITLEMENTS = dist.plist;
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Geni, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Geni, Inc.";
 				COPY_PHASE_STRIP = NO;
@@ -616,8 +620,9 @@
 				GCC_PREFIX_HEADER = Yammer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Yammer;
-				PROVISIONING_PROFILE = "2C564286-8B80-46B5-BFAA-F40D19BE2A7D";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2C564286-8B80-46B5-BFAA-F40D19BE2A7D";
+				PROVISIONING_PROFILE = "2B44A0B9-C7CF-4D98-8317-F2F762A2CB38";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2B44A0B9-C7CF-4D98-8317-F2F762A2CB38";
+				SDKROOT = iphoneos2.2.1;
 			};
 			name = Debug;
 		};
@@ -639,6 +644,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Geni, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Geni, Inc.";
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -646,9 +652,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "2C564286-8B80-46B5-BFAA-F40D19BE2A7D";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2C564286-8B80-46B5-BFAA-F40D19BE2A7D";
-				SDKROOT = iphoneos2.0;
+				PROVISIONING_PROFILE = "2B44A0B9-C7CF-4D98-8317-F2F762A2CB38";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2B44A0B9-C7CF-4D98-8317-F2F762A2CB38";
+				SDKROOT = iphoneos2.2.1;
 			};
 			name = Debug;
 		};
