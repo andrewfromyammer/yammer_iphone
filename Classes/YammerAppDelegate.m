@@ -10,6 +10,7 @@
 #import "LocalStorage.h"
 #import "MainTabBarController.h"
 #import "OAuthGateway.h"
+#import "ApiGateway.h"
 
 @implementation YammerAppDelegate
 
@@ -29,12 +30,25 @@
 - (void)setupMainView {
   mainView = [[MainTabBarController alloc] init];
   [window addSubview:mainView.view];
+  [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+	NSLog(@"deviceToken: %@", deviceToken);
+  [APIGateway sendPushToken:[[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
+                                                        stringByReplacingOccurrencesOfString:@">" withString:@""]
+                                                        stringByReplacingOccurrencesOfString:@" " withString:@""]
+                             ];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+	NSLog(@"Error in registration. Error: %@", error); 
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
    self.launchURL = [url description];
    return true;
- }
+}
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
   [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];

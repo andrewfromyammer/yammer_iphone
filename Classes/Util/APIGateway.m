@@ -15,7 +15,7 @@
 @implementation APIGateway
 
 + (NSMutableDictionary *)usersCurrent {
-  
+
   NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json"];
   
   if (json)
@@ -88,6 +88,14 @@
   [params setObject:@"User" forKey:@"target_type"];
   
   return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"POST"];  
+}
+
++ (BOOL)sendPushToken:(NSString *)token {
+  NSMutableDictionary *params = [NSMutableDictionary dictionary];
+  
+  [params setObject:token forKey:@"token"];
+  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/apple_push" method:@"POST"];  
 }
 
 @end

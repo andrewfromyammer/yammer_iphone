@@ -21,5 +21,6 @@
 + (BOOL)followingUser:(NSString *)theUserId;
 + (BOOL)removeFollow:(NSString *)theUserId;
 + (BOOL)addFollow:(NSString *)theUserId;
++ (BOOL)sendPushToken:(NSString *)token;
 
 @end
