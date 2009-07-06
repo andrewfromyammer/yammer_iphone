@@ -155,7 +155,7 @@
     }
     
     NSMutableDictionary *message = [messages objectAtIndex:indexPath.row];
-    cell.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+    cell.imageView.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
     [cell setMessage:message];
 
     return cell;
@@ -164,8 +164,8 @@
 	  if (cell == nil)
 		  cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MoreCell"] autorelease];
     
-    cell.text = @"                fetch more";
-    cell.textColor = [UIColor blueColor];
+    cell.textLabel.text = @"                fetch more";
+    cell.textLabel.textColor = [UIColor blueColor];
   	return cell;
   }
 }

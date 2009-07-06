@@ -56,19 +56,19 @@
   
   if (indexPath.row == 0) {
     if (indexPath.section == 0)
-      cell.text = @"Logged in as:";
+      cell.textLabel.text = @"Logged in as:";
     else if (indexPath.section == 1)
-      cell.text = @"Feed for home page:";
+      cell.textLabel.text = @"Feed for home page:";
     else if (indexPath.section == 2)
-      cell.text = @"Advanced:";
+      cell.textLabel.text = @"Advanced:";
   }
   else {
     if (indexPath.section == 0)
-      cell.text = self.email;
+      cell.textLabel.text = self.email;
     else if (indexPath.section == 1)
-      cell.text = [[LocalStorage getFeedInfo] objectForKey:@"name"];
+      cell.textLabel.text = [[LocalStorage getFeedInfo] objectForKey:@"name"];
     else if (indexPath.section == 2)
-      cell.text = @"Advanced Options";
+      cell.textLabel.text = @"Advanced Options";
   }
  	
 	return cell;

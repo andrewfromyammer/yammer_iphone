@@ -52,9 +52,9 @@
   NSArray *keys = [userData allKeys];
   
   if (indexPath.row == 0)
-    cell.text = [keys objectAtIndex:indexPath.section];
+    cell.textLabel.text = [keys objectAtIndex:indexPath.section];
   else
-    cell.text = [userData objectForKey:[keys objectAtIndex:indexPath.section]];
+    cell.textLabel.text = [userData objectForKey:[keys objectAtIndex:indexPath.section]];
  	
 	return cell;
 }

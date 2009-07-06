@@ -39,8 +39,9 @@
 - (void)loadView {
   self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   
-  toggle = [[UIButton buttonWithType:UIButtonTypeRoundedRect] initWithFrame:CGRectMake(20, 20, 200, 30)];
-  
+  toggle = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+  toggle.frame = CGRectMake(20, 20, 200, 30);
+
   [self setButtonTitle];
   
   [toggle addTarget:self action:@selector(handleClick) forControlEvents:UIControlEventTouchUpInside];

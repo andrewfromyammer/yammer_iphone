@@ -43,10 +43,10 @@
 	}
   
   NSMutableDictionary *dict = [feeds objectAtIndex:indexPath.row];
-  cell.text = [dict objectForKey:@"name"];
-  cell.image = nil;
+  cell.textLabel.text = [dict objectForKey:@"name"];
+  cell.imageView.image = nil;
   if ([[dict objectForKey:@"private"] intValue] == 1)
-    cell.image = [UIImage imageNamed:@"lock.png"];
+    cell.imageView.image = [UIImage imageNamed:@"lock.png"];
   
 	return cell;
 }

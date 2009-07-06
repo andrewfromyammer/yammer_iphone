@@ -75,7 +75,8 @@
   [image release];
     
   if (![loggedInId isEqualToString:theUserId]) {
-    follow = [[UIButton buttonWithType:UIButtonTypeRoundedRect] initWithFrame:CGRectMake(55, 40, 100, 30)];
+    follow = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    follow.frame = CGRectMake(55, 40, 100, 30);
     [follow addTarget:self action:@selector(handleFollow) forControlEvents:UIControlEventTouchUpInside];
     
     isFollowed = [APIGateway followingUser:theUserId];
@@ -100,11 +101,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
   else {
     UITableViewCell *cell = [dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
-    NSRange range = [cell.text rangeOfString:@"@"];
+    NSRange range = [cell.textLabel.text rangeOfString:@"@"];
     if (range.length == 0)
-      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", cell.text]]];
+      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", cell.textLabel.text]]];
     else
-      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", cell.text]]];
+      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", cell.textLabel.text]]];
   }  
 }
 

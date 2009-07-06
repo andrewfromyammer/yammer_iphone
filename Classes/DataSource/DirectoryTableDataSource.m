@@ -67,13 +67,13 @@
   
   if (indexPath.section == 0) {
     NSMutableDictionary *dict = [users objectAtIndex:indexPath.row];
-    cell.text = [dict objectForKey:@"name"];
-    cell.image = [[UIImage alloc] initWithData:[dict objectForKey:@"imageData"]];
-    cell.textColor = [UIColor blackColor];
+    cell.textLabel.text = [dict objectForKey:@"name"];
+    cell.imageView.image = [[UIImage alloc] initWithData:[dict objectForKey:@"imageData"]];
+    cell.textLabel.textColor = [UIColor blackColor];
   } else {
-    cell.text = @"                fetch more";
-    cell.image = nil;
-    cell.textColor = [UIColor blueColor];
+    cell.textLabel.text = @"                fetch more";
+    cell.imageView.image = nil;
+    cell.textLabel.textColor = [UIColor blueColor];
   }
   
 	return cell;

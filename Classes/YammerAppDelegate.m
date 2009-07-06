@@ -30,6 +30,7 @@
 - (void)setupMainView {
   mainView = [[MainTabBarController alloc] init];
   [window addSubview:mainView.view];
+//  if ( [[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotificationTypes:)] )
   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 }
 
@@ -51,6 +52,7 @@
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
   [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
 }
 
