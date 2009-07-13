@@ -33,7 +33,7 @@
 	return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return [feeds count];
 }
 
@@ -63,10 +63,26 @@
       cell.accessoryType = UITableViewCellAccessoryCheckmark;
   }
   else if ([klass isEqualToString:@"SettingsPush"]) {
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    UISwitch *switchView = [[UISwitch alloc] init];
+    cell.accessoryView = switchView;
+    [switchView setOn:NO animated:NO];
+    [switchView setTag:[indexPath row]];
+    [switchView addTarget:self action:@selector(switchWasChanged:) forControlEvents:UIControlEventValueChanged];
+    [switchView release];   
   }
   
 	return cell;
+}
+
+- (void)switchWasChanged:(id)sender {
+  UIAlertView *alert = [[UIAlertView alloc]
+                        initWithTitle:@"Switch Changed."
+                        message:@"Wefwef"
+                        delegate:nil
+                        cancelButtonTitle:@"Thanks!"
+                        otherButtonTitles:nil];
+  [alert show];
+  [alert release];
 }
 
 - (NSMutableDictionary *)feedAtIndex:(int)index {

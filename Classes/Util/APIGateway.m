@@ -15,11 +15,21 @@
 @implementation APIGateway
 
 + (NSMutableDictionary *)usersCurrent {
-
+  
   NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json"];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
+  
+  return nil;
+}
+
++ (NSMutableArray *)pushSettings {
+  
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/apple_push/list_settings.json"];
+  
+  if (json)
+    return (NSMutableArray *)[json JSONValue];
   
   return nil;
 }

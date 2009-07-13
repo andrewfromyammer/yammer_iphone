@@ -77,7 +77,7 @@
   }  
   else if (indexPath.section == 2) {
     [theTableView deselectRowAtIndexPath:indexPath animated:YES];
-    SettingsPush *localSettingPush = [[SettingsPush alloc] initWithDict:self.usersCurrent parent:self];
+    SettingsPush *localSettingPush = [[SettingsPush alloc] init];
     [self.navigationController pushViewController:localSettingPush animated:YES];
     [localSettingPush release];
   }  

@@ -14,6 +14,7 @@
 }
 
 + (NSMutableDictionary *)usersCurrent;
++ (NSMutableArray *)pushSettings;
 + (NSMutableArray *)users:(int)page;
 + (NSMutableDictionary *)userById:(NSString *)theUserId;
 + (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)messageId;

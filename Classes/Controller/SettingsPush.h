@@ -10,7 +10,7 @@
 #import "FeedsTableDataSource.h"
 #import "SettingsViewController.h"
 
-@interface SettingsPush : UIViewController <UITableViewDelegate> {
+@interface SettingsPush : SpinnerViewController <UITableViewDelegate> {
   UITableView *theTableView;
   FeedsTableDataSource *dataSource;
   SettingsViewController *parent;
@@ -20,6 +20,6 @@
 @property (nonatomic,retain) FeedsTableDataSource *dataSource;
 @property (nonatomic,retain) SettingsViewController *parent;
 
-- (id)initWithDict:(NSMutableDictionary *)dict parent:(SettingsViewController *)view;
+- (id)init;
 
 @end

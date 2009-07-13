@@ -9,6 +9,7 @@
 #import "SettingsPush.h"
 #import "FeedsTableDataSource.h"
 #import "LocalStorage.h"
+#import "APIGateway.h"
 
 @implementation SettingsPush
 
@@ -16,23 +17,29 @@
 @synthesize theTableView;
 @synthesize parent;
 
-- (id)initWithDict:(NSMutableDictionary *)dict parent:(SettingsViewController *)view {
+- (id)init {
   self.title = @"Push Notice Feeds";
-  self.parent = view;
+  return self;
+}
+
+- (void)getData {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+
 	theTableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]
-                                              style:UITableViewStyleGrouped];  
+                                              style:UITableViewStyleGrouped];
   
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-	
+  
 	theTableView.delegate = self;  
-  self.dataSource = [FeedsTableDataSource getFeeds:dict klass:@"SettingsPush"];
-	theTableView.dataSource = self.dataSource;
+  NSMutableArray *pushSettings = [APIGateway pushSettings];
+  NSLog([pushSettings description]);
+  self.dataSource = [FeedsTableDataSource getFeeds:[APIGateway usersCurrent] klass:@"SettingsPush"];
+	theTableView.dataSource = self.dataSource;  
   self.view = theTableView;
   
-//[toggle addTarget:self action:@selector(handleClick) forControlEvents:UIControlEventTouchUpInside];
-  
-  return self;
+  [super getData];
+  [autoreleasepool release];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
