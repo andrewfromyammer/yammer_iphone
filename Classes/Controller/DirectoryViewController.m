@@ -35,10 +35,6 @@
   [autoreleasepool release];
 }
 
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-	return UITableViewCellAccessoryDisclosureIndicator;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
   
   [theTableView deselectRowAtIndexPath:indexPath animated:YES];

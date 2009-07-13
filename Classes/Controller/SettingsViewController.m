@@ -13,6 +13,7 @@
 #import "LocalStorage.h"
 #import "OAuthGateway.h"
 #import "SettingsChooseFeed.h"
+#import "SettingsPush.h"
 
 @implementation SettingsViewController
 
@@ -58,14 +59,6 @@
   [autoreleasepool release];
 }
 
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-  if (indexPath.section == 1 && indexPath.row == 1)
-    return UITableViewCellAccessoryDisclosureIndicator;
-  if (indexPath.section == 2 && indexPath.row == 1)
-    return UITableViewCellAccessoryDisclosureIndicator;
-	return UITableViewCellAccessoryNone;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (indexPath.row == 0)
     return 30.0;
@@ -84,10 +77,17 @@
   }  
   else if (indexPath.section == 2) {
     [theTableView deselectRowAtIndexPath:indexPath animated:YES];
+    SettingsPush *localSettingPush = [[SettingsPush alloc] initWithDict:self.usersCurrent parent:self];
+    [self.navigationController pushViewController:localSettingPush animated:YES];
+    [localSettingPush release];
+  }  
+  else if (indexPath.section == 3) {
+    [theTableView deselectRowAtIndexPath:indexPath animated:YES];
     SettingsAdvancedOptions *localSettingsAdvancedOptions = [[SettingsAdvancedOptions alloc] init];
     [self.navigationController pushViewController:localSettingsAdvancedOptions animated:YES];
     [localSettingsAdvancedOptions release];
   }  
+  
 }
 
 - (void)dealloc {

@@ -75,7 +75,8 @@
     cell.imageView.image = nil;
     cell.textLabel.textColor = [UIColor blueColor];
   }
-  
+
+  cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	return cell;
 }
 

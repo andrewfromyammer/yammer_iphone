@@ -37,7 +37,7 @@
 	
 	theTableView.delegate = self;
   NSMutableDictionary *dict = [APIGateway usersCurrent];
-  self.dataSource = [FeedsTableDataSource getFeeds:dict];
+  self.dataSource = [FeedsTableDataSource getFeeds:dict klass:@"FeedViewController"];
 	theTableView.dataSource = self.dataSource;
   
   self.view = theTableView;
@@ -48,10 +48,6 @@
 
 - (void)refresh {
   [super refresh];
-}
-
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-	return UITableViewCellAccessoryDisclosureIndicator;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  

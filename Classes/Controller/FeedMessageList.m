@@ -134,10 +134,6 @@
   [super refresh];
 }
 
-//- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {#
-//	return UITableViewCellAccessoryDisclosureIndicator;
-//}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (indexPath.section == 1)
     return 50.0;

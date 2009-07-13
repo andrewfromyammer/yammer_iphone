@@ -38,9 +38,9 @@
   int i=0;
   for (; i<[array count]; i++) {
     if ([email hasSuffix:[array objectAtIndex:i]])
-      return 3;
+      return 4;
   }
-  return 2;
+  return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
@@ -60,6 +60,8 @@
     else if (indexPath.section == 1)
       cell.textLabel.text = @"Feed for home page:";
     else if (indexPath.section == 2)
+      cell.textLabel.text = @"Push Notifications:";
+    else if (indexPath.section == 3)
       cell.textLabel.text = @"Advanced:";
   }
   else {
@@ -68,12 +70,18 @@
     else if (indexPath.section == 1)
       cell.textLabel.text = [[LocalStorage getFeedInfo] objectForKey:@"name"];
     else if (indexPath.section == 2)
+      cell.textLabel.text = @"Settings";
+    else if (indexPath.section == 3)
       cell.textLabel.text = @"Advanced Options";
   }
+  
+  cell.accessoryType = UITableViewCellAccessoryNone;
+  
+  if (indexPath.row == 1)
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
  	
 	return cell;
 }
-
 
 - (void)dealloc {
   [super dealloc];

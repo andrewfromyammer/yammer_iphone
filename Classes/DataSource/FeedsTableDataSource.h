@@ -11,12 +11,14 @@
 
 @interface FeedsTableDataSource : NSObject <UITableViewDataSource> {
   NSMutableArray *feeds;
+  NSString *klass;
 }
 
 @property (nonatomic,retain) NSMutableArray *feeds;
+@property (nonatomic,retain) NSString *klass;
 
-- (id)initWithArray:(NSMutableArray *)array;
-+ (FeedsTableDataSource *)getFeeds:(NSMutableDictionary *)dict;
+- (id)initWithArray:(NSMutableArray *)array klass:(NSString *)klassName;
++ (FeedsTableDataSource *)getFeeds:(NSMutableDictionary *)dict klass:(NSString *)klassName;
 
 - (NSMutableDictionary *)feedAtIndex:(int)index;
 
