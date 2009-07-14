@@ -24,12 +24,12 @@
   return nil;
 }
 
-+ (NSMutableArray *)pushSettings {
++ (NSMutableDictionary *)pushSettings {
   
   NSString *json = [OAuthGateway httpGet:@"/api/v1/apple_push/list_settings.json"];
   
   if (json)
-    return (NSMutableArray *)[json JSONValue];
+    return (NSMutableDictionary *)[json JSONValue];
   
   return nil;
 }

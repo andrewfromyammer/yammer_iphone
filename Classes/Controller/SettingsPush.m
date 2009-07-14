@@ -31,9 +31,7 @@
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
   
 	theTableView.delegate = self;  
-  NSMutableArray *pushSettings = [APIGateway pushSettings];
-  NSLog([pushSettings description]);
-  self.dataSource = [DataSettingsPush getFeeds:[APIGateway usersCurrent]];
+  self.dataSource = [DataSettingsPush getFeeds:[APIGateway usersCurrent] pushSettings:[APIGateway pushSettings]];
 	theTableView.dataSource = self.dataSource;  
   self.view = theTableView;
   

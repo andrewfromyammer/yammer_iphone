@@ -7,17 +7,19 @@
 @implementation DataSettingsPush
 
 @synthesize feeds;
+@synthesize pushSettings;
 
-+ (DataSettingsPush *)getFeeds:(NSMutableDictionary *)dict {
++ (DataSettingsPush *)getFeeds:(NSMutableDictionary *)dict pushSettings:(NSMutableDictionary *)pushSettingsDict {
   if (dict) {
     dict = [dict objectForKey:@"web_preferences"];
-    return [[DataSettingsPush alloc] initWithArray:[dict objectForKey:@"home_tabs"]];
+    return [[DataSettingsPush alloc] initWithArray:[dict objectForKey:@"home_tabs"] pushSettings:pushSettingsDict];
   }
-  return [[DataSettingsPush alloc] initWithArray:[NSMutableArray array]];
+  return [[DataSettingsPush alloc] initWithArray:[NSMutableArray array] pushSettings:pushSettingsDict];
 }
 
-- (id)initWithArray:(NSMutableArray *)array {
+- (id)initWithArray:(NSMutableArray *)array pushSettings:(NSMutableDictionary *)pushSettingsDict {
   self.feeds = array;
+  self.pushSettings = pushSettingsDict;
   return self;
 }
 
@@ -43,6 +45,8 @@
   UISwitch *switchView = [[UISwitch alloc] init];
   cell.accessoryView = switchView;
   [switchView setOn:NO animated:NO];
+  if ([(NSString *)[[pushSettings objectForKey:cell.textLabel.text] objectForKey:@"status"] isEqualToString:@"enabled"])
+    [switchView setOn:YES animated:NO];
   [switchView setTag:[indexPath row]];
   [switchView addTarget:self action:@selector(switchWasChanged:) forControlEvents:UIControlEventValueChanged];
   [switchView release];   
