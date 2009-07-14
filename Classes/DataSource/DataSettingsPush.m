@@ -9,14 +9,6 @@
 @synthesize feeds;
 @synthesize pushSettings;
 
-+ (DataSettingsPush *)getFeeds:(NSMutableDictionary *)dict pushSettings:(NSMutableDictionary *)pushSettingsDict {
-  if (dict) {
-    dict = [dict objectForKey:@"web_preferences"];
-    return [[DataSettingsPush alloc] initWithArray:[dict objectForKey:@"home_tabs"] pushSettings:pushSettingsDict];
-  }
-  return [[DataSettingsPush alloc] initWithArray:[NSMutableArray array] pushSettings:pushSettingsDict];
-}
-
 - (id)initWithArray:(NSMutableArray *)array pushSettings:(NSMutableDictionary *)pushSettingsDict {
   self.feeds = array;
   self.pushSettings = pushSettingsDict;

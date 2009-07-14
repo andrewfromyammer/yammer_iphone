@@ -24,9 +24,20 @@
   return nil;
 }
 
++ (NSMutableArray *)homeTabs {
+  
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json"];
+  
+  if (json) {
+    NSMutableDictionary *dict = [(NSMutableDictionary *)[json JSONValue] objectForKey:@"web_preferences"];
+    return (NSMutableArray*)[dict objectForKey:@"home_tabs"];
+  }
+  return nil;
+}
+
 + (NSMutableDictionary *)pushSettings {
   
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/apple_push/list_settings.json"];
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/user_clients/ApplePushDevice.json"];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
@@ -103,9 +114,11 @@
 + (BOOL)sendPushToken:(NSString *)token {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
-  [params setObject:token forKey:@"token"];
+  [params setObject:token forKey:@"user_client[client_id]"];
+  [params setObject:@"true" forKey:@"user_client[verified]"];
+  [params setObject:@"client_type" forKey:@"ApplePushDevice"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/apple_push" method:@"POST"];  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/user_clients" method:@"POST"];  
 }
 
 @end

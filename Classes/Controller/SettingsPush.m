@@ -31,7 +31,23 @@
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
   
 	theTableView.delegate = self;  
-  self.dataSource = [DataSettingsPush getFeeds:[APIGateway usersCurrent] pushSettings:[APIGateway pushSettings]];
+  NSMutableArray *homeTabs = [APIGateway homeTabs];
+  NSMutableArray *filteredHomeTabs = [NSMutableArray array];
+  NSMutableDictionary *pushSettings = [APIGateway pushSettings];
+  NSMutableArray *notifications = [pushSettings objectForKey:@"notifications"];
+  NSMutableDictionary *notificationDict = [NSMutableDictionary dictionary];
+  int i=0;
+  for (i=0; i<[notifications count]; i++) {
+    NSMutableDictionary *tab = [notifications objectAtIndex:i];
+    [notificationDict setObject:tab forKey:[tab objectForKey:@"name"]];
+  }
+  for (i=0; i<[homeTabs count]; i++) {
+    NSMutableDictionary *tab = (NSMutableDictionary *)[homeTabs objectAtIndex:i];
+    if ([notificationDict objectForKey:[tab objectForKey:@"name"]])
+      [filteredHomeTabs addObject:tab];
+  }
+  
+  self.dataSource = [[DataSettingsPush alloc] initWithArray:filteredHomeTabs pushSettings:notificationDict];
 	theTableView.dataSource = self.dataSource;  
   self.view = theTableView;
   

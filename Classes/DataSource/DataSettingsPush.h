@@ -10,7 +10,6 @@
 @property (nonatomic,retain) NSMutableDictionary *pushSettings;
 
 - (id)initWithArray:(NSMutableArray *)array pushSettings:(NSMutableDictionary *)pushSettingsDict;
-+ (DataSettingsPush *)getFeeds:(NSMutableDictionary *)dict pushSettings:(NSMutableDictionary *)pushSettingsDict;
 
 - (NSMutableDictionary *)feedAtIndex:(int)index;
 

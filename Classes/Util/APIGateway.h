@@ -14,6 +14,7 @@
 }
 
 + (NSMutableDictionary *)usersCurrent;
++ (NSMutableArray *)homeTabs;
 + (NSMutableDictionary *)pushSettings;
 + (NSMutableArray *)users:(int)page;
 + (NSMutableDictionary *)userById:(NSString *)theUserId;
