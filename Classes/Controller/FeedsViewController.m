@@ -37,7 +37,7 @@
 	
 	theTableView.delegate = self;
   NSMutableDictionary *dict = [APIGateway usersCurrent];
-  self.dataSource = [FeedsTableDataSource getFeeds:dict klass:@"FeedViewController"];
+  self.dataSource = [FeedsTableDataSource getFeeds:dict];
 	theTableView.dataSource = self.dataSource;
   
   self.view = theTableView;

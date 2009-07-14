@@ -7,7 +7,6 @@
 //
 
 #import "SettingsPush.h"
-#import "FeedsTableDataSource.h"
 #import "LocalStorage.h"
 #import "APIGateway.h"
 
@@ -34,7 +33,7 @@
 	theTableView.delegate = self;  
   NSMutableArray *pushSettings = [APIGateway pushSettings];
   NSLog([pushSettings description]);
-  self.dataSource = [FeedsTableDataSource getFeeds:[APIGateway usersCurrent] klass:@"SettingsPush"];
+  self.dataSource = [DataSettingsPush getFeeds:[APIGateway usersCurrent]];
 	theTableView.dataSource = self.dataSource;  
   self.view = theTableView;
   

@@ -7,17 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FeedsTableDataSource.h"
+#import "DataSettingsPush.h"
 #import "SettingsViewController.h"
 
 @interface SettingsPush : SpinnerViewController <UITableViewDelegate> {
   UITableView *theTableView;
-  FeedsTableDataSource *dataSource;
+  DataSettingsPush *dataSource;
   SettingsViewController *parent;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
-@property (nonatomic,retain) FeedsTableDataSource *dataSource;
+@property (nonatomic,retain) DataSettingsPush *dataSource;
 @property (nonatomic,retain) SettingsViewController *parent;
 
 - (id)init;

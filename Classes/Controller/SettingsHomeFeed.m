@@ -1,16 +1,8 @@
-//
-//  SettingsChooseFeed.m
-//  Yammer
-//
-//  Created by aa on 2/3/09.
-//  Copyright 2009 Yammer, Inc. All rights reserved.
-//
-
-#import "SettingsChooseFeed.h"
-#import "FeedsTableDataSource.h"
+#import "SettingsHomeFeed.h"
+#import "DataSettingsHomeFeed.h"
 #import "LocalStorage.h"
 
-@implementation SettingsChooseFeed
+@implementation SettingsHomeFeed
 
 @synthesize dataSource;
 @synthesize theTableView;
@@ -26,7 +18,7 @@
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	theTableView.delegate = self;  
-  self.dataSource = [FeedsTableDataSource getFeeds:dict klass:@"SettingsChooseFeed"];
+  self.dataSource = [DataSettingsHomeFeed getFeeds:dict];
 	theTableView.dataSource = self.dataSource;
   self.view = theTableView;
   

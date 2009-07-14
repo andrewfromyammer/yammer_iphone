@@ -7,12 +7,12 @@
 //
 
 #import "SettingsViewController.h"
-#import "SettingsTableDataSource.h"
+#import "DataSettings.h"
 #import "APIGateway.h"
 #import "SettingsAdvancedOptions.h"
 #import "LocalStorage.h"
 #import "OAuthGateway.h"
-#import "SettingsChooseFeed.h"
+#import "SettingsHomeFeed.h"
 #import "SettingsPush.h"
 
 @implementation SettingsViewController
@@ -50,7 +50,7 @@
 	theTableView.delegate = self;
   
   self.usersCurrent = [APIGateway usersCurrent];
-  self.dataSource = [[SettingsTableDataSource alloc] initWithDict:self.usersCurrent];
+  self.dataSource = [[DataSettings alloc] initWithDict:self.usersCurrent];
 	theTableView.dataSource = self.dataSource;
   
   self.view = theTableView;
@@ -71,7 +71,7 @@
     [theTableView deselectRowAtIndexPath:indexPath animated:NO];
   else if (indexPath.section == 1) {
     [theTableView deselectRowAtIndexPath:indexPath animated:YES];
-    SettingsChooseFeed *localSettingsChooseFeed = [[SettingsChooseFeed alloc] initWithDict:self.usersCurrent parent:self];
+    SettingsHomeFeed *localSettingsChooseFeed = [[SettingsHomeFeed alloc] initWithDict:self.usersCurrent parent:self];
     [self.navigationController pushViewController:localSettingsChooseFeed animated:YES];
     [localSettingsChooseFeed release];   
   }  

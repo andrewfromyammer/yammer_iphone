@@ -7,19 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FeedsTableDataSource.h"
 
 @interface FeedsTableDataSource : NSObject <UITableViewDataSource> {
   NSMutableArray *feeds;
-  NSString *klass;
 }
 
 @property (nonatomic,retain) NSMutableArray *feeds;
-@property (nonatomic,retain) NSString *klass;
 
-- (id)initWithArray:(NSMutableArray *)array klass:(NSString *)klassName;
-+ (FeedsTableDataSource *)getFeeds:(NSMutableDictionary *)dict klass:(NSString *)klassName;
+- (id)initWithArray:(NSMutableArray *)array;
++ (FeedsTableDataSource *)getFeeds:(NSMutableDictionary *)dict;
 
++ (void)setupCell:(UITableViewCell *)cell dict:(NSMutableDictionary *)dict;
 - (NSMutableDictionary *)feedAtIndex:(int)index;
 
 

@@ -1,25 +1,19 @@
-//
-//  FeedsTableDataSource.m
-//  Yammer
-//
-//  Created by aa on 1/28/09.
-//  Copyright 2009 Yammer, Inc. All rights reserved.
-//
 
-#import "FeedsTableDataSource.h"
+#import "DataSettingsHomeFeed.h"
 #import "APIGateway.h"
 #import "LocalStorage.h"
+#import "FeedsTableDataSource.h"
 
-@implementation FeedsTableDataSource
+@implementation DataSettingsHomeFeed
 
 @synthesize feeds;
 
-+ (FeedsTableDataSource *)getFeeds:(NSMutableDictionary *)dict {
++ (DataSettingsHomeFeed *)getFeeds:(NSMutableDictionary *)dict {
   if (dict) {
     dict = [dict objectForKey:@"web_preferences"];
-    return [[FeedsTableDataSource alloc] initWithArray:[dict objectForKey:@"home_tabs"]];
+    return [[DataSettingsHomeFeed alloc] initWithArray:[dict objectForKey:@"home_tabs"]];
   }
-  return [[FeedsTableDataSource alloc] initWithArray:[NSMutableArray array]];
+  return [[DataSettingsHomeFeed alloc] initWithArray:[NSMutableArray array]];
 }
 
 - (id)initWithArray:(NSMutableArray *)array {
@@ -44,15 +38,16 @@
   
   [FeedsTableDataSource setupCell:cell dict:[feeds objectAtIndex:indexPath.row]];
   
-  cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	return cell;
-}
+  cell.accessoryType = UITableViewCellAccessoryNone;
+  
+  NSString *currentURL = [[LocalStorage getFeedInfo] objectForKey:@"url"];
+  
+  NSString *rowURL = [[feeds objectAtIndex:indexPath.row] objectForKey:@"url"];
+  
+  if ([rowURL isEqualToString:currentURL])
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-+ (void)setupCell:(UITableViewCell *)cell dict:(NSMutableDictionary *)dict {
-  cell.textLabel.text = [dict objectForKey:@"name"];
-  cell.imageView.image = nil;
-  if ([[dict objectForKey:@"private"] intValue] == 1)
-    cell.imageView.image = [UIImage imageNamed:@"lock.png"];  
+	return cell;
 }
 
 - (NSMutableDictionary *)feedAtIndex:(int)index {

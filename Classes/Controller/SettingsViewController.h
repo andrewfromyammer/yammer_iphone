@@ -10,16 +10,16 @@
 
 #import "SpinnerViewController.h"
 #import "FeedsTableDataSource.h"
-#import "SettingsTableDataSource.h"
+#import "DataSettings.h"
 
 @interface SettingsViewController : SpinnerViewController <UITableViewDelegate> {
 	UITableView *theTableView;
   NSMutableDictionary *usersCurrent;
-  SettingsTableDataSource *dataSource;
+  DataSettings *dataSource;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) NSMutableDictionary *usersCurrent;
-@property (nonatomic,retain) SettingsTableDataSource *dataSource;
+@property (nonatomic,retain) DataSettings *dataSource;
 
 @end

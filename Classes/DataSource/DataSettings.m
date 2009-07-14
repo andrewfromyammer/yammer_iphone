@@ -6,12 +6,12 @@
 //  Copyright 2009 Yammer, Inc. All rights reserved.
 //
 
-#import "SettingsTableDataSource.h"
+#import "DataSettings.h"
 #import "APIGateway.h"
 #import "LocalStorage.h"
 #import "OAuthCustom.h"
 
-@implementation SettingsTableDataSource
+@implementation DataSettings
 
 @synthesize email;
 
