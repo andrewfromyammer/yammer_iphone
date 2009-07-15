@@ -12,6 +12,7 @@
 #import "LocalStorage.h"
 #import "OAConsumer.h"
 #import "OAMutableURLRequest.h"
+#import "OAPlaintextSignatureProvider.h"
 
 @implementation OAuthPostURLEncoded
 
@@ -28,7 +29,7 @@
                                                                  consumer:consumer
                                                                     token:accessToken
                                                                     realm:nil   
-                                                        signatureProvider:nil];
+                                                        signatureProvider:[OAPlaintextSignatureProvider alloc]];
   
   [request setHTTPMethod:method];
   request.HTTPShouldHandleCookies = NO;
@@ -40,7 +41,7 @@
     [oauthParams addObject:[[OARequestParameter alloc] initWithName:[keys objectAtIndex:i] 
                                                               value:[params objectForKey:[keys objectAtIndex:i]]]];
   
-  [request setParameters:oauthParams];  
+  [request setParameters:oauthParams];
   [request prepare];
       
   return [OAuthGateway handleConnection:request] == nil;

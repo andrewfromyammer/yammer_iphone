@@ -35,7 +35,6 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-	NSLog(@"deviceToken: %@", deviceToken);
   [APIGateway sendPushToken:[[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
                                                         stringByReplacingOccurrencesOfString:@">" withString:@""]
                                                         stringByReplacingOccurrencesOfString:@" " withString:@""]

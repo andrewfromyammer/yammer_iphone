@@ -116,9 +116,19 @@
   
   [params setObject:token forKey:@"user_client[client_id]"];
   [params setObject:@"true" forKey:@"user_client[verified]"];
-  [params setObject:@"client_type" forKey:@"ApplePushDevice"];
+  [params setObject:@"ApplePushDevice" forKey:@"client_type"];
   
   return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/user_clients" method:@"POST"];  
+}
+
++ (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue {
+  NSMutableDictionary *params = [NSMutableDictionary dictionary];
+  
+  [params setObject:statusValue forKey:[NSString stringWithFormat:@"notifications[%@]", feed_key]];
+  [params setObject:@"PUT" forKey:@"_method"];
+  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/user_clients/ApplePushDevice" method:@"POST"];
+  return true;
 }
 
 @end

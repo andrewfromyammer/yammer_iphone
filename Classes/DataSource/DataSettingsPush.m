@@ -47,14 +47,35 @@
 }
 
 - (void)switchWasChanged:(id)sender {
-  UIAlertView *alert = [[UIAlertView alloc]
-                        initWithTitle:@"Switch Changed."
-                        message:@"Wefwef"
-                        delegate:nil
-                        cancelButtonTitle:@"Thanks!"
-                        otherButtonTitles:nil];
-  [alert show];
-  [alert release];
+  UISwitch *switchView = (UISwitch *)sender;
+  [NSThread detachNewThreadSelector:@selector(updatePushSettingsThread:) toTarget:self withObject:switchView];  
+}
+
+- (void)updatePushSettingsThread:(UISwitch *)switchView {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  
+  NSMutableDictionary *feed = [feeds objectAtIndex:switchView.tag];
+  NSString *name = [feed objectForKey:@"name"];
+
+  NSString *feed_key = [[pushSettings objectForKey:name] objectForKey:@"feed_key"];
+
+  
+  if (switchView.on) {
+    NSMutableDictionary *tab = [pushSettings objectForKey:name];
+    [tab setObject:@"enabled" forKey:@"status"];
+    [pushSettings setObject:tab forKey:name];
+
+    [APIGateway updatePushSetting:feed_key status:@"enabled"];
+  }
+  else {
+    NSMutableDictionary *tab = [pushSettings objectForKey:name];
+    [tab setObject:@"disabled" forKey:@"status"];
+    [pushSettings setObject:tab forKey:name];
+    
+    [APIGateway updatePushSetting:feed_key status:@"disabled"];
+  }
+  
+  [autoreleasepool release];
 }
 
 - (NSMutableDictionary *)feedAtIndex:(int)index {
