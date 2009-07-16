@@ -63,9 +63,12 @@
                                  CGRectGetWidth(mainViewBounds),
                                  toolbarHeight)];
     [self.view addSubview:toolbar];
-	}
-  
-  
+	} else {
+    int i=0;
+    for (i=0; i<[[toolbar items] count]; i++)
+      [[[toolbar items] objectAtIndex:i] release];
+  }
+    
   UIBarButtonItem *reply = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply
                                                                          target:self
                                                                          action:@selector(reply)];

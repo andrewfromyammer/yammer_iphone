@@ -30,7 +30,6 @@
 - (void)setupMainView {
   mainView = [[MainTabBarController alloc] init];
   [window addSubview:mainView.view];
-//  if ( [[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotificationTypes:)] )
   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 }
 

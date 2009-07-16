@@ -93,10 +93,24 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   
   [request setHTTPMethod:@"POST"];
   request.HTTPShouldHandleCookies = NO;
-  NSArray *parts = [launchURL componentsSeparatedByString:@"="];
-	
+  
+  // yammer://verify?oauth_token=1111111111111&callback_token=AC45&more=true
+
+  NSRange range = [launchURL rangeOfString:@"?"];
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  if (range.location != NSNotFound) {
+    NSArray *parts = [[launchURL substringFromIndex:range.location+1] componentsSeparatedByString:@"&"];
+    int i=0;
+    for (i=0; i<[parts count]; i++) {
+      NSArray *key_value = [[parts objectAtIndex:i] componentsSeparatedByString:@"="];
+      if ([key_value count] == 2)
+        [dict setObject:[key_value objectAtIndex:1] forKey:[key_value objectAtIndex:0]];
+    }
+  }
+
   NSMutableArray *oauthParams = [NSMutableArray array];
-  [oauthParams addObject:[[OARequestParameter alloc] initWithName:@"callback_token" value:[parts objectAtIndex:2]]];
+  [oauthParams addObject:[[OARequestParameter alloc] initWithName:@"callback_token" 
+                                                            value:[dict objectForKey:@"callback_token"]]];
 	
   [request setParameters:oauthParams];  	
   [request prepare];
