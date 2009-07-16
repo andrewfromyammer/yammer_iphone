@@ -23,10 +23,17 @@
 @synthesize timeLine;
 @synthesize image;
 @synthesize lockImage;
+@synthesize toolbar;
+@synthesize threadIcon;
 
 - (void)displayMessage {
   self.title = [NSString stringWithFormat:@"%d of %d", theIndex+1, [theList count]];
   NSMutableDictionary *message = [theList objectAtIndex:theIndex];
+  
+  if ([[message objectForKey:@"sender_type"] isEqualToString:@"user"])
+    [self setupToolbar:true];
+  else
+    [self setupToolbar:false];
   
   fromLine.text = [message objectForKey:@"fromLine"];
   timeLine.text = [message objectForKey:@"timeLine"];
@@ -41,19 +48,22 @@
     [webView setHTML:message bgcolor:@"#FFFFFF"];
 }
 
-- (void)setupToolbar:(BOOL)showTheadIcon {
-  UIToolbar *toolbar = [UIToolbar new];
-	toolbar.barStyle = UIBarStyleDefault;
-  [toolbar setTintColor:[MainTabBarController yammerGray]];
-	
-	// size up the toolbar and set its frame
-	[toolbar sizeToFit];
-	CGFloat toolbarHeight = [toolbar frame].size.height;
-	CGRect mainViewBounds = self.view.bounds;
-	[toolbar setFrame:CGRectMake(CGRectGetMinX(mainViewBounds),
-                               CGRectGetMinY(mainViewBounds) + CGRectGetHeight(mainViewBounds) - (toolbarHeight * 2.0) + 2.0,
-                               CGRectGetWidth(mainViewBounds),
-                               toolbarHeight)];
+- (void)setupToolbar:(BOOL)showUserIcon {
+  if (!toolbar) {
+    toolbar = [UIToolbar new];
+	  toolbar.barStyle = UIBarStyleDefault;
+    [toolbar setTintColor:[MainTabBarController yammerGray]];
+
+    // size up the toolbar and set its frame
+    [toolbar sizeToFit];
+    CGFloat toolbarHeight = [toolbar frame].size.height;
+    CGRect mainViewBounds = self.view.bounds;
+    [toolbar setFrame:CGRectMake(CGRectGetMinX(mainViewBounds),
+                                 CGRectGetMinY(mainViewBounds) + CGRectGetHeight(mainViewBounds) - (toolbarHeight * 2.0) + 2.0,
+                                 CGRectGetWidth(mainViewBounds),
+                                 toolbarHeight)];
+    [self.view addSubview:toolbar];
+	}
   
   
   UIBarButtonItem *reply = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply
@@ -77,17 +87,18 @@
                                                           target:self //[[UIApplication sharedApplication] delegate]
                                                           action:@selector(userView)];
   
-  NSArray *items = [NSArray arrayWithObjects: reply, flexItem, user, nil];
-  if (showTheadIcon)
-    items = [NSArray arrayWithObjects: reply, flexItem, thread, flexItem2, user, nil];;
+  NSMutableArray *items = [NSMutableArray arrayWithObjects: reply, flexItem, user, nil];
+  if (self.threadIcon)
+    items = [NSMutableArray arrayWithObjects: reply, flexItem, thread, flexItem2, user, nil];
+  if (!showUserIcon)
+    [user setEnabled:false];
   [toolbar setItems:items animated:NO];
-  [self.view addSubview:toolbar];
-  [toolbar release];
 }
 
-- (id)initWithBooleanForThreadIcon:(BOOL)showTheadIcon list:(NSMutableArray *)list index:(int)index {
+- (id)initWithBooleanForThreadIcon:(BOOL)showThreadIcon list:(NSMutableArray *)list index:(int)index {
   self.theList = list;
   self.theIndex = index;
+  self.threadIcon = showThreadIcon;
   
   [MainTabBarController setBackButton:self];
   
@@ -117,7 +128,6 @@
   self.lockImage = [[UIImageView alloc] initWithFrame:CGRectMake(55, 25, 16, 16)];
   [self.view addSubview:lockImage];
     
-  [self setupToolbar:showTheadIcon]; 
   [self displayMessage];
   return self;
 }
@@ -171,6 +181,7 @@
   [timeLine release];
   [image release];
   [lockImage release];
+  [toolbar release];
   [super dealloc];
 }
 
