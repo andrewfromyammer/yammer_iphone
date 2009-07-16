@@ -11,6 +11,7 @@
 #import "ImageCache.h"
 #import "MessageTableCell.h"
 #import "NSDate-Ago.h"
+#import "LocalStorage.h"
 
 @implementation FeedDataSource
 
@@ -20,22 +21,22 @@
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:nil];
   if (dict)
-    return [[FeedDataSource alloc] initWithDict:dict];
+    return [[FeedDataSource alloc] initWithDict:dict feed:feed];
   
   dict = [NSMutableDictionary dictionary];
-  [dict setObject:[NSMutableArray array] forKey:@"references"];  
+  [dict setObject:[NSMutableArray array] forKey:@"references"];
   [dict setObject:[NSMutableArray array] forKey:@"messages"];
   [dict setObject:[NSMutableDictionary dictionary] forKey:@"meta"];
-  return [[FeedDataSource alloc] initWithDict:dict];
+  return [[FeedDataSource alloc] initWithDict:dict feed:feed];
 }
 
-- (id)initWithDict:(NSMutableDictionary *)dict {
+- (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   self.messages = [NSMutableArray array];
-  [self proccesMessages:dict];
+  [self proccesMessages:dict feed:feed];
   return self;
 }
 
-- (void)proccesMessages:(NSMutableDictionary *)dict {
+- (void)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
   NSNumber *older = [meta objectForKey:@"older_available"];
   self.olderAvailable = false;
@@ -47,7 +48,7 @@
   NSMutableDictionary *referencesByType = [NSMutableDictionary dictionary];
   
   int i=0;
-  for (; i < [references count]; i++) {
+  for (i=0; i < [references count]; i++) {
     NSMutableDictionary *reference = [references objectAtIndex:i];
     NSString *type = [reference objectForKey:@"type"];
     NSString *ref_id = [reference objectForKey:@"id"];
@@ -64,73 +65,88 @@
    
   NSMutableArray *tempMessages = [dict objectForKey:@"messages"];
 
-  i=0;
-  for (; i < [tempMessages count]; i++) {
+  for (i=0; i < [tempMessages count]; i++) {
     @try {
-    NSMutableDictionary *message = [tempMessages objectAtIndex:i];
-    NSMutableDictionary *referencesById = [referencesByType objectForKey:[message objectForKey:@"sender_type"]];
-    NSMutableDictionary *actor = [referencesById objectForKey:[message objectForKey:@"sender_id"]];
-    
-    [message setObject:[actor objectForKey:@"name"] forKey:@"sender"];    
-    [message setObject:[ImageCache getImageAndSave:[actor objectForKey:@"mugshot_url"] user_id:[actor objectForKey:@"id"] type:[actor objectForKey:@"type"]] forKey:@"imageData"];
-    
-    referencesById = [referencesByType objectForKey:@"message"];
-    NSMutableDictionary *messageRef = [referencesById objectForKey:[message objectForKey:@"replied_to_id"]];
-    
-    if (messageRef) {
-      referencesById = [referencesByType objectForKey:[messageRef objectForKey:@"sender_type"]];
-      NSMutableDictionary *actor = [referencesById objectForKey:[messageRef objectForKey:@"sender_id"]];
-      [message setObject:[actor objectForKey:@"name"] forKey:@"reply_name"];
-
-      referencesById = [referencesByType objectForKey:@"thread"];
-      NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
-
-      [message setObject:[threadRef objectForKey:@"web_url"] forKey:@"thread_url"];
-    }
-
-    referencesById = [referencesByType objectForKey:@"group"];
-    NSMutableDictionary *groupRef = [referencesById objectForKey:[message objectForKey:@"group_id"]];
-    
-    if (groupRef) {
-      [message setObject:[groupRef objectForKey:@"name"] forKey:@"group_name"];
-      [message setObject:[groupRef objectForKey:@"privacy"] forKey:@"group_privacy"];
-      if ([[groupRef objectForKey:@"privacy"] isEqualToString:@"private"]) {
-        [message setObject:[NSString stringWithFormat:@"%@ (private)", [groupRef objectForKey:@"name"]] forKey:@"group_name"];
-        [message setObject:@"true" forKey:@"lock"];
+      NSMutableDictionary *message = [tempMessages objectAtIndex:i];
+      NSMutableDictionary *referencesById = [referencesByType objectForKey:[message objectForKey:@"sender_type"]];
+      NSMutableDictionary *actor = [referencesById objectForKey:[message objectForKey:@"sender_id"]];
+      
+      [message setObject:[actor objectForKey:@"mugshot_url"] forKey:@"actor_mugshot_url"];
+      [message setObject:[actor objectForKey:@"id"] forKey:@"actor_id"];
+      [message setObject:[actor objectForKey:@"type"] forKey:@"actor_type"];
+      
+      [message setObject:[actor objectForKey:@"name"] forKey:@"sender"];      
+      referencesById = [referencesByType objectForKey:@"message"];
+      NSMutableDictionary *messageRef = [referencesById objectForKey:[message objectForKey:@"replied_to_id"]];
+      
+      if (messageRef) {
+        referencesById = [referencesByType objectForKey:[messageRef objectForKey:@"sender_type"]];
+        NSMutableDictionary *actor = [referencesById objectForKey:[messageRef objectForKey:@"sender_id"]];
+        [message setObject:[actor objectForKey:@"name"] forKey:@"reply_name"];
+        
+        referencesById = [referencesByType objectForKey:@"thread"];
+        NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
+        
+        [message setObject:[threadRef objectForKey:@"web_url"] forKey:@"thread_url"];
       }
-    }
-    
-    referencesById = [referencesByType objectForKey:@"user"];
-    NSMutableDictionary *directRef = [referencesById objectForKey:[message objectForKey:@"direct_to_id"]];
-            
-    NSString *fromLine  = [message objectForKey:@"sender"];
-    NSString *replyName = [message objectForKey:@"reply_name"];
-    
-    if (directRef) {
-      fromLine = [NSString stringWithFormat:@"%@ to: %@ (Private)", [message objectForKey:@"sender"], [directRef objectForKey:@"name"]];
-      [message setObject:@"true" forKey:@"lock"];
-      [message setObject:@"true" forKey:@"lockColor"];
-    }
-    
-    if (replyName && directRef == nil)
-      fromLine = [NSString stringWithFormat:@"%@ re: %@", [message objectForKey:@"sender"], replyName];
-    if (replyName && directRef != nil)
-      fromLine = [NSString stringWithFormat:@"%@ re: %@ (Private)", [message objectForKey:@"sender"], replyName];
-    
-    
-    [message setObject:fromLine forKey:@"fromLine"];
-    
-    NSString *createdAt = [message objectForKey:@"created_at"];
-    NSString *front = [createdAt substringToIndex:10];
-    NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
-    
-    NSString *timeLine = [[NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]] agoDate];    
-    NSString *groupName = [message objectForKey:@"group_name"];
-    if (groupName)
-      timeLine = [NSString stringWithFormat:@"%@ in %@", timeLine, groupName];
-    [message setObject:timeLine forKey:@"timeLine"];
+      
+      referencesById = [referencesByType objectForKey:@"group"];
+      NSMutableDictionary *groupRef = [referencesById objectForKey:[message objectForKey:@"group_id"]];
+      
+      if (groupRef) {
+        [message setObject:[groupRef objectForKey:@"name"] forKey:@"group_name"];
+        [message setObject:[groupRef objectForKey:@"privacy"] forKey:@"group_privacy"];
+        if ([[groupRef objectForKey:@"privacy"] isEqualToString:@"private"]) {
+          [message setObject:[NSString stringWithFormat:@"%@ (private)", [groupRef objectForKey:@"name"]] forKey:@"group_name"];
+          [message setObject:@"true" forKey:@"lock"];
+        }
+      }
+      
+      referencesById = [referencesByType objectForKey:@"user"];
+      NSMutableDictionary *directRef = [referencesById objectForKey:[message objectForKey:@"direct_to_id"]];
+      
+      NSString *fromLine  = [message objectForKey:@"sender"];
+      NSString *replyName = [message objectForKey:@"reply_name"];
+      
+      if (directRef) {
+        fromLine = [NSString stringWithFormat:@"%@ to: %@ (Private)", [message objectForKey:@"sender"], [directRef objectForKey:@"name"]];
+        [message setObject:@"true" forKey:@"lock"];
+        [message setObject:@"true" forKey:@"lockColor"];
+      }
+      
+      if (replyName && directRef == nil)
+        fromLine = [NSString stringWithFormat:@"%@ re: %@", [message objectForKey:@"sender"], replyName];
+      if (replyName && directRef != nil)
+        fromLine = [NSString stringWithFormat:@"%@ re: %@ (Private)", [message objectForKey:@"sender"], replyName];
+      
+      
+      [message setObject:fromLine forKey:@"fromLine"];
+      
+      NSString *createdAt = [message objectForKey:@"created_at"];
+      NSString *front = [createdAt substringToIndex:10];
+      NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
+      
+      NSString *timeLine = [[NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]] agoDate];    
+      NSString *groupName = [message objectForKey:@"group_name"];
+      if (groupName)
+        timeLine = [NSString stringWithFormat:@"%@ in %@", timeLine, groupName];
+      [message setObject:timeLine forKey:@"timeLine"];
     } @catch (NSException *theErr) {}
   }    
+
+  [LocalStorage writeFeed:[feed objectForKey:@"url"] messages:tempMessages];
+
+  // second pass for images, after we wrote to cache
+  for (i=0; i < [tempMessages count]; i++) {
+    @try {
+      NSMutableDictionary *message = [tempMessages objectAtIndex:i];
+
+      [message setObject:[ImageCache getImageAndSave:[message objectForKey:@"actor_mugshot_url"] 
+                                             user_id:[message objectForKey:@"actor_id"] 
+                                                type:[message objectForKey:@"actor_type"]] forKey:@"imageData"];
+    } @catch (NSException *theErr) {}
+  }
+
   [self.messages addObjectsFromArray:tempMessages];
 }
 
