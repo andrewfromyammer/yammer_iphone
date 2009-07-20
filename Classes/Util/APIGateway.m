@@ -65,11 +65,21 @@
   return nil;
 }
 
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)messageId {
-  NSString *older = @"";
-  if (messageId)
-    older = [NSString stringWithFormat:@"?older_than=%@", messageId];
-  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, older]];
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan {
+  [APIGateway messages:url olderThan:olderThan newerThan:nil];
+}
+
++ (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSDecimalNumber *)newerThan {
+  [APIGateway messages:url olderThan:nil newerThan:newerThan];
+}
+
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan newerThan:(NSDecimalNumber *)newerThan {
+  NSString *param = @"";
+  if (olderThan)
+    param = [NSString stringWithFormat:@"?older_than=%@", olderThan];
+  if (newerThan)
+    param = [NSString stringWithFormat:@"?newer_than=%@", newerThan];
+  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, param]];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];

@@ -17,9 +17,11 @@
 @property (nonatomic,retain) NSMutableArray *messages;
 @property BOOL olderAvailable;
 
-- (id)initWithDict:(NSMutableDictionary *)dict;
+- (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;
+- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed;
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed;
-- (void)proccesMessages:(NSMutableDictionary *)dict;
+- (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed cache:(BOOL)cache;
+- (void)processImages;
 
 
 @end

@@ -50,6 +50,7 @@
 		009C15130F2FE16800489B43 /* directory.png in Resources */ = {isa = PBXBuildFile; fileRef = 009C15100F2FE16800489B43 /* directory.png */; };
 		009C15140F2FE16800489B43 /* feeds.png in Resources */ = {isa = PBXBuildFile; fileRef = 009C15110F2FE16800489B43 /* feeds.png */; };
 		009C15150F2FE16800489B43 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 009C15120F2FE16800489B43 /* settings.png */; };
+		009CAD7910110B23001263E5 /* FeedCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 009CAD7810110B23001263E5 /* FeedCache.m */; };
 		00A5BF97100B8D9800E18AA5 /* SettingsPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A5BF96100B8D9800E18AA5 /* SettingsPush.m */; };
 		00AFB6260F363E6C008E2C74 /* OAuthPostURLEncoded.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AFB6250F363E6C008E2C74 /* OAuthPostURLEncoded.m */; };
 		00B4645B100CDABF00A62118 /* DataSettingsHomeFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B46458100CDABF00A62118 /* DataSettingsHomeFeed.m */; };
@@ -160,6 +161,8 @@
 		009C15100F2FE16800489B43 /* directory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = directory.png; path = Images/directory.png; sourceTree = "<group>"; };
 		009C15110F2FE16800489B43 /* feeds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = feeds.png; path = Images/feeds.png; sourceTree = "<group>"; };
 		009C15120F2FE16800489B43 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings.png; path = Images/settings.png; sourceTree = "<group>"; };
+		009CAD7710110B23001263E5 /* FeedCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedCache.h; path = Util/FeedCache.h; sourceTree = "<group>"; };
+		009CAD7810110B23001263E5 /* FeedCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedCache.m; path = Util/FeedCache.m; sourceTree = "<group>"; };
 		00A5BF95100B8D9800E18AA5 /* SettingsPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsPush.h; path = Controller/SettingsPush.h; sourceTree = "<group>"; };
 		00A5BF96100B8D9800E18AA5 /* SettingsPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsPush.m; path = Controller/SettingsPush.m; sourceTree = "<group>"; };
 		00AFB6240F363E6C008E2C74 /* OAuthPostURLEncoded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAuthPostURLEncoded.h; path = Util/OAuthPostURLEncoded.h; sourceTree = "<group>"; };
@@ -309,10 +312,12 @@
 		00D5215E0F2FBE2600FB3A8A /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				009BA0650F33EAC000C6A098 /* NSDate-Ago.h */,
-				009BA0660F33EAC000C6A098 /* NSDate-Ago.m */,
+				009CAD7710110B23001263E5 /* FeedCache.h */,
+				009CAD7810110B23001263E5 /* FeedCache.m */,
 				0080512C0F3371BC00592204 /* ImageCache.h */,
 				0080512D0F3371BC00592204 /* ImageCache.m */,
+				009BA0650F33EAC000C6A098 /* NSDate-Ago.h */,
+				009BA0660F33EAC000C6A098 /* NSDate-Ago.m */,
 				0014F1480F32544400A5AFF9 /* APIGateway.h */,
 				0014F1490F32544400A5AFF9 /* APIGateway.m */,
 				0014F13F0F324FFE00A5AFF9 /* OAuthCustom.h */,
@@ -580,6 +585,7 @@
 				00A5BF97100B8D9800E18AA5 /* SettingsPush.m in Sources */,
 				00B4645B100CDABF00A62118 /* DataSettingsHomeFeed.m in Sources */,
 				00B4645C100CDABF00A62118 /* DataSettingsPush.m in Sources */,
+				009CAD7910110B23001263E5 /* FeedCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

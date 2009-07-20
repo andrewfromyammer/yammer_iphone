@@ -11,7 +11,7 @@
 
 static NSString *ACCOUNT_DIR  = @"/account";
 static NSString *PHOTO_DIR    = @"/photos";
-static NSString *FEEDS_DIR    = @"/feeds";
+static NSString *FEED_DIR     = @"/feeds";
 static NSString *REQUEST_TOKEN = @"/account/request_token.txt";
 static NSString *ACCESS_TOKEN = @"/account/access_token.txt";
 static NSString *USERFILE = @"/account/user.txt";
@@ -27,6 +27,10 @@ static NSString *BASE_URL = @"/account/base_url.txt";
   return PHOTO_DIR;
 }
 
++ (NSString *)feedDirectory {
+  return FEED_DIR;
+}
+
 + (NSString *)localPath {
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   return [paths objectAtIndex:0];
@@ -38,7 +42,7 @@ static NSString *BASE_URL = @"/account/base_url.txt";
   
   [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:ACCOUNT_DIR] attributes:nil];
   [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:PHOTO_DIR] attributes:nil];
-  [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:FEEDS_DIR] attributes:nil];
+  [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:FEED_DIR] attributes:nil];
   
   NSError *error;
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:USERFILE] error:&error];  
@@ -112,6 +116,7 @@ static NSString *BASE_URL = @"/account/base_url.txt";
   [LocalStorage removeFile:ACCESS_TOKEN];
   [LocalStorage removeFile:REQUEST_TOKEN];
   [LocalStorage removeFile:FEEDFILE];
+  [LocalStorage removeFile:FEED_DIR];
 }
 
 + (void)saveFeedInfo:(NSMutableDictionary *)feed {
@@ -145,23 +150,5 @@ static NSString *BASE_URL = @"/account/base_url.txt";
   return dic;
 }
 
-+ (NSString *)feedCacheFileName:(NSString *)url {
-  NSString *file;
-  
-  if (![url hasPrefix:@"http"])
-    file = [NSString stringWithFormat:@"%@%@", [OAuthGateway baseURL], url];
-  else
-    file = [NSString stringWithFormat:@"%@", url];
-  
-  file = [file stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
-  file = [file stringByReplacingOccurrencesOfString:@":" withString:@"_"];
-  file = [file stringByReplacingOccurrencesOfString:@"." withString:@"_"];
-  return file;  
-}
-
-+ (void)writeFeed:(NSString *)url messages:(NSArray *)messages {
-  //JSONRepresentation
-  NSLog([LocalStorage feedCacheFileName:url]);
-}
 
 @end

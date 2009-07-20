@@ -26,11 +26,8 @@
 + (void)deleteAccountInfo;
 
 + (NSString *)photoDirectory;
++ (NSString *)feedDirectory;
 + (void)saveFeedInfo:(NSMutableDictionary *)feed;
 + (NSMutableDictionary *)getFeedInfo;
-
-+ (NSString *)feedCacheFileName:(NSString *)url;
-+ (void)writeFeed:(NSString *)url messages:(NSArray *)messages;
-
 
 @end

@@ -169,9 +169,9 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   NSMutableDictionary *message = [dataSource.messages objectAtIndex:[dataSource.messages count]-1];
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"]];
-  if (dict)
-    [dataSource proccesMessages:dict];
-  [theTableView reloadData];
+  //if (dict)
+  //  [dataSource proccesMessages:dict feed:[feed objectForKey:@"url"] cache:false];
+  //[theTableView reloadData];
   
   [super getData];
   [self showTable];

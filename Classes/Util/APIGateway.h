@@ -18,7 +18,9 @@
 + (NSMutableDictionary *)pushSettings;
 + (NSMutableArray *)users:(int)page;
 + (NSMutableDictionary *)userById:(NSString *)theUserId;
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)messageId;
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan;
++ (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSDecimalNumber *)newerThan;  
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan newerThan:(NSDecimalNumber *)newerThan;
 + (BOOL)createMessage:(NSString *)body repliedToId:(NSDecimalNumber *)repliedToId groupId:(NSDecimalNumber *)groupId;
 + (BOOL)followingUser:(NSString *)theUserId;
 + (BOOL)removeFollow:(NSString *)theUserId;

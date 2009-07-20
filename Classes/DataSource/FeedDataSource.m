@@ -11,7 +11,7 @@
 #import "ImageCache.h"
 #import "MessageTableCell.h"
 #import "NSDate-Ago.h"
-#import "LocalStorage.h"
+#import "FeedCache.h"
 
 @implementation FeedDataSource
 
@@ -19,6 +19,11 @@
 @synthesize olderAvailable;
 
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
+  
+  NSMutableArray *cachedMessages = [FeedCache loadFeed:[feed objectForKey:@"url"]];
+  if (cachedMessages)
+    return [[FeedDataSource alloc] initWithMessages:cachedMessages feed:feed];
+  
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:nil];
   if (dict)
     return [[FeedDataSource alloc] initWithDict:dict feed:feed];
@@ -32,11 +37,30 @@
 
 - (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   self.messages = [NSMutableArray array];
-  [self proccesMessages:dict feed:feed];
+  [self.messages addObjectsFromArray:[self proccesMessages:dict feed:feed cache:true]];
+  [self processImages];
   return self;
 }
 
-- (void)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
+- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed {
+  self.messages = cachedMessages;
+  [self processImages];
+  
+  [NSThread detachNewThreadSelector:@selector(checkForNewerMessages:) toTarget:self withObject:feed];
+  return self;
+}
+
+- (void)checkForNewerMessages:(NSMutableDictionary *)feed {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+
+  NSMutableDictionary *message = [self.messages objectAtIndex:0];
+  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
+  [self proccesMessages:dict feed:feed cache:true];
+  
+  [autoreleasepool release];
+}
+
+- (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed cache:(BOOL)cache {
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
   NSNumber *older = [meta objectForKey:@"older_available"];
   self.olderAvailable = false;
@@ -88,6 +112,7 @@
         NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
         
         [message setObject:[threadRef objectForKey:@"web_url"] forKey:@"thread_url"];
+        [message setObject:[threadRef objectForKey:@"updates"] forKey:@"thread_updates"];
       }
       
       referencesById = [referencesByType objectForKey:@"group"];
@@ -134,20 +159,26 @@
     } @catch (NSException *theErr) {}
   }    
 
-  [LocalStorage writeFeed:[feed objectForKey:@"url"] messages:tempMessages];
-
+  if (cache)
+    [FeedCache writeFeed:[feed objectForKey:@"url"] messages:tempMessages];
+ 
+//  [self.messages addObjectsFromArray:tempMessages];
   // second pass for images, after we wrote to cache
-  for (i=0; i < [tempMessages count]; i++) {
-    @try {
-      NSMutableDictionary *message = [tempMessages objectAtIndex:i];
+//  [self processImages];
+  return tempMessages;
+}
 
+- (void)processImages {
+  int i=0;
+  for (i=0; i < [self.messages count]; i++) {
+    @try {
+      NSMutableDictionary *message = [self.messages objectAtIndex:i];
+      
       [message setObject:[ImageCache getImageAndSave:[message objectForKey:@"actor_mugshot_url"] 
                                              user_id:[message objectForKey:@"actor_id"] 
                                                 type:[message objectForKey:@"actor_type"]] forKey:@"imageData"];
     } @catch (NSException *theErr) {}
-  }
-
-  [self.messages addObjectsFromArray:tempMessages];
+  }  
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
