@@ -20,11 +20,15 @@
 
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
   
-  NSMutableArray *cachedMessages = [FeedCache loadFeed:[feed objectForKey:@"url"]];
-  if (cachedMessages)
-    return [[FeedDataSource alloc] initWithMessages:cachedMessages feed:feed];
+  NSMutableDictionary *dict = [FeedCache loadFeed:[feed objectForKey:@"url"]];
   
-  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:nil];
+  if (dict) {
+    BOOL olderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"]; 
+
+    return [[FeedDataSource alloc] initWithMessages:[dict objectForKey:@"messages"] feed:feed more:olderAvailable];
+  }
+  
+  dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:nil];
   if (dict)
     return [[FeedDataSource alloc] initWithDict:dict feed:feed];
   
@@ -37,15 +41,15 @@
 
 - (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   self.messages = [NSMutableArray array];
-  [self.messages addObjectsFromArray:[self proccesMessages:dict feed:feed cache:true]];
+  [self.messages addObjectsFromArray:[self proccesMessages:dict feed:feed]];
   [self processImages];
   return self;
 }
 
-- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed {
+- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore {
   self.messages = cachedMessages;
   [self processImages];
-  
+  self.olderAvailable = hasMore;
   [NSThread detachNewThreadSelector:@selector(checkForNewerMessages:) toTarget:self withObject:feed];
   return self;
 }
@@ -55,12 +59,12 @@
 
   NSMutableDictionary *message = [self.messages objectAtIndex:0];
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
-  [self proccesMessages:dict feed:feed cache:true];
+  [self proccesMessages:dict feed:feed];
   
   [autoreleasepool release];
 }
 
-- (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed cache:(BOOL)cache {
+- (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
   NSNumber *older = [meta objectForKey:@"older_available"];
   self.olderAvailable = false;
@@ -159,12 +163,8 @@
     } @catch (NSException *theErr) {}
   }    
 
-  if (cache)
-    [FeedCache writeFeed:[feed objectForKey:@"url"] messages:tempMessages];
+  [FeedCache writeFeed:[feed objectForKey:@"url"] messages:tempMessages more:self.olderAvailable];
  
-//  [self.messages addObjectsFromArray:tempMessages];
-  // second pass for images, after we wrote to cache
-//  [self processImages];
   return tempMessages;
 }
 
@@ -211,8 +211,15 @@
 	  if (cell == nil)
 		  cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MoreCell"] autorelease];
     
-    cell.textLabel.text = @"                fetch more";
-    cell.textLabel.textColor = [UIColor blueColor];
+    UIView *wrapper = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 50)];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(60, 12, 20, 20)];
+    spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [wrapper addSubview:spinner];
+    [spinner startAnimating];
+    [cell.contentView addSubview:wrapper];
+    [wrapper release];
+    //cell.textLabel.text = @"                     More";
+    //cell.textLabel.textColor = [UIColor blueColor];
   	return cell;
   }
 }

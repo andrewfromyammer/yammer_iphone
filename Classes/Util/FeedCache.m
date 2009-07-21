@@ -30,18 +30,18 @@
           [NSString stringWithFormat:@"%@/%@", [LocalStorage feedDirectory], file]];  
 }
 
-+ (NSMutableArray *)loadFeed:(NSString *)url {
++ (NSMutableDictionary *)loadFeed:(NSString *)url {
   NSString *path = [FeedCache feedCacheFilePath:url];  
   NSFileManager *fileManager = [NSFileManager defaultManager];
 
   if ([fileManager fileExistsAtPath:path]) {
-    return (NSMutableArray*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
+    return (NSMutableDictionary*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
                                                encoding:NSUTF8StringEncoding] JSONValue];
   }
   return nil;
 }
 
-+ (void)writeFeed:(NSString *)url messages:(NSMutableArray *)messages {
++ (void)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
   
   if ([messages count] == 0)
     return;
@@ -49,8 +49,10 @@
   NSString *path = [FeedCache feedCacheFilePath:url];    
   NSFileManager *fileManager = [NSFileManager defaultManager];  
   if ([fileManager fileExistsAtPath:path]) {
-    NSMutableArray *existing = (NSMutableArray*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
+    NSMutableDictionary *dict = (NSMutableArray*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
                                                                        encoding:NSUTF8StringEncoding] JSONValue];
+    NSMutableArray *existing = [dict objectForKey:@"messages"];
+    BOOL existingOlderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"];    
     
     NSMutableDictionary *lastNew       = [messages lastObject];
     NSMutableDictionary *firstNew      = [messages objectAtIndex:0];
@@ -59,17 +61,17 @@
 
     if ([[lastNew objectForKey:@"id"] intValue] > [[firstExisting objectForKey:@"id"] intValue]) {
       [messages addObjectsFromArray:existing];
-      [FeedCache trimArrayAndWrite:path messages:messages];
+      [FeedCache trimArrayAndWrite:path messages:messages more:existingOlderAvailable];
     }
     else if ([[lastExisting objectForKey:@"id"] intValue] > [[firstNew objectForKey:@"id"] intValue]) {
       [existing addObjectsFromArray:messages];
-      [FeedCache trimArrayAndWrite:path messages:existing];
+      [FeedCache trimArrayAndWrite:path messages:existing more:olderAvailable];
     }
   } else
-    [FeedCache trimArrayAndWrite:path messages:messages];
+    [FeedCache trimArrayAndWrite:path messages:messages more:olderAvailable];
 }
 
-+ (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages {  
++ (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {  
   NSFileManager *fileManager = [NSFileManager defaultManager];  
 
   NSRange range;
@@ -77,7 +79,16 @@
   range.length = [messages count] - MAX_FEED_CACHE;
   if ([messages count] > MAX_FEED_CACHE)
     [messages removeObjectsInRange:range];
-  [fileManager createFileAtPath:path contents:[[messages JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+  
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  [dict setObject:messages forKey:@"messages"];
+  NSMutableDictionary *meta = [NSMutableDictionary dictionary];
+  if (olderAvailable)
+    [meta setObject:@"t" forKey:@"olderAvailable"];
+  else
+    [meta setObject:@"f" forKey:@"olderAvailable"];
+  [dict setObject:meta forKey:@"meta"];
+  [fileManager createFileAtPath:path contents:[[dict JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
 }
 
 

@@ -18,9 +18,9 @@
 @property BOOL olderAvailable;
 
 - (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;
-- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed;
+- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed;
-- (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed cache:(BOOL)cache;
+- (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;
 - (void)processImages;
 
 
