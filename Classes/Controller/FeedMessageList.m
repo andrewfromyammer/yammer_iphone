@@ -147,9 +147,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
-
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
-  
+
   if (indexPath.section == 0) {
     MessageViewController *localMessageViewController = [[MessageViewController alloc] 
                                                          initWithBooleanForThreadIcon:threadIcon 
@@ -159,8 +158,9 @@
     [localMessageViewController release];
   } else {
     if ([dataSource.messages count] < 999) {      
-      SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];      
+      SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];
       [cell.spinner startAnimating];
+      [cell.displayText setText:@"Loading More..."];
       [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];
     }
   }
@@ -175,7 +175,14 @@
   //  [dataSource proccesMessages:dict feed:[feed objectForKey:@"url"] cache:false];
   //[theTableView reloadData];
   
-  self.dataSource.fetchingMore = false;
+  NSUInteger newIndex[] = {1, 0};
+  NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
+  SpinnerCell *cell = (SpinnerCell *)[theTableView cellForRowAtIndexPath:newPath];
+  [newPath release];
+  
+  [cell.spinner stopAnimating];
+  [cell.displayText setText:@"        More"];
+  
   [autoreleasepool release];
 }
 

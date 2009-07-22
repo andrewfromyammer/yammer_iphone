@@ -213,6 +213,7 @@
 	  if (cell == nil)
 		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MoreCell"] autorelease];
     
+    [cell.displayText setText:@"        More"];
   	return cell;
   }
 }
