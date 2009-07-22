@@ -13,6 +13,7 @@
 #import "APIGateway.h"
 #import "MessageViewController.h"
 #import "LocalStorage.h"
+#import "SpinnerCell.h"
 
 @implementation FeedMessageList
 
@@ -158,23 +159,23 @@
     [localMessageViewController release];
   } else {
     if ([dataSource.messages count] < 999) {      
-      self.view = wrapper;
-      [spinner startAnimating];  
-      [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];    
+      SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];      
+      [cell.spinner startAnimating];
+      [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];
     }
   }
 }
 
 - (void)fetchMore {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+
   NSMutableDictionary *message = [dataSource.messages objectAtIndex:[dataSource.messages count]-1];
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"]];
   //if (dict)
   //  [dataSource proccesMessages:dict feed:[feed objectForKey:@"url"] cache:false];
   //[theTableView reloadData];
   
-  [super getData];
-  [self showTable];
+  self.dataSource.fetchingMore = false;
   [autoreleasepool release];
 }
 

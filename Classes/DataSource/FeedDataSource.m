@@ -12,11 +12,13 @@
 #import "MessageTableCell.h"
 #import "NSDate-Ago.h"
 #import "FeedCache.h"
+#import "SpinnerCell.h"
 
 @implementation FeedDataSource
 
 @synthesize messages;
 @synthesize olderAvailable;
+@synthesize fetchingMore;
 
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
   
@@ -207,19 +209,10 @@
 
     return cell;
   } else {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
+    SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
 	  if (cell == nil)
-		  cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MoreCell"] autorelease];
+		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MoreCell"] autorelease];
     
-    UIView *wrapper = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 50)];
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(60, 12, 20, 20)];
-    spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    [wrapper addSubview:spinner];
-    [spinner startAnimating];
-    [cell.contentView addSubview:wrapper];
-    [wrapper release];
-    //cell.textLabel.text = @"                     More";
-    //cell.textLabel.textColor = [UIColor blueColor];
   	return cell;
   }
 }

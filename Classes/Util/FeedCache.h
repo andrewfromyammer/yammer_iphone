@@ -16,7 +16,7 @@ static int MAX_FEED_CACHE = 21;
 }
 
 + (NSString *)feedCacheFilePath:(NSString *)url;
-+ (NSMutableArray *)loadFeed:(NSString *)url;
++ (NSMutableDictionary *)loadFeed:(NSString *)url;
 + (void)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 + (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 

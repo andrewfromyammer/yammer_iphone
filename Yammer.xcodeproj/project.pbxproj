@@ -72,6 +72,7 @@
 		00DCE7E00F30D94C0020F864 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 00DCE7DF0F30D94C0020F864 /* Default.png */; };
 		00E1A98E0F328F6D005D7E18 /* SettingsAdvancedOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E1A98D0F328F6D005D7E18 /* SettingsAdvancedOptions.m */; };
 		00F8063E0F33AEB00004DDA2 /* MessageTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F8063D0F33AEB00004DDA2 /* MessageTableCell.m */; };
+		00FE85B31017770800DB15A8 /* SpinnerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE85B21017770800DB15A8 /* SpinnerCell.m */; };
 		1D3623260D0F684500981E51 /* YammerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* YammerAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -196,6 +197,8 @@
 		00E1A98D0F328F6D005D7E18 /* SettingsAdvancedOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsAdvancedOptions.m; path = Controller/SettingsAdvancedOptions.m; sourceTree = "<group>"; };
 		00F8063C0F33AEB00004DDA2 /* MessageTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageTableCell.h; path = Interface/MessageTableCell.h; sourceTree = "<group>"; };
 		00F8063D0F33AEB00004DDA2 /* MessageTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageTableCell.m; path = Interface/MessageTableCell.m; sourceTree = "<group>"; };
+		00FE85B11017770800DB15A8 /* SpinnerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpinnerCell.h; path = Interface/SpinnerCell.h; sourceTree = "<group>"; };
+		00FE85B21017770800DB15A8 /* SpinnerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpinnerCell.m; path = Interface/SpinnerCell.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* YammerAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YammerAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* YammerAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YammerAppDelegate.m; sourceTree = "<group>"; };
@@ -389,6 +392,8 @@
 		00F806360F33AE1E0004DDA2 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				00FE85B11017770800DB15A8 /* SpinnerCell.h */,
+				00FE85B21017770800DB15A8 /* SpinnerCell.m */,
 				00F8063C0F33AEB00004DDA2 /* MessageTableCell.h */,
 				00F8063D0F33AEB00004DDA2 /* MessageTableCell.m */,
 				004A38BA0F377EB90086C2A6 /* MessageWebView.h */,
@@ -586,6 +591,7 @@
 				00B4645B100CDABF00A62118 /* DataSettingsHomeFeed.m in Sources */,
 				00B4645C100CDABF00A62118 /* DataSettingsPush.m in Sources */,
 				009CAD7910110B23001263E5 /* FeedCache.m in Sources */,
+				00FE85B31017770800DB15A8 /* SpinnerCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

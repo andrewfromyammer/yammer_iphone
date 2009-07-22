@@ -12,10 +12,12 @@
 @interface FeedDataSource : NSObject <UITableViewDataSource> {
   NSMutableArray *messages;
   BOOL olderAvailable;
+  BOOL fetchingMore;
 }
 
 @property (nonatomic,retain) NSMutableArray *messages;
 @property BOOL olderAvailable;
+@property BOOL fetchingMore;
 
 - (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
