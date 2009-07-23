@@ -13,11 +13,13 @@
   NSMutableArray *messages;
   BOOL olderAvailable;
   BOOL fetchingMore;
+  NSString *statusMessage;
 }
 
 @property (nonatomic,retain) NSMutableArray *messages;
 @property BOOL olderAvailable;
 @property BOOL fetchingMore;
+@property (nonatomic,retain) NSString *statusMessage;
 
 - (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;

@@ -81,12 +81,35 @@
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	theTableView.delegate = self;
-  self.dataSource = [FeedDataSource getMessages:feed];
+  self.dataSource = [FeedDataSource getMessages:feed];  
 	theTableView.dataSource = self.dataSource;
-  
   [self showTable];
   [super getData];
+  
+  [NSThread detachNewThreadSelector:@selector(setStatus) toTarget:self withObject:nil];
+
   [autoreleasepool release];
+}
+
+- (void)setStatus {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  sleep(1);
+  
+  NSUInteger newIndex[] = {0, 0};
+  NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
+  SpinnerCell *cell = (SpinnerCell *)[self.theTableView cellForRowAtIndexPath:newPath];
+  [newPath release];
+  
+  NSLog(@"fefe %@", self.dataSource.statusMessage);
+  if (self.dataSource.statusMessage) {
+    NSLog(@"1");
+    [cell.displayText setText:self.dataSource.statusMessage];
+    [cell hideSpinner];
+//    self.dataSource.statusMessage = @"wefwe";
+  } else {
+    NSLog(@"2");
+  }
+  [autoreleasepool release];  
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -136,7 +159,9 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-  if (indexPath.section == 1)
+  if (indexPath.section == 0)
+    return 30.0;
+  if (indexPath.section == 2)
     return 50.0;
 
   MessageTableCell *cell = (MessageTableCell *)[dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
@@ -149,17 +174,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-  if (indexPath.section == 0) {
+  if (indexPath.section == 1) {
     MessageViewController *localMessageViewController = [[MessageViewController alloc] 
                                                          initWithBooleanForThreadIcon:threadIcon 
                                                          list:[dataSource messages] 
                                                          index:indexPath.row];
     [self.navigationController pushViewController:localMessageViewController animated:YES];
     [localMessageViewController release];
-  } else {
-    if ([dataSource.messages count] < 999) {      
+  } else if (indexPath.section == 2) {
+    if ([dataSource.messages count] < 999) {
       SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];
-      [cell.spinner startAnimating];
+      [cell showSpinner];
       [cell.displayText setText:@"Loading More..."];
       [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];
     }
@@ -171,18 +196,20 @@
 
   NSMutableDictionary *message = [dataSource.messages objectAtIndex:[dataSource.messages count]-1];
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"]];
-  //if (dict)
-  //  [dataSource proccesMessages:dict feed:[feed objectForKey:@"url"] cache:false];
-  //[theTableView reloadData];
+  if (dict) {
+    NSMutableArray *messages = [dataSource proccesMessages:dict feed:feed];
+    [dataSource.messages addObjectsFromArray:messages];
+  }
   
-  NSUInteger newIndex[] = {1, 0};
+  NSUInteger newIndex[] = {2, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
   SpinnerCell *cell = (SpinnerCell *)[theTableView cellForRowAtIndexPath:newPath];
   [newPath release];
   
-  [cell.spinner stopAnimating];
-  [cell.displayText setText:@"        More"];
-  
+  [cell hideSpinner];
+  [cell displayMore];
+
+  [theTableView reloadData];
   [autoreleasepool release];
 }
 

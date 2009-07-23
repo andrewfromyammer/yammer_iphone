@@ -49,7 +49,7 @@
   NSString *path = [FeedCache feedCacheFilePath:url];    
   NSFileManager *fileManager = [NSFileManager defaultManager];  
   if ([fileManager fileExistsAtPath:path]) {
-    NSMutableDictionary *dict = (NSMutableArray*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
+    NSMutableDictionary *dict = (NSMutableDictionary*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
                                                                        encoding:NSUTF8StringEncoding] JSONValue];
     NSMutableArray *existing = [dict objectForKey:@"messages"];
     BOOL existingOlderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"];    
@@ -77,8 +77,10 @@
   NSRange range;
   range.location = MAX_FEED_CACHE;
   range.length = [messages count] - MAX_FEED_CACHE;
-  if ([messages count] > MAX_FEED_CACHE)
+  if ([messages count] > MAX_FEED_CACHE) {
+    olderAvailable = true;
     [messages removeObjectsInRange:range];
+  }
   
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   [dict setObject:messages forKey:@"messages"];

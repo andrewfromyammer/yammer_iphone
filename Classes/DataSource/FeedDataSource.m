@@ -19,6 +19,7 @@
 @synthesize messages;
 @synthesize olderAvailable;
 @synthesize fetchingMore;
+@synthesize statusMessage;
 
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
   
@@ -26,10 +27,9 @@
   
   if (dict) {
     BOOL olderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"]; 
-
     return [[FeedDataSource alloc] initWithMessages:[dict objectForKey:@"messages"] feed:feed more:olderAvailable];
   }
-  
+
   dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:nil];
   if (dict)
     return [[FeedDataSource alloc] initWithDict:dict feed:feed];
@@ -45,6 +45,7 @@
   self.messages = [NSMutableArray array];
   [self.messages addObjectsFromArray:[self proccesMessages:dict feed:feed]];
   [self processImages];
+  self.statusMessage = @"Updated 12:34 PM";
   return self;
 }
 
@@ -52,6 +53,7 @@
   self.messages = cachedMessages;
   [self processImages];
   self.olderAvailable = hasMore;
+  self.statusMessage = nil;
   [NSThread detachNewThreadSelector:@selector(checkForNewerMessages:) toTarget:self withObject:feed];
   return self;
 }
@@ -164,7 +166,7 @@
       [message setObject:timeLine forKey:@"timeLine"];
     } @catch (NSException *theErr) {}
   }    
-
+  
   [FeedCache writeFeed:[feed objectForKey:@"url"] messages:tempMessages more:self.olderAvailable];
  
   return tempMessages;
@@ -185,37 +187,55 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
   if (olderAvailable)
-    return 2;
-	return 1;
+    return 3;
+	return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  if (section == 0)
+  if (section == 1)
   	return [messages count];
   return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  if (indexPath.section == 0) {
+  if (indexPath.section == 1) {
     MessageTableCell *cell = (MessageTableCell *)[tableView dequeueReusableCellWithIdentifier:@"FeedMessageCell"];
 
     if (cell == nil) {
       cell = [[[MessageTableCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"FeedMessageCell"] autorelease];
     }
-    
     NSMutableDictionary *message = [messages objectAtIndex:indexPath.row];
     cell.imageView.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
-    [cell setMessage:message];
-
-    return cell;
-  } else {
-    SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
-	  if (cell == nil)
-		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"MoreCell"] autorelease];
+    [cell setMessage:message];      
     
-    [cell.displayText setText:@"        More"];
+    return cell;
+  } else if (indexPath.section == 2) {
+    SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
+	  if (cell == nil) {
+		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero 
+                                   reuseIdentifier:@"MoreCell"
+                                   spinRect:CGRectMake(60, 12, 20, 20)
+                                   textRect:CGRectMake(100, 12, 200, 20)] autorelease];
+    }
+    
+    [cell displayMore];
+    [cell hideSpinner];
+  	return cell;
+  } else if (indexPath.section == 0) {
+    SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell"];
+	  if (cell == nil) {
+		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero 
+                                 reuseIdentifier:@"StatusCell"
+                                        spinRect:CGRectMake(60, 4, 20, 20)
+                                        textRect:CGRectMake(100, 4, 200, 20)] autorelease];
+      [cell showSpinner];
+      [cell displayCheckNew];
+    }
+    
+    cell.displayText.font = [UIFont systemFontOfSize:12];
   	return cell;
   }
+  return nil;
 }
 
 - (void)dealloc {
