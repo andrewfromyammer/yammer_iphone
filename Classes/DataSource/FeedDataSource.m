@@ -44,14 +44,14 @@
 - (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   self.messages = [NSMutableArray array];
   [self.messages addObjectsFromArray:[self proccesMessages:dict feed:feed]];
-  [self processImages];
+  [self processImages:self.messages];
   self.statusMessage = @"Updated 12:34 PM";
   return self;
 }
 
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore {
   self.messages = cachedMessages;
-  [self processImages];
+  [self processImages:self.messages];
   self.olderAvailable = hasMore;
   self.statusMessage = nil;
   [NSThread detachNewThreadSelector:@selector(checkForNewerMessages:) toTarget:self withObject:feed];
@@ -172,11 +172,11 @@
   return tempMessages;
 }
 
-- (void)processImages {
+- (void)processImages:(NSMutableArray *)listToUpdate {
   int i=0;
-  for (i=0; i < [self.messages count]; i++) {
+  for (i=0; i < [listToUpdate count]; i++) {
     @try {
-      NSMutableDictionary *message = [self.messages objectAtIndex:i];
+      NSMutableDictionary *message = [listToUpdate objectAtIndex:i];
       
       [message setObject:[ImageCache getImageAndSave:[message objectForKey:@"actor_mugshot_url"] 
                                              user_id:[message objectForKey:@"actor_id"] 
@@ -187,18 +187,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
   if (olderAvailable)
-    return 3;
-	return 2;
+    return 2;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  if (section == 1)
+  if (section == 0)
   	return [messages count];
   return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  if (indexPath.section == 1) {
+  if (indexPath.section == 0) {
     MessageTableCell *cell = (MessageTableCell *)[tableView dequeueReusableCellWithIdentifier:@"FeedMessageCell"];
 
     if (cell == nil) {
@@ -209,7 +209,7 @@
     [cell setMessage:message];      
     
     return cell;
-  } else if (indexPath.section == 2) {
+  } else if (indexPath.section == 1) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
 	  if (cell == nil) {
 		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero 
@@ -221,7 +221,7 @@
     [cell displayMore];
     [cell hideSpinner];
   	return cell;
-  } else if (indexPath.section == 0) {
+  } else if (indexPath.section == 3) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell"];
 	  if (cell == nil) {
 		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero 

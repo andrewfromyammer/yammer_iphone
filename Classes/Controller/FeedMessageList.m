@@ -25,6 +25,8 @@
 @synthesize textInput;
 @synthesize threadIcon;
 @synthesize homeTab;
+@synthesize topSpinner;
+@synthesize displayText;
 
 - (id)initWithDict:(NSMutableDictionary *)dict textInput:(BOOL)showTextInput threadIcon:(BOOL)showThreadIcon homeTab:(BOOL)isHomeTab {
   self.feed = dict;
@@ -43,16 +45,22 @@
 }
 
 - (void)showTable {  
+  self.topSpinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(80, 4, 20, 20)];
+  self.topSpinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
 
-  if (textInput) {
-    UIView *topLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 40, 320, 327)];
-    [topLayer setBackgroundColor:[UIColor whiteColor]];
-    [topLayer addSubview:theTableView];
-    [tableAndInput addSubview:topLayer];
-    self.view = tableAndInput;
-  } else {
-    self.view = theTableView;
-  }
+  self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(110, 4, 200, 20)];
+  self.displayText.textColor = [UIColor blueColor];
+  self.displayText.font = [UIFont systemFontOfSize:12];
+  [self.displayText setText:@"Checking for new yams..."];
+  
+  UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 29, 320, 1)];
+  [line setBackgroundColor:[UIColor lightGrayColor]];
+  [tableAndInput addSubview:self.topSpinner];
+  [tableAndInput addSubview:self.displayText];
+  [tableAndInput addSubview:line];
+  [tableAndInput addSubview:theTableView];
+  self.view = tableAndInput;
+  [self.topSpinner startAnimating];
 }
 
 - (void)getData {
@@ -60,23 +68,8 @@
 
   self.tableAndInput = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   tableAndInput.backgroundColor = [UIColor whiteColor];
-  
-  CGRect frame = [[UIScreen mainScreen] applicationFrame]; 
-  if (textInput) {
-    frame = CGRectMake(0, 0, 320, 327);
-    input = [[UITextField alloc] initWithFrame:CGRectMake(5, 6, 310, 27)];
-    input.backgroundColor = [MainTabBarController yammerBlue];
-    tableAndInput.backgroundColor = [MainTabBarController yammerBlue];
-    input.borderStyle = UITextBorderStyleRoundedRect;
-    input.textColor = [MainTabBarController yammerGray];
-    input.clearsOnBeginEditing = YES;
-    input.returnKeyType = UIReturnKeySend;
-    [input setText:[self gray_text]];
-    input.delegate = self;    
-    [tableAndInput addSubview:input];
-  }
-  
-  theTableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];  
+    
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];  
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
@@ -93,23 +86,34 @@
 
 - (void)setStatus {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  sleep(1);
+  if (self.dataSource.statusMessage)
+    sleep(1);
+  else {
+    NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
+    NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
+    if (dict) {
+      NSMutableArray *messages = [dataSource proccesMessages:dict feed:feed];
+      [dataSource processImages:messages];
+      [messages addObjectsFromArray:dataSource.messages];
+      dataSource.messages = messages;
+      [theTableView reloadData];
+    }
+  }
   
+  /*
   NSUInteger newIndex[] = {0, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
   SpinnerCell *cell = (SpinnerCell *)[self.theTableView cellForRowAtIndexPath:newPath];
   [newPath release];
   
-  NSLog(@"fefe %@", self.dataSource.statusMessage);
   if (self.dataSource.statusMessage) {
-    NSLog(@"1");
     [cell.displayText setText:self.dataSource.statusMessage];
     [cell hideSpinner];
-//    self.dataSource.statusMessage = @"wefwe";
   } else {
-    NSLog(@"2");
-  }
-  [autoreleasepool release];  
+    [cell.displayText setText:@"Updated 12:36 PM"];
+    [cell hideSpinner];    
+  } */
+  [autoreleasepool release];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -159,9 +163,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-  if (indexPath.section == 0)
-    return 30.0;
-  if (indexPath.section == 2)
+  if (indexPath.section == 1)
     return 50.0;
 
   MessageTableCell *cell = (MessageTableCell *)[dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
@@ -174,14 +176,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-  if (indexPath.section == 1) {
+  if (indexPath.section == 0) {
     MessageViewController *localMessageViewController = [[MessageViewController alloc] 
                                                          initWithBooleanForThreadIcon:threadIcon 
                                                          list:[dataSource messages] 
                                                          index:indexPath.row];
     [self.navigationController pushViewController:localMessageViewController animated:YES];
     [localMessageViewController release];
-  } else if (indexPath.section == 2) {
+  } else {
     if ([dataSource.messages count] < 999) {
       SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];
       [cell showSpinner];
@@ -198,10 +200,11 @@
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"]];
   if (dict) {
     NSMutableArray *messages = [dataSource proccesMessages:dict feed:feed];
+    [dataSource processImages:messages];
     [dataSource.messages addObjectsFromArray:messages];
   }
   
-  NSUInteger newIndex[] = {2, 0};
+  NSUInteger newIndex[] = {1, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
   SpinnerCell *cell = (SpinnerCell *)[theTableView cellForRowAtIndexPath:newPath];
   [newPath release];

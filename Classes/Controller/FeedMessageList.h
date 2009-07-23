@@ -19,6 +19,9 @@
   BOOL textInput;
   BOOL threadIcon;
   BOOL homeTab;
+  
+  UIActivityIndicatorView *topSpinner;
+  UILabel *displayText;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
@@ -26,6 +29,8 @@
 @property (nonatomic,retain) NSMutableDictionary *feed;
 @property (nonatomic,retain) UITextField *input;
 @property (nonatomic,retain) UIView *tableAndInput;
+@property (nonatomic,retain) UIActivityIndicatorView *topSpinner;
+@property (nonatomic,retain) UILabel *displayText;
 @property BOOL textInput;
 @property BOOL threadIcon;
 @property BOOL homeTab;
