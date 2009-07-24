@@ -51,16 +51,26 @@
   self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(110, 4, 200, 20)];
   self.displayText.textColor = [UIColor blueColor];
   self.displayText.font = [UIFont systemFontOfSize:12];
-  [self.displayText setText:@"Checking for new yams..."];
   
   UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 29, 320, 1)];
   [line setBackgroundColor:[UIColor lightGrayColor]];
-  [tableAndInput addSubview:self.topSpinner];
   [tableAndInput addSubview:self.displayText];
   [tableAndInput addSubview:line];
   [tableAndInput addSubview:theTableView];
   self.view = tableAndInput;
+  
+  [self topSpinnerShow];
+}
+
+- (void)topSpinnerShow {
+  [self.displayText setText:@"Checking for new yams..."];
+  [tableAndInput addSubview:self.topSpinner];
   [self.topSpinner startAnimating];
+}
+- (void)topSpinnerHide {
+  [self.displayText setText:@"Updated 12:36 PM"];
+  [self.topSpinner stopAnimating];
+  [self.topSpinner removeFromSuperview];
 }
 
 - (void)getData {
@@ -86,33 +96,21 @@
 
 - (void)setStatus {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  if (self.dataSource.statusMessage)
-    sleep(1);
-  else {
+  if (self.dataSource.statusMessage == nil) {
     NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
     NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
     if (dict) {
-      NSMutableArray *messages = [dataSource proccesMessages:dict feed:feed];
+      BOOL previousValue = dataSource.olderAvailable;
+      NSMutableArray *messages = [dataSource proccesMessages:dict feed:feed];            
+      dataSource.olderAvailable = previousValue;
+      
       [dataSource processImages:messages];
       [messages addObjectsFromArray:dataSource.messages];
       dataSource.messages = messages;
       [theTableView reloadData];
     }
   }
-  
-  /*
-  NSUInteger newIndex[] = {0, 0};
-  NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
-  SpinnerCell *cell = (SpinnerCell *)[self.theTableView cellForRowAtIndexPath:newPath];
-  [newPath release];
-  
-  if (self.dataSource.statusMessage) {
-    [cell.displayText setText:self.dataSource.statusMessage];
-    [cell hideSpinner];
-  } else {
-    [cell.displayText setText:@"Updated 12:36 PM"];
-    [cell hideSpinner];    
-  } */
+  [self topSpinnerHide];  
   [autoreleasepool release];
 }
 

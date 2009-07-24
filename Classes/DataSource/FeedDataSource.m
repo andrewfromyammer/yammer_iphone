@@ -54,18 +54,7 @@
   [self processImages:self.messages];
   self.olderAvailable = hasMore;
   self.statusMessage = nil;
-  [NSThread detachNewThreadSelector:@selector(checkForNewerMessages:) toTarget:self withObject:feed];
   return self;
-}
-
-- (void)checkForNewerMessages:(NSMutableDictionary *)feed {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-
-  NSMutableDictionary *message = [self.messages objectAtIndex:0];
-  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
-  [self proccesMessages:dict feed:feed];
-  
-  [autoreleasepool release];
 }
 
 - (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {

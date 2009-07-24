@@ -35,6 +35,8 @@
 @property BOOL threadIcon;
 @property BOOL homeTab;
 
+- (void)topSpinnerShow;
+- (void)topSpinnerHide;
 - (id)initWithDict:(NSMutableDictionary *)dict textInput:(BOOL)showTextInput 
                                                threadIcon:(BOOL)showThreadIcon
                                                   homeTab:(BOOL)isHomeTab;
