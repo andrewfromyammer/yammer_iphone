@@ -12,6 +12,8 @@
 @implementation ComposeYamController
 
 @synthesize input;
+@synthesize topSpinner;
+
 - (void)loadView {
   UIView *wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   wrapper.backgroundColor = [UIColor whiteColor];
@@ -30,11 +32,14 @@
   self.navigationItem.rightBarButtonItem = send;  
   self.navigationItem.leftBarButtonItem = cancel;  
   
-  self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 320, 170)];
+  
+  self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+  [self.topSpinner.displayText setText:@"Share with My Colleagues"];
+  
+  self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, 30, 320, 130)];
   [self.input setFont:[UIFont systemFontOfSize:16]];
   
   UIToolbar *bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 171, 320, 30)];
-//  bar.backgroundColor = [UIColor blackColor];
 
   UIBarButtonItem *camera = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
                                                                          target:self
@@ -45,9 +50,10 @@
   
   NSMutableArray *items = [NSMutableArray arrayWithObjects: flexItem, camera, flexItem, nil];
   [bar setItems:items animated:NO];
-  
-  [wrapper addSubview:bar];
+
+  [wrapper addSubview:self.topSpinner];
   [wrapper addSubview:self.input];
+  [wrapper addSubview:bar];
   
   self.view = wrapper;
   

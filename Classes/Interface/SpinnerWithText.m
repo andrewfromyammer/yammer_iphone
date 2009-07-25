@@ -13,7 +13,6 @@
     
     self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(110, 4, 200, 20)];
     self.displayText.textColor = [UIColor blueColor];
-    [self.displayText setText:@"wefwefwefwe"];
     self.displayText.font = [UIFont systemFontOfSize:12];
 
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 29, 320, 1)];
