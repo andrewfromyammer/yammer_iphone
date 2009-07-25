@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SpinnerViewController.h"
 #import "FeedDataSource.h"
+#import "SpinnerWithText.h"
 
 @interface FeedMessageList : SpinnerViewController <UITableViewDelegate, UITextFieldDelegate>  {
   UIView *tableAndInput;
@@ -19,9 +20,8 @@
   BOOL textInput;
   BOOL threadIcon;
   BOOL homeTab;
-  
-  UIActivityIndicatorView *topSpinner;
-  UILabel *displayText;
+    
+  SpinnerWithText *topSpinner;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
@@ -29,8 +29,7 @@
 @property (nonatomic,retain) NSMutableDictionary *feed;
 @property (nonatomic,retain) UITextField *input;
 @property (nonatomic,retain) UIView *tableAndInput;
-@property (nonatomic,retain) UIActivityIndicatorView *topSpinner;
-@property (nonatomic,retain) UILabel *displayText;
+@property (nonatomic,retain) SpinnerWithText *topSpinner;
 @property BOOL textInput;
 @property BOOL threadIcon;
 @property BOOL homeTab;

@@ -27,7 +27,6 @@
 @synthesize threadIcon;
 @synthesize homeTab;
 @synthesize topSpinner;
-@synthesize displayText;
 
 - (id)initWithDict:(NSMutableDictionary *)dict textInput:(BOOL)showTextInput threadIcon:(BOOL)showThreadIcon homeTab:(BOOL)isHomeTab {
   self.feed = dict;
@@ -46,32 +45,13 @@
 }
 
 - (void)showTable {  
-  self.topSpinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(80, 4, 20, 20)];
-  self.topSpinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-
-  self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(110, 4, 200, 20)];
-  self.displayText.textColor = [UIColor blueColor];
-  self.displayText.font = [UIFont systemFontOfSize:12];
-  
-  UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 29, 320, 1)];
-  [line setBackgroundColor:[UIColor lightGrayColor]];
-  [tableAndInput addSubview:self.displayText];
-  [tableAndInput addSubview:line];
+  self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+    
+  [tableAndInput addSubview:self.topSpinner];
   [tableAndInput addSubview:theTableView];
   self.view = tableAndInput;
   
-  [self topSpinnerShow];
-}
-
-- (void)topSpinnerShow {
-  [self.displayText setText:@"Checking for new yams..."];
-  [tableAndInput addSubview:self.topSpinner];
-  [self.topSpinner startAnimating];
-}
-- (void)topSpinnerHide {
-  [self.displayText setText:@"Updated 12:36 PM"];
-  [self.topSpinner stopAnimating];
-  [self.topSpinner removeFromSuperview];
+  [topSpinner showTheSpinner];
 }
 
 - (void)getData {
@@ -111,7 +91,7 @@
       [theTableView reloadData];
     }
   }
-  [self topSpinnerHide];  
+  [self.topSpinner hideTheSpinner];
   [autoreleasepool release];
 }
 
