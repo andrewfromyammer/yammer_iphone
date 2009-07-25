@@ -14,6 +14,7 @@
 #import "MessageViewController.h"
 #import "LocalStorage.h"
 #import "SpinnerCell.h"
+#import "ComposeYamController.h"
 
 @implementation FeedMessageList
 
@@ -34,7 +35,7 @@
   self.textInput = showTextInput;
   self.threadIcon = showThreadIcon;
   self.homeTab = isHomeTab;
-  [self addRefreshButton];
+  [self addComposeButton];
 	return self;
 }
 
@@ -132,7 +133,7 @@
   theTableView.alpha = 1.0;
   input.textColor = [MainTabBarController yammerGray];
   [input setText:[self gray_text]];
-  [self addRefreshButton];  
+  [self addComposeButton];  
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -152,6 +153,21 @@
   [self cleanUpInput];
   [self getData];
   [autoreleasepool release];
+}
+
+- (void)compose {
+  ComposeYamController *compose = [[ComposeYamController alloc] init];
+  UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
+  [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
+
+  [self presentModalViewController:modal animated:YES];
+  
+  // MyViewController *modalViewController = [[[MyModalViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+  //[[self firstNavigationController] presentModalViewController:secondNavigationController animated:YES];
+  
+//  [NTLNTweetPostViewController dismiss];
+//	NTLNTweetPostViewController *vc = [[[NTLNTweetPostViewController alloc] init] autorelease];
+//	[parentViewController presentModalViewController:vc animated:NO];
 }
 
 - (void)refresh {

@@ -36,6 +36,7 @@
 		006335C30F30F08600B4F38F /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335C00F30F08600B4F38F /* SBJSON.m */; };
 		006335F20F30F9D500B4F38F /* SpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335F10F30F9D500B4F38F /* SpinnerViewController.m */; };
 		0063362C0F31160C00B4F38F /* FeedsTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 0063362B0F31160C00B4F38F /* FeedsTableDataSource.m */; };
+		006B09DC101A755C0089CB57 /* ComposeYamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006B09DB101A755C0089CB57 /* ComposeYamController.m */; };
 		0077C1BE0F9FD1290097605D /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0077C1BD0F9FD1290097605D /* Entitlements.plist */; };
 		007BE6390F336CE5006C79D1 /* DirectoryTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 007BE6380F336CE5006C79D1 /* DirectoryTableDataSource.m */; };
 		0080512E0F3371BC00592204 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0080512D0F3371BC00592204 /* ImageCache.m */; };
@@ -143,6 +144,8 @@
 		006335F10F30F9D500B4F38F /* SpinnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpinnerViewController.m; path = Controller/SpinnerViewController.m; sourceTree = "<group>"; };
 		0063362A0F31160C00B4F38F /* FeedsTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedsTableDataSource.h; path = DataSource/FeedsTableDataSource.h; sourceTree = "<group>"; };
 		0063362B0F31160C00B4F38F /* FeedsTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedsTableDataSource.m; path = DataSource/FeedsTableDataSource.m; sourceTree = "<group>"; };
+		006B09DA101A755C0089CB57 /* ComposeYamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComposeYamController.h; path = Controller/ComposeYamController.h; sourceTree = "<group>"; };
+		006B09DB101A755C0089CB57 /* ComposeYamController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComposeYamController.m; path = Controller/ComposeYamController.m; sourceTree = "<group>"; };
 		0077C1BD0F9FD1290097605D /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		007BE6370F336CE5006C79D1 /* DirectoryTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DirectoryTableDataSource.h; path = DataSource/DirectoryTableDataSource.h; sourceTree = "<group>"; };
 		007BE6380F336CE5006C79D1 /* DirectoryTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DirectoryTableDataSource.m; path = DataSource/DirectoryTableDataSource.m; sourceTree = "<group>"; };
@@ -291,6 +294,8 @@
 		00D5215C0F2FBE1800FB3A8A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				006B09DA101A755C0089CB57 /* ComposeYamController.h */,
+				006B09DB101A755C0089CB57 /* ComposeYamController.m */,
 				00B464AB100CDEE400A62118 /* Settings */,
 				006335F00F30F9D500B4F38F /* SpinnerViewController.h */,
 				006335F10F30F9D500B4F38F /* SpinnerViewController.m */,
@@ -592,6 +597,7 @@
 				00B4645C100CDABF00A62118 /* DataSettingsPush.m in Sources */,
 				009CAD7910110B23001263E5 /* FeedCache.m in Sources */,
 				00FE85B31017770800DB15A8 /* SpinnerCell.m in Sources */,
+				006B09DC101A755C0089CB57 /* ComposeYamController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

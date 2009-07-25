@@ -22,5 +22,6 @@
 - (void)getData;
 - (void)refresh;
 - (void)addRefreshButton;
+- (void)addComposeButton;
 
 @end

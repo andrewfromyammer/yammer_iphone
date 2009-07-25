@@ -156,7 +156,7 @@
     } @catch (NSException *theErr) {}
   }    
   
-  [FeedCache writeFeed:[feed objectForKey:@"url"] messages:tempMessages more:self.olderAvailable];
+  BOOL replaceAll = [FeedCache writeFeed:[feed objectForKey:@"url"] messages:tempMessages more:self.olderAvailable];
  
   return tempMessages;
 }

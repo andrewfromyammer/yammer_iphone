@@ -51,6 +51,14 @@
   self.navigationItem.leftBarButtonItem = nil;  
 }
 
+- (void)addComposeButton {
+  UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                           target:self
+                                                                           action:@selector(compose)];  
+  self.navigationItem.rightBarButtonItem = compose;  
+  self.navigationItem.leftBarButtonItem = nil;  
+}
+
 - (void)dealloc {
   [spinner release];
   [loading release];

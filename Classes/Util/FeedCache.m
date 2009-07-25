@@ -41,7 +41,7 @@
   return nil;
 }
 
-+ (void)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
++ (BOOL)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
   
   if ([messages count] == 0)
     return;
@@ -60,8 +60,17 @@
     NSMutableDictionary *lastExisting  = [existing lastObject];    
 
     if ([[lastNew objectForKey:@"id"] intValue] > [[firstExisting objectForKey:@"id"] intValue]) {
-      [messages addObjectsFromArray:existing];
-      [FeedCache trimArrayAndWrite:path messages:messages more:existingOlderAvailable];
+      
+      // make another http call here for the next twenty, older than the last id
+      // if our existing first id is within that next batch, line 'er up
+      // if not, delete all the existing, just have 40 cached.
+      
+      if (olderAvailable) {
+        [FeedCache trimArrayAndWrite:path messages:messages more:true];        
+      } else {
+        [messages addObjectsFromArray:existing];
+        [FeedCache trimArrayAndWrite:path messages:messages more:existingOlderAvailable];
+      }
     }
     else if ([[lastExisting objectForKey:@"id"] intValue] > [[firstNew objectForKey:@"id"] intValue]) {
       [existing addObjectsFromArray:messages];
@@ -69,6 +78,7 @@
     }
   } else
     [FeedCache trimArrayAndWrite:path messages:messages more:olderAvailable];
+  return false;
 }
 
 + (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {  
