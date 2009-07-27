@@ -133,7 +133,7 @@
   NSMutableDictionary *feed = [NSMutableDictionary dictionary];
   [feed setObject:[NSString stringWithFormat:@"/api/v1/messages/from_user/%@", theUserId] forKey:@"url"];
   
-  FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed textInput:false threadIcon:true homeTab:false];
+  FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed threadIcon:true homeTab:false];
   localFeedMessageList.title = @"User Feed";
   return localFeedMessageList;
 }

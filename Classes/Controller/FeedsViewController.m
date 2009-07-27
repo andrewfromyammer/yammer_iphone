@@ -55,7 +55,6 @@
   [theTableView deselectRowAtIndexPath:indexPath animated:YES];
   FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] 
                                            initWithDict:[dataSource feedAtIndex:indexPath.row] 
-                                           textInput:true
                                            threadIcon:true
                                            homeTab:false];
   [self.navigationController pushViewController:localFeedMessageList animated:YES];

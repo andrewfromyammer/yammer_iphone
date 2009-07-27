@@ -155,7 +155,7 @@
   NSMutableDictionary *feed = [NSMutableDictionary dictionary];
   [feed setObject:[NSString stringWithFormat:@"/api/v1/messages/in_thread/%@", [message objectForKey:@"thread_id"]] forKey:@"url"];
   
-  FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed textInput:false threadIcon:false homeTab:false];
+  FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed threadIcon:false homeTab:false];
   localFeedMessageList.title = @"Thread";
   [self.navigationController pushViewController:localFeedMessageList animated:YES];
   [localFeedMessageList release];

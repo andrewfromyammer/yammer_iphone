@@ -11,13 +11,11 @@
 #import "FeedDataSource.h"
 #import "SpinnerWithText.h"
 
-@interface FeedMessageList : SpinnerViewController <UITableViewDelegate, UITextFieldDelegate>  {
-  UIView *tableAndInput;
+@interface FeedMessageList : SpinnerViewController <UITableViewDelegate>  {
+  UIView *tableAndSpinner;
 	UITableView *theTableView;
-  UITextField *input;
   FeedDataSource *dataSource;
   NSMutableDictionary *feed;
-  BOOL textInput;
   BOOL threadIcon;
   BOOL homeTab;
     
@@ -27,17 +25,14 @@
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) FeedDataSource *dataSource;
 @property (nonatomic,retain) NSMutableDictionary *feed;
-@property (nonatomic,retain) UITextField *input;
-@property (nonatomic,retain) UIView *tableAndInput;
+@property (nonatomic,retain) UIView *tableAndSpinner;
 @property (nonatomic,retain) SpinnerWithText *topSpinner;
-@property BOOL textInput;
 @property BOOL threadIcon;
 @property BOOL homeTab;
 
 - (void)topSpinnerShow;
 - (void)topSpinnerHide;
-- (id)initWithDict:(NSMutableDictionary *)dict textInput:(BOOL)showTextInput 
-                                               threadIcon:(BOOL)showThreadIcon
+- (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   homeTab:(BOOL)isHomeTab;
 
 @end

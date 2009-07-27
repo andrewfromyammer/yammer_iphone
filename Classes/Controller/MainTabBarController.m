@@ -51,7 +51,6 @@
   
   // first tab: home
   FeedMessageList *homeViewController = [[FeedMessageList alloc] initWithDict:[LocalStorage getFeedInfo] 
-                                                                    textInput:true 
                                                                    threadIcon:true
                                                                       homeTab:true];
   [self setupView:homeViewController title:@"Home" image:@"home.png"];

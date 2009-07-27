@@ -21,35 +21,26 @@
 @synthesize theTableView;
 @synthesize dataSource;
 @synthesize feed;
-@synthesize tableAndInput;
-@synthesize input;
-@synthesize textInput;
+@synthesize tableAndSpinner;
 @synthesize threadIcon;
 @synthesize homeTab;
 @synthesize topSpinner;
 
-- (id)initWithDict:(NSMutableDictionary *)dict textInput:(BOOL)showTextInput threadIcon:(BOOL)showThreadIcon homeTab:(BOOL)isHomeTab {
+- (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon homeTab:(BOOL)isHomeTab {
   self.feed = dict;
   self.title = [feed objectForKey:@"name"];
-  self.textInput = showTextInput;
   self.threadIcon = showThreadIcon;
   self.homeTab = isHomeTab;
   [self addComposeButton];
 	return self;
 }
 
-- (NSString *)gray_text {
-  if ([[feed objectForKey:@"type"] isEqualToString:@"group"])
-    return [NSString stringWithFormat:@"Update %@", [feed objectForKey:@"name"]];
-  return @"What are you working on?";
-}
-
 - (void)showTable {  
   self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
     
-  [tableAndInput addSubview:self.topSpinner];
-  [tableAndInput addSubview:theTableView];
-  self.view = tableAndInput;
+  [tableAndSpinner addSubview:self.topSpinner];
+  [tableAndSpinner addSubview:theTableView];
+  self.view = tableAndSpinner;
   
   [topSpinner showTheSpinner:@"Checking for new messages..."];
 }
@@ -57,8 +48,8 @@
 - (void)getData {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
-  self.tableAndInput = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-  tableAndInput.backgroundColor = [UIColor whiteColor];
+  self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+  tableAndSpinner.backgroundColor = [UIColor whiteColor];
     
   theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];  
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
@@ -92,46 +83,6 @@
     }
   }
   [self.topSpinner hideTheSpinner:@"Updated 12:34 PM"];
-  [autoreleasepool release];
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-  theTableView.alpha = 0.15;
-  input.textColor = [UIColor blackColor];
-  UIBarButtonItem *temporaryBarButtonItem=[[UIBarButtonItem alloc] init];
-  temporaryBarButtonItem.title=@"Cancel";
-  temporaryBarButtonItem.action = @selector(cleanUpInput);
-  temporaryBarButtonItem.target = self;
-  self.navigationItem.leftBarButtonItem = temporaryBarButtonItem;
-  [temporaryBarButtonItem release];  
-  self.navigationItem.rightBarButtonItem = nil;
-}
-
-- (void)cleanUpInput {
-  [input setText:@""];
-  [input resignFirstResponder];
-  theTableView.alpha = 1.0;
-  input.textColor = [MainTabBarController yammerGray];
-  [input setText:[self gray_text]];
-  [self addComposeButton];  
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-  self.view = wrapper;
-  self.navigationItem.leftBarButtonItem = nil;
-  [spinner startAnimating];  
-  [NSThread detachNewThreadSelector:@selector(sendUpdate) toTarget:self withObject:nil];
-  return NO;
-}
-
-- (void)sendUpdate {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  NSDecimalNumber *groupId = nil;
-  if ([[feed objectForKey:@"type"] isEqualToString:@"group"])
-    groupId = [feed objectForKey:@"group_id"];
-  [APIGateway createMessage:input.text repliedToId:nil groupId:groupId];
-  [self cleanUpInput];
-  [self getData];
   [autoreleasepool release];
 }
 
@@ -215,8 +166,7 @@
   [theTableView release];
   [dataSource release];
   [feed release];
-  [tableAndInput release];
-  [input release];
+  [tableAndSpinner release];
   [super dealloc];
   
 }
