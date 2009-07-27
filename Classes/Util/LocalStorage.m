@@ -9,17 +9,18 @@
 #import "LocalStorage.h"
 #import "OAuthGateway.h"
 
-static NSString *ACCOUNT_DIR  = @"/account";
-static NSString *PHOTO_DIR    = @"/photos";
-static NSString *FEED_DIR     = @"/feeds";
+static NSString *ACCOUNT_DIR   = @"/account";
+static NSString *PHOTO_DIR     = @"/photos";
+static NSString *FEED_DIR      = @"/feeds";
+static NSString *DRAFT         = @"/account/draft.txt";
 static NSString *REQUEST_TOKEN = @"/account/request_token.txt";
-static NSString *ACCESS_TOKEN = @"/account/access_token.txt";
-static NSString *USERFILE = @"/account/user.txt";
-static NSString *PASSFILE = @"/account/pass.txt";
-static NSString *FEEDFILE_OLD = @"/account/feed.txt";
-static NSString *FEEDFILE = @"/account/feed2.txt";
-static NSString *CURRENTFILE = @"/account/current.txt";
-static NSString *BASE_URL = @"/account/base_url.txt";
+static NSString *ACCESS_TOKEN  = @"/account/access_token.txt";
+static NSString *USERFILE      = @"/account/user.txt";
+static NSString *PASSFILE      = @"/account/pass.txt";
+static NSString *FEEDFILE_OLD  = @"/account/feed.txt";
+static NSString *FEEDFILE      = @"/account/feed2.txt";
+static NSString *CURRENTFILE   = @"/account/current.txt";
+static NSString *BASE_URL      = @"/account/base_url.txt";
 
 @implementation LocalStorage
 
@@ -87,8 +88,16 @@ static NSString *BASE_URL = @"/account/base_url.txt";
   return [LocalStorage getFile:REQUEST_TOKEN];
 }
 
++ (NSString *)getDraft {
+  return [LocalStorage getFile:DRAFT];
+}
+
 + (void)saveRequestToken:(NSString *)token {
   [LocalStorage saveFile:REQUEST_TOKEN data:token];
+}
+
++ (void)saveDraft:(NSString *)draft {
+  [LocalStorage saveFile:DRAFT data:draft];
 }
 
 + (void)removeRequestToken {
@@ -115,6 +124,7 @@ static NSString *BASE_URL = @"/account/base_url.txt";
 + (void)deleteAccountInfo {
   [LocalStorage removeFile:ACCESS_TOKEN];
   [LocalStorage removeFile:REQUEST_TOKEN];
+  [LocalStorage removeFile:DRAFT];  
   [LocalStorage removeFile:FEEDFILE];
   [LocalStorage removeFile:FEED_DIR];
 }

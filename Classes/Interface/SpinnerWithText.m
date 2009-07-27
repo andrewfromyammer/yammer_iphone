@@ -8,11 +8,12 @@
 
 - (id)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(80, 4, 20, 20)];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(10, 4, 20, 20)];
     self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     
-    self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(110, 4, 200, 20)];
+    self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(30, 4, 270, 20)];
     self.displayText.textColor = [UIColor blueColor];
+    self.displayText.textAlignment = UITextAlignmentCenter;
     self.displayText.font = [UIFont systemFontOfSize:12];
 
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 29, 320, 1)];
@@ -26,14 +27,14 @@
   return self;
 }
 
-- (void)showTheSpinner {
-  [self.displayText setText:@"Checking for new yams..."];
+- (void)showTheSpinner:(NSString *)text {
+  [self.displayText setText:text];
   [self addSubview:self.spinner];
   [spinner startAnimating];
 }
 
-- (void)hideTheSpinner {
-  [self.displayText setText:@"Updated 12:36 PM"];
+- (void)hideTheSpinner:(NSString *)text {
+  [self.displayText setText:text];
   [spinner stopAnimating];
   [spinner removeFromSuperview];
 }

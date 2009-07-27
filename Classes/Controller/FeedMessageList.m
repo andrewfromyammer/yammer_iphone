@@ -51,7 +51,7 @@
   [tableAndInput addSubview:theTableView];
   self.view = tableAndInput;
   
-  [topSpinner showTheSpinner];
+  [topSpinner showTheSpinner:@"Checking for new messages..."];
 }
 
 - (void)getData {
@@ -91,7 +91,7 @@
       [theTableView reloadData];
     }
   }
-  [self.topSpinner hideTheSpinner];
+  [self.topSpinner hideTheSpinner:@"Updated 12:34 PM"];
   [autoreleasepool release];
 }
 
@@ -136,7 +136,7 @@
 }
 
 - (void)compose {
-  ComposeYamController *compose = [[ComposeYamController alloc] init];
+  ComposeYamController *compose = [[ComposeYamController alloc] initWithSpinner:self.topSpinner];
   UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
   [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
 

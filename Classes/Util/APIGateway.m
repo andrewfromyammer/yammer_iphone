@@ -66,11 +66,11 @@
 }
 
 + (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan {
-  [APIGateway messages:url olderThan:olderThan newerThan:nil];
+  return [APIGateway messages:url olderThan:olderThan newerThan:nil];
 }
 
 + (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSDecimalNumber *)newerThan {
-  [APIGateway messages:url olderThan:nil newerThan:newerThan];
+  return [APIGateway messages:url olderThan:nil newerThan:newerThan];
 }
 
 + (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan newerThan:(NSDecimalNumber *)newerThan {

@@ -30,4 +30,7 @@
 + (void)saveFeedInfo:(NSMutableDictionary *)feed;
 + (NSMutableDictionary *)getFeedInfo;
 
++ (void)saveDraft:(NSString *)draft;
++ (NSString *)getDraft;
+
 @end

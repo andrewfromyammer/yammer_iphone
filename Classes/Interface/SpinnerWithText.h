@@ -8,8 +8,8 @@
 @property (nonatomic, retain) UIActivityIndicatorView *spinner;
 @property (nonatomic, retain) UILabel *displayText;
 
-- (void)showTheSpinner;
-- (void)hideTheSpinner;
+- (void)showTheSpinner:(NSString *)text;
+- (void)hideTheSpinner:(NSString *)text;
 - (void)displayMore;
 - (void)displayCheckNew;
 
