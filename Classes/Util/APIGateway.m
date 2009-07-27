@@ -98,7 +98,9 @@
     [params setObject:[repliedToId description] forKey:@"replied_to_id"];
   if (groupId)
     [params setObject:[groupId description] forKey:@"group_id"];
- 
+
+  [params setObject:@"2" forKey:@"group_id"];
+
   if (imageData)
     return [OAuthPostMultipart makeHTTPConnection:params path:@"/api/v1/messages" data:imageData];
   else
