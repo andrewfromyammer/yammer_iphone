@@ -8,11 +8,13 @@
   UITextView *input;
   SpinnerWithText *topSpinner;
   SpinnerWithText *previousSpinner;
+  NSData *imageData;
 }
 
 @property (nonatomic,retain) UITextView *input;
 @property (nonatomic,retain) SpinnerWithText *topSpinner;
 @property (nonatomic,retain) SpinnerWithText *previousSpinner;
+@property (nonatomic,retain) NSData *imageData;
 
 - (void)sendMessage;
 - (id)initWithSpinner:(SpinnerWithText *)spinner;

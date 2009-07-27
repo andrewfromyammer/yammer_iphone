@@ -11,6 +11,7 @@
 #import "NSString+SBJSON.h"
 #import "LocalStorage.h"
 #import "OAuthPostURLEncoded.h"
+#import "OAuthPostMultipart.h"
 
 @implementation APIGateway
 
@@ -87,7 +88,9 @@
   return nil;
 }
 
-+ (BOOL)createMessage:(NSString *)body repliedToId:(NSDecimalNumber *)repliedToId groupId:(NSDecimalNumber *)groupId {
++ (BOOL)createMessage:(NSString *)body repliedToId:(NSDecimalNumber *)repliedToId 
+                                       groupId:(NSDecimalNumber *)groupId
+                                       imageData:(NSData *)imageData {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
   [params setObject:body forKey:@"body"];
@@ -95,8 +98,11 @@
     [params setObject:[repliedToId description] forKey:@"replied_to_id"];
   if (groupId)
     [params setObject:[groupId description] forKey:@"group_id"];
-  
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages" method:@"POST"];
+ 
+  if (imageData)
+    return [OAuthPostMultipart makeHTTPConnection:params path:@"/api/v1/messages" data:imageData];
+  else
+    return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages" method:@"POST"];
 }
 
 + (BOOL)followingUser:(NSString *)theUserId {

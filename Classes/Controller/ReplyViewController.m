@@ -49,7 +49,7 @@
 
 - (void)sendReply {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  [APIGateway createMessage:input.text repliedToId:[message objectForKey:@"id"] groupId:[message objectForKey:@"group_id"]];
+  [APIGateway createMessage:input.text repliedToId:[message objectForKey:@"id"] groupId:[message objectForKey:@"group_id"] imageData:nil];
   [autoreleasepool release];
 }
 

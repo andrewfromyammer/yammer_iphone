@@ -11,11 +11,13 @@
 #import "APIGateway.h"
 #import "YammerAppDelegate.h"
 
+
 @implementation ComposeYamController
 
 @synthesize input;
 @synthesize topSpinner;
 @synthesize previousSpinner;
+@synthesize imageData;
 
 - (id)initWithSpinner:(SpinnerWithText *)spinner {
   self.previousSpinner = spinner;
@@ -102,8 +104,8 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   NSDecimalNumber *groupId = nil;
 //  if ([[feed objectForKey:@"type"] isEqualToString:@"group"])
-//    groupId = [feed objectForKey:@"group_id"];
-  if ([APIGateway createMessage:text repliedToId:nil groupId:groupId])
+ //   groupId = [feed objectForKey:@"group_id"];
+  if ([APIGateway createMessage:text repliedToId:nil groupId:groupId imageData:self.imageData])
     [LocalStorage saveDraft:@""];
   [self.previousSpinner hideTheSpinner:@"Updated 12:34 PM"];
   [autoreleasepool release];  
@@ -120,6 +122,9 @@
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+  if (buttonIndex == 2)
+    return;
+  
   [input resignFirstResponder];
   UIImagePickerController *picker = [[UIImagePickerController alloc] init];
   picker.delegate = self;
@@ -143,10 +148,10 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo {
-  NSData *imageData = UIImageJPEGRepresentation(image, 90);
-
+  self.imageData = UIImageJPEGRepresentation(image, 90);
   [picker.view removeFromSuperview];
   [input becomeFirstResponder];
+  [topSpinner.displayText setText:@"Image attached"];
 }
 
 
@@ -154,6 +159,7 @@
   [input release];
   [topSpinner release];
   [previousSpinner release];
+  [imageData release];
   [super dealloc];
 }
 

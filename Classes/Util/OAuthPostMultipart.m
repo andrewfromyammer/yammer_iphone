@@ -13,22 +13,9 @@
 #import "OAConsumer.h"
 #import "OAMutableURLRequest.h"
 
-/* 
- Multipart posts are not in the code yet.  When ready to allow photo uploads the code is here:
- 
- UIImagePickerController *picker = [[UIImagePickerController alloc] init];
- picker.delegate = self;
- picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
- [window addSubview:picker.view];
- 
- - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo {
-    NSData *imageData = UIImageJPEGRepresentation(image, 90);  
-  }
- */
-
 @implementation OAuthPostMultipart
 
-- (BOOL)makeHTTPConnection:(NSArray *)params path:(NSString *)path data:(NSData *)data {  
++ (BOOL)makeHTTPConnection:(NSMutableDictionary *)params path:(NSString *)path data:(NSData *)data {  
   
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   
@@ -66,7 +53,7 @@
   [request setValue:[NSString stringWithFormat:@"%d", [body length]] forHTTPHeaderField:@"Content-Length"];
   [request setValue:contentType forHTTPHeaderField:@"Content-Type"]; 
   
-  return [OAuthGateway handleConnection:request] == nil;
+  return [OAuthGateway handleConnection:request] != nil;
 }
 
 @end
