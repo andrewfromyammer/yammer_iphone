@@ -91,14 +91,7 @@
   UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
   [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
 
-  [self presentModalViewController:modal animated:YES];
-  
-  // MyViewController *modalViewController = [[[MyModalViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-  //[[self firstNavigationController] presentModalViewController:secondNavigationController animated:YES];
-  
-//  [NTLNTweetPostViewController dismiss];
-//	NTLNTweetPostViewController *vc = [[[NTLNTweetPostViewController alloc] init] autorelease];
-//	[parentViewController presentModalViewController:vc animated:NO];
+  [self presentModalViewController:modal animated:YES];  
 }
 
 - (void)refresh {

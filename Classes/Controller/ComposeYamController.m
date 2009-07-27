@@ -9,6 +9,7 @@
 #import "ComposeYamController.h"
 #import "LocalStorage.h"
 #import "APIGateway.h"
+#import "YammerAppDelegate.h"
 
 @implementation ComposeYamController
 
@@ -35,7 +36,7 @@
   UIBarButtonItem *send=[[UIBarButtonItem alloc] init];
   send.title=@"Send";
   send.target = self;
-  send.action = @selector(sendYam);
+  send.action = @selector(sendMessage);
   
   
   self.navigationItem.rightBarButtonItem = send;  
@@ -48,13 +49,14 @@
   self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, 30, 320, 130)];
   [self.input setFont:[UIFont systemFontOfSize:16]];
   self.input.text = [LocalStorage getDraft];
+  [self setSendEnabledState];
   [self.input setDelegate:self];
   
   UIToolbar *bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 171, 320, 30)];
 
   UIBarButtonItem *camera = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
                                                                          target:self
-                                                                         action:@selector(sendYam)];
+                                                                         action:@selector(photoSelect)];
   UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                             target:nil
                                                                             action:nil];
@@ -70,16 +72,24 @@
   
 }
 
+- (void)setSendEnabledState {
+  if ([[self.input.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0)
+    self.navigationItem.rightBarButtonItem.enabled = true;
+  else
+    self.navigationItem.rightBarButtonItem.enabled = false;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
   [input becomeFirstResponder];
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
   [LocalStorage saveDraft:textView.text];
+  [self setSendEnabledState];
 }
 
 
-- (void)sendYam {
+- (void)sendMessage {
   self.input.text = [self.input.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   if ([self.input hasText]) {
     [NSThread detachNewThreadSelector:@selector(sendUpdate:) toTarget:self withObject:[NSString stringWithString:self.input.text]];
@@ -98,6 +108,47 @@
   [self.previousSpinner hideTheSpinner:@"Updated 12:34 PM"];
   [autoreleasepool release];  
 }
+
+- (void)photoSelect {
+  YammerAppDelegate *yad = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                           delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil
+                                                  otherButtonTitles:@"Take Photo", @"Choose Existing Photo", nil];
+  actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+  [actionSheet showInView:yad.window];
+  [actionSheet release];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+  [input resignFirstResponder];
+  UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+  picker.delegate = self;
+  
+  @try {
+    if (buttonIndex == 0)
+      picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    else
+      picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+
+    YammerAppDelegate *yad = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [yad.window addSubview:picker.view];
+  } @catch (NSException *theErr) {
+    [input becomeFirstResponder];
+  }
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+  [picker.view removeFromSuperview];
+  [input becomeFirstResponder];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo {
+  NSData *imageData = UIImageJPEGRepresentation(image, 90);
+
+  [picker.view removeFromSuperview];
+  [input becomeFirstResponder];
+}
+
 
 - (void)dealloc {
   [input release];
