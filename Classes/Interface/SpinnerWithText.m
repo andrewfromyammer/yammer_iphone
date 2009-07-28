@@ -12,7 +12,7 @@
     self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     
     self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(30, 4, 270, 20)];
-    self.displayText.textColor = [UIColor blueColor];
+    self.displayText.textColor = [UIColor darkGrayColor];
     self.displayText.textAlignment = UITextAlignmentCenter;
     self.displayText.font = [UIFont systemFontOfSize:12];
 

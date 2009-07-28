@@ -18,6 +18,8 @@
 @synthesize topSpinner;
 @synthesize previousSpinner;
 @synthesize imageData;
+@synthesize bar;
+@synthesize undoBuffer;
 
 - (id)initWithSpinner:(SpinnerWithText *)spinner {
   self.previousSpinner = spinner;
@@ -54,16 +56,18 @@
   [self setSendEnabledState];
   [self.input setDelegate:self];
   
-  UIToolbar *bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 171, 320, 30)];
-
-  UIBarButtonItem *camera = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                                         target:self
-                                                                         action:@selector(photoSelect)];
+  bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 171, 320, 30)];
+    
   UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                             target:nil
                                                                             action:nil];
   
-  NSMutableArray *items = [NSMutableArray arrayWithObjects: flexItem, camera, flexItem, nil];
+  UIBarButtonItem *camera = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                         target:self
+                                                                         action:@selector(photoSelect)];
+  camera.style = UIBarButtonItemStyleBordered;
+  
+  NSMutableArray *items = [NSMutableArray arrayWithObjects: [self trashButton], flexItem, camera, nil];
   [bar setItems:items animated:NO];
 
   [wrapper addSubview:self.topSpinner];
@@ -71,7 +75,36 @@
   [wrapper addSubview:bar];
   
   self.view = wrapper;
-  
+}
+
+- (void)replaceButton:(UIBarButtonItem*)item index:(int)index {
+  NSMutableArray *items = [bar.items mutableCopy];
+  [items replaceObjectAtIndex:index withObject:item];
+  [bar setItems:items animated:false];
+  [items release];
+}
+
+- (void)trashIt {
+  self.undoBuffer = [NSString stringWithString:input.text];
+  input.text = @"";
+  UIBarButtonItem *undo = [[UIBarButtonItem alloc] initWithTitle:@"Undo" style:UIBarButtonItemStyleBordered
+                                                                         target:self
+                                                                         action:@selector(undoIt)];
+  [self replaceButton:undo index:0];
+}
+
+- (UIBarButtonItem *)trashButton {
+  UIBarButtonItem *trash = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                         target:self
+                                                                         action:@selector(trashIt)];
+  trash.style = UIBarButtonItemStyleBordered;  
+  return trash;
+}
+
+- (void)undoIt {
+  [self.input setText:self.undoBuffer];
+  self.undoBuffer = nil;
+  [self replaceButton:[self trashButton] index:0];
 }
 
 - (void)setSendEnabledState {
@@ -88,6 +121,10 @@
 - (void)textViewDidChange:(UITextView *)textView {
   [LocalStorage saveDraft:textView.text];
   [self setSendEnabledState];
+  if (self.undoBuffer != nil && [textView hasText]) {
+    self.undoBuffer = nil;
+    [self replaceButton:[self trashButton] index:0];
+  }
 }
 
 
@@ -160,6 +197,8 @@
   [topSpinner release];
   [previousSpinner release];
   [imageData release];
+  [bar release];
+  [undoBuffer release];
   [super dealloc];
 }
 
