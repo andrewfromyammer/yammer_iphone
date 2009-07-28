@@ -6,13 +6,13 @@
 //  Copyright 2009 Yammer, Inc. All rights reserved.
 //
 
-#import "ComposeYamController.h"
+#import "ComposeMessageController.h"
 #import "LocalStorage.h"
 #import "APIGateway.h"
 #import "YammerAppDelegate.h"
 
 
-@implementation ComposeYamController
+@implementation ComposeMessageController
 
 @synthesize input;
 @synthesize topSpinner;
@@ -20,10 +20,10 @@
 @synthesize imageData;
 @synthesize bar;
 @synthesize undoBuffer;
-@synthesize feed;
+@synthesize meta;
 
-- (id)initWithSpinner:(SpinnerWithText *)spinner feed:(NSMutableDictionary *)theFeed {
-  self.feed = theFeed;
+- (id)initWithSpinner:(SpinnerWithText *)spinner meta:(NSMutableDictionary *)metaInfo {
+  self.meta = metaInfo;
   self.previousSpinner = spinner;
   return self;
 }
@@ -49,8 +49,8 @@
   self.navigationItem.leftBarButtonItem = draft;
   
   
-  self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-  [self.topSpinner.displayText setText:[NSString stringWithFormat:@"Share with %@", [feed objectForKey:@"name"]]];
+  self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];  
+  [self.topSpinner.displayText setText:[meta objectForKey:@"display"]];
   
   self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, 30, 320, 125)];
   [self.input setFont:[UIFont systemFontOfSize:16]];
@@ -138,20 +138,19 @@
   if ([self.input hasText]) {
     [NSThread detachNewThreadSelector:@selector(sendUpdate:) toTarget:self withObject:[NSString stringWithString:self.input.text]];
     [self dismissModalViewControllerAnimated:YES];
-    [self.previousSpinner showTheSpinner:@"Sending message..."];
+    //[self.previousSpinner showTheSpinner:@"Sending message..."];
   }
 }
 
 - (void)sendUpdate:(NSString *)text {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  NSDecimalNumber *groupId = nil;
-  if ([[feed objectForKey:@"type"] isEqualToString:@"group"])
-    groupId = [feed objectForKey:@"group_id"];
-  if ([APIGateway createMessage:text repliedToId:nil groupId:groupId imageData:self.imageData]) {
+  if ([APIGateway createMessage:text repliedToId:[meta objectForKey:@"replied_to_id"] 
+                        groupId:[meta objectForKey:@"group_id"] 
+                        imageData:self.imageData]) {
     [LocalStorage saveDraft:@""];
-    [self.previousSpinner hideTheSpinner:@"Message sent."];
+    //[self.previousSpinner hideTheSpinner:@"Message sent."];
   } else {
-    [self.previousSpinner hideTheSpinner:@"Last message not sent."];
+    //[self.previousSpinner hideTheSpinner:@"Last message not sent."];
   }
   [autoreleasepool release];
 }
@@ -215,7 +214,7 @@
   [imageData release];
   [bar release];
   [undoBuffer release];
-  [feed release];
+  [meta release];
   [super dealloc];
 }
 

@@ -14,7 +14,7 @@
 #import "MessageViewController.h"
 #import "LocalStorage.h"
 #import "SpinnerCell.h"
-#import "ComposeYamController.h"
+#import "ComposeMessageController.h"
 
 @implementation FeedMessageList
 
@@ -51,12 +51,12 @@
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   tableAndSpinner.backgroundColor = [UIColor whiteColor];
     
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];  
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	theTableView.delegate = self;
-  self.dataSource = [FeedDataSource getMessages:feed];  
+  self.dataSource = [FeedDataSource getMessages:feed];
 	theTableView.dataSource = self.dataSource;
   [self showTable];
   [super getData];
@@ -72,7 +72,14 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   if (self.dataSource.statusMessage == nil) {
 
-    NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
+    NSMutableDictionary *message;
+    @try {
+      message = [dataSource.messages objectAtIndex:0];
+    } @catch (NSException *theErr) {
+      message = [NSMutableDictionary dictionary];
+      [message setObject:@"1" forKey:@"id"];
+    }
+    
     NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
     if (dict) {
       BOOL previousValue = dataSource.olderAvailable;
@@ -90,11 +97,20 @@
 }
 
 - (void)compose {
-  ComposeYamController *compose = [[ComposeYamController alloc] initWithSpinner:self.topSpinner feed:feed];
+  NSMutableDictionary *meta = [NSMutableDictionary dictionary];
+
+  NSString *name = [feed objectForKey:@"name"];
+  if ([[feed objectForKey:@"type"] isEqualToString:@"group"])
+    [meta setObject:[feed objectForKey:@"group_id"] forKey:@"group_id"];
+  else
+    name = @"My Colleagues";
+  [meta setObject:[NSString stringWithFormat:@"Share with %@", name] forKey:@"display"];
+  
+  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithSpinner:self.topSpinner meta:meta];
   UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
   [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
 
-  [self presentModalViewController:modal animated:YES];  
+  [self presentModalViewController:modal animated:YES];
 }
 
 - (void)topSpinnerClicked {

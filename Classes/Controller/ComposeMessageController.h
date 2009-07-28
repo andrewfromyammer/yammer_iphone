@@ -1,14 +1,14 @@
 #import <UIKit/UIKit.h>
 #import "SpinnerWithText.h"
 
-@interface ComposeYamController : UIViewController <UITextViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate> {
+@interface ComposeMessageController : UIViewController <UITextViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate> {
   UITextView *input;
   SpinnerWithText *topSpinner;
   SpinnerWithText *previousSpinner;
   NSData *imageData;
   UIToolbar *bar;
   NSString *undoBuffer; 
-  NSMutableDictionary *feed;
+  NSMutableDictionary *meta;
 }
 
 @property (nonatomic,retain) UITextView *input;
@@ -17,10 +17,10 @@
 @property (nonatomic,retain) NSData *imageData;
 @property (nonatomic,retain) UIToolbar *bar;
 @property (nonatomic,retain) NSString *undoBuffer;
-@property (nonatomic,retain) NSMutableDictionary *feed;
+@property (nonatomic,retain) NSMutableDictionary *meta;
 
 - (void)sendMessage;
-- (id)initWithSpinner:(SpinnerWithText *)spinner feed:(NSMutableDictionary *)theFeed;
+- (id)initWithSpinner:(SpinnerWithText *)spinner meta:(NSMutableDictionary *)metaInfo;
 - (void)sendUpdate:(NSString *)text;
 - (void)photoSelect;
 - (void)setSendEnabledState;

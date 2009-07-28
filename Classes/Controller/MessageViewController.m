@@ -12,6 +12,7 @@
 #import "ReplyViewController.h"
 #import "DirectoryUserProfile.h"
 #import "FeedMessageList.h"
+#import "ComposeMessageController.h"
 
 @implementation MessageViewController
 
@@ -157,6 +158,7 @@
   
   FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed threadIcon:false homeTab:false];
   localFeedMessageList.title = @"Thread";
+  localFeedMessageList.navigationItem.rightBarButtonItem = nil;
   [self.navigationController pushViewController:localFeedMessageList animated:YES];
   [localFeedMessageList release];
 }
@@ -171,9 +173,17 @@
 }
 
 - (void)reply {
-  ReplyViewController *localReplyViewController = [[ReplyViewController alloc] initWithMessage:[theList objectAtIndex:theIndex]];
-	[self.navigationController pushViewController:localReplyViewController animated:NO];
-  [localReplyViewController release];
+  NSMutableDictionary *message = [theList objectAtIndex:theIndex];
+  NSMutableDictionary *meta = [NSMutableDictionary dictionary];
+  
+  [meta setObject:[message objectForKey:@"id"] forKey:@"replied_to_id"];
+  [meta setObject:[NSString stringWithFormat:@"Replying to %@", [message objectForKey:@"sender"]] forKey:@"display"];
+  
+  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithSpinner:nil meta:meta];
+  UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
+  [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
+  
+  [self presentModalViewController:modal animated:YES];
 }
 
 - (void)dealloc {
