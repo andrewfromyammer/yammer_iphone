@@ -47,8 +47,7 @@
   UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                            target:self
                                                                            action:@selector(refresh)];  
-  self.navigationItem.rightBarButtonItem = refresh;  
-  self.navigationItem.leftBarButtonItem = nil;  
+  self.navigationItem.leftBarButtonItem = refresh;  
 }
 
 - (void)addComposeButton {
@@ -56,7 +55,6 @@
                                                                            target:self
                                                                            action:@selector(compose)];  
   self.navigationItem.rightBarButtonItem = compose;  
-  self.navigationItem.leftBarButtonItem = nil;  
 }
 
 - (void)dealloc {

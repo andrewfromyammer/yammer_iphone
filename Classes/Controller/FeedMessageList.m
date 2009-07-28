@@ -37,12 +37,12 @@
 
 - (void)showTable {  
   self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-    
-  [tableAndSpinner addSubview:self.topSpinner];
+  self.topSpinner.target = self;
+
+  [tableAndSpinner addSubview:topSpinner];
   [tableAndSpinner addSubview:theTableView];
   self.view = tableAndSpinner;
   
-  [topSpinner showTheSpinner:@"Checking for new messages..."];
 }
 
 - (void)getData {
@@ -60,6 +60,8 @@
 	theTableView.dataSource = self.dataSource;
   [self showTable];
   [super getData];
+
+  [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   
   [NSThread detachNewThreadSelector:@selector(setStatus) toTarget:self withObject:nil];
 
@@ -69,6 +71,7 @@
 - (void)setStatus {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   if (self.dataSource.statusMessage == nil) {
+
     NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
     NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
     if (dict) {
@@ -87,17 +90,17 @@
 }
 
 - (void)compose {
-  ComposeYamController *compose = [[ComposeYamController alloc] initWithSpinner:self.topSpinner];
+  ComposeYamController *compose = [[ComposeYamController alloc] initWithSpinner:self.topSpinner feed:feed];
   UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
   [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
 
   [self presentModalViewController:modal animated:YES];  
 }
 
-- (void)refresh {
-  if (homeTab) 
-    self.feed = [LocalStorage getFeedInfo];
-  [super refresh];
+- (void)topSpinnerClicked {
+  [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
+  self.dataSource.statusMessage = nil;
+  [NSThread detachNewThreadSelector:@selector(setStatus) toTarget:self withObject:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -159,9 +162,9 @@
   [theTableView release];
   [dataSource release];
   [feed release];
+  [topSpinner release];
   [tableAndSpinner release];
   [super dealloc];
-  
 }
 
 @end

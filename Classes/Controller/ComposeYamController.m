@@ -20,8 +20,10 @@
 @synthesize imageData;
 @synthesize bar;
 @synthesize undoBuffer;
+@synthesize feed;
 
-- (id)initWithSpinner:(SpinnerWithText *)spinner {
+- (id)initWithSpinner:(SpinnerWithText *)spinner feed:(NSMutableDictionary *)theFeed {
+  self.feed = theFeed;
   self.previousSpinner = spinner;
   return self;
 }
@@ -48,26 +50,21 @@
   
   
   self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-  [self.topSpinner.displayText setText:@"Share with My Colleagues"];
+  [self.topSpinner.displayText setText:[NSString stringWithFormat:@"Share with %@", [feed objectForKey:@"name"]]];
   
-  self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, 30, 320, 130)];
+  self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, 30, 320, 125)];
   [self.input setFont:[UIFont systemFontOfSize:16]];
   self.input.text = [LocalStorage getDraft];
   [self setSendEnabledState];
   [self.input setDelegate:self];
   
-  bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 171, 320, 30)];
+  self.bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 166, 320, 35)];
     
   UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                             target:nil
-                                                                            action:nil];
+                                                                            action:nil];  
   
-  UIBarButtonItem *camera = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                                         target:self
-                                                                         action:@selector(photoSelect)];
-  camera.style = UIBarButtonItemStyleBordered;
-  
-  NSMutableArray *items = [NSMutableArray arrayWithObjects: [self trashButton], flexItem, camera, nil];
+  NSMutableArray *items = [NSMutableArray arrayWithObjects: [self trashButton], flexItem, [self cameraButton], nil];
   [bar setItems:items animated:NO];
 
   [wrapper addSubview:self.topSpinner];
@@ -99,6 +96,14 @@
                                                                          action:@selector(trashIt)];
   trash.style = UIBarButtonItemStyleBordered;  
   return trash;
+}
+
+- (UIBarButtonItem *)cameraButton {
+  UIBarButtonItem *camera = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                         target:self
+                                                                         action:@selector(photoSelect)];
+  camera.style = UIBarButtonItemStyleBordered;  
+  return camera;
 }
 
 - (void)undoIt {
@@ -140,12 +145,15 @@
 - (void)sendUpdate:(NSString *)text {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   NSDecimalNumber *groupId = nil;
-//  if ([[feed objectForKey:@"type"] isEqualToString:@"group"])
- //   groupId = [feed objectForKey:@"group_id"];
-  if ([APIGateway createMessage:text repliedToId:nil groupId:groupId imageData:self.imageData])
+  if ([[feed objectForKey:@"type"] isEqualToString:@"group"])
+    groupId = [feed objectForKey:@"group_id"];
+  if ([APIGateway createMessage:text repliedToId:nil groupId:groupId imageData:self.imageData]) {
     [LocalStorage saveDraft:@""];
-  [self.previousSpinner hideTheSpinner:@"Updated 12:34 PM"];
-  [autoreleasepool release];  
+    [self.previousSpinner hideTheSpinner:@"Message sent."];
+  } else {
+    [self.previousSpinner hideTheSpinner:@"Last message not sent."];
+  }
+  [autoreleasepool release];
 }
 
 - (void)photoSelect {
@@ -187,8 +195,16 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo {
   self.imageData = UIImageJPEGRepresentation(image, 90);
   [picker.view removeFromSuperview];
+  UIBarButtonItem *removePhoto = [[UIBarButtonItem alloc] initWithTitle:@"Remove Photo" style:UIBarButtonItemStyleBordered
+                                                          target:self
+                                                          action:@selector(removePhoto)];
+  [self replaceButton:removePhoto index:2];
   [input becomeFirstResponder];
-  [topSpinner.displayText setText:@"Image attached"];
+}
+
+- (void)removePhoto {
+  self.imageData = nil;
+  [self replaceButton:[self cameraButton] index:2];
 }
 
 
@@ -199,6 +215,7 @@
   [imageData release];
   [bar release];
   [undoBuffer release];
+  [feed release];
   [super dealloc];
 }
 

@@ -5,6 +5,7 @@
 
 @synthesize spinner;
 @synthesize displayText;
+@synthesize target;
 
 - (id)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
@@ -27,6 +28,11 @@
   return self;
 }
 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+  if (self.target)
+    [NSThread detachNewThreadSelector:@selector(topSpinnerClicked) toTarget:self.target withObject:nil];
+}
+
 - (void)showTheSpinner:(NSString *)text {
   [self.displayText setText:text];
   [self addSubview:self.spinner];
@@ -43,8 +49,8 @@
   [displayText setText:@"        More"];
 }
 
-- (void)displayCheckNew {
-  [displayText setText:@"Checking for new Yams..."];
++ (NSString *)checkingNewString {
+  return @"Checking for new messages...";
 }
 
 
@@ -56,6 +62,7 @@
   
 - (void)dealloc {
   [spinner release];
+  [target release];
   [super dealloc];
 }
 

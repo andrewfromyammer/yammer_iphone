@@ -30,8 +30,6 @@
 @property BOOL threadIcon;
 @property BOOL homeTab;
 
-- (void)topSpinnerShow;
-- (void)topSpinnerHide;
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   homeTab:(BOOL)isHomeTab;
 
