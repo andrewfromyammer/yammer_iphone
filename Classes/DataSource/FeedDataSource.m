@@ -109,7 +109,8 @@
         NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
         
         [message setObject:[threadRef objectForKey:@"web_url"] forKey:@"thread_url"];
-        [message setObject:[threadRef objectForKey:@"updates"] forKey:@"thread_updates"];
+        if ([threadRef objectForKey:@"updates"])
+          [message setObject:[threadRef objectForKey:@"updates"] forKey:@"thread_updates"];
       }
       
       referencesById = [referencesByType objectForKey:@"group"];

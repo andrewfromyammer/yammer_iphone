@@ -30,7 +30,7 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
   if (self.target)
-    [self.target topSpinnerClicked];
+    [self.target performSelector:@selector(topSpinnerClicked)];    
 }
 
 - (void)showTheSpinner:(NSString *)text {

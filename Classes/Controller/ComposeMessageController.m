@@ -21,6 +21,7 @@
 @synthesize bar;
 @synthesize undoBuffer;
 @synthesize meta;
+@synthesize sendingBuffer;
 
 - (id)initWithSpinner:(SpinnerWithText *)spinner meta:(NSMutableDictionary *)metaInfo {
   self.meta = metaInfo;
@@ -94,7 +95,7 @@
   UIBarButtonItem *trash = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                                          target:self
                                                                          action:@selector(trashIt)];
-  trash.style = UIBarButtonItemStyleBordered;  
+  trash.style = UIBarButtonItemStyleBordered;
   return trash;
 }
 
@@ -124,6 +125,10 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
+  if (self.sendingBuffer) {
+    [self.input setText:self.sendingBuffer];
+    return;
+  }
   [LocalStorage saveDraft:textView.text];
   [self setSendEnabledState];
   if (self.undoBuffer != nil && [textView hasText]) {
@@ -136,21 +141,44 @@
 - (void)sendMessage {
   self.input.text = [self.input.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   if ([self.input hasText]) {
-    [NSThread detachNewThreadSelector:@selector(sendUpdate:) toTarget:self withObject:[NSString stringWithString:self.input.text]];
-    [self dismissModalViewControllerAnimated:YES];
-    //[self.previousSpinner showTheSpinner:@"Sending message..."];
+    self.sendingBuffer = [NSString stringWithString:self.input.text];
+    
+    self.navigationItem.leftBarButtonItem.enabled = false;
+    self.navigationItem.rightBarButtonItem.enabled = false;
+    
+    UIBarButtonItem *button = (UIBarButtonItem *)[bar.items objectAtIndex:0];
+    button.enabled = false;
+    button = (UIBarButtonItem *)[bar.items objectAtIndex:2];
+    button.enabled = false;
+    
+    [self.topSpinner showTheSpinner:@"Sending message..."];
+    [NSThread detachNewThreadSelector:@selector(sendUpdate) toTarget:self withObject:nil];
   }
 }
 
-- (void)sendUpdate:(NSString *)text {
+- (void)closeIt {
+  [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)sendUpdate {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  if ([APIGateway createMessage:text repliedToId:[meta objectForKey:@"replied_to_id"] 
+  if ([APIGateway createMessage:self.sendingBuffer repliedToId:[meta objectForKey:@"replied_to_id"] 
                         groupId:[meta objectForKey:@"group_id"] 
                         imageData:self.imageData]) {
     [LocalStorage saveDraft:@""];
+    self.sendingBuffer = nil;
+    [self performSelectorOnMainThread:@selector(closeIt) withObject:nil waitUntilDone:NO];
     //[self.previousSpinner hideTheSpinner:@"Message sent."];
   } else {
-    //[self.previousSpinner hideTheSpinner:@"Last message not sent."];
+    [self.topSpinner hideTheSpinner:@"Message not sent."];
+    self.sendingBuffer = nil;    
+    self.navigationItem.leftBarButtonItem.enabled = true;
+    self.navigationItem.rightBarButtonItem.enabled = true;
+    
+    UIBarButtonItem *button = (UIBarButtonItem *)[bar.items objectAtIndex:0];
+    button.enabled = true;
+    button = (UIBarButtonItem *)[bar.items objectAtIndex:2];
+    button.enabled = true;
   }
   [autoreleasepool release];
 }
@@ -215,6 +243,7 @@
   [bar release];
   [undoBuffer release];
   [meta release];
+  [sendingBuffer release];
   [super dealloc];
 }
 
