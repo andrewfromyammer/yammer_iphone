@@ -43,7 +43,8 @@
 
 - (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   self.messages = [NSMutableArray array];
-  [self.messages addObjectsFromArray:[self proccesMessages:dict feed:feed]];
+  NSMutableDictionary *result = [self proccesMessages:dict feed:feed];
+  [self.messages addObjectsFromArray:[result objectForKey:@"messages"]];
   [self processImages:self.messages];
   self.statusMessage = @"Updated 12:34 PM";
   return self;
@@ -57,7 +58,7 @@
   return self;
 }
 
-- (NSMutableArray *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
+- (NSMutableDictionary *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
   NSNumber *older = [meta objectForKey:@"older_available"];
   self.olderAvailable = false;
@@ -80,7 +81,7 @@
         referencesById = [NSMutableDictionary dictionary];
         [referencesByType setObject:referencesById forKey:type];
       }
-      [referencesById setObject:reference forKey:ref_id];  
+      [referencesById setObject:reference forKey:ref_id];
     }
   }
    
@@ -157,9 +158,12 @@
     } @catch (NSException *theErr) {}
   }    
   
-  BOOL replaceAll = [FeedCache writeFeed:[feed objectForKey:@"url"] messages:tempMessages more:self.olderAvailable];
+  NSMutableDictionary *result = [NSMutableDictionary dictionary];
+  if ([FeedCache writeFeed:[feed objectForKey:@"url"] messages:[NSMutableArray arrayWithArray:tempMessages] more:self.olderAvailable])
+    [result setObject:@"1" forKey:@"replace_all"];
+  [result setObject:tempMessages forKey:@"messages"];
  
-  return tempMessages;
+  return result;
 }
 
 - (void)processImages:(NSMutableArray *)listToUpdate {

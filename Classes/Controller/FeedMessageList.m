@@ -63,12 +63,12 @@
 
   [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   
-  [NSThread detachNewThreadSelector:@selector(setStatus) toTarget:self withObject:nil];
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 
   [autoreleasepool release];
 }
 
-- (void)setStatus {
+- (void)checkForNewMessages {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   if (self.dataSource.statusMessage == nil) {
 
@@ -83,11 +83,16 @@
     NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
     if (dict) {
       BOOL previousValue = dataSource.olderAvailable;
-      NSMutableArray *messages = [dataSource proccesMessages:dict feed:feed];            
-      dataSource.olderAvailable = previousValue;
+      
+      NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
+      NSMutableArray *messages = [result objectForKey:@"messages"];          
       
       [dataSource processImages:messages];
-      [messages addObjectsFromArray:dataSource.messages];
+      
+      if (![result objectForKey:@"replace_all"]) {
+        [messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
+        dataSource.olderAvailable = previousValue;
+      }
       dataSource.messages = messages;
       [theTableView reloadData];
     }
@@ -116,7 +121,7 @@
 - (void)topSpinnerClicked {
   [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   self.dataSource.statusMessage = nil;
-  [NSThread detachNewThreadSelector:@selector(setStatus) toTarget:self withObject:nil];
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -156,7 +161,8 @@
   NSMutableDictionary *message = [dataSource.messages objectAtIndex:[dataSource.messages count]-1];
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"]];
   if (dict) {
-    NSMutableArray *messages = [dataSource proccesMessages:dict feed:feed];
+    NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
+    NSMutableArray *messages = [result objectForKey:@"messages"];
     [dataSource processImages:messages];
     [dataSource.messages addObjectsFromArray:messages];
   }

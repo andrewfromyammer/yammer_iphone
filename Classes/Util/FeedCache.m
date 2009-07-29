@@ -66,7 +66,8 @@
       // if not, delete all the existing, just have 40 cached.
       
       if (olderAvailable) {
-        [FeedCache trimArrayAndWrite:path messages:messages more:true];        
+        [FeedCache trimArrayAndWrite:path messages:messages more:true];
+        return true;
       } else {
         [messages addObjectsFromArray:existing];
         [FeedCache trimArrayAndWrite:path messages:messages more:existingOlderAvailable];

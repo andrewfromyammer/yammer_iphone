@@ -16,7 +16,7 @@
     self.displayText.textColor = [UIColor darkGrayColor];
     self.displayText.textAlignment = UITextAlignmentCenter;
     self.displayText.font = [UIFont systemFontOfSize:12];
-
+        
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 29, 320, 1)];
     [line setBackgroundColor:[UIColor lightGrayColor]];
 
