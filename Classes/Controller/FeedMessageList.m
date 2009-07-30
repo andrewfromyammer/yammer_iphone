@@ -40,7 +40,7 @@
   self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
   self.topSpinner.target = self;
 
-  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) parent:self];
+  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
 
   UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
   [line setBackgroundColor:[UIColor blackColor]];
@@ -68,6 +68,7 @@
   [super getData];
 
   [toolbar displayCheckingNew];
+  [toolbar replaceRefreshWithSpinner];
 //  [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
@@ -104,7 +105,9 @@
       [theTableView reloadData];
     }
   }
-  [self.topSpinner hideTheSpinner:@"Updated 12:34 PM"];
+  
+  [self.toolbar setText:@"Updated 12:34 PM"];
+  [self.toolbar replaceSpinnerWithRefresh];
   [autoreleasepool release];
 }
 
@@ -126,7 +129,10 @@
 }
 
 - (void)refresh {
-  [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
+  //[topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
+  [toolbar displayCheckingNew];
+  [toolbar replaceRefreshWithSpinner];
+  
   self.dataSource.statusMessage = nil;
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 }
