@@ -43,6 +43,7 @@
 		00808FBF0F37ABA8004AB665 /* thread_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00808FBD0F37ABA8004AB665 /* thread_gray.png */; };
 		00808FC00F37ABA8004AB665 /* user_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00808FBE0F37ABA8004AB665 /* user_gray.png */; };
 		00808FC70F37AD0D004AB665 /* ReplyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00808FC60F37AD0D004AB665 /* ReplyViewController.m */; };
+		008576671022031F00F6B747 /* ToolbarWithText.m in Sources */ = {isa = PBXBuildFile; fileRef = 008576661022031F00F6B747 /* ToolbarWithText.m */; };
 		008EBC570F439F85000A6C6D /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = 008EBC560F439F85000A6C6D /* lock.png */; };
 		009BA0670F33EAC000C6A098 /* NSDate-Ago.m in Sources */ = {isa = PBXBuildFile; fileRef = 009BA0660F33EAC000C6A098 /* NSDate-Ago.m */; };
 		009BA07A0F33ED6600C6A098 /* paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = 009BA0790F33ED6600C6A098 /* paperclip.png */; };
@@ -156,6 +157,8 @@
 		00808FBE0F37ABA8004AB665 /* user_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = user_gray.png; path = Images/user_gray.png; sourceTree = "<group>"; };
 		00808FC50F37AD0D004AB665 /* ReplyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReplyViewController.h; path = Controller/ReplyViewController.h; sourceTree = "<group>"; };
 		00808FC60F37AD0D004AB665 /* ReplyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReplyViewController.m; path = Controller/ReplyViewController.m; sourceTree = "<group>"; };
+		008576651022031F00F6B747 /* ToolbarWithText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToolbarWithText.h; path = Interface/ToolbarWithText.h; sourceTree = "<group>"; };
+		008576661022031F00F6B747 /* ToolbarWithText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToolbarWithText.m; path = Interface/ToolbarWithText.m; sourceTree = "<group>"; };
 		008EBC560F439F85000A6C6D /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lock.png; path = Images/lock.png; sourceTree = "<group>"; };
 		009BA0650F33EAC000C6A098 /* NSDate-Ago.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate-Ago.h"; path = "Util/NSDate-Ago.h"; sourceTree = "<group>"; };
 		009BA0660F33EAC000C6A098 /* NSDate-Ago.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate-Ago.m"; path = "Util/NSDate-Ago.m"; sourceTree = "<group>"; };
@@ -400,6 +403,8 @@
 		00F806360F33AE1E0004DDA2 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				008576651022031F00F6B747 /* ToolbarWithText.h */,
+				008576661022031F00F6B747 /* ToolbarWithText.m */,
 				00FBF5C1101A90C400B5B7BF /* SpinnerWithText.h */,
 				00FBF5C2101A90C400B5B7BF /* SpinnerWithText.m */,
 				00FE85B11017770800DB15A8 /* SpinnerCell.h */,
@@ -604,6 +609,7 @@
 				00FE85B31017770800DB15A8 /* SpinnerCell.m in Sources */,
 				006B09DC101A755C0089CB57 /* ComposeMessageController.m in Sources */,
 				00FBF5C3101A90C400B5B7BF /* SpinnerWithText.m in Sources */,
+				008576671022031F00F6B747 /* ToolbarWithText.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

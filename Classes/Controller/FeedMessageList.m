@@ -15,6 +15,7 @@
 #import "LocalStorage.h"
 #import "SpinnerCell.h"
 #import "ComposeMessageController.h"
+#import "ToolbarWithText.h"
 
 @implementation FeedMessageList
 
@@ -25,13 +26,13 @@
 @synthesize threadIcon;
 @synthesize homeTab;
 @synthesize topSpinner;
+@synthesize toolbar;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon homeTab:(BOOL)isHomeTab {
   self.feed = dict;
   self.title = [feed objectForKey:@"name"];
   self.threadIcon = showThreadIcon;
   self.homeTab = isHomeTab;
-  [self addComposeButton];
 	return self;
 }
 
@@ -39,10 +40,15 @@
   self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
   self.topSpinner.target = self;
 
-  [tableAndSpinner addSubview:topSpinner];
+  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) parent:self];
+
+  UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
+  [line setBackgroundColor:[UIColor blackColor]];
+
+  [tableAndSpinner addSubview:toolbar];
+  [tableAndSpinner addSubview:line];
   [tableAndSpinner addSubview:theTableView];
-  self.view = tableAndSpinner;
-  
+  self.view = tableAndSpinner;  
 }
 
 - (void)getData {
@@ -51,7 +57,7 @@
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   tableAndSpinner.backgroundColor = [UIColor whiteColor];
     
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, 332) style:UITableViewStylePlain];
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
@@ -61,7 +67,8 @@
   [self showTable];
   [super getData];
 
-  [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
+  [toolbar displayCheckingNew];
+//  [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 
@@ -85,7 +92,7 @@
       BOOL previousValue = dataSource.olderAvailable;
       
       NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
-      NSMutableArray *messages = [result objectForKey:@"messages"];          
+      NSMutableArray *messages = [result objectForKey:@"messages"];
       
       [dataSource processImages:messages];
       
@@ -118,7 +125,7 @@
   [self presentModalViewController:modal animated:YES];
 }
 
-- (void)topSpinnerClicked {
+- (void)refresh {
   [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   self.dataSource.statusMessage = nil;
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
@@ -185,6 +192,7 @@
   [dataSource release];
   [feed release];
   [topSpinner release];
+  [toolbar release];
   [tableAndSpinner release];
   [super dealloc];
 }
