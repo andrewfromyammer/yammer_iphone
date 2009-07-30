@@ -16,16 +16,14 @@
 
 @synthesize input;
 @synthesize topSpinner;
-@synthesize previousSpinner;
 @synthesize imageData;
 @synthesize bar;
 @synthesize undoBuffer;
 @synthesize meta;
 @synthesize sendingBuffer;
 
-- (id)initWithSpinner:(SpinnerWithText *)spinner meta:(NSMutableDictionary *)metaInfo {
+- (id)initWithMeta:(NSMutableDictionary *)metaInfo {
   self.meta = metaInfo;
-  self.previousSpinner = spinner;
   return self;
 }
 
@@ -168,7 +166,6 @@
     [LocalStorage saveDraft:@""];
     self.sendingBuffer = nil;
     [self performSelectorOnMainThread:@selector(closeIt) withObject:nil waitUntilDone:NO];
-    //[self.previousSpinner hideTheSpinner:@"Message sent."];
   } else {
     [self.topSpinner hideTheSpinner:@"Message not sent."];
     self.sendingBuffer = nil;    
@@ -238,7 +235,6 @@
 - (void)dealloc {
   [input release];
   [topSpinner release];
-  [previousSpinner release];
   [imageData release];
   [bar release];
   [undoBuffer release];

@@ -179,7 +179,7 @@
   [meta setObject:[message objectForKey:@"id"] forKey:@"replied_to_id"];
   [meta setObject:[NSString stringWithFormat:@"Replying to %@", [message objectForKey:@"sender"]] forKey:@"display"];
   
-  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithSpinner:nil meta:meta];
+  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithMeta:meta];
   UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
   [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
   

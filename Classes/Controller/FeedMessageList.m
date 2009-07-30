@@ -25,7 +25,6 @@
 @synthesize tableAndSpinner;
 @synthesize threadIcon;
 @synthesize homeTab;
-@synthesize topSpinner;
 @synthesize toolbar;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon homeTab:(BOOL)isHomeTab {
@@ -37,9 +36,6 @@
 }
 
 - (void)showTable {  
-  self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
-  self.topSpinner.target = self;
-
   self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
 
   UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
@@ -69,7 +65,6 @@
 
   [toolbar displayCheckingNew];
   [toolbar replaceRefreshWithSpinner];
-//  [topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 
@@ -121,7 +116,7 @@
     name = @"My Colleagues";
   [meta setObject:[NSString stringWithFormat:@"Share with %@", name] forKey:@"display"];
   
-  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithSpinner:self.topSpinner meta:meta];
+  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithMeta:meta];
   UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
   [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
 
@@ -129,7 +124,6 @@
 }
 
 - (void)refresh {
-  //[topSpinner showTheSpinner:[SpinnerWithText checkingNewString]];
   [toolbar displayCheckingNew];
   [toolbar replaceRefreshWithSpinner];
   
@@ -197,7 +191,6 @@
   [theTableView release];
   [dataSource release];
   [feed release];
-  [topSpinner release];
   [toolbar release];
   [tableAndSpinner release];
   [super dealloc];
