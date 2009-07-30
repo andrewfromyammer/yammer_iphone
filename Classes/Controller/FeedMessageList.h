@@ -33,5 +33,7 @@
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   homeTab:(BOOL)isHomeTab;
 - (void)checkForNewMessages;
+- (void)disableCompose;
+- (void)displayLastUpdated;
 
 @end

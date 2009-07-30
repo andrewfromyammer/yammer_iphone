@@ -16,6 +16,7 @@
 #import "SpinnerCell.h"
 #import "ComposeMessageController.h"
 #import "ToolbarWithText.h"
+#import "FeedCache.h"
 
 @implementation FeedMessageList
 
@@ -32,11 +33,11 @@
   self.title = [feed objectForKey:@"name"];
   self.threadIcon = showThreadIcon;
   self.homeTab = isHomeTab;
+  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
 	return self;
 }
 
 - (void)showTable {  
-  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
 
   UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
   [line setBackgroundColor:[UIColor blackColor]];
@@ -101,9 +102,17 @@
     }
   }
   
-  [self.toolbar setText:@"Updated 12:34 PM"];
+  [self displayLastUpdated];
   [self.toolbar replaceSpinnerWithRefresh];
   [autoreleasepool release];
+}
+
+- (void)displayLastUpdated {
+  NSDate *date = [FeedCache loadFeedDate:[feed objectForKey:@"url"]];  
+  if (date)
+    [self.toolbar setText:[FeedCache niceDate:date]];
+  else
+    [self.toolbar setText:@"No updates yet"];
 }
 
 - (void)compose {
@@ -121,6 +130,15 @@
   [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
 
   [self presentModalViewController:modal animated:YES];
+}
+
+- (void)disableCompose {
+  NSLog(@"11111111111111");
+  NSLog([self.toolbar.items description]);
+
+  UIBarButtonItem *item = (UIBarButtonItem *)[self.toolbar.items objectAtIndex:2];
+  item.enabled = false;
+  NSLog([item description]);
 }
 
 - (void)refresh {

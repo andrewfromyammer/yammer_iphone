@@ -158,7 +158,7 @@
   
   FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed threadIcon:false homeTab:false];
   localFeedMessageList.title = @"Thread";
-  localFeedMessageList.navigationItem.rightBarButtonItem = nil;
+  [localFeedMessageList disableCompose];
   [self.navigationController pushViewController:localFeedMessageList animated:YES];
   [localFeedMessageList release];
 }

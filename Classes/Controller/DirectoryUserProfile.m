@@ -135,7 +135,7 @@
   
   FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed threadIcon:true homeTab:false];
   localFeedMessageList.title = @"User Feed";
-  localFeedMessageList.navigationItem.rightBarButtonItem = nil;
+  [localFeedMessageList disableCompose];
   return localFeedMessageList;
 }
 

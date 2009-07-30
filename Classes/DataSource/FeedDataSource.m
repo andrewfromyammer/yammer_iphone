@@ -46,7 +46,7 @@
   NSMutableDictionary *result = [self proccesMessages:dict feed:feed];
   [self.messages addObjectsFromArray:[result objectForKey:@"messages"]];
   [self processImages:self.messages];
-  self.statusMessage = @"Updated 12:34 PM";
+  self.statusMessage = [FeedCache niceDate:[NSDate date]];
   return self;
 }
 

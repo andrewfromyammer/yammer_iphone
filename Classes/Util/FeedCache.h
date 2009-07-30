@@ -19,5 +19,7 @@ static int MAX_FEED_CACHE = 200;
 + (NSMutableDictionary *)loadFeed:(NSString *)url;
 + (BOOL)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 + (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
++ (NSString *)niceDate:(NSDate *)date;
++ (NSDate *)loadFeedDate:(NSString *)url;
 
 @end

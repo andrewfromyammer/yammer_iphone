@@ -20,5 +20,6 @@
 - (void)replaceRefreshWithSpinner;
 - (void)replaceSpinnerWithRefresh;
 - (void)setText:(NSString *)text;
+- (void)setTextToCurrentTime;
 
 @end

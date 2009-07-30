@@ -41,7 +41,7 @@
     UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
                                                                              target:self.target
                                                                              action:@selector(compose)];
-    compose.style = UIBarButtonItemStyleBordered;        
+    compose.style = UIBarButtonItemStyleBordered;
     NSMutableArray *items = [NSMutableArray arrayWithObjects: self.refreshButton, custom, compose, nil];
     [self setItems:items animated:NO];        
   }
@@ -55,6 +55,10 @@
 
 - (void)setText:(NSString *)text {
   self.displayText.text = text;
+}
+
+- (void)setTextToCurrentTime {
+  self.displayText.text = @"333";
 }
 
 - (void)replaceRefreshWithSpinner {

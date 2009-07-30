@@ -30,6 +30,18 @@
           [NSString stringWithFormat:@"%@/%@", [LocalStorage feedDirectory], file]];  
 }
 
++ (NSDate *)loadFeedDate:(NSString *)url {
+  NSString *path = [FeedCache feedCacheFilePath:url];  
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  
+  if ([fileManager fileExistsAtPath:path]) {    
+    NSDictionary *fileAttributes = [fileManager fileAttributesAtPath:path traverseLink:YES];
+    return (NSDate *)[fileAttributes objectForKey:NSFileModificationDate];
+  }
+  return nil;
+}
+
+
 + (NSMutableDictionary *)loadFeed:(NSString *)url {
   NSString *path = [FeedCache feedCacheFilePath:url];  
   NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -43,16 +55,18 @@
 
 + (BOOL)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
   
-  if ([messages count] == 0)
-    return;
-  
   NSString *path = [FeedCache feedCacheFilePath:url];    
   NSFileManager *fileManager = [NSFileManager defaultManager];  
   if ([fileManager fileExistsAtPath:path]) {
     NSMutableDictionary *dict = (NSMutableDictionary*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
                                                                        encoding:NSUTF8StringEncoding] JSONValue];
     NSMutableArray *existing = [dict objectForKey:@"messages"];
-    BOOL existingOlderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"];    
+    BOOL existingOlderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"];
+    
+    if ([messages count] == 0) {
+      [FeedCache trimArrayAndWrite:path messages:existing more:existingOlderAvailable];
+      return false;
+    }
     
     NSMutableDictionary *lastNew       = [messages lastObject];
     NSMutableDictionary *firstNew      = [messages objectAtIndex:0];
@@ -100,8 +114,15 @@
     [meta setObject:@"t" forKey:@"olderAvailable"];
   else
     [meta setObject:@"f" forKey:@"olderAvailable"];
+  
   [dict setObject:meta forKey:@"meta"];
   [fileManager createFileAtPath:path contents:[[dict JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+}
+
++ (NSString *)niceDate:(NSDate *)date {
+  NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+  [outputFormatter setDateFormat:@"MMM d h:mm a"];
+  return [NSString stringWithFormat:@"Updated %@", [outputFormatter stringFromDate:date]];
 }
 
 
