@@ -36,6 +36,27 @@
   return nil;
 }
 
++ (void)deleteOldestFile:(NSString *)path {
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSArray *list = [fileManager directoryContentsAtPath:path];
+  NSMutableDictionary *hash = [NSMutableDictionary dictionary];
+  if ([list count] > 500) {
+    int i =0;
+    for (i=0; i<[list count]; i++) {
+      NSString *file = [list objectAtIndex:i];
+      
+      NSDictionary *fileAttributes = [fileManager fileAttributesAtPath:
+                                      [path stringByAppendingPathComponent:file] 
+                                                          traverseLink:YES];
+      [hash setObject:file forKey:[NSNumber numberWithDouble: [[fileAttributes objectForKey:NSFileModificationDate] timeIntervalSince1970]]];
+    }
+    NSError *error;
+    NSArray *sortedArray = [[hash allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    [fileManager removeItemAtPath:[path stringByAppendingPathComponent:[hash objectForKey:[sortedArray objectAtIndex:0]]]
+                            error:&error];
+  }  
+}
+
 + (void)saveImage:(NSString *)url user_id:(NSString *)user_id type:(NSString *)type {
   if (url == nil)
     return;
@@ -46,23 +67,7 @@
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSString *photoDirectory = [NSString stringWithFormat:@"%@%@", [LocalStorage localPath], [LocalStorage photoDirectory]];
   
-  NSArray *list = [fileManager directoryContentsAtPath:photoDirectory];
-  NSMutableDictionary *hash = [NSMutableDictionary dictionary];
-  if ([list count] > 500) {
-    int i =0;
-    for (i=0; i<[list count]; i++) {
-      NSString *file = [list objectAtIndex:i];
-      
-      NSDictionary *fileAttributes = [fileManager fileAttributesAtPath:
-                                      [photoDirectory stringByAppendingPathComponent:file] 
-                                                          traverseLink:YES];
-      [hash setObject:file forKey:[NSNumber numberWithDouble: [[fileAttributes objectForKey:NSFileModificationDate] timeIntervalSince1970]]];
-    }
-    NSError *error;
-    NSArray *sortedArray = [[hash allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    [fileManager removeItemAtPath:[photoDirectory stringByAppendingPathComponent:[hash objectForKey:[sortedArray objectAtIndex:0]]]
-                            error:&error];
-  }
+  [ImageCache deleteOldestFile:photoDirectory];
   
   NSError *error;
   NSData *data;

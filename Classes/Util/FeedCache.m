@@ -11,6 +11,7 @@
 #import "OAuthGateway.h"
 #import "NSObject+SBJSON.h"
 #import "NSString+SBJSON.h"
+#import "ImageCache.h"
 
 @implementation FeedCache
 
@@ -54,6 +55,7 @@
 }
 
 + (BOOL)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
+  [ImageCache deleteOldestFile:[NSString stringWithFormat:@"%@%@", [LocalStorage localPath], [LocalStorage feedDirectory]]];
   
   NSString *path = [FeedCache feedCacheFilePath:url];    
   NSFileManager *fileManager = [NSFileManager defaultManager];  

@@ -18,8 +18,8 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 @implementation OAuthGateway
 
 + (NSString *)baseURL {
-  return @"http://192.168.1.151:3000";   
-//  return @"https://staging.yammer.com";
+//  return @"http://192.168.1.151:3000";   
+  return @"https://staging.yammer.com";
   
   NSString *url = [LocalStorage getBaseURL];
   if (url)
@@ -151,8 +151,10 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
     [YammerAppDelegate showError:ERROR_OUT_OF_RANGE];
     return nil;
   } else if (error != nil) {
-    if ([error code] == -1012)
-      [YammerAppDelegate showError:@"Login not valid, please logout via settings and login again."];
+    if ([error code] == -1012) {
+      [LocalStorage deleteAccountInfo];
+      exit(1);
+    }
     else
       [YammerAppDelegate showError:ERROR_OUT_OF_RANGE];
     return nil;
