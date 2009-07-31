@@ -25,7 +25,7 @@
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed;
 - (NSMutableDictionary *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;
-- (void)processImages:(NSMutableArray *)listToUpdate;
+- (void)processImagesAndTime:(NSMutableArray *)listToUpdate;
 
 
 @end

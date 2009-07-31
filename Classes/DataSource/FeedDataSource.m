@@ -41,7 +41,7 @@
 
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore {
   self.messages = cachedMessages;
-  [self processImages:self.messages];
+  [self processImagesAndTime:self.messages];
   self.olderAvailable = hasMore;
   return self;
 }
@@ -133,16 +133,6 @@
       
       
       [message setObject:fromLine forKey:@"fromLine"];
-      
-      NSString *createdAt = [message objectForKey:@"created_at"];
-      NSString *front = [createdAt substringToIndex:10];
-      NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
-      
-      NSString *timeLine = [[NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]] agoDate];    
-      NSString *groupName = [message objectForKey:@"group_name"];
-      if (groupName)
-        timeLine = [NSString stringWithFormat:@"%@ in %@", timeLine, groupName];
-      [message setObject:timeLine forKey:@"timeLine"];
     } @catch (NSException *theErr) {}
   }    
   
@@ -154,7 +144,7 @@
   return result;
 }
 
-- (void)processImages:(NSMutableArray *)listToUpdate {
+- (void)processImagesAndTime:(NSMutableArray *)listToUpdate {
   int i=0;
   for (i=0; i < [listToUpdate count]; i++) {
     @try {
@@ -163,6 +153,16 @@
       [message setObject:[ImageCache getImageAndSave:[message objectForKey:@"actor_mugshot_url"] 
                                              user_id:[message objectForKey:@"actor_id"] 
                                                 type:[message objectForKey:@"actor_type"]] forKey:@"imageData"];
+      
+      NSString *createdAt = [message objectForKey:@"created_at"];
+      NSString *front = [createdAt substringToIndex:10];
+      NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
+      
+      NSString *timeLine = [[NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]] agoDate];    
+      NSString *groupName = [message objectForKey:@"group_name"];
+      if (groupName)
+        timeLine = [NSString stringWithFormat:@"%@ in %@", timeLine, groupName];
+      [message setObject:timeLine forKey:@"timeLine"];      
     } @catch (NSException *theErr) {}
   }  
 }

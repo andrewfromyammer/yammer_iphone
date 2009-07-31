@@ -41,7 +41,10 @@
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   tableAndSpinner.backgroundColor = [UIColor whiteColor];
   
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, 332) style:UITableViewStylePlain];
+  int height = 332;
+  if (!self.threadIcon)
+    height = 380;
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, height) style:UITableViewStylePlain];
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
@@ -80,7 +83,7 @@
     NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
     NSMutableArray *messages = [result objectForKey:@"messages"];
     
-    [dataSource processImages:messages];
+    [dataSource processImagesAndTime:messages];
     
     if (![result objectForKey:@"replace_all"] && newerThan != nil) {
       [messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
@@ -174,7 +177,7 @@
   if (dict) {
     NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
     NSMutableArray *messages = [result objectForKey:@"messages"];
-    [dataSource processImages:messages];
+    [dataSource processImagesAndTime:messages];
     [dataSource.messages addObjectsFromArray:messages];
   }
   

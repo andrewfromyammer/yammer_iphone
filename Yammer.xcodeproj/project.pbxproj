@@ -655,8 +655,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "01C9717A-01E2-4CC4-B2C4-809F6D4C54F2";
-				SDKROOT = iphoneos2.2;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "11ED294A-165C-4159-A692-DE4BE239FC9B";
+				SDKROOT = iphoneos2.0;
 			};
 			name = DistAdHoc;
 		};
@@ -664,13 +664,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Geni, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Geni, Inc.";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Yammer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Yammer;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "01C9717A-01E2-4CC4-B2C4-809F6D4C54F2";
+				PROVISIONING_PROFILE = "11ED294A-165C-4159-A692-DE4BE239FC9B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "11ED294A-165C-4159-A692-DE4BE239FC9B";
+				SDKROOT = iphoneos2.0;
 			};
 			name = DistAdHoc;
 		};
@@ -679,7 +682,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Andrew Arrow (69L9J483YE)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Geni, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Andrew Arrow (69L9J483YE)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -688,7 +691,7 @@
 				GCC_PREFIX_HEADER = Yammer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Yammer;
-				PROVISIONING_PROFILE = "E1DB8028-6116-48DC-ACB7-B8AD5F8E16C0";
+				PROVISIONING_PROFILE = "11ED294A-165C-4159-A692-DE4BE239FC9B";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E1DB8028-6116-48DC-ACB7-B8AD5F8E16C0";
 				SDKROOT = iphoneos2.0;
 			};
@@ -722,7 +725,7 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "E1DB8028-6116-48DC-ACB7-B8AD5F8E16C0";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E1DB8028-6116-48DC-ACB7-B8AD5F8E16C0";
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphoneos2.0;
 			};
 			name = Debug;
 		};
