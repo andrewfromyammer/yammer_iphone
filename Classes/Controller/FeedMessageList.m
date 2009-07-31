@@ -52,11 +52,7 @@
   self.dataSource = [FeedDataSource getMessages:feed];
 	theTableView.dataSource = self.dataSource;
   
-  UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
-  [line setBackgroundColor:[UIColor blackColor]];
-  
   [tableAndSpinner addSubview:toolbar];
-  [tableAndSpinner addSubview:line];
   [tableAndSpinner addSubview:theTableView];
   self.view = tableAndSpinner;  
   
@@ -124,11 +120,8 @@
 }
 
 - (void)disableCompose {
-  NSLog([self.toolbar.items description]);
-
-  UIBarButtonItem *item = (UIBarButtonItem *)[self.toolbar.items objectAtIndex:2];
+  UIBarButtonItem *item = (UIBarButtonItem *)[self.toolbar.theBar.items objectAtIndex:2];
   item.enabled = false;
-  NSLog([item description]);
 }
 
 - (void)refresh {

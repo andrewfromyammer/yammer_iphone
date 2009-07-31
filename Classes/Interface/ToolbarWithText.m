@@ -8,10 +8,13 @@
 @synthesize target;
 @synthesize spinnerButton;
 @synthesize refreshButton;
+@synthesize theBar;
 
 - (id)initWithFrame:(CGRect)frame target:(NSObject *)theTarget {
   if (self = [super initWithFrame:frame]) {
     self.target = theTarget;
+    
+    self.theBar = [[UIToolbar alloc] initWithFrame:frame];
     
     self.refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                              target:self.target
@@ -43,7 +46,13 @@
                                                                              action:@selector(compose)];
     compose.style = UIBarButtonItemStyleBordered;
     NSMutableArray *items = [NSMutableArray arrayWithObjects: self.refreshButton, custom, compose, nil];
-    [self setItems:items animated:NO];        
+    [self.theBar setItems:items animated:NO];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
+    [line setBackgroundColor:[UIColor blackColor]];
+    
+    [self addSubview:self.theBar];
+    [self addSubview:line];
   }
   
   return self;
@@ -62,17 +71,24 @@
 }
 
 - (void)replaceRefreshWithSpinner {
-  NSMutableArray *tempItems = [self.items mutableCopy];
+  NSMutableArray *tempItems = [self.theBar.items mutableCopy];
   [tempItems replaceObjectAtIndex:0 withObject:self.spinnerButton];
-  [self setItems:tempItems animated:false];
+  [self.theBar setItems:tempItems animated:false];
   [self.spinner startAnimating];
   [tempItems release];
 }
 
 - (void)replaceSpinnerWithRefresh {
-  NSMutableArray *tempItems = [self.items mutableCopy];
+  NSMutableArray *tempItems = [self.theBar.items mutableCopy];
   [tempItems replaceObjectAtIndex:0 withObject:self.refreshButton];
-  [self setItems:tempItems animated:false];
+  [self.theBar setItems:tempItems animated:false];
+  [tempItems release];
+}
+
+- (void)removeCompose {
+  NSMutableArray *tempItems = [self.theBar.items mutableCopy];
+  [tempItems removeLastObject];
+  [self.theBar setItems:tempItems animated:false];
   [tempItems release];
 }
 
@@ -82,6 +98,7 @@
   [target release];
   [spinnerButton release];
   [refreshButton release];
+  [theBar release];
   [super dealloc];
 }
 

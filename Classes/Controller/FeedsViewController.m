@@ -14,40 +14,35 @@
 
 @synthesize theTableView;
 @synthesize dataSource;
+@synthesize toolbar;
 
 - (id)init {
-  
-  UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                           target:self
-                                                                           action:@selector(refresh)];  
-  self.navigationItem.rightBarButtonItem = refresh;  
-  self.navigationItem.leftBarButtonItem = nil;
-  
+  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
+  [self.toolbar removeCompose];
 	return self;
 }
 
-- (void)getData {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+- (void)loadView {  
   
-	theTableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]
-                                                   style:UITableViewStylePlain];
+  UIView *wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];  
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, 332) style:UITableViewStylePlain];
   
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	theTableView.delegate = self;
-  NSMutableDictionary *dict = [APIGateway usersCurrent];
-  self.dataSource = [FeedsTableDataSource getFeeds:dict];
+//  NSMutableDictionary *dict = [APIGateway usersCurrent];
+  self.dataSource = [FeedsTableDataSource getFeeds:nil];
 	theTableView.dataSource = self.dataSource;
+  [wrapper addSubview:theTableView];
+  [wrapper addSubview:self.toolbar];
   
-  self.view = theTableView;
-  
-  [super getData];
-  [autoreleasepool release];
+  self.view = wrapper;  
+  [wrapper release];
 }
 
 - (void)refresh {
-  [super refresh];
+  
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
@@ -64,6 +59,7 @@
 - (void)dealloc {
   [super dealloc];
   [theTableView release];
+  [toolbar release];
   [dataSource release];
 }
 

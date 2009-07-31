@@ -37,6 +37,7 @@
 - (void)setupView:(UIViewController *)view title:(NSString *)title image:(NSString *)image {
   view.title = title;
   view.tabBarItem.image = [UIImage imageNamed:image];
+//  view.tabBarItem.badgeValue = @"9,334";
 
   view.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
   [MainTabBarController setBackButton:view];
