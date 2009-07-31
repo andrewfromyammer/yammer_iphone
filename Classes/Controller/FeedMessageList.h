@@ -11,7 +11,7 @@
 #import "FeedDataSource.h"
 #import "ToolbarWithText.h"
 
-@interface FeedMessageList : SpinnerViewController <UITableViewDelegate>  {
+@interface FeedMessageList : UIViewController <UITableViewDelegate>  {
   UIView *tableAndSpinner;
 	UITableView *theTableView;
   FeedDataSource *dataSource;

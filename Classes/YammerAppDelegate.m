@@ -29,7 +29,11 @@
 
 - (void)setupMainView {
   mainView = [[MainTabBarController alloc] init];
-  [window addSubview:mainView.view];
+  
+  UIView *image = [[self.window subviews] objectAtIndex:0];
+  [image removeFromSuperview];
+  
+  [self.window addSubview:mainView.view];
   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 }
 
@@ -49,14 +53,19 @@
    return true;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {    
-  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+- (void)applicationDidFinishLaunching:(UIApplication *)application {     
+  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+  self.window.backgroundColor = [UIColor whiteColor];
+  UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+  image.frame = CGRectMake(0, 0, 320, 480);
+  [self.window addSubview:image];
+  [self.window makeKeyAndVisible];
+  
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  
   [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
 }
 
 - (void)postFinishLaunch {
-  [window setBackgroundColor:[UIColor whiteColor]];
-    
   // OAuth stores an access token on local hard drive, if there, user is already authenticated
   if ([LocalStorage getAccessToken]) {
     [self setupMainView];
@@ -69,14 +78,14 @@
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"yammer_header.png"]];
     [mainView.view addSubview:imageView];
     [imageView release];
+    
+    UIView *image = [[self.window subviews] objectAtIndex:0];
+    [image removeFromSuperview];
     [window addSubview:mainView.view];
     
     [self askLoginOrSignup];
   }
-
-  [window makeKeyAndVisible];
 }
-
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
   if (buttonIndex == 1)

@@ -37,23 +37,10 @@
 	return self;
 }
 
-- (void)showTable {  
-
-  UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
-  [line setBackgroundColor:[UIColor blackColor]];
-
-  [tableAndSpinner addSubview:toolbar];
-  [tableAndSpinner addSubview:line];
-  [tableAndSpinner addSubview:theTableView];
-  self.view = tableAndSpinner;  
-}
-
-- (void)getData {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-
+- (void)loadView {
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   tableAndSpinner.backgroundColor = [UIColor whiteColor];
-    
+  
   theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, 332) style:UITableViewStylePlain];
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -61,45 +48,46 @@
 	theTableView.delegate = self;
   self.dataSource = [FeedDataSource getMessages:feed];
 	theTableView.dataSource = self.dataSource;
-  [self showTable];
-  [super getData];
-
+  
+  UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
+  [line setBackgroundColor:[UIColor blackColor]];
+  
+  [tableAndSpinner addSubview:toolbar];
+  [tableAndSpinner addSubview:line];
+  [tableAndSpinner addSubview:theTableView];
+  self.view = tableAndSpinner;  
+  
+  
   [toolbar displayCheckingNew];
   [toolbar replaceRefreshWithSpinner];
   
-  [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
-
-  [autoreleasepool release];
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];  
 }
 
 - (void)checkForNewMessages {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  if (self.dataSource.statusMessage == nil) {
-
-    NSMutableDictionary *message;
-    @try {
-      message = [dataSource.messages objectAtIndex:0];
-    } @catch (NSException *theErr) {
-      message = [NSMutableDictionary dictionary];
-      [message setObject:@"1" forKey:@"id"];
-    }
+  
+  NSDecimalNumber *newerThan=nil;
+  @try {
+    NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
+    newerThan = [message objectForKey:@"id"];
+  } @catch (NSException *theErr) {}
+  
+  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan];
+  if (dict) {
+    BOOL previousValue = dataSource.olderAvailable;
     
-    NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:[message objectForKey:@"id"]];
-    if (dict) {
-      BOOL previousValue = dataSource.olderAvailable;
-      
-      NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
-      NSMutableArray *messages = [result objectForKey:@"messages"];
-      
-      [dataSource processImages:messages];
-      
-      if (![result objectForKey:@"replace_all"]) {
-        [messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
-        dataSource.olderAvailable = previousValue;
-      }
-      dataSource.messages = messages;
-      [theTableView reloadData];
+    NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
+    NSMutableArray *messages = [result objectForKey:@"messages"];
+    
+    [dataSource processImages:messages];
+    
+    if (![result objectForKey:@"replace_all"] && newerThan != nil) {
+      [messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
+      dataSource.olderAvailable = previousValue;
     }
+    dataSource.messages = messages;
+    [theTableView reloadData];
   }
   
   [self displayLastUpdated];
@@ -133,7 +121,6 @@
 }
 
 - (void)disableCompose {
-  NSLog(@"11111111111111");
   NSLog([self.toolbar.items description]);
 
   UIBarButtonItem *item = (UIBarButtonItem *)[self.toolbar.items objectAtIndex:2];
@@ -145,7 +132,6 @@
   [toolbar displayCheckingNew];
   [toolbar replaceRefreshWithSpinner];
   
-  self.dataSource.statusMessage = nil;
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 }
 
@@ -157,7 +143,7 @@
   cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   if ([cell length] > 50)
     return 65.0;
-  return 50.0;
+  return 49.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  

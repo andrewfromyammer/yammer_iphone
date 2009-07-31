@@ -21,7 +21,7 @@
 @property BOOL fetchingMore;
 @property (nonatomic,retain) NSString *statusMessage;
 
-- (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;
+- (id)initWithEmpty;
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed;
 - (NSMutableDictionary *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;

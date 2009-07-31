@@ -30,23 +30,12 @@
     return [[FeedDataSource alloc] initWithMessages:[dict objectForKey:@"messages"] feed:feed more:olderAvailable];
   }
 
-  dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:nil];
-  if (dict)
-    return [[FeedDataSource alloc] initWithDict:dict feed:feed];
-  
-  dict = [NSMutableDictionary dictionary];
-  [dict setObject:[NSMutableArray array] forKey:@"references"];
-  [dict setObject:[NSMutableArray array] forKey:@"messages"];
-  [dict setObject:[NSMutableDictionary dictionary] forKey:@"meta"];
-  return [[FeedDataSource alloc] initWithDict:dict feed:feed];
+  return [[FeedDataSource alloc] initWithEmpty];
 }
 
-- (id)initWithDict:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
+- (id)initWithEmpty {
   self.messages = [NSMutableArray array];
-  NSMutableDictionary *result = [self proccesMessages:dict feed:feed];
-  [self.messages addObjectsFromArray:[result objectForKey:@"messages"]];
-  [self processImages:self.messages];
-  self.statusMessage = [FeedCache niceDate:[NSDate date]];
+  self.olderAvailable = false;
   return self;
 }
 
@@ -54,7 +43,6 @@
   self.messages = cachedMessages;
   [self processImages:self.messages];
   self.olderAvailable = hasMore;
-  self.statusMessage = nil;
   return self;
 }
 
