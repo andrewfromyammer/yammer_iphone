@@ -21,6 +21,7 @@
 + (void)saveFile:(NSString *)name data:(NSString *)data;
 + (NSString *)getFile:(NSString *)name;
 + (void)removeFile:(NSString *)name;
++ (NSDate *)getFileDate:(NSString *)name;
 
 + (void)saveRequestToken:(NSString *)token;
 + (void)saveAccessToken:(NSString *)token;

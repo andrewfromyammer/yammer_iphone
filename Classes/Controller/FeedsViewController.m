@@ -67,7 +67,7 @@
   
   [theTableView reloadData];  
   [self.toolbar replaceSpinnerWithFlex];
-  [self.toolbar setText:[FeedCache niceDate:[NSDate date]]];
+  [self.toolbar setText:[FeedCache niceDate:[LocalStorage getFileDate:USER_CURRENT]]];
   [autoreleasepool release];
 }
 

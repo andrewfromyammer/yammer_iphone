@@ -64,6 +64,17 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
                                encoding:NSUTF8StringEncoding];
 }
 
++ (NSDate *)getFileDate:(NSString *)name {
+  NSString *documentsDirectory = [LocalStorage localPath];
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  
+  if (![fileManager fileExistsAtPath:[documentsDirectory stringByAppendingPathComponent:name]])
+    return nil;
+  
+  NSDictionary *fileAttributes = [fileManager fileAttributesAtPath:[documentsDirectory stringByAppendingPathComponent:name] traverseLink:YES];
+  return (NSDate *)[fileAttributes objectForKey:NSFileModificationDate];
+}  
+
 + (void)saveFile:(NSString *)name data:(NSString *)data {
   NSString *documentsDirectory = [LocalStorage localPath];  
   NSFileManager *fileManager = [NSFileManager defaultManager];
