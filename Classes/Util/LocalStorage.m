@@ -127,6 +127,7 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [LocalStorage removeFile:DRAFT];  
   [LocalStorage removeFile:FEEDFILE];
   [LocalStorage removeFile:FEED_DIR];
+  [LocalStorage removeFile:USER_CURRENT];
 }
 
 + (void)saveFeedInfo:(NSMutableDictionary *)feed {

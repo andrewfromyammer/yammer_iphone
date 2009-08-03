@@ -50,7 +50,7 @@
 }
 
 + (NSString *)checkingNewString {
-  return @"Checking for new messages...";
+  return @"Contacting yammer.com...";
 }
 
 

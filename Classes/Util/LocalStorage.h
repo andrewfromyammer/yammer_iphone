@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define USER_CURRENT @"/account/user_current.json"
+
 @interface LocalStorage : NSObject {
 
 }
@@ -16,6 +18,10 @@
 
 + (NSString *)getRequestToken;
 + (NSString *)getAccessToken;
++ (void)saveFile:(NSString *)name data:(NSString *)data;
++ (NSString *)getFile:(NSString *)name;
++ (void)removeFile:(NSString *)name;
+
 + (void)saveRequestToken:(NSString *)token;
 + (void)saveAccessToken:(NSString *)token;
 + (void)removeRequestToken;

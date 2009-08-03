@@ -56,7 +56,7 @@
 }
 
 - (void)displayCheckingNew {
-  self.displayText.text = @"Checking for new messages...";
+  self.displayText.text = @"Contacting yammer.com...";
 }
 
 - (void)setText:(NSString *)text {

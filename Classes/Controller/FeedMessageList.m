@@ -17,6 +17,7 @@
 #import "ComposeMessageController.h"
 #import "ToolbarWithText.h"
 #import "FeedCache.h"
+#import "NSDate-Ago.h"
 
 @implementation FeedMessageList
 
@@ -73,7 +74,6 @@
   
   [toolbar displayLoadingCache];
   [toolbar replaceFlexWithSpinner];
-  
   [NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];  
 }
 
@@ -82,6 +82,7 @@
     
   self.dataSource = [FeedDataSource getMessages:feed];
  	theTableView.dataSource = self.dataSource;
+  
   [theTableView reloadData];
 
   [toolbar displayCheckingNew];

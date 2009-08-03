@@ -19,8 +19,10 @@
   
   NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json"];
   
-  if (json)
+  if (json) {
+    [LocalStorage saveFile:USER_CURRENT data:json];
     return (NSMutableDictionary *)[json JSONValue];
+  }
   
   return nil;
 }
