@@ -53,7 +53,8 @@
   // first tab: home
   FeedMessageList *homeViewController = [[FeedMessageList alloc] initWithDict:[LocalStorage getFeedInfo] 
                                                                    threadIcon:true
-                                                                      homeTab:true];
+                                                                      refresh:true
+                                                                      compose:true];
   [self setupView:homeViewController title:@"Home" image:@"home.png"];
 	localNavigationController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
   [homeViewController release];

@@ -7,7 +7,7 @@
 @synthesize displayText;
 @synthesize target;
 @synthesize spinnerButton;
-@synthesize refreshButton;
+@synthesize flexItem;
 @synthesize theBar;
 
 - (id)initWithFrame:(CGRect)frame target:(NSObject *)theTarget {
@@ -16,19 +16,13 @@
     
     self.theBar = [[UIToolbar alloc] initWithFrame:frame];
     
-    self.refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                             target:self.target
-                                                                             action:@selector(refresh)];
-    self.refreshButton.style = UIBarButtonItemStyleBordered;
-
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 3, 20, 20)];
     self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
     UIView *wrapper = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
     wrapper.backgroundColor = [UIColor clearColor];
     [wrapper addSubview:self.spinner];
     self.spinnerButton = [[UIBarButtonItem alloc] initWithCustomView:wrapper];
-    
-    
+        
     UIView *statusAndSpinner = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 218, 30)];
         
     self.displayText = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 200, 20)];
@@ -40,12 +34,11 @@
         
     UIBarButtonItem *custom = [[UIBarButtonItem alloc] initWithCustomView:statusAndSpinner];
     
+    self.flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                              target:nil
+                                                                              action:nil];
 
-    UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-                                                                             target:self.target
-                                                                             action:@selector(compose)];
-    compose.style = UIBarButtonItemStyleBordered;
-    NSMutableArray *items = [NSMutableArray arrayWithObjects: self.refreshButton, custom, compose, nil];
+    NSMutableArray *items = [NSMutableArray arrayWithObjects: self.flexItem, custom, self.flexItem, nil];
     [self.theBar setItems:items animated:NO];
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 34, 320, 1)];
@@ -70,7 +63,7 @@
   self.displayText.text = @"333";
 }
 
-- (void)replaceRefreshWithSpinner {
+- (void)replaceFlexWithSpinner {
   NSMutableArray *tempItems = [self.theBar.items mutableCopy];
   [tempItems replaceObjectAtIndex:0 withObject:self.spinnerButton];
   [self.theBar setItems:tempItems animated:false];
@@ -78,26 +71,18 @@
   [tempItems release];
 }
 
-- (void)replaceSpinnerWithRefresh {
+- (void)replaceSpinnerWithFlex {
   NSMutableArray *tempItems = [self.theBar.items mutableCopy];
-  [tempItems replaceObjectAtIndex:0 withObject:self.refreshButton];
+  [tempItems replaceObjectAtIndex:0 withObject:self.flexItem];
   [self.theBar setItems:tempItems animated:false];
   [tempItems release];
 }
 
-- (void)removeCompose {
-  NSMutableArray *tempItems = [self.theBar.items mutableCopy];
-  [tempItems removeLastObject];
-  [self.theBar setItems:tempItems animated:false];
-  [tempItems release];
-}
-
-  
 - (void)dealloc {
   [spinner release];
   [target release];
   [spinnerButton release];
-  [refreshButton release];
+  [flexItem release];
   [theBar release];
   [super dealloc];
 }

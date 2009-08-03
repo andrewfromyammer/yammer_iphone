@@ -31,9 +31,10 @@
 @property BOOL homeTab;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
-                                                  homeTab:(BOOL)isHomeTab;
+                                                  refresh:(BOOL)showRefresh
+                                                  compose:(BOOL)showCompose;
+
 - (void)checkForNewMessages;
-- (void)disableCompose;
 - (void)displayLastUpdated;
 
 @end

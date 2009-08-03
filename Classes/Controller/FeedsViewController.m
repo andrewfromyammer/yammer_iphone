@@ -18,7 +18,6 @@
 
 - (id)init {
   self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
-  [self.toolbar removeCompose];
 	return self;
 }
 
@@ -51,7 +50,8 @@
   FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] 
                                            initWithDict:[dataSource feedAtIndex:indexPath.row] 
                                            threadIcon:true
-                                           homeTab:false];
+                                           refresh:false
+                                           compose:true];
   [self.navigationController pushViewController:localFeedMessageList animated:YES];
   [localFeedMessageList release];
 }

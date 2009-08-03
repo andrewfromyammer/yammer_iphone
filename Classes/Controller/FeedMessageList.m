@@ -28,12 +28,27 @@
 @synthesize homeTab;
 @synthesize toolbar;
 
-- (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon homeTab:(BOOL)isHomeTab {
+- (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
+                                                  refresh:(BOOL)showRefresh
+                                                  compose:(BOOL)showCompose {
   self.feed = dict;
   self.title = [feed objectForKey:@"name"];
   self.threadIcon = showThreadIcon;
-  self.homeTab = isHomeTab;
   self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
+  
+  if (showRefresh) {
+    UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                             target:self
+                                                                             action:@selector(refresh)];  
+    self.navigationItem.leftBarButtonItem = refresh;
+  }
+  
+  if (showCompose) {
+    UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                             target:self
+                                                                             action:@selector(compose)];  
+    self.navigationItem.rightBarButtonItem = compose;
+  }
 	return self;
 }
 
@@ -58,7 +73,7 @@
   
   
   [toolbar displayCheckingNew];
-  [toolbar replaceRefreshWithSpinner];
+  [toolbar replaceFlexWithSpinner];
   
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];  
 }
@@ -90,7 +105,7 @@
   }
   
   [self displayLastUpdated];
-  [self.toolbar replaceSpinnerWithRefresh];
+  [self.toolbar replaceSpinnerWithFlex];
   [autoreleasepool release];
 }
 
@@ -119,14 +134,9 @@
   [self presentModalViewController:modal animated:YES];
 }
 
-- (void)disableCompose {
-  UIBarButtonItem *item = (UIBarButtonItem *)[self.toolbar.theBar.items objectAtIndex:2];
-  item.enabled = false;
-}
-
 - (void)refresh {
   [toolbar displayCheckingNew];
-  [toolbar replaceRefreshWithSpinner];
+  [toolbar replaceFlexWithSpinner];
   
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 }
