@@ -51,6 +51,10 @@
   return self;
 }
 
+- (void)displayLoadingCache {
+  self.displayText.text = @"Loading messages from cache...";
+}
+
 - (void)displayCheckingNew {
   self.displayText.text = @"Checking for new messages...";
 }

@@ -64,23 +64,34 @@
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	theTableView.delegate = self;
-  self.dataSource = [FeedDataSource getMessages:feed];
+  self.dataSource = [[FeedDataSource alloc] initWithEmpty];
 	theTableView.dataSource = self.dataSource;
   
   [tableAndSpinner addSubview:toolbar];
   [tableAndSpinner addSubview:theTableView];
   self.view = tableAndSpinner;  
   
-  
-  [toolbar displayCheckingNew];
+  [toolbar displayLoadingCache];
   [toolbar replaceFlexWithSpinner];
   
+  [NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];  
+}
+
+- (void)loadCachedMessages {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+    
+  self.dataSource = [FeedDataSource getMessages:feed];
+ 	theTableView.dataSource = self.dataSource;
+  [theTableView reloadData];
+
+  [toolbar displayCheckingNew];
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];  
+  [autoreleasepool release];
 }
 
 - (void)checkForNewMessages {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  
+    
   NSDecimalNumber *newerThan=nil;
   @try {
     NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];

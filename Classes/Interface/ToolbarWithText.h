@@ -23,5 +23,6 @@
 - (void)replaceSpinnerWithFlex;
 - (void)setText:(NSString *)text;
 - (void)setTextToCurrentTime;
+- (void)displayLoadingCache;
 
 @end
