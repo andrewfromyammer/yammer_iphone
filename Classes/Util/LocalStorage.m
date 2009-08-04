@@ -160,5 +160,16 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   return dic;
 }
 
++ (NSMutableDictionary *)getReceivedInfo {
+  
+  NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+  [dic setObject:@"Received" forKey:@"name"];
+  [dic setObject:@"received" forKey:@"type"];
+  [dic setObject:@"/api/v1/messages/received" forKey:@"url"];
+  [dic setObject:@"(null)" forKey:@"group_id"];
+  
+  return dic;
+}
+
 
 @end

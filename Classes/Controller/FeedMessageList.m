@@ -137,7 +137,7 @@
     [meta setObject:[feed objectForKey:@"group_id"] forKey:@"group_id"];
   else
     name = @"My Colleagues";
-  [meta setObject:[NSString stringWithFormat:@"Share with %@", name] forKey:@"display"];
+  [meta setObject:[NSString stringWithFormat:@"Share something with %@:", name] forKey:@"display"];
   
   ComposeMessageController *compose = [[ComposeMessageController alloc] initWithMeta:meta];
   UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];

@@ -40,4 +40,6 @@
 + (void)saveDraft:(NSString *)draft;
 + (NSString *)getDraft;
 
++ (NSMutableDictionary *)getReceivedInfo;
+
 @end

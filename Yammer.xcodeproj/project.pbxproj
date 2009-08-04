@@ -30,6 +30,7 @@
 		0037FE600F31290800A6A599 /* Base64Transcoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 0037FE5A0F31290800A6A599 /* Base64Transcoder.c */; };
 		0037FE610F31290800A6A599 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 0037FE5C0F31290800A6A599 /* hmac.c */; };
 		0037FE620F31290800A6A599 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 0037FE5E0F31290800A6A599 /* sha1.c */; };
+		003A81491028912400565FE1 /* received.png in Resources */ = {isa = PBXBuildFile; fileRef = 003A81481028912400565FE1 /* received.png */; };
 		004A38580F37668A0086C2A6 /* OAuthPostMultipart.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A38570F37668A0086C2A6 /* OAuthPostMultipart.m */; };
 		004A388F0F3773990086C2A6 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A388E0F3773990086C2A6 /* MessageViewController.m */; };
 		004A38BC0F377EB90086C2A6 /* MessageWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A38BB0F377EB90086C2A6 /* MessageWebView.m */; };
@@ -133,6 +134,7 @@
 		0037FE5D0F31290800A6A599 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hmac.h; path = OAuth/hmac.h; sourceTree = "<group>"; };
 		0037FE5E0F31290800A6A599 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha1.c; path = OAuth/sha1.c; sourceTree = "<group>"; };
 		0037FE5F0F31290800A6A599 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = OAuth/sha1.h; sourceTree = "<group>"; };
+		003A81481028912400565FE1 /* received.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = received.png; path = Images/received.png; sourceTree = "<group>"; };
 		004A38560F37668A0086C2A6 /* OAuthPostMultipart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAuthPostMultipart.h; path = Util/OAuthPostMultipart.h; sourceTree = "<group>"; };
 		004A38570F37668A0086C2A6 /* OAuthPostMultipart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAuthPostMultipart.m; path = Util/OAuthPostMultipart.m; sourceTree = "<group>"; };
 		004A388D0F3773990086C2A6 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageViewController.h; path = Controller/MessageViewController.h; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 		00D521550F2FBDCB00FB3A8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				003A81481028912400565FE1 /* received.png */,
 				0000AABC102884270051924F /* advanced.png */,
 				0000AABD102884270051924F /* push.png */,
 				008EBC560F439F85000A6C6D /* lock.png */,
@@ -556,6 +559,7 @@
 				00DAF50F10225D9900F56F36 /* MainWindow.xib in Resources */,
 				0000AABE102884270051924F /* advanced.png in Resources */,
 				0000AABF102884270051924F /* push.png in Resources */,
+				003A81491028912400565FE1 /* received.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

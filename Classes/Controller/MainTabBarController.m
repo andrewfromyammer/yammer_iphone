@@ -55,14 +55,25 @@
                                                                    threadIcon:true
                                                                       refresh:true
                                                                       compose:true];
-  [self setupView:homeViewController title:@"Home" image:@"home.png"];
+  [self setupView:homeViewController title:@"My Feed" image:@"home.png"];
 	localNavigationController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
   [homeViewController release];
   [localNavigationController.navigationBar setTintColor:[MainTabBarController yammerGray]];
   [localViewControllersArray addObject:localNavigationController];
   [localNavigationController release];
 
-  // second tab: feeds
+  FeedMessageList *receivedViewController = [[FeedMessageList alloc] initWithDict:[LocalStorage getReceivedInfo] 
+                                                                   threadIcon:true
+                                                                      refresh:true
+                                                                      compose:true];
+  [self setupView:receivedViewController title:@"Received" image:@"received.png"];
+	localNavigationController = [[UINavigationController alloc] initWithRootViewController:receivedViewController];
+  [receivedViewController release];
+  [localNavigationController.navigationBar setTintColor:[MainTabBarController yammerGray]];
+  [localViewControllersArray addObject:localNavigationController];
+  [localNavigationController release];
+  
+  
   FeedsViewController *feedViewController = [[FeedsViewController alloc] init];
   [self setupView:feedViewController title:@"Feeds" image:@"feeds.png"];
 	localNavigationController = [[UINavigationController alloc] initWithRootViewController:feedViewController];
@@ -71,7 +82,6 @@
   [localViewControllersArray addObject:localNavigationController];
   [localNavigationController release];
 
-  // third tab: directory
   DirectoryViewController *directoryViewController = [[DirectoryViewController alloc] init];
   [self setupView:directoryViewController title:@"Directory" image:@"directory.png"];
 	localNavigationController = [[UINavigationController alloc] initWithRootViewController:directoryViewController];
@@ -80,7 +90,6 @@
   [localViewControllersArray addObject:localNavigationController];
   [localNavigationController release];
 
-  // fourth tab: settings
   SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
   [self setupView:settingsViewController title:@"Settings" image:@"settings.png"];
 	localNavigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
