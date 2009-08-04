@@ -123,6 +123,12 @@
 
 + (NSString *)niceDate:(NSDate *)date {
   NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+  [outputFormatter setDateFormat:@"MMM d YYYY"];
+  if ([[outputFormatter stringFromDate:date] isEqualToString:[outputFormatter stringFromDate:[NSDate date]]]) {
+    [outputFormatter setDateFormat:@"h:mm a"];
+    return [NSString stringWithFormat:@"Updated %@ Today", [outputFormatter stringFromDate:date]];
+  }
+  
   [outputFormatter setDateFormat:@"h:mm a MMM d"];
   return [NSString stringWithFormat:@"Updated %@", [outputFormatter stringFromDate:date]];
 }

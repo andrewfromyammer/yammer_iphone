@@ -30,5 +30,7 @@
 - (void)replaceButton:(UIBarButtonItem*)item index:(int)index;
 - (UIBarButtonItem *)trashButton;
 - (UIBarButtonItem *)cameraButton;
+- (UIImage *)scaleAndRotateImage:(UIImage *)image;
+- (UIImage *)resizeImage:(UIImage *)image;
 
 @end
