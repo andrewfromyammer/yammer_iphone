@@ -10,6 +10,7 @@
 #import "LocalStorage.h"
 #import "APIGateway.h"
 #import "YammerAppDelegate.h"
+#import "MainTabBarController.h"
 
 
 @implementation ComposeMessageController
@@ -23,10 +24,16 @@
 @synthesize sendingBuffer;
 @synthesize topLabel;
 
++ (UINavigationController *)getNav:(NSMutableDictionary *)metaInfo {
+  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithMeta:metaInfo];
+  UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
+  [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
+  return modal;
+}
+
 - (id)initWithMeta:(NSMutableDictionary *)metaInfo {
   [super initWithNibName:@"ComposeMessage" bundle:nil];
-  //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
-  self.title = @"New Message";
+  //self.title = [metaInfo objectForKey:@"display"];
   self.meta = metaInfo;
   return self;
 }
@@ -37,6 +44,7 @@
 
 - (void)viewDidLoad {
   [self.topLabel setText:[meta objectForKey:@"display"]];
+  self.navigationItem.titleView = self.topLabel;
 
   UIBarButtonItem *draft=[[UIBarButtonItem alloc] init];
   draft.title=@"Close";
@@ -47,11 +55,16 @@
   send.title=@"Send";
   send.target = self;
   send.action = @selector(sendMessage);
-  
-  
+
   self.navigationItem.rightBarButtonItem = send;  
   self.navigationItem.leftBarButtonItem = draft;
+
+  UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                            target:nil
+                                                                            action:nil];  
   
+  NSMutableArray *items = [NSMutableArray arrayWithObjects: [self trashButton], flexItem, [self cameraButton], nil];
+  [bar setItems:items animated:NO];  
 }
 
 - (void)loadView2 {

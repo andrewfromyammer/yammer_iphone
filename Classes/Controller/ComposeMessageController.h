@@ -21,6 +21,7 @@
 @property (nonatomic,retain) NSString *sendingBuffer;
 @property (nonatomic,retain) NSMutableDictionary *meta;
 
++ (UINavigationController *)getNav:(NSMutableDictionary *)metaInfo;
 - (void)sendMessage;
 - (id)initWithMeta:(NSMutableDictionary *)metaInfo;
 - (void)sendUpdate;

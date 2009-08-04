@@ -138,12 +138,9 @@
   else
     name = @"My Colleagues";
   [meta setObject:[NSString stringWithFormat:@"Share something with %@:", name] forKey:@"display"];
-  
-  ComposeMessageController *compose = [[ComposeMessageController alloc] initWithMeta:meta];
-  UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:compose];
-  [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
 
-  [self presentModalViewController:modal animated:YES];
+  
+  [self presentModalViewController:[ComposeMessageController getNav:meta] animated:YES];
 }
 
 - (void)refresh {
