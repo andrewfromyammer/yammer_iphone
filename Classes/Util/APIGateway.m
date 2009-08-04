@@ -12,6 +12,7 @@
 #import "LocalStorage.h"
 #import "OAuthPostURLEncoded.h"
 #import "OAuthPostMultipart.h"
+#import "NSString+SBJSON.h"
 
 @implementation APIGateway
 
@@ -52,8 +53,11 @@
 
   NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/users.json?page=%d", page]];
   
-  if (json)
+  if (json) {
+    if (page == 1)
+      [LocalStorage saveFile:DIRECTORY_CACHE data:json];
     return (NSMutableArray *)[json JSONValue];
+  }
   
   return nil;
 }

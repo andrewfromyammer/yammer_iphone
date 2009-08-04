@@ -59,6 +59,10 @@
   self.displayText.text = @"Contacting yammer.com...";
 }
 
+- (void)displayLoading {
+  self.displayText.text = @"Loading...";
+}
+
 - (void)setText:(NSString *)text {
   self.displayText.text = text;
 }

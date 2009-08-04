@@ -23,11 +23,9 @@
   return [[DirectoryTableDataSource alloc] initWithArray:[NSMutableArray array]];
 }
 
-- (id)initWithArray:(NSMutableArray *)array {
-  
+- (id)init {
   self.page = 1;
   self.users = [NSMutableArray array];
-  [self handleUsers:array];
   return self;
 }
 

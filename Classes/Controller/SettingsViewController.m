@@ -48,8 +48,6 @@
 	
 	theTableView.delegate = self;
   
-//  self.usersCurrent = [APIGateway usersCurrent];
-//  self.dataSource = [[DataSettings alloc] initWithDict:self.usersCurrent];
   self.dataSource = [[DataSettings alloc] init];
 	theTableView.dataSource = self.dataSource;
   
@@ -70,9 +68,10 @@
     dict = [APIGateway usersCurrent];
   
   [self.dataSource findEmailFromDict:dict];
-  [theTableView reloadData];
   
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  
+  [theTableView reloadData];
   [autoreleasepool release];
 }
 

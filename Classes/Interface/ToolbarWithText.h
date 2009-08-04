@@ -24,5 +24,6 @@
 - (void)setText:(NSString *)text;
 - (void)setTextToCurrentTime;
 - (void)displayLoadingCache;
+- (void)displayLoading;
 
 @end

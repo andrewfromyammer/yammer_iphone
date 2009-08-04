@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define USER_CURRENT @"/account/user_current.json"
+#define USER_CURRENT    @"/account/user_current.json"
+#define DIRECTORY_CACHE @"/account/directory_cache.json"
 
 @interface LocalStorage : NSObject {
 

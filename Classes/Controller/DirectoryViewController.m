@@ -10,29 +10,73 @@
 #import "DirectoryTableDataSource.h"
 #import "DirectoryUserProfile.h";
 #import "APIGateway.h"
+#import "NSString+SBJSON.h"
+#import "LocalStorage.h"
+#import "FeedCache.h"
 
 @implementation DirectoryViewController
 
 @synthesize theTableView;
 @synthesize dataSource;
+@synthesize toolbar;
 
-- (void)getData {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-    
-	theTableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]
-                                              style:UITableViewStylePlain];
+- (id)init {
+  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
   
+  UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                           target:self
+                                                                           action:@selector(refresh)];  
+  self.navigationItem.leftBarButtonItem = refresh;
+  
+  return self;
+}
+
+- (void)loadView {
+    
+  UIView *wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];  
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, 332) style:UITableViewStylePlain];
+    
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	theTableView.delegate = self;
-  self.dataSource = [DirectoryTableDataSource getUsers];
+  self.dataSource = [[DirectoryTableDataSource alloc] init];
 	theTableView.dataSource = self.dataSource;
+
+  [wrapper addSubview:toolbar];
+  [wrapper addSubview:theTableView];
   
-  self.view = theTableView;
+  self.view = wrapper;  
   
-  [super getData];
+  [toolbar displayLoading];
+  [toolbar replaceFlexWithSpinner];
+  [NSThread detachNewThreadSelector:@selector(loadUsers) toTarget:self withObject:nil];  
+}
+
+- (void)loadUsers {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  
+  NSMutableArray *list;
+  NSString *cached = [LocalStorage getFile:DIRECTORY_CACHE];
+  if (cached)
+    list = (NSMutableArray *)[cached JSONValue];
+  else
+    list = [APIGateway users:1];
+  
+  [self.dataSource handleUsers:list];
+  [theTableView reloadData];  
+  
+  [self.toolbar replaceSpinnerWithFlex];
+  [self.toolbar setText:[FeedCache niceDate:[LocalStorage getFileDate:DIRECTORY_CACHE]]];
   [autoreleasepool release];
+}
+
+- (void)refresh {
+  self.dataSource.users = [NSMutableArray array];
+  [LocalStorage removeFile:DIRECTORY_CACHE];
+  [toolbar displayCheckingNew];
+  [toolbar replaceFlexWithSpinner];
+  [NSThread detachNewThreadSelector:@selector(loadUsers) toTarget:self withObject:nil];  
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
@@ -47,9 +91,9 @@
     [localDirectoryUserProfile release];
   } else {
     if ([dataSource.users count] < 999) {
-      self.view = wrapper;
-      [spinner startAnimating];  
-      [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];    
+//      self.view = wrapper;
+//      [spinner startAnimating];  
+ //     [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];    
     }
   }
 }
@@ -61,7 +105,6 @@
   if (array)
     [dataSource handleUsers:array];
   [theTableView reloadData];
-  [super getData];
   self.view = theTableView;
   [autoreleasepool release];
 }
@@ -74,6 +117,7 @@
 - (void)dealloc {
   [theTableView release];
   [dataSource release];
+  [toolbar release];
   [super dealloc];
 }
 
