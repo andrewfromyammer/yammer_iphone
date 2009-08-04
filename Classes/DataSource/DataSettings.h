@@ -7,7 +7,7 @@
 
 @property (nonatomic,retain) NSString *email;
 
-- (id)initWithDict:(NSMutableDictionary *)dict;
-
+- (void)findEmailFromDict:(NSMutableDictionary *)dict;
+- (id)init;
 
 @end

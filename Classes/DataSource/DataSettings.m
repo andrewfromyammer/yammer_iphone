@@ -15,7 +15,12 @@
 
 @synthesize email;
 
-- (id)initWithDict:(NSMutableDictionary *)dict {
+- (id)init {
+  self.email = @"";
+  return self;
+}
+
+- (void)findEmailFromDict:(NSMutableDictionary *)dict {
   
   self.email = @"";
   
@@ -30,21 +35,23 @@
         break;
       }
   }
-  return self;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+  return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+  if (section == 0)
+    return 2;
+  
   NSArray *array = [DEV_NETWORKS componentsSeparatedByString:@" "];
   int i=0;
   for (; i<[array count]; i++) {
     if ([email hasSuffix:[array objectAtIndex:i]])
-      return 4;
+      return 2;
   }
-  return 3;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView  numberOfRowsInSection:(NSInteger)section {
-	return 2;
+  return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -54,32 +61,23 @@
 		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"SettingsCell"] autorelease];
 	}
   
-  if (indexPath.row == 0) {
-    if (indexPath.section == 0)
+  if (indexPath.section == 0) {
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    if (indexPath.row == 0)
       cell.textLabel.text = @"Logged in as:";
-    else if (indexPath.section == 1)
-      cell.textLabel.text = @"Feed for home page:";
-    else if (indexPath.section == 2)
-      cell.textLabel.text = @"Push Notifications:";
-    else if (indexPath.section == 3)
-      cell.textLabel.text = @"Advanced:";
-  }
-  else {
-    if (indexPath.section == 0)
+    else if (indexPath.row == 1)
       cell.textLabel.text = self.email;
-    else if (indexPath.section == 1)
-      cell.textLabel.text = [[LocalStorage getFeedInfo] objectForKey:@"name"];
-    else if (indexPath.section == 2)
-      cell.textLabel.text = @"Settings";
-    else if (indexPath.section == 3)
-      cell.textLabel.text = @"Advanced Options";
-  }
-  
-  cell.accessoryType = UITableViewCellAccessoryNone;
-  
-  if (indexPath.row == 1)
+  } else {
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
- 	
+    if (indexPath.row == 0) {
+      cell.textLabel.text = @"Push Notifications";
+      cell.imageView.image = [UIImage imageNamed:@"push.png"];
+    } else if (indexPath.row == 1) {
+      cell.textLabel.text = @"Advanced";
+      cell.imageView.image = [UIImage imageNamed:@"advanced.png"];
+    }    
+  }
+
 	return cell;
 }
 

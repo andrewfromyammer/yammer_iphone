@@ -157,18 +157,6 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [dic setObject:@"/api/v1/messages/following" forKey:@"url"];
   [dic setObject:@"(null)" forKey:@"group_id"];
   
-  NSString *file = [LocalStorage getFile:FEEDFILE];
-  
-  if (!file)
-    return dic;
-    
-  NSArray *array = [file componentsSeparatedByString:@"\n"];
-  dic = [NSMutableDictionary dictionary];
-  [dic setObject:[array objectAtIndex:0] forKey:@"name"];
-  [dic setObject:[array objectAtIndex:1] forKey:@"type"];
-  [dic setObject:[array objectAtIndex:2] forKey:@"url"];
-  [dic setObject:[array objectAtIndex:3] forKey:@"group_id"];
-  
   return dic;
 }
 

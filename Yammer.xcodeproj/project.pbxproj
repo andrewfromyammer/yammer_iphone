@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0000AABE102884270051924F /* advanced.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000AABC102884270051924F /* advanced.png */; };
+		0000AABF102884270051924F /* push.png in Resources */ = {isa = PBXBuildFile; fileRef = 0000AABD102884270051924F /* push.png */; };
 		0014F1420F324FFE00A5AFF9 /* OAuthGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014F1410F324FFE00A5AFF9 /* OAuthGateway.m */; };
 		0014F14A0F32544400A5AFF9 /* APIGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014F1490F32544400A5AFF9 /* APIGateway.m */; };
 		0014F2360F32621300A5AFF9 /* DataSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014F2350F32621300A5AFF9 /* DataSettings.m */; };
@@ -85,6 +87,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0000AABC102884270051924F /* advanced.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = advanced.png; path = Images/advanced.png; sourceTree = "<group>"; };
+		0000AABD102884270051924F /* push.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = push.png; path = Images/push.png; sourceTree = "<group>"; };
 		0014F13F0F324FFE00A5AFF9 /* OAuthCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAuthCustom.h; path = Util/OAuthCustom.h; sourceTree = "<group>"; };
 		0014F1400F324FFE00A5AFF9 /* OAuthGateway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAuthGateway.h; path = Util/OAuthGateway.h; sourceTree = "<group>"; };
 		0014F1410F324FFE00A5AFF9 /* OAuthGateway.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAuthGateway.m; path = Util/OAuthGateway.m; sourceTree = "<group>"; };
@@ -280,6 +284,8 @@
 		00D521550F2FBDCB00FB3A8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0000AABC102884270051924F /* advanced.png */,
+				0000AABD102884270051924F /* push.png */,
 				008EBC560F439F85000A6C6D /* lock.png */,
 				00B48D7C0F38FFC100499D40 /* no_photo_small.png */,
 				00808FBD0F37ABA8004AB665 /* thread_gray.png */,
@@ -548,6 +554,8 @@
 				0077C1BE0F9FD1290097605D /* Entitlements.plist in Resources */,
 				00D050D90FFD4D4E00CEF89D /* yammer_sound.wav in Resources */,
 				00DAF50F10225D9900F56F36 /* MainWindow.xib in Resources */,
+				0000AABE102884270051924F /* advanced.png in Resources */,
+				0000AABF102884270051924F /* push.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

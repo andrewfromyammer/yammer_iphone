@@ -12,7 +12,7 @@
 #import "FeedsTableDataSource.h"
 #import "DataSettings.h"
 
-@interface SettingsViewController : SpinnerViewController <UITableViewDelegate> {
+@interface SettingsViewController : UIViewController <UITableViewDelegate> {
 	UITableView *theTableView;
   NSMutableDictionary *usersCurrent;
   DataSettings *dataSource;
