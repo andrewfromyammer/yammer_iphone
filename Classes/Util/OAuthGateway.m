@@ -19,7 +19,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 
 + (NSString *)baseURL {
   return @"http://192.168.1.151:3000";   
-//  return @"https://staging.yammer.com";
+// return @"https://staging.yammer.com";
   
   NSString *url = [LocalStorage getBaseURL];
   if (url)

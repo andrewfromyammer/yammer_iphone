@@ -47,7 +47,7 @@
   self.view = wrapper;  
   [wrapper release];
   
-  [toolbar displayCheckingNew];
+  [toolbar displayLoading];
   [toolbar replaceFlexWithSpinner];
   [NSThread detachNewThreadSelector:@selector(loadFeeds) toTarget:self withObject:nil];  
   

@@ -9,12 +9,14 @@
   NSString *undoBuffer; 
   NSString *sendingBuffer; 
   NSMutableDictionary *meta;
+  UILabel *topLabel;
 }
 
-@property (nonatomic,retain) UITextView *input;
+@property (nonatomic,retain) IBOutlet UITextView *input;
 @property (nonatomic,retain) SpinnerWithText *topSpinner;
+@property (nonatomic,retain) IBOutlet UILabel *topLabel;
 @property (nonatomic,retain) NSData *imageData;
-@property (nonatomic,retain) UIToolbar *bar;
+@property (nonatomic,retain) IBOutlet UIToolbar *bar;
 @property (nonatomic,retain) NSString *undoBuffer;
 @property (nonatomic,retain) NSString *sendingBuffer;
 @property (nonatomic,retain) NSMutableDictionary *meta;

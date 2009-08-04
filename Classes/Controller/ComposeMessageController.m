@@ -21,13 +21,40 @@
 @synthesize undoBuffer;
 @synthesize meta;
 @synthesize sendingBuffer;
+@synthesize topLabel;
 
 - (id)initWithMeta:(NSMutableDictionary *)metaInfo {
+  [super initWithNibName:@"ComposeMessage" bundle:nil];
+  //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
+  self.title = @"New Message";
   self.meta = metaInfo;
   return self;
 }
 
-- (void)loadView {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+  return YES;
+}
+
+- (void)viewDidLoad {
+  [self.topLabel setText:[meta objectForKey:@"display"]];
+
+  UIBarButtonItem *draft=[[UIBarButtonItem alloc] init];
+  draft.title=@"Close";
+  draft.target = self;
+  draft.action = @selector(dismissModalViewControllerAnimated:);
+  
+  UIBarButtonItem *send=[[UIBarButtonItem alloc] init];
+  send.title=@"Send";
+  send.target = self;
+  send.action = @selector(sendMessage);
+  
+  
+  self.navigationItem.rightBarButtonItem = send;  
+  self.navigationItem.leftBarButtonItem = draft;
+  
+}
+
+- (void)loadView2 {
   UIView *wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   wrapper.backgroundColor = [UIColor whiteColor];
   
@@ -401,6 +428,7 @@
   [undoBuffer release];
   [meta release];
   [sendingBuffer release];
+  [topLabel release];
   [super dealloc];
 }
 
