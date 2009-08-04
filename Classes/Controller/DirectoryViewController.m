@@ -13,6 +13,7 @@
 #import "NSString+SBJSON.h"
 #import "LocalStorage.h"
 #import "FeedCache.h"
+#import "SpinnerCell.h"
 
 @implementation DirectoryViewController
 
@@ -90,10 +91,11 @@
     [self.navigationController pushViewController:localDirectoryUserProfile animated:YES];
     [localDirectoryUserProfile release];
   } else {
-    if ([dataSource.users count] < 999) {
-//      self.view = wrapper;
-//      [spinner startAnimating];  
- //     [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];    
+    if ([dataSource.users count] < 500) {
+      SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];
+      [cell showSpinner];
+      [cell.displayText setText:@"Loading More..."];
+      [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];
     }
   }
 }
@@ -105,7 +107,6 @@
   if (array)
     [dataSource handleUsers:array];
   [theTableView reloadData];
-  self.view = theTableView;
   [autoreleasepool release];
 }
 

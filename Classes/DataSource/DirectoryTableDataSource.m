@@ -9,6 +9,7 @@
 #import "DirectoryTableDataSource.h"
 #import "APIGateway.h"
 #import "ImageCache.h"
+#import "SpinnerCell.h"
 
 @implementation DirectoryTableDataSource
 
@@ -57,25 +58,34 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
-
-	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"UserCell"] autorelease];
-	}
   
   if (indexPath.section == 0) {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
+    
+    if (cell == nil) {
+      cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"UserCell"] autorelease];
+    }
+    
     NSMutableDictionary *dict = [users objectAtIndex:indexPath.row];
     cell.textLabel.text = [dict objectForKey:@"name"];
     cell.imageView.image = [[UIImage alloc] initWithData:[dict objectForKey:@"imageData"]];
     cell.textLabel.textColor = [UIColor blackColor];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    return cell;
   } else {
-    cell.textLabel.text = @"                fetch more";
-    cell.imageView.image = nil;
-    cell.textLabel.textColor = [UIColor blueColor];
+    SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
+	  if (cell == nil) {
+		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero 
+                                 reuseIdentifier:@"MoreCell"
+                                        spinRect:CGRectMake(60, 12, 20, 20)
+                                        textRect:CGRectMake(100, 12, 200, 20)] autorelease];
+    }
+    
+    [cell displayMore];
+    [cell hideSpinner];
+  	return cell;    
   }
 
-  cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	return cell;
 }
 
 
