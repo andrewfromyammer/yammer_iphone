@@ -17,10 +17,12 @@
 	UITableView *theTableView;
   DirectoryTableDataSource *dataSource;
   SpinnerWithText *spinnerWithText;
+  UIView *wrapper;
 }
 
 @property (nonatomic,retain) SpinnerWithText *spinnerWithText;
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) DirectoryTableDataSource *dataSource;
+@property (nonatomic,retain) UIView *wrapper;
 
 @end

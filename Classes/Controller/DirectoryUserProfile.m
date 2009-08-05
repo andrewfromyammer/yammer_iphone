@@ -48,7 +48,7 @@
 - (void)getData {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   
-  NSMutableDictionary *userCurrent = [APIGateway usersCurrent];
+  NSMutableDictionary *userCurrent = [APIGateway usersCurrent:nil];
   NSString *loggedInId = [[userCurrent objectForKey:@"id"] description];  
   
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);

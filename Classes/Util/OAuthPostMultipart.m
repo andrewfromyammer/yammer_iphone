@@ -58,7 +58,7 @@
   [request setValue:[NSString stringWithFormat:@"%d", [body length]] forHTTPHeaderField:@"Content-Length"];
   [request setValue:contentType forHTTPHeaderField:@"Content-Type"]; 
   
-  return [OAuthGateway handleConnection:request] != nil;
+  return [OAuthGateway handleConnection:request style:nil] != nil;
 }
 
 @end

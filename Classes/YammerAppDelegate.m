@@ -94,7 +94,9 @@
     [OAuthGateway getRequestToken:false];
 }
 
-+ (void)showError:(NSString *)error {
++ (void)showError:(NSString *)error style:(NSString *)style {
+  if (style != nil)
+    return;
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                   message:error delegate:self 
                                         cancelButtonTitle:@"OK" otherButtonTitles: nil];

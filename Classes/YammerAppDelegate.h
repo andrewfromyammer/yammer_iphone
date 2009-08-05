@@ -20,9 +20,9 @@
 @property (nonatomic, retain) NSString *launchURL;
 @property (nonatomic, retain) IBOutlet UIViewController *mainView;
 
-+ (void)showError:(NSString *)error;
 - (void)teleportToUserFeed:(FeedMessageList *)feed;
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url;
++ (void)showError:(NSString *)error style:(NSString *)style;
 
 @end
 

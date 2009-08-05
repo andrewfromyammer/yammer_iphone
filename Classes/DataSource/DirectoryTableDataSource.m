@@ -18,7 +18,7 @@
 @synthesize page;
 
 + (DirectoryTableDataSource *)getUsers {
-  NSMutableArray *array = [APIGateway users:1];
+  NSMutableArray *array = [APIGateway users:1 style:nil];
   if (array)
     return [[DirectoryTableDataSource alloc] initWithArray:array]; 
   return [[DirectoryTableDataSource alloc] initWithArray:[NSMutableArray array]];

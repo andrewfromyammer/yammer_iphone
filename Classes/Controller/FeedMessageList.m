@@ -50,10 +50,7 @@
                                                                              action:@selector(compose)];  
     self.navigationItem.rightBarButtonItem = compose;
   }
-	return self;
-}
-
-- (void)loadView {
+  
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   tableAndSpinner.backgroundColor = [UIColor whiteColor];
   
@@ -70,11 +67,15 @@
   
   [tableAndSpinner addSubview:spinnerWithText];
   [tableAndSpinner addSubview:theTableView];
-  self.view = tableAndSpinner;  
   
   [spinnerWithText displayLoadingCache];
   [spinnerWithText showTheSpinner];
-  [NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];  
+  [NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];    
+	return self;
+}
+
+- (void)loadView {
+  self.view = tableAndSpinner;
 }
 
 - (void)loadCachedMessages {
@@ -86,11 +87,11 @@
   [theTableView reloadData];
 
   [spinnerWithText displayCheckingNew];
-  [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];  
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
   [autoreleasepool release];
 }
 
-- (void)checkForNewMessages {
+- (void)checkForNewMessages:(NSString *)style {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
     
   NSDecimalNumber *newerThan=nil;
@@ -99,7 +100,7 @@
     newerThan = [message objectForKey:@"id"];
   } @catch (NSException *theErr) {}
   
-  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan];
+  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan style:style];
   if (dict) {
     BOOL previousValue = dataSource.olderAvailable;
     
@@ -147,7 +148,7 @@
   [spinnerWithText displayCheckingNew];
   [spinnerWithText showTheSpinner];
   
-  [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:nil];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -185,7 +186,7 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
   NSMutableDictionary *message = [dataSource.messages objectAtIndex:[dataSource.messages count]-1];
-  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"]];
+  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"] style:nil];
   if (dict) {
     NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
     NSMutableArray *messages = [result objectForKey:@"messages"];

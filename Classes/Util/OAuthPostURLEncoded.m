@@ -44,7 +44,7 @@
   [request setParameters:oauthParams];
   [request prepare];
       
-  return [OAuthGateway handleConnection:request] != nil;
+  return [OAuthGateway handleConnection:request style:nil] != nil;
 }
 
 @end

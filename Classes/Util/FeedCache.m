@@ -122,6 +122,10 @@
 }
 
 + (NSString *)niceDate:(NSDate *)date {
+  if (date == nil) {
+    return @"No update yet.";
+  }
+  
   NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
   [outputFormatter setDateFormat:@"MMM d YYYY"];
   if ([[outputFormatter stringFromDate:date] isEqualToString:[outputFormatter stringFromDate:[NSDate date]]]) {

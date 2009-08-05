@@ -34,7 +34,7 @@
                                                   refresh:(BOOL)showRefresh
                                                   compose:(BOOL)showCompose;
 
-- (void)checkForNewMessages;
+- (void)checkForNewMessages:(NSString *)style;
 - (void)displayLastUpdated;
 
 @end

@@ -16,9 +16,9 @@
 
 @implementation APIGateway
 
-+ (NSMutableDictionary *)usersCurrent {
++ (NSMutableDictionary *)usersCurrent:(NSString *)style {
   
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json"];
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json" style:style];
   
   if (json) {
     [LocalStorage saveFile:USER_CURRENT data:json];
@@ -30,7 +30,7 @@
 
 + (NSMutableArray *)homeTabs {
   
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json"];
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json" style:nil];
   
   if (json) {
     NSMutableDictionary *dict = [(NSMutableDictionary *)[json JSONValue] objectForKey:@"web_preferences"];
@@ -41,7 +41,7 @@
 
 + (NSMutableDictionary *)pushSettings {
   
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/user_clients/ApplePushDevice.json"];
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/user_clients/ApplePushDevice.json" style:nil];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
@@ -49,9 +49,9 @@
   return nil;
 }
 
-+ (NSMutableArray *)users:(int)page {
++ (NSMutableArray *)users:(int)page style:(NSString *)style {
 
-  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/users.json?page=%d", page]];
+  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/users.json?page=%d", page] style:style];
   
   if (json) {
     if (page == 1)
@@ -64,7 +64,7 @@
 
 + (NSMutableDictionary *)userById:(NSString *)theUserId {
   
-  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/users/%@.json", theUserId]];
+  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/users/%@.json", theUserId] style:nil];
     
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
@@ -72,21 +72,23 @@
   return nil;
 }
 
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan {
-  return [APIGateway messages:url olderThan:olderThan newerThan:nil];
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan style:(NSString *)style {
+  return [APIGateway messages:url olderThan:olderThan newerThan:nil style:style];
 }
 
-+ (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSDecimalNumber *)newerThan {
-  return [APIGateway messages:url olderThan:nil newerThan:newerThan];
++ (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSDecimalNumber *)newerThan style:(NSString *)style {
+  return [APIGateway messages:url olderThan:nil newerThan:newerThan style:style];
 }
 
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan newerThan:(NSDecimalNumber *)newerThan {
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan 
+                                                  newerThan:(NSDecimalNumber *)newerThan
+                                                  style:(NSString *)style {
   NSString *param = @"";
   if (olderThan)
     param = [NSString stringWithFormat:@"?older_than=%@", olderThan];
   if (newerThan)
     param = [NSString stringWithFormat:@"?newer_than=%@", newerThan];
-  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, param]];
+  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, param] style:(NSString *)style];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];

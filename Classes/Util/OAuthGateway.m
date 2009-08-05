@@ -61,7 +61,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
   
   if (response == nil || responseData == nil || error != nil || [(NSHTTPURLResponse *)response statusCode] >= 400) {
-    [YammerAppDelegate showError:@"oauth getRequestToken"];
+    [YammerAppDelegate showError:@"oauth getRequestToken" style:nil];
   } else {
     NSString *responseBody = [[NSString alloc] initWithData:responseData
                                                    encoding:NSUTF8StringEncoding];
@@ -140,15 +140,16 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   return [NSURL URLWithString:[NSString stringWithFormat:@"%@", path]];
 }
 
-+ (NSString *)handleConnection:(OAMutableURLRequest *)request {
++ (NSString *)handleConnection:(OAMutableURLRequest *)request style:(NSString *)style {
   NSHTTPURLResponse *response;
   NSError *error;
   NSData *responseData;
   
+  NSLog([request description]);
   responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
   
   if ((response == nil || responseData == nil) && error == nil) {
-    [YammerAppDelegate showError:ERROR_OUT_OF_RANGE];
+    [YammerAppDelegate showError:ERROR_OUT_OF_RANGE style:style];
     return nil;
   } else if (error != nil) {
     if ([error code] == -1012) {
@@ -156,21 +157,21 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
       exit(1);
     }
     else
-      [YammerAppDelegate showError:ERROR_OUT_OF_RANGE];
+      [YammerAppDelegate showError:ERROR_OUT_OF_RANGE style:style];
     return nil;
   } else if ([response statusCode] >= 400) {
     NSString *detail = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
     NSLog(detail);
     if ([detail length] > 30)
       detail = [detail substringToIndex:30];
-    [YammerAppDelegate showError:[NSString stringWithFormat:@"%d %@", [response statusCode], detail]];
+    [YammerAppDelegate showError:[NSString stringWithFormat:@"%d %@", [response statusCode], detail] style:style];
     return nil;
   }
   
   return [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 }
 
-+ (NSString *)httpGet:(NSString *)path {  
++ (NSString *)httpGet:(NSString *)path style:(NSString *)style {  
   NSURL *url = [OAuthGateway fixRelativeURL:path];
     
   OAConsumer *consumer = [[OAConsumer alloc] initWithKey:OAUTH_KEY
@@ -187,7 +188,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   request.HTTPShouldHandleCookies = NO;
   
   [request prepare];
-  return [OAuthGateway handleConnection:request];  
+  return [OAuthGateway handleConnection:request style:style];  
 }
 
 + (BOOL)httpGet200vsError:(NSString *)path {  

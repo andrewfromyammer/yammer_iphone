@@ -15,10 +15,12 @@
 	UITableView *theTableView;
   FeedsTableDataSource *dataSource;
   SpinnerWithText *spinnerWithText;
+  UIView *wrapper;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) FeedsTableDataSource *dataSource;
-@property (nonatomic,retain)   SpinnerWithText *spinnerWithText;
+@property (nonatomic,retain) SpinnerWithText *spinnerWithText;
+@property (nonatomic,retain) UIView *wrapper;
 
 @end

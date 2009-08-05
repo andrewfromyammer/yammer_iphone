@@ -31,16 +31,8 @@
   self.navigationItem.rightBarButtonItem = logout;
   [logout release];
   self.navigationItem.leftBarButtonItem = nil;
-  
-	return self;
-}
 
-- (void)logout {
-  [OAuthGateway logout];
-}
-
-- (void)loadView {  
-	theTableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]
+  self.theTableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]
                                               style:UITableViewStyleGrouped];  
   
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
@@ -50,27 +42,32 @@
   
   self.dataSource = [[DataSettings alloc] init];
 	theTableView.dataSource = self.dataSource;
-  
-  self.view = theTableView;
-  
-  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];  
+
   [NSThread detachNewThreadSelector:@selector(loadUserCurrent) toTarget:self withObject:nil];
+	return self;
+}
+
+- (void)logout {
+  [OAuthGateway logout];
+}
+
+- (void)loadView {  
+  self.view = theTableView;
 }
 
 - (void)loadUserCurrent {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   
+  sleep(2);
   NSMutableDictionary *dict;
   NSString *cached = [LocalStorage getFile:USER_CURRENT];
   if (cached)
     dict = (NSMutableDictionary *)[cached JSONValue];
   else
-    dict = [APIGateway usersCurrent];
+    dict = [APIGateway usersCurrent:@"silent"];
   
   [self.dataSource findEmailFromDict:dict];
-  
-  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-  
+    
   [theTableView reloadData];
   [autoreleasepool release];
 }

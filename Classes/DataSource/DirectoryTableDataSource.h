@@ -19,7 +19,7 @@
 @property int lastSize;
 @property int page;
 
-- (id)initWithArray:(NSMutableArray *)array;
+- (id)init;
 + (DirectoryTableDataSource *)getUsers;
 
 - (NSMutableDictionary *)getUser:(int)index;
