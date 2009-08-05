@@ -16,7 +16,6 @@
 @implementation ComposeMessageController
 
 @synthesize input;
-@synthesize topSpinner;
 @synthesize imageData;
 @synthesize bar;
 @synthesize undoBuffer;
@@ -58,59 +57,31 @@
 
   self.navigationItem.rightBarButtonItem = send;  
   self.navigationItem.leftBarButtonItem = draft;
-
-  UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                            target:nil
-                                                                            action:nil];  
   
-  NSMutableArray *items = [NSMutableArray arrayWithObjects: [self trashButton], flexItem, [self cameraButton], nil];
-  [bar setItems:items animated:NO];  
-}
-
-- (void)loadView2 {
-  UIView *wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-  wrapper.backgroundColor = [UIColor whiteColor];
-  
-  self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
-  
-  UIBarButtonItem *draft=[[UIBarButtonItem alloc] init];
-  draft.title=@"Close";
-  draft.target = self;
-  draft.action = @selector(dismissModalViewControllerAnimated:);
-  
-  UIBarButtonItem *send=[[UIBarButtonItem alloc] init];
-  send.title=@"Send";
-  send.target = self;
-  send.action = @selector(sendMessage);
-  
-  
-  self.navigationItem.rightBarButtonItem = send;  
-  self.navigationItem.leftBarButtonItem = draft;
-  
-  
-  self.topSpinner = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];  
-  [self.topSpinner.displayText setText:[meta objectForKey:@"display"]];
-  
-  self.input = [[UITextView alloc] initWithFrame:CGRectMake(0, 30, 320, 125)];
-  [self.input setFont:[UIFont systemFontOfSize:16]];
   self.input.text = [LocalStorage getDraft];
   [self setSendEnabledState];
   [self.input setDelegate:self];
-  
-  self.bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 166, 320, 35)];
-    
+
   UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                             target:nil
                                                                             action:nil];  
   
   NSMutableArray *items = [NSMutableArray arrayWithObjects: [self trashButton], flexItem, [self cameraButton], nil];
   [bar setItems:items animated:NO];
-
-  [wrapper addSubview:self.topSpinner];
-  [wrapper addSubview:self.input];
-  [wrapper addSubview:bar];
   
-  self.view = wrapper;
+  [self setBarY];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+  [self setBarY];
+}
+
+- (void)setBarY {
+  // 71
+  if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft || self.interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    self.bar.frame = CGRectMake(self.bar.frame.origin.x, 200, self.bar.frame.size.width, self.bar.frame.size.height);  
+  else
+    self.bar.frame = CGRectMake(self.bar.frame.origin.x, 156, self.bar.frame.size.width, self.bar.frame.size.height);
 }
 
 - (void)replaceButton:(UIBarButtonItem*)item index:(int)index {
@@ -188,8 +159,8 @@
     button.enabled = false;
     button = (UIBarButtonItem *)[bar.items objectAtIndex:2];
     button.enabled = false;
-    
-    [self.topSpinner showTheSpinner:@"Sending message..."];
+        
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];  
     [NSThread detachNewThreadSelector:@selector(sendUpdate) toTarget:self withObject:nil];
   }
 }
@@ -208,11 +179,12 @@
   if ([APIGateway createMessage:self.sendingBuffer repliedToId:[meta objectForKey:@"replied_to_id"] 
                         groupId:[meta objectForKey:@"group_id"] 
                         imageData:self.imageData]) {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];  
     [LocalStorage saveDraft:@""];
     self.sendingBuffer = nil;
     [self performSelectorOnMainThread:@selector(closeIt) withObject:nil waitUntilDone:NO];
   } else {
-    [self.topSpinner hideTheSpinner:@"Message not sent."];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     self.sendingBuffer = nil;    
     self.navigationItem.leftBarButtonItem.enabled = true;
     self.navigationItem.rightBarButtonItem.enabled = true;
@@ -220,12 +192,13 @@
     UIBarButtonItem *button = (UIBarButtonItem *)[bar.items objectAtIndex:0];
     button.enabled = true;
     button = (UIBarButtonItem *)[bar.items objectAtIndex:2];
-    button.enabled = true;
+    button.enabled = true;    
   }
+
   [autoreleasepool release];
 }
 
-- (void)photoSelect {
+- (void)photoSelect {  
   YammerAppDelegate *yad = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil
@@ -435,7 +408,6 @@
 
 - (void)dealloc {
   [input release];
-  [topSpinner release];
   [imageData release];
   [bar release];
   [undoBuffer release];

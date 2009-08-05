@@ -3,7 +3,6 @@
 
 @interface ComposeMessageController : UIViewController <UITextViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate> {
   UITextView *input;
-  SpinnerWithText *topSpinner;
   NSData *imageData;
   UIToolbar *bar;
   NSString *undoBuffer; 
@@ -13,7 +12,6 @@
 }
 
 @property (nonatomic,retain) IBOutlet UITextView *input;
-@property (nonatomic,retain) SpinnerWithText *topSpinner;
 @property (nonatomic,retain) IBOutlet UILabel *topLabel;
 @property (nonatomic,retain) NSData *imageData;
 @property (nonatomic,retain) IBOutlet UIToolbar *bar;
@@ -35,5 +33,6 @@
 - (UIBarButtonItem *)cameraButton;
 - (UIImage *)scaleAndRotateImage:(UIImage *)image;
 - (UIImage *)resizeImage:(UIImage *)image;
+- (void)setBarY;
 
 @end
