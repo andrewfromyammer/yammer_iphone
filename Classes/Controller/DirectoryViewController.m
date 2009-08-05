@@ -19,10 +19,10 @@
 
 @synthesize theTableView;
 @synthesize dataSource;
-@synthesize toolbar;
+@synthesize spinnerWithText;
 
 - (id)init {
-  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
+  self.spinnerWithText = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
   
   UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                            target:self
@@ -35,7 +35,7 @@
 - (void)loadView {
     
   UIView *wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];  
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, 332) style:UITableViewStylePlain];
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
     
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -44,13 +44,13 @@
   self.dataSource = [[DirectoryTableDataSource alloc] init];
 	theTableView.dataSource = self.dataSource;
 
-  [wrapper addSubview:toolbar];
+  [wrapper addSubview:spinnerWithText];
   [wrapper addSubview:theTableView];
   
   self.view = wrapper;  
   
-  [toolbar displayLoading];
-  [toolbar replaceFlexWithSpinner];
+  [spinnerWithText displayLoading];
+  [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(loadUsers) toTarget:self withObject:nil];  
 }
 
@@ -67,16 +67,16 @@
   [self.dataSource handleUsers:list];
   [theTableView reloadData];  
   
-  [self.toolbar replaceSpinnerWithFlex];
-  [self.toolbar setText:[FeedCache niceDate:[LocalStorage getFileDate:DIRECTORY_CACHE]]];
+  [self.spinnerWithText hideTheSpinner];
+  [self.spinnerWithText setText:[FeedCache niceDate:[LocalStorage getFileDate:DIRECTORY_CACHE]]];
   [autoreleasepool release];
 }
 
 - (void)refresh {
   self.dataSource.users = [NSMutableArray array];
   [LocalStorage removeFile:DIRECTORY_CACHE];
-  [toolbar displayCheckingNew];
-  [toolbar replaceFlexWithSpinner];
+  [spinnerWithText displayCheckingNew];
+  [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(loadUsers) toTarget:self withObject:nil];  
 }
 
@@ -118,7 +118,7 @@
 - (void)dealloc {
   [theTableView release];
   [dataSource release];
-  [toolbar release];
+  [spinnerWithText release];
   [super dealloc];
 }
 

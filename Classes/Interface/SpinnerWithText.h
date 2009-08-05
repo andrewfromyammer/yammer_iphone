@@ -10,9 +10,11 @@
 @property (nonatomic, retain) UILabel *displayText;
 @property (nonatomic, retain) NSObject *target;
 
-- (void)showTheSpinner:(NSString *)text;
-- (void)hideTheSpinner:(NSString *)text;
-- (void)displayMore;
-+ (NSString *)checkingNewString;
+- (void)showTheSpinner;
+- (void)hideTheSpinner;  
+- (void)displayLoadingCache;
+- (void)displayCheckingNew;
+- (void)displayLoading;
+- (void)setText:(NSString *)text;
 
 @end

@@ -28,31 +28,31 @@
   return self;
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-  if (self.target)
-    [self.target performSelector:@selector(topSpinnerClicked)];    
-}
-
-- (void)showTheSpinner:(NSString *)text {
-  [self.displayText setText:text];
+- (void)showTheSpinner {
   [self addSubview:self.spinner];
   [spinner startAnimating];
 }
 
-- (void)hideTheSpinner:(NSString *)text {
-  [self.displayText setText:text];
+- (void)hideTheSpinner {
   [spinner stopAnimating];
   [spinner removeFromSuperview];
 }
 
-- (void)displayMore {
-  [displayText setText:@"        More"];
+- (void)displayLoadingCache {
+  self.displayText.text = @"Loading messages from cache...";
 }
 
-+ (NSString *)checkingNewString {
-  return @"Contacting yammer.com...";
+- (void)displayCheckingNew {
+  self.displayText.text = @"Contacting yammer.com...";
 }
 
+- (void)displayLoading {
+  self.displayText.text = @"Loading...";
+}
+
+- (void)setText:(NSString *)text {
+  self.displayText.text = text;
+}
 
 - (void)layoutSubviews {
   

@@ -17,10 +17,10 @@
 
 @synthesize theTableView;
 @synthesize dataSource;
-@synthesize toolbar;
+@synthesize spinnerWithText;
 
 - (id)init {
-  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
+  self.spinnerWithText = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
   
   UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                            target:self
@@ -33,7 +33,7 @@
 - (void)loadView {  
   
   UIView *wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];  
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, 332) style:UITableViewStylePlain];
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
   
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -42,13 +42,13 @@
   self.dataSource = [FeedsTableDataSource getFeeds:nil];
 	theTableView.dataSource = self.dataSource;
   [wrapper addSubview:theTableView];
-  [wrapper addSubview:self.toolbar];
+  [wrapper addSubview:self.spinnerWithText];
   
   self.view = wrapper;  
   [wrapper release];
   
-  [toolbar displayLoading];
-  [toolbar replaceFlexWithSpinner];
+  [spinnerWithText displayLoading];
+  [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(loadFeeds) toTarget:self withObject:nil];  
   
 }
@@ -66,15 +66,15 @@
 	theTableView.dataSource = self.dataSource;
   
   [theTableView reloadData];  
-  [self.toolbar replaceSpinnerWithFlex];
-  [self.toolbar setText:[FeedCache niceDate:[LocalStorage getFileDate:USER_CURRENT]]];
+  [self.spinnerWithText hideTheSpinner];
+  [self.spinnerWithText setText:[FeedCache niceDate:[LocalStorage getFileDate:USER_CURRENT]]];
   [autoreleasepool release];
 }
 
 - (void)refresh {
   [LocalStorage removeFile:USER_CURRENT];
-  [toolbar displayCheckingNew];
-  [toolbar replaceFlexWithSpinner];
+  [spinnerWithText displayCheckingNew];
+  [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(loadFeeds) toTarget:self withObject:nil];  
 }
 
@@ -93,7 +93,7 @@
 - (void)dealloc {
   [super dealloc];
   [theTableView release];
-  [toolbar release];
+  [spinnerWithText release];
   [dataSource release];
 }
 

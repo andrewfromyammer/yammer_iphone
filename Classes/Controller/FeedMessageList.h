@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SpinnerViewController.h"
 #import "FeedDataSource.h"
-#import "ToolbarWithText.h"
+#import "SpinnerWithText.h"
 
 @interface FeedMessageList : UIViewController <UITableViewDelegate>  {
   UIView *tableAndSpinner;
@@ -19,14 +19,14 @@
   BOOL threadIcon;
   BOOL homeTab;
     
-  ToolbarWithText *toolbar;
+  SpinnerWithText *spinnerWithText;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) FeedDataSource *dataSource;
 @property (nonatomic,retain) NSMutableDictionary *feed;
 @property (nonatomic,retain) UIView *tableAndSpinner;
-@property (nonatomic,retain) ToolbarWithText *toolbar;
+@property (nonatomic,retain) SpinnerWithText *spinnerWithText;
 @property BOOL threadIcon;
 @property BOOL homeTab;
 

@@ -15,7 +15,6 @@
 #import "LocalStorage.h"
 #import "SpinnerCell.h"
 #import "ComposeMessageController.h"
-#import "ToolbarWithText.h"
 #import "FeedCache.h"
 #import "NSDate-Ago.h"
 
@@ -27,7 +26,7 @@
 @synthesize tableAndSpinner;
 @synthesize threadIcon;
 @synthesize homeTab;
-@synthesize toolbar;
+@synthesize spinnerWithText;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   refresh:(BOOL)showRefresh
@@ -35,7 +34,8 @@
   self.feed = dict;
   self.title = [feed objectForKey:@"name"];
   self.threadIcon = showThreadIcon;
-  self.toolbar = [[ToolbarWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35) target:self];
+  
+  self.spinnerWithText = [[SpinnerWithText alloc] initWithFrame:CGRectMake(0, 0, 320, 35)];
   
   if (showRefresh) {
     UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
@@ -57,10 +57,10 @@
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   tableAndSpinner.backgroundColor = [UIColor whiteColor];
   
-  int height = 332;
+  int height = 337;
   if (!self.threadIcon)
-    height = 380;
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 35, 320, height) style:UITableViewStylePlain];
+    height = 385;
+  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, height) style:UITableViewStylePlain];
 	theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
@@ -68,12 +68,12 @@
   self.dataSource = [[FeedDataSource alloc] initWithEmpty];
 	theTableView.dataSource = self.dataSource;
   
-  [tableAndSpinner addSubview:toolbar];
+  [tableAndSpinner addSubview:spinnerWithText];
   [tableAndSpinner addSubview:theTableView];
   self.view = tableAndSpinner;  
   
-  [toolbar displayLoadingCache];
-  [toolbar replaceFlexWithSpinner];
+  [spinnerWithText displayLoadingCache];
+  [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];  
 }
 
@@ -85,7 +85,7 @@
   
   [theTableView reloadData];
 
-  [toolbar displayCheckingNew];
+  [spinnerWithText displayCheckingNew];
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];  
   [autoreleasepool release];
 }
@@ -117,16 +117,16 @@
   }
   
   [self displayLastUpdated];
-  [self.toolbar replaceSpinnerWithFlex];
+  [spinnerWithText hideTheSpinner];
   [autoreleasepool release];
 }
 
 - (void)displayLastUpdated {
   NSDate *date = [FeedCache loadFeedDate:[feed objectForKey:@"url"]];  
   if (date)
-    [self.toolbar setText:[FeedCache niceDate:date]];
+    [self.spinnerWithText setText:[FeedCache niceDate:date]];
   else
-    [self.toolbar setText:@"No updates yet"];
+    [self.spinnerWithText setText:@"No updates yet"];
 }
 
 - (void)compose {
@@ -144,8 +144,8 @@
 }
 
 - (void)refresh {
-  [toolbar displayCheckingNew];
-  [toolbar replaceFlexWithSpinner];
+  [spinnerWithText displayCheckingNew];
+  [spinnerWithText showTheSpinner];
   
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages) toTarget:self withObject:nil];
 }
@@ -210,7 +210,7 @@
   [theTableView release];
   [dataSource release];
   [feed release];
-  [toolbar release];
+  [spinnerWithText release];
   [tableAndSpinner release];
   [super dealloc];
 }

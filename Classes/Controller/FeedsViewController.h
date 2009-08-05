@@ -9,16 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "SpinnerViewController.h"
 #import "FeedsTableDataSource.h"
-#import "ToolbarWithText.h"
+#import "SpinnerWithText.h"
 
 @interface FeedsViewController : UIViewController <UITableViewDelegate> {
 	UITableView *theTableView;
   FeedsTableDataSource *dataSource;
-  ToolbarWithText *toolbar;
+  SpinnerWithText *spinnerWithText;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) FeedsTableDataSource *dataSource;
-@property (nonatomic,retain) ToolbarWithText *toolbar;
+@property (nonatomic,retain)   SpinnerWithText *spinnerWithText;
 
 @end

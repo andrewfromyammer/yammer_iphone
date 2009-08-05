@@ -11,15 +11,15 @@
 #import "SpinnerViewController.h"
 #import "FeedsTableDataSource.h"
 #import "DirectoryTableDataSource.h"
-#import "ToolbarWithText.h"
+#import "SpinnerWithText.h"
 
 @interface DirectoryViewController : UIViewController <UITableViewDelegate> {
 	UITableView *theTableView;
   DirectoryTableDataSource *dataSource;
-  ToolbarWithText *toolbar;
+  SpinnerWithText *spinnerWithText;
 }
 
-@property (nonatomic,retain) ToolbarWithText *toolbar;
+@property (nonatomic,retain) SpinnerWithText *spinnerWithText;
 @property (nonatomic,retain) UITableView *theTableView;
 @property (nonatomic,retain) DirectoryTableDataSource *dataSource;
 
