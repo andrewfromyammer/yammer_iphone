@@ -66,6 +66,14 @@
 }
 
 - (void)setFooterSizes:(NSMutableDictionary *)message {
+  UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lock.png"]];
+  imageView.frame = CGRectMake(0, 0, 16, 16);
+  [self.footer addSubview:imageView];
+  [imageView release];
+  
+  
+  
+  
   CGSize maximumSize = CGSizeMake(80, self.time.frame.size.height);
   UIFont *footerFont = [UIFont fontWithName:@"Helvetica" size:10];
   CGSize stringSize = [[message objectForKey:@"timeLine"] sizeWithFont:footerFont 
