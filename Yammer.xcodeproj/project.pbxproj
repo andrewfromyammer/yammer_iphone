@@ -60,6 +60,7 @@
 		009C15150F2FE16800489B43 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 009C15120F2FE16800489B43 /* settings.png */; };
 		009CAD7910110B23001263E5 /* FeedCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 009CAD7810110B23001263E5 /* FeedCache.m */; };
 		00A5BF97100B8D9800E18AA5 /* SettingsPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A5BF96100B8D9800E18AA5 /* SettingsPush.m */; };
+		00A5ECFC102B7373007C8B80 /* tab_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 00A5ECFB102B7373007C8B80 /* tab_right.png */; };
 		00AFB6260F363E6C008E2C74 /* OAuthPostURLEncoded.m in Sources */ = {isa = PBXBuildFile; fileRef = 00AFB6250F363E6C008E2C74 /* OAuthPostURLEncoded.m */; };
 		00B4645B100CDABF00A62118 /* DataSettingsHomeFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B46458100CDABF00A62118 /* DataSettingsHomeFeed.m */; };
 		00B4645C100CDABF00A62118 /* DataSettingsPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B4645A100CDABF00A62118 /* DataSettingsPush.m */; };
@@ -186,6 +187,7 @@
 		009CAD7810110B23001263E5 /* FeedCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedCache.m; path = Util/FeedCache.m; sourceTree = "<group>"; };
 		00A5BF95100B8D9800E18AA5 /* SettingsPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsPush.h; path = Controller/SettingsPush.h; sourceTree = "<group>"; };
 		00A5BF96100B8D9800E18AA5 /* SettingsPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsPush.m; path = Controller/SettingsPush.m; sourceTree = "<group>"; };
+		00A5ECFB102B7373007C8B80 /* tab_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tab_right.png; path = Images/tab_right.png; sourceTree = "<group>"; };
 		00AFB6240F363E6C008E2C74 /* OAuthPostURLEncoded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAuthPostURLEncoded.h; path = Util/OAuthPostURLEncoded.h; sourceTree = "<group>"; };
 		00AFB6250F363E6C008E2C74 /* OAuthPostURLEncoded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAuthPostURLEncoded.m; path = Util/OAuthPostURLEncoded.m; sourceTree = "<group>"; };
 		00B46457100CDABF00A62118 /* DataSettingsHomeFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataSettingsHomeFeed.h; path = DataSource/DataSettingsHomeFeed.h; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 		00D521550F2FBDCB00FB3A8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00A5ECFB102B7373007C8B80 /* tab_right.png */,
 				003A81481028912400565FE1 /* received.png */,
 				0000AABC102884270051924F /* advanced.png */,
 				0000AABD102884270051924F /* push.png */,
@@ -573,6 +576,7 @@
 				003A81491028912400565FE1 /* received.png in Resources */,
 				003D26EF1028DE36006BB140 /* ComposeMessage.xib in Resources */,
 				0056321A102B1FBE00FCA490 /* MessageCell.xib in Resources */,
+				00A5ECFC102B7373007C8B80 /* tab_right.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

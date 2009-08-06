@@ -107,6 +107,7 @@
       
       if (groupRef) {
         [message setObject:[groupRef objectForKey:@"name"] forKey:@"group_name"];
+        [message setObject:[groupRef objectForKey:@"full_name"] forKey:@"group_full_name"];
         [message setObject:[groupRef objectForKey:@"privacy"] forKey:@"group_privacy"];
         if ([[groupRef objectForKey:@"privacy"] isEqualToString:@"private"]) {
           [message setObject:[NSString stringWithFormat:@"%@ (private)", [groupRef objectForKey:@"name"]] forKey:@"group_name"];
@@ -159,9 +160,6 @@
       NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
       
       NSString *timeLine = [[NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]] agoDate];    
-      NSString *groupName = [message objectForKey:@"group_name"];
-      if (groupName)
-        timeLine = [NSString stringWithFormat:@"%@ in %@", timeLine, groupName];
       [message setObject:timeLine forKey:@"timeLine"];      
     } @catch (NSException *theErr) {}
   }  
@@ -188,35 +186,9 @@
       cell = (MessageCell *)vc.view;
       [vc release];
     }
-    NSMutableDictionary *message = [messages objectAtIndex:indexPath.row];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[[UIImage alloc] initWithData:[message objectForKey:@"imageData"]]];
-    imageView.frame = CGRectMake(0, 0, 48, 48);
-    [cell.pictureHolder addSubview:imageView];
-    [imageView release];
+    [cell setMessage:[messages objectAtIndex:indexPath.row]];
     
-    cell.from.text = @"Andrew Arrow";
-    cell.time.text = @"2 days ago";
-    cell.group.text = @"Engineering";
-    NSMutableDictionary *body = [message objectForKey:@"body"];
 
-    CGSize maximumSize = CGSizeMake(cell.preview.frame.size.width, 9999);
-    UIFont *previewFont = [UIFont fontWithName:@"Helvetica" size:11];
-    CGSize stringSize = [[body objectForKey:@"plain"] sizeWithFont:previewFont 
-                                   constrainedToSize:maximumSize 
-                                       lineBreakMode:cell.preview.lineBreakMode];
-    float newHeight = stringSize.height;
-    if (newHeight > 74)
-      newHeight = 74;
-    cell.preview.frame = CGRectMake(cell.preview.frame.origin.x, cell.preview.frame.origin.y, 
-                                    cell.preview.frame.size.width, newHeight);
-    
-    cell.bounds = CGRectMake(cell.bounds.origin.x, cell.bounds.origin.y, 
-                             cell.bounds.size.width, newHeight + 35);
-    
-    cell.footer.frame = CGRectMake(cell.footer.frame.origin.x, 15 + newHeight, 
-                                cell.footer.frame.size.width, cell.footer.frame.size.height);
-
-    cell.preview.text = [body objectForKey:@"plain"];    
     return cell;
   } else if (indexPath.section == 1) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
