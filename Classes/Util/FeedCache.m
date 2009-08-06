@@ -70,6 +70,11 @@
       return false;
     }
     
+    if ([existing count] == 0) {
+      [FeedCache trimArrayAndWrite:path messages:messages more:olderAvailable];
+      return false;
+    }
+    
     NSMutableDictionary *lastNew       = [messages lastObject];
     NSMutableDictionary *firstNew      = [messages objectAtIndex:0];
     NSMutableDictionary *firstExisting = [existing objectAtIndex:0];
@@ -123,7 +128,7 @@
 
 + (NSString *)niceDate:(NSDate *)date {
   if (date == nil) {
-    return @"No update yet.";
+    return @"Network out of range.";
   }
   
   NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];

@@ -30,16 +30,14 @@
   [refresh release];
 
   self.wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];  
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
+  self.theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
   
-	theTableView.autoresizingMask = (UIViewAutoresizingNone);
-	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+	self.theTableView.autoresizingMask = (UIViewAutoresizingNone);
+	self.theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
-	theTableView.delegate = self;
+	self.theTableView.delegate = self;
   self.dataSource = [FeedsTableDataSource getFeeds:nil];
-	theTableView.dataSource = self.dataSource;
-  [wrapper addSubview:theTableView];
-  [wrapper addSubview:self.spinnerWithText];
+	self.theTableView.dataSource = self.dataSource;
     
   [spinnerWithText displayLoading];
   [spinnerWithText showTheSpinner];
@@ -49,6 +47,9 @@
 }
 
 - (void)loadView {    
+  [wrapper addSubview:self.theTableView];
+  [wrapper addSubview:self.spinnerWithText];
+
   self.view = wrapper;
 }
 

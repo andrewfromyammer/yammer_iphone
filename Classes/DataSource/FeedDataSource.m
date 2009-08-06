@@ -9,7 +9,7 @@
 #import "FeedDataSource.h"
 #import "APIGateway.h"
 #import "ImageCache.h"
-#import "MessageTableCell.h"
+#import "MessageCell.h"
 #import "NSDate-Ago.h"
 #import "FeedCache.h"
 #import "SpinnerCell.h"
@@ -181,15 +181,42 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (indexPath.section == 0) {
-    MessageTableCell *cell = (MessageTableCell *)[tableView dequeueReusableCellWithIdentifier:@"FeedMessageCell"];
+    MessageCell *cell = (MessageCell *)[tableView dequeueReusableCellWithIdentifier:@"MessageCell"];
 
     if (cell == nil) {
-      cell = [[[MessageTableCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"FeedMessageCell"] autorelease];
+      UIViewController *vc = [[UIViewController alloc] initWithNibName:@"MessageCell" bundle:nil];
+      cell = (MessageCell *)vc.view;
+      [vc release];
     }
     NSMutableDictionary *message = [messages objectAtIndex:indexPath.row];
-    cell.imageView.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
-    [cell setMessage:message];      
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[[UIImage alloc] initWithData:[message objectForKey:@"imageData"]]];
+    imageView.frame = CGRectMake(0, 0, 48, 48);
+    [cell.pictureHolder addSubview:imageView];
+    [imageView release];
     
+    cell.from.text = @"Andrew Arrow";
+    cell.time.text = @"2 days ago";
+    cell.group.text = @"Engineering";
+    NSMutableDictionary *body = [message objectForKey:@"body"];
+
+    CGSize maximumSize = CGSizeMake(cell.preview.frame.size.width, 9999);
+    UIFont *previewFont = [UIFont fontWithName:@"Helvetica" size:11];
+    CGSize stringSize = [[body objectForKey:@"plain"] sizeWithFont:previewFont 
+                                   constrainedToSize:maximumSize 
+                                       lineBreakMode:cell.preview.lineBreakMode];
+    float newHeight = stringSize.height;
+    if (newHeight > 74)
+      newHeight = 74;
+    cell.preview.frame = CGRectMake(cell.preview.frame.origin.x, cell.preview.frame.origin.y, 
+                                    cell.preview.frame.size.width, newHeight);
+    
+    cell.bounds = CGRectMake(cell.bounds.origin.x, cell.bounds.origin.y, 
+                             cell.bounds.size.width, newHeight + 35);
+    
+    cell.footer.frame = CGRectMake(cell.footer.frame.origin.x, 15 + newHeight, 
+                                cell.footer.frame.size.width, cell.footer.frame.size.height);
+
+    cell.preview.text = [body objectForKey:@"plain"];    
     return cell;
   } else if (indexPath.section == 1) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];

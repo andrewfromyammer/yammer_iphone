@@ -31,17 +31,15 @@
   self.navigationItem.leftBarButtonItem = refresh;
   
   self.wrapper = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];  
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
+  self.theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 337) style:UITableViewStylePlain];
   
-	theTableView.autoresizingMask = (UIViewAutoresizingNone);
-	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+	self.theTableView.autoresizingMask = (UIViewAutoresizingNone);
+	self.theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
-	theTableView.delegate = self;
+	self.theTableView.delegate = self;
   self.dataSource = [[DirectoryTableDataSource alloc] init];
-	theTableView.dataSource = self.dataSource;
+	self.theTableView.dataSource = self.dataSource;
   
-  [wrapper addSubview:spinnerWithText];
-  [wrapper addSubview:theTableView];
     
   [spinnerWithText displayLoading];
   [spinnerWithText showTheSpinner];
@@ -51,6 +49,9 @@
 }
 
 - (void)loadView {
+  [wrapper addSubview:self.spinnerWithText];
+  [wrapper addSubview:self.theTableView];
+
   self.view = self.wrapper;
 }
 

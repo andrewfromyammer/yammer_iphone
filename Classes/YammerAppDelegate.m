@@ -108,7 +108,7 @@
   MainTabBarController *tabBarController = (MainTabBarController *)mainView;
   UINavigationController *nav = (UINavigationController *)[tabBarController selectedViewController];
   [nav popToRootViewControllerAnimated:NO];
-  tabBarController.selectedIndex = 1;
+  tabBarController.selectedIndex = 2;
   nav = (UINavigationController *)[tabBarController selectedViewController];
   [nav popToRootViewControllerAnimated:NO];
   [nav pushViewController:feed animated:NO];

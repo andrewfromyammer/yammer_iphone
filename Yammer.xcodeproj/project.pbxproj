@@ -35,6 +35,8 @@
 		004A38580F37668A0086C2A6 /* OAuthPostMultipart.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A38570F37668A0086C2A6 /* OAuthPostMultipart.m */; };
 		004A388F0F3773990086C2A6 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A388E0F3773990086C2A6 /* MessageViewController.m */; };
 		004A38BC0F377EB90086C2A6 /* MessageWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A38BB0F377EB90086C2A6 /* MessageWebView.m */; };
+		0056321A102B1FBE00FCA490 /* MessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00563219102B1FBE00FCA490 /* MessageCell.xib */; };
+		0056322A102B206D00FCA490 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00563229102B206D00FCA490 /* MessageCell.m */; };
 		006335C10F30F08600B4F38F /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335BC0F30F08600B4F38F /* NSObject+SBJSON.m */; };
 		006335C20F30F08600B4F38F /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335BE0F30F08600B4F38F /* NSString+SBJSON.m */; };
 		006335C30F30F08600B4F38F /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335C00F30F08600B4F38F /* SBJSON.m */; };
@@ -143,6 +145,9 @@
 		004A388E0F3773990086C2A6 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageViewController.m; path = Controller/MessageViewController.m; sourceTree = "<group>"; };
 		004A38BA0F377EB90086C2A6 /* MessageWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageWebView.h; path = Interface/MessageWebView.h; sourceTree = "<group>"; };
 		004A38BB0F377EB90086C2A6 /* MessageWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageWebView.m; path = Interface/MessageWebView.m; sourceTree = "<group>"; };
+		00563219102B1FBE00FCA490 /* MessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageCell.xib; sourceTree = "<group>"; };
+		00563228102B206D00FCA490 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageCell.h; path = Interface/MessageCell.h; sourceTree = "<group>"; };
+		00563229102B206D00FCA490 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageCell.m; path = Interface/MessageCell.m; sourceTree = "<group>"; };
 		006335BA0F30F08600B4F38F /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSON.h; path = JSON/JSON.h; sourceTree = "<group>"; };
 		006335BB0F30F08600B4F38F /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+SBJSON.h"; path = "JSON/NSObject+SBJSON.h"; sourceTree = "<group>"; };
 		006335BC0F30F08600B4F38F /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+SBJSON.m"; path = "JSON/NSObject+SBJSON.m"; sourceTree = "<group>"; };
@@ -414,6 +419,8 @@
 		00F806360F33AE1E0004DDA2 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				00563228102B206D00FCA490 /* MessageCell.h */,
+				00563229102B206D00FCA490 /* MessageCell.m */,
 				008576651022031F00F6B747 /* ToolbarWithText.h */,
 				008576661022031F00F6B747 /* ToolbarWithText.m */,
 				00FBF5C1101A90C400B5B7BF /* SpinnerWithText.h */,
@@ -477,6 +484,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00563219102B1FBE00FCA490 /* MessageCell.xib */,
 				003D26EE1028DE36006BB140 /* ComposeMessage.xib */,
 				00DAF50E10225D9900F56F36 /* MainWindow.xib */,
 				00D050D80FFD4D4E00CEF89D /* yammer_sound.wav */,
@@ -564,6 +572,7 @@
 				0000AABF102884270051924F /* push.png in Resources */,
 				003A81491028912400565FE1 /* received.png in Resources */,
 				003D26EF1028DE36006BB140 /* ComposeMessage.xib in Resources */,
+				0056321A102B1FBE00FCA490 /* MessageCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +635,7 @@
 				006B09DC101A755C0089CB57 /* ComposeMessageController.m in Sources */,
 				00FBF5C3101A90C400B5B7BF /* SpinnerWithText.m in Sources */,
 				008576671022031F00F6B747 /* ToolbarWithText.m in Sources */,
+				0056322A102B206D00FCA490 /* MessageCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

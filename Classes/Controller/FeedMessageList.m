@@ -52,22 +52,19 @@
   }
   
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-  tableAndSpinner.backgroundColor = [UIColor whiteColor];
+  self.tableAndSpinner.backgroundColor = [UIColor whiteColor];
   
   int height = 337;
   if (!self.threadIcon)
     height = 385;
-  theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, height) style:UITableViewStylePlain];
-	theTableView.autoresizingMask = (UIViewAutoresizingNone);
-	theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+  self.theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, height) style:UITableViewStylePlain];
+	self.theTableView.autoresizingMask = (UIViewAutoresizingNone);
+	self.theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
-	theTableView.delegate = self;
+	self.theTableView.delegate = self;
   self.dataSource = [[FeedDataSource alloc] initWithEmpty];
-	theTableView.dataSource = self.dataSource;
-  
-  [tableAndSpinner addSubview:spinnerWithText];
-  [tableAndSpinner addSubview:theTableView];
-  
+	self.theTableView.dataSource = self.dataSource;
+    
   [spinnerWithText displayLoadingCache];
   [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];    
@@ -75,6 +72,9 @@
 }
 
 - (void)loadView {
+  [tableAndSpinner addSubview:self.spinnerWithText];
+  [tableAndSpinner addSubview:self.theTableView];
+
   self.view = tableAndSpinner;
 }
 
@@ -82,11 +82,11 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
     
   self.dataSource = [FeedDataSource getMessages:feed];
- 	theTableView.dataSource = self.dataSource;
+ 	self.theTableView.dataSource = self.dataSource;
   
-  [theTableView reloadData];
+  [self.theTableView reloadData];
 
-  [spinnerWithText displayCheckingNew];
+  [self.spinnerWithText displayCheckingNew];
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
   [autoreleasepool release];
 }
@@ -154,12 +154,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (indexPath.section == 1)
     return 50.0;
+  // NSString UIKit Additions Reference
+  // UILineBreakModeTailTruncation UILineBreakModeWordWrap
+  // [NSString sizeWithFont] 
+  // CGSize maxSize = CGSizeMake(mViewBounds.size.width, [UIFont labelFontSize]);
+  // mTempSize = [text sizeWithFont:font constrainedToSize:maxSize lineBreakMode:UILineBreakModeTailTruncation];
+  // [self prepLayoutForCellAtIndex:index];
+  UITableViewCell *cell = [dataSource tableView: tableView cellForRowAtIndexPath: indexPath];
+  return cell.bounds.size.height;
 
-  MessageTableCell *cell = (MessageTableCell *)[dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
-  cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-  if ([cell length] > 50)
-    return 65.0;
-  return 49.0;
+  //MessageTableCell *cell = (MessageTableCell *)[dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+  //if ([cell length] > 50)
+  //  return 65.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
