@@ -110,7 +110,7 @@
         [message setObject:[groupRef objectForKey:@"full_name"] forKey:@"group_full_name"];
         [message setObject:[groupRef objectForKey:@"privacy"] forKey:@"group_privacy"];
         if ([[groupRef objectForKey:@"privacy"] isEqualToString:@"private"]) {
-          [message setObject:[NSString stringWithFormat:@"%@ (private)", [groupRef objectForKey:@"name"]] forKey:@"group_name"];
+          [message setObject:[NSString stringWithFormat:@"%@", [groupRef objectForKey:@"name"]] forKey:@"group_name"];
           [message setObject:@"true" forKey:@"lock"];
         }
       }
@@ -122,7 +122,7 @@
       NSString *replyName = [message objectForKey:@"reply_name"];
       
       if (directRef) {
-        fromLine = [NSString stringWithFormat:@"%@ to: %@ (Private)", [message objectForKey:@"sender"], [directRef objectForKey:@"name"]];
+        fromLine = [NSString stringWithFormat:@"%@ to: %@", [message objectForKey:@"sender"], [directRef objectForKey:@"name"]];
         [message setObject:@"true" forKey:@"lock"];
         [message setObject:@"true" forKey:@"lockColor"];
       }
@@ -130,7 +130,7 @@
       if (replyName && directRef == nil)
         fromLine = [NSString stringWithFormat:@"%@ re: %@", [message objectForKey:@"sender"], replyName];
       if (replyName && directRef != nil)
-        fromLine = [NSString stringWithFormat:@"%@ re: %@ (Private)", [message objectForKey:@"sender"], replyName];
+        fromLine = [NSString stringWithFormat:@"%@ re: %@", [message objectForKey:@"sender"], replyName];
       
       
       [message setObject:fromLine forKey:@"fromLine"];
@@ -184,7 +184,6 @@
     if (cell == nil) {
       UIViewController *vc = [[UIViewController alloc] initWithNibName:@"MessageCell" bundle:nil];
       cell = (MessageCell *)vc.view;
-      [vc release];
     }
     [cell setMessage:[messages objectAtIndex:indexPath.row]];
     

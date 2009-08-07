@@ -8,17 +8,17 @@
 @synthesize group;
 @synthesize theWordIn;
 @synthesize preview;
-@synthesize pictureHolder;
+@synthesize actorPhoto;
 @synthesize footer;
 @synthesize tabRight;
 @synthesize rightSide;
+@synthesize attachment_footer;
+@synthesize attachment_text;
+@synthesize lockImage;
 
 - (void)setMessage:(NSMutableDictionary *)message {
   
-  UIImageView *imageView = [[UIImageView alloc] initWithImage:[[UIImage alloc] initWithData:[message objectForKey:@"imageData"]]];
-  imageView.frame = CGRectMake(0, 0, 48, 48);
-  [self.pictureHolder addSubview:imageView];
-  [imageView release];
+  self.actorPhoto.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
     
   self.from.text = [message objectForKey:@"fromLine"];
   self.time.text = [message objectForKey:@"timeLine"];
@@ -41,10 +41,31 @@
   self.preview.frame = CGRectMake(self.preview.frame.origin.x, self.preview.frame.origin.y, 
                                   self.preview.frame.size.width, stringSize.height);
   
-  self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, 
-                           self.bounds.size.width, stringSize.height + 35);
+  int newHeight = stringSize.height + 37;
+  if (newHeight < 58)
+    newHeight = 58;
+ 
+  //self.private_footer.hidden = true;
+  //self.attachment_footer.hidden = true;
+  self.lockImage.hidden = true;
   
-  self.footer.frame = CGRectMake(self.footer.frame.origin.x, 16 + stringSize.height,
+  if ([message objectForKey:@"lock"]) {
+    self.lockImage.hidden = false;
+  }
+
+  //if ([[message objectForKey:@"attachments"] count] > 0) {
+  if (false) {
+    newHeight += 19;
+    self.attachment_footer.frame = CGRectMake(self.attachment_footer.frame.origin.x, newHeight - 34,
+                                              self.attachment_footer.frame.size.width, self.attachment_footer.frame.size.height);
+    self.attachment_footer.hidden = false;
+    self.attachment_text.text = [NSString stringWithFormat:@"%d attachment(s)", [[message objectForKey:@"attachments"] count]];
+  }
+    
+  self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, 
+                           self.bounds.size.width, newHeight);
+  
+  self.footer.frame = CGRectMake(self.footer.frame.origin.x, newHeight - 24,
                                  self.footer.frame.size.width, self.footer.frame.size.height);
 
   float offset = 0;
@@ -66,11 +87,11 @@
 }
 
 - (void)setFooterSizes:(NSMutableDictionary *)message {
-  UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lock.png"]];
+  /*UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lock.png"]];
   imageView.frame = CGRectMake(0, 0, 16, 16);
   [self.footer addSubview:imageView];
   [imageView release];
-  
+  */
   
   
   
@@ -103,11 +124,14 @@
   [time release];
   [theWordIn release];
   [group release];
+  [attachment_text release];
   
-  [pictureHolder release];
+  [actorPhoto release];
   [footer release];
   [tabRight release];
   [rightSide release];
+  [attachment_footer release];
+  [lockImage release];
   [super dealloc];
 }
 
