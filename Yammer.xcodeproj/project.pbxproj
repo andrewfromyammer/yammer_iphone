@@ -35,7 +35,6 @@
 		004A38580F37668A0086C2A6 /* OAuthPostMultipart.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A38570F37668A0086C2A6 /* OAuthPostMultipart.m */; };
 		004A388F0F3773990086C2A6 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A388E0F3773990086C2A6 /* MessageViewController.m */; };
 		004A38BC0F377EB90086C2A6 /* MessageWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004A38BB0F377EB90086C2A6 /* MessageWebView.m */; };
-		0056321A102B1FBE00FCA490 /* MessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00563219102B1FBE00FCA490 /* MessageCell.xib */; };
 		0056322A102B206D00FCA490 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00563229102B206D00FCA490 /* MessageCell.m */; };
 		006335C10F30F08600B4F38F /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335BC0F30F08600B4F38F /* NSObject+SBJSON.m */; };
 		006335C20F30F08600B4F38F /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 006335BE0F30F08600B4F38F /* NSString+SBJSON.m */; };
@@ -146,7 +145,6 @@
 		004A388E0F3773990086C2A6 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageViewController.m; path = Controller/MessageViewController.m; sourceTree = "<group>"; };
 		004A38BA0F377EB90086C2A6 /* MessageWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageWebView.h; path = Interface/MessageWebView.h; sourceTree = "<group>"; };
 		004A38BB0F377EB90086C2A6 /* MessageWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageWebView.m; path = Interface/MessageWebView.m; sourceTree = "<group>"; };
-		00563219102B1FBE00FCA490 /* MessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageCell.xib; sourceTree = "<group>"; };
 		00563228102B206D00FCA490 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageCell.h; path = Interface/MessageCell.h; sourceTree = "<group>"; };
 		00563229102B206D00FCA490 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageCell.m; path = Interface/MessageCell.m; sourceTree = "<group>"; };
 		006335BA0F30F08600B4F38F /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSON.h; path = JSON/JSON.h; sourceTree = "<group>"; };
@@ -487,7 +485,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				00563219102B1FBE00FCA490 /* MessageCell.xib */,
 				003D26EE1028DE36006BB140 /* ComposeMessage.xib */,
 				00DAF50E10225D9900F56F36 /* MainWindow.xib */,
 				00D050D80FFD4D4E00CEF89D /* yammer_sound.wav */,
@@ -575,7 +572,6 @@
 				0000AABF102884270051924F /* push.png in Resources */,
 				003A81491028912400565FE1 /* received.png in Resources */,
 				003D26EF1028DE36006BB140 /* ComposeMessage.xib in Resources */,
-				0056321A102B1FBE00FCA490 /* MessageCell.xib in Resources */,
 				00A5ECFC102B7373007C8B80 /* tab_right.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

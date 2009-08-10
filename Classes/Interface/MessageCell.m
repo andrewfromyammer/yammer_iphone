@@ -1,6 +1,19 @@
 
 #import "MessageCell.h"
 
+#define ACTOR_IMAGE_X  5
+#define ACTOR_IMAGE_Y  5
+#define LEFT_MARGIN    60
+#define MIDDLE_WIDTH   219
+#define DISCLOSURE_X   300
+#define MIN_HEIGHT 48 + (ACTOR_IMAGE_Y * 2)
+#define MAX_HEIGHT 74
+#define ACTOR_IMAGE_W 48
+#define ACTOR_IMAGE_H 48
+
+#define FONT_12_HEIGHT 20
+
+
 @implementation MessageCell
 
 @synthesize from;
@@ -16,7 +29,100 @@
 @synthesize attachment_text;
 @synthesize lockImage;
 
+- (id)init {
+  if (self = [super initWithFrame:CGRectMake(0,0,320,MIN_HEIGHT) reuseIdentifier:@"MessageCell"]) {  
+    self.bounds = CGRectMake(0,0,320,MIN_HEIGHT);
+    self.actorPhoto = [[UIImageView alloc] initWithFrame:CGRectMake(ACTOR_IMAGE_X,ACTOR_IMAGE_Y,ACTOR_IMAGE_W,ACTOR_IMAGE_H)];
+
+    self.from = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_MARGIN,0,MIDDLE_WIDTH,FONT_12_HEIGHT)];
+    self.from.font = [UIFont boldSystemFontOfSize:12];
+
+    self.preview = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_MARGIN,FONT_12_HEIGHT,MIDDLE_WIDTH,30)];
+    self.preview.numberOfLines = 5;
+    self.preview.font = [UIFont systemFontOfSize:11];
+
+    self.footer = [[UIView alloc] initWithFrame:CGRectMake(LEFT_MARGIN,0,MIDDLE_WIDTH,FONT_12_HEIGHT)];
+    self.time = [[UILabel alloc] initWithFrame:CGRectMake(0,0,50,FONT_12_HEIGHT)];
+    self.time.font = [UIFont systemFontOfSize:10];
+    self.theWordIn = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,FONT_12_HEIGHT)];
+    self.theWordIn.font = [UIFont systemFontOfSize:10];
+    self.theWordIn.text = @"in";
+    self.group = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,FONT_12_HEIGHT)];
+    self.group.font = [UIFont boldSystemFontOfSize:10];
+    
+    [self.footer addSubview:time];
+    [self.footer addSubview:theWordIn];
+    [self.footer addSubview:group];
+    
+    [self.contentView addSubview:actorPhoto];
+    [self.contentView addSubview:from];
+    [self.contentView addSubview:preview];
+    
+    [self.contentView addSubview:footer];
+  }
+  
+  return self;
+}
+
 - (void)setMessage:(NSMutableDictionary *)message {
+  self.actorPhoto.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+  self.from.text = [message objectForKey:@"fromLine"];
+  
+  NSMutableDictionary *body = [message objectForKey:@"body"];
+  self.preview.text = [body objectForKey:@"plain"];
+  
+  NSString *group_name = [message objectForKey:@"group_full_name"];
+  if (group_name) {
+    self.group.text = group_name;
+    self.theWordIn.text = @"in";
+  }
+  else {
+    self.group.text = @"";
+    self.theWordIn.text = @"";
+  }  
+  
+  [self setHeightByPreview];
+  
+  self.time.text = [message objectForKey:@"timeLine"];
+  [self setTimeLength];
+}
+
+- (void)setHeightByPreview {
+  CGSize stringSize = [preview.text sizeWithFont:preview.font 
+                                    constrainedToSize:CGSizeMake(MIDDLE_WIDTH, MAX_HEIGHT) 
+                                    lineBreakMode:preview.lineBreakMode];
+  self.preview.frame = CGRectMake(preview.frame.origin.x, preview.frame.origin.y, 
+                                  preview.frame.size.width, stringSize.height);
+  
+  int newHeight = stringSize.height + FONT_12_HEIGHT + FONT_12_HEIGHT;
+  if (newHeight < MIN_HEIGHT)
+    newHeight = MIN_HEIGHT;
+  
+  self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, 
+                           self.bounds.size.width, newHeight);
+  
+  self.footer.frame = CGRectMake(footer.frame.origin.x, newHeight - FONT_12_HEIGHT,
+                                 footer.frame.size.width, footer.frame.size.height);
+
+}
+
+- (void)setTimeLength {
+  CGSize stringSize = [time.text sizeWithFont:time.font 
+                                 constrainedToSize: CGSizeMake(80, time.frame.size.height)
+                                 lineBreakMode:time.lineBreakMode];
+  
+  self.time.frame = CGRectMake(time.frame.origin.x, time.frame.origin.y,
+                               stringSize.width, time.frame.size.height);
+  
+  self.theWordIn.frame = CGRectMake(stringSize.width+3, theWordIn.frame.origin.y,
+                                    theWordIn.frame.size.width, theWordIn.frame.size.height);
+  
+  self.group.frame = CGRectMake(theWordIn.frame.origin.x + 12, group.frame.origin.y,
+                                200 - theWordIn.frame.origin.x + 12, group.frame.size.height);
+  
+}
+
+- (void)setMessage2:(NSMutableDictionary *)message {
   
   self.actorPhoto.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
     
@@ -81,36 +187,10 @@
   
   
   self.preview.text = [body objectForKey:@"plain"];
-  
-  
-  [self setFooterSizes:message];
+    
 }
 
-- (void)setFooterSizes:(NSMutableDictionary *)message {
-  /*UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lock.png"]];
-  imageView.frame = CGRectMake(0, 0, 16, 16);
-  [self.footer addSubview:imageView];
-  [imageView release];
-  */
-  
-  
-  
-  CGSize maximumSize = CGSizeMake(80, self.time.frame.size.height);
-  UIFont *footerFont = [UIFont fontWithName:@"Helvetica" size:10];
-  CGSize stringSize = [[message objectForKey:@"timeLine"] sizeWithFont:footerFont 
-                                               constrainedToSize:maximumSize
-                                                   lineBreakMode:self.time.lineBreakMode];
 
-  self.time.frame = CGRectMake(self.time.frame.origin.x, self.time.frame.origin.y,
-                               stringSize.width, self.time.frame.size.height);
-  
-  self.theWordIn.frame = CGRectMake(stringSize.width+3, self.theWordIn.frame.origin.y,
-                                    self.theWordIn.frame.size.width, self.theWordIn.frame.size.height);
-
-  self.group.frame = CGRectMake(self.theWordIn.frame.origin.x + 12, self.group.frame.origin.y,
-                                200 - self.theWordIn.frame.origin.x + 12, self.group.frame.size.height);
-
-}
 
 - (void)layoutSubviews {
   [super layoutSubviews];

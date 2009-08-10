@@ -181,13 +181,10 @@
   if (indexPath.section == 0) {
     MessageCell *cell = (MessageCell *)[tableView dequeueReusableCellWithIdentifier:@"MessageCell"];
 
-    if (cell == nil) {
-      UIViewController *vc = [[UIViewController alloc] initWithNibName:@"MessageCell" bundle:nil];
-      cell = (MessageCell *)vc.view;
-    }
-    [cell setMessage:[messages objectAtIndex:indexPath.row]];
+    if (cell == nil)
+      cell = [[[MessageCell alloc] init] autorelease];
     
-
+    [cell setMessage:[messages objectAtIndex:indexPath.row]];    
     return cell;
   } else if (indexPath.section == 1) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];

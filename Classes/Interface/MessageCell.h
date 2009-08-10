@@ -21,25 +21,26 @@
   UILabel *attachment_text;
 }
 
-@property (nonatomic, retain) IBOutlet UILabel *from;
+@property (nonatomic, retain) UILabel *from;
 
-@property (nonatomic, retain) IBOutlet UILabel *preview;
+@property (nonatomic, retain) UILabel *preview;
 
-@property (nonatomic, retain) IBOutlet UILabel *time;
-@property (nonatomic, retain) IBOutlet UILabel *theWordIn;
-@property (nonatomic, retain) IBOutlet UILabel *group;
-@property (nonatomic, retain) IBOutlet UILabel *attachment_text;
+@property (nonatomic, retain) UILabel *time;
+@property (nonatomic, retain) UILabel *theWordIn;
+@property (nonatomic, retain) UILabel *group;
+@property (nonatomic, retain) UILabel *attachment_text;
 
-@property (nonatomic, retain) IBOutlet UIView *footer;
-@property (nonatomic, retain) IBOutlet UIView *rightSide;
+@property (nonatomic, retain) UIView *footer;
+@property (nonatomic, retain) UIView *rightSide;
 
-@property (nonatomic, retain) IBOutlet  UIImageView *tabRight;
-@property (nonatomic, retain) IBOutlet  UIImageView *actorPhoto;
+@property (nonatomic, retain) UIImageView *tabRight;
+@property (nonatomic, retain) UIImageView *actorPhoto;
 
-@property (nonatomic, retain) IBOutlet UIView *attachment_footer;
-@property (nonatomic, retain) IBOutlet UIImageView *lockImage;
+@property (nonatomic, retain) UIView *attachment_footer;
+@property (nonatomic, retain) UIImageView *lockImage;
 
 - (void)setMessage:(NSMutableDictionary *)message;
-- (void)setFooterSizes:(NSMutableDictionary *)message;
+- (void)setHeightByPreview;
+- (void)setTimeLength;
 
 @end
