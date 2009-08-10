@@ -89,7 +89,13 @@
   else {
     self.group.text = @"";
     self.theWordIn.text = @"";
-  }  
+  }
+  
+  NSString *thread_updates = [message objectForKey:@"thread_updates"];
+  if (thread_updates)
+    self.replyCount.text = [thread_updates description];
+  else
+    self.replyCount.text = @"";
   
   [self setHeightByPreview];
   

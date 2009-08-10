@@ -93,13 +93,17 @@
         referencesById = [referencesByType objectForKey:[messageRef objectForKey:@"sender_type"]];
         NSMutableDictionary *actor = [referencesById objectForKey:[messageRef objectForKey:@"sender_id"]];
         [message setObject:[actor objectForKey:@"name"] forKey:@"reply_name"];
-        
-        referencesById = [referencesByType objectForKey:@"thread"];
-        NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
-        
+      }
+      
+      referencesById = [referencesByType objectForKey:@"thread"];
+      NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
+      if (threadRef) {  
         [message setObject:[threadRef objectForKey:@"web_url"] forKey:@"thread_url"];
-        if ([threadRef objectForKey:@"updates"])
-          [message setObject:[threadRef objectForKey:@"updates"] forKey:@"thread_updates"];
+        NSMutableDictionary *threadStats = [threadRef objectForKey:@"stats"];
+        [message setObject:[threadStats objectForKey:@"updates"] forKey:@"thread_updates"];
+        [message setObject:[threadStats objectForKey:@"first_reply_id"] forKey:@"thread_first_reply_id"];
+        [message setObject:[threadStats objectForKey:@"first_reply_at"] forKey:@"thread_first_reply_at"];
+        [message setObject:[threadStats objectForKey:@"latest_reply_id"] forKey:@"thread_latest_reply_id"];        
       }
       
       referencesById = [referencesByType objectForKey:@"group"];
