@@ -140,6 +140,7 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [LocalStorage removeFile:FEED_DIR];
   [LocalStorage removeFile:USER_CURRENT];
   [LocalStorage removeFile:DIRECTORY_CACHE];
+  [LocalStorage removeFile:SETTINGS];
 }
 
 + (void)saveFeedInfo:(NSMutableDictionary *)feed {
@@ -170,6 +171,14 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [dic setObject:@"(null)" forKey:@"group_id"];
   
   return dic;
+}
+
++ (BOOL)threadedMode {
+  if ([LocalStorage getFile:SETTINGS]) {
+    NSMutableDictionary *dict = [[LocalStorage getFile:SETTINGS] JSONValue];
+    return [[dict objectForKey:@"threaded_mode"] isEqualToString:@"on"];
+  }
+  return YES;
 }
 
 

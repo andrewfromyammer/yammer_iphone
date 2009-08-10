@@ -99,7 +99,7 @@
     NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
     newerThan = [message objectForKey:@"id"];
   } @catch (NSException *theErr) {}
-  
+    
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan style:style];
   if (dict) {
     BOOL previousValue = dataSource.olderAvailable;

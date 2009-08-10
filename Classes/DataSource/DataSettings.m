@@ -10,6 +10,8 @@
 #import "APIGateway.h"
 #import "LocalStorage.h"
 #import "OAuthCustom.h"
+#import "NSString+SBJSON.h"
+#import "NSObject+SBJSON.h"
 
 @implementation DataSettings
 
@@ -49,9 +51,9 @@
   int i=0;
   for (; i<[array count]; i++) {
     if ([email hasSuffix:[array objectAtIndex:i]])
-      return 2;
+      return 3;
   }
-  return 1;
+  return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -70,15 +72,38 @@
   } else {
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if (indexPath.row == 0) {
+      cell.textLabel.text = @"Threaded Mode";
+      cell.imageView.image = [UIImage imageNamed:@"threaded_mode.png"];
+      cell.accessoryType = UITableViewCellAccessoryNone;
+      UISwitch *switchView = [[UISwitch alloc] init];
+      cell.accessoryView = switchView;
+      [switchView setOn:[LocalStorage threadedMode] animated:NO];
+      [switchView addTarget:self action:@selector(switchWasChanged:) forControlEvents:UIControlEventValueChanged];
+      [switchView release];
+    } else if (indexPath.row == 1) {
       cell.textLabel.text = @"Push Notifications";
       cell.imageView.image = [UIImage imageNamed:@"push.png"];
-    } else if (indexPath.row == 1) {
+    } else if (indexPath.row == 2) {
       cell.textLabel.text = @"Advanced";
       cell.imageView.image = [UIImage imageNamed:@"advanced.png"];
-    }    
+    }
   }
 
 	return cell;
+}
+
+- (void)switchWasChanged:(id)sender {
+  UISwitch *switchView = (UISwitch *)sender;
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  if ([LocalStorage getFile:SETTINGS])
+    dict = [[LocalStorage getFile:SETTINGS] JSONValue];
+  
+  if (switchView.on)
+    [dict setObject:@"on" forKey:@"threaded_mode"];
+  else
+    [dict setObject:@"off" forKey:@"threaded_mode"];
+
+  [LocalStorage saveFile:SETTINGS data:[dict JSONRepresentation]];
 }
 
 - (void)dealloc {

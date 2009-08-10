@@ -23,11 +23,8 @@
 @synthesize preview;
 @synthesize actorPhoto;
 @synthesize footer;
-@synthesize tabRight;
-@synthesize rightSide;
-@synthesize attachment_footer;
-@synthesize attachment_text;
 @synthesize lockImage;
+@synthesize replyCount;
 
 - (id)init {
   if (self = [super initWithFrame:CGRectMake(0,0,320,MIN_HEIGHT) reuseIdentifier:@"MessageCell"]) {  
@@ -50,15 +47,28 @@
     self.group = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,FONT_12_HEIGHT)];
     self.group.font = [UIFont boldSystemFontOfSize:10];
     
+    self.lockImage = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_MARGIN,4,12,12)];
+    self.lockImage.image = [UIImage imageNamed:@"lock.png"];
+    self.lockImage.hidden = true;
+
+    self.replyCount = [[UILabel alloc] initWithFrame:CGRectMake(320-40,20,16,FONT_12_HEIGHT)];
+    self.replyCount.font = [UIFont boldSystemFontOfSize:14];
+    self.replyCount.text = @"99";
+    self.replyCount.textAlignment = UITextAlignmentRight;
+    
     [self.footer addSubview:time];
     [self.footer addSubview:theWordIn];
     [self.footer addSubview:group];
     
     [self.contentView addSubview:actorPhoto];
     [self.contentView addSubview:from];
+    [self.contentView addSubview:lockImage];
     [self.contentView addSubview:preview];
     
     [self.contentView addSubview:footer];
+    [self.contentView addSubview:replyCount];
+    
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   
   return self;
@@ -85,6 +95,15 @@
   
   self.time.text = [message objectForKey:@"timeLine"];
   [self setTimeLength];
+  if ([message objectForKey:@"lock"]) {
+    self.lockImage.hidden = false;
+    self.from.frame = CGRectMake(LEFT_MARGIN+15, from.frame.origin.y, 
+                                 MIDDLE_WIDTH-15, from.frame.size.height);
+  } else {
+    self.lockImage.hidden = true;    
+    self.from.frame = CGRectMake(LEFT_MARGIN, from.frame.origin.y, 
+                                 MIDDLE_WIDTH, from.frame.size.height);
+  }
 }
 
 - (void)setHeightByPreview {
@@ -103,7 +122,11 @@
   
   self.footer.frame = CGRectMake(footer.frame.origin.x, newHeight - FONT_12_HEIGHT,
                                  footer.frame.size.width, footer.frame.size.height);
-
+  
+  self.replyCount.frame = CGRectMake(replyCount.frame.origin.x, (self.bounds.size.height / 2) - 10,
+                                     replyCount.frame.size.width, replyCount.frame.size.height);
+  
+  
 }
 
 - (void)setTimeLength {
@@ -122,6 +145,7 @@
   
 }
 
+/*
 - (void)setMessage2:(NSMutableDictionary *)message {
   
   self.actorPhoto.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
@@ -189,6 +213,7 @@
   self.preview.text = [body objectForKey:@"plain"];
     
 }
+ */
 
 
 
@@ -198,20 +223,14 @@
   
 - (void)dealloc {
   [from release];
-  
   [preview release];
-  
   [time release];
   [theWordIn release];
-  [group release];
-  [attachment_text release];
-  
+  [group release];  
   [actorPhoto release];
   [footer release];
-  [tabRight release];
-  [rightSide release];
-  [attachment_footer release];
   [lockImage release];
+  [replyCount release];
   [super dealloc];
 }
 

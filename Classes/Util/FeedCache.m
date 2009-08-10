@@ -27,8 +27,12 @@
   file = [file stringByReplacingOccurrencesOfString:@":" withString:@"_"];
   file = [file stringByReplacingOccurrencesOfString:@"." withString:@"_"];
   
+  NSString *suffix = @"";
+  if ([LocalStorage threadedMode])
+    suffix = @".t";
+  
   return [[LocalStorage localPath] stringByAppendingPathComponent: 
-          [NSString stringWithFormat:@"%@/%@", [LocalStorage feedDirectory], file]];  
+          [NSString stringWithFormat:@"%@/%@%@", [LocalStorage feedDirectory], file, suffix]];  
 }
 
 + (NSDate *)loadFeedDate:(NSString *)url {

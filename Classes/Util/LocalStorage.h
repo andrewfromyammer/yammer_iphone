@@ -10,6 +10,7 @@
 
 #define USER_CURRENT    @"/account/user_current.json"
 #define DIRECTORY_CACHE @"/account/directory_cache.json"
+#define SETTINGS        @"/account/settngs.json"
 
 @interface LocalStorage : NSObject {
 
@@ -42,5 +43,6 @@
 + (NSString *)getDraft;
 
 + (NSMutableDictionary *)getReceivedInfo;
++ (BOOL)threadedMode;
 
 @end

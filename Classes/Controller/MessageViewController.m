@@ -129,7 +129,7 @@
   [self.view addSubview:timeLine];  
   self.image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
   [self.view addSubview:image];
-  self.lockImage = [[UIImageView alloc] initWithFrame:CGRectMake(55, 25, 16, 16)];
+  self.lockImage = [[UIImageView alloc] initWithFrame:CGRectMake(55, 25, 12, 12)];
   [self.view addSubview:lockImage];
     
   [self displayMessage];

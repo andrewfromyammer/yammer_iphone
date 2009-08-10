@@ -81,13 +81,13 @@
   if (indexPath.section == 0)
     [theTableView deselectRowAtIndexPath:indexPath animated:NO];
   else {
-    if (indexPath.row == 0) {
+    if (indexPath.row == 1) {
       [theTableView deselectRowAtIndexPath:indexPath animated:YES];
       SettingsPush *localSettingPush = [[SettingsPush alloc] init];
       [self.navigationController pushViewController:localSettingPush animated:YES];
       [localSettingPush release];
     }
-    else if (indexPath.row == 1) {
+    else if (indexPath.row == 2) {
       [theTableView deselectRowAtIndexPath:indexPath animated:YES];
       SettingsAdvancedOptions *localSettingsAdvancedOptions = [[SettingsAdvancedOptions alloc] init];
       [self.navigationController pushViewController:localSettingsAdvancedOptions animated:YES];

@@ -11,32 +11,21 @@
   UILabel *group;
   
   UIView *footer;
-  UIView *rightSide;
 
   UIImageView *actorPhoto;
-  UIImageView *tabRight;
-  UIImageView *lockImage;
-  
-  UIView *attachment_footer;
-  UILabel *attachment_text;
+  UIImageView *lockImage;  
+
+  UILabel *replyCount;
 }
 
 @property (nonatomic, retain) UILabel *from;
-
 @property (nonatomic, retain) UILabel *preview;
-
 @property (nonatomic, retain) UILabel *time;
 @property (nonatomic, retain) UILabel *theWordIn;
 @property (nonatomic, retain) UILabel *group;
-@property (nonatomic, retain) UILabel *attachment_text;
-
+@property (nonatomic, retain) UILabel *replyCount;
 @property (nonatomic, retain) UIView *footer;
-@property (nonatomic, retain) UIView *rightSide;
-
-@property (nonatomic, retain) UIImageView *tabRight;
 @property (nonatomic, retain) UIImageView *actorPhoto;
-
-@property (nonatomic, retain) UIView *attachment_footer;
 @property (nonatomic, retain) UIImageView *lockImage;
 
 - (void)setMessage:(NSMutableDictionary *)message;

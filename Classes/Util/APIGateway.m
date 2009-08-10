@@ -81,14 +81,21 @@
 }
 
 + (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan 
-                                                  newerThan:(NSDecimalNumber *)newerThan
-                                                  style:(NSString *)style {
-  NSString *param = @"";
+                                                           newerThan:(NSDecimalNumber *)newerThan
+                                                          style:(NSString *)style {
+  
+  NSMutableString *params = [NSMutableString stringWithCapacity:10];
   if (olderThan)
-    param = [NSString stringWithFormat:@"?older_than=%@", olderThan];
+    [params appendFormat:@"?older_than=%@", olderThan];
   if (newerThan)
-    param = [NSString stringWithFormat:@"?newer_than=%@", newerThan];
-  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, param] style:(NSString *)style];
+    [params appendFormat:@"?newer_than=%@", newerThan];
+  
+  BOOL threaded = [LocalStorage threadedMode];
+  if (threaded && (newerThan != nil || olderThan != nil))
+    [params appendString:@"&threaded=true"];
+  else if (threaded)
+    [params appendString:@"?threaded=true"];
+  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, params] style:(NSString *)style];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
