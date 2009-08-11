@@ -17,6 +17,7 @@
 #import "ComposeMessageController.h"
 #import "FeedCache.h"
 #import "NSDate-Ago.h"
+#import "Message.h"
 
 @implementation FeedMessageList
 
@@ -98,6 +99,8 @@
     
   NSDecimalNumber *newerThan=nil;
   @try {
+    Message *m = [dataSource.fetcher.fetchedObjects objectAtIndex:0];
+    NSLog([m.message_id description]);
 //    NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
  //   newerThan = [message objectForKey:@"id"];
   } @catch (NSException *theErr) {}

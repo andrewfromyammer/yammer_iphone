@@ -80,7 +80,7 @@
   self.from.text = message.from; //[message objectForKey:@"fromLine"];
   
 //  NSMutableDictionary *body = [message objectForKey:@"body"];
-  self.preview.text = @"test"; //[body objectForKey:@"plain"];
+  self.preview.text = message.plain_body;
   
   NSString *group_name = nil; //[message objectForKey:@"group_full_name"];
   if (group_name) {

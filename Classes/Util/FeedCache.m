@@ -103,17 +103,14 @@
                                                                                               managedObjectContext:context 
                                                                                               sectionNameKeyPath:@"message_id" 
                                                                                                       cacheName:@"Root"];  
-  NSError *error1;
-	[fetcher performFetch:&error1];
+  NSError *error;
+	[fetcher performFetch:&error];
   
   for (i=0; i<[fetcher.fetchedObjects count]; i++) {
     Message *m = [fetcher.fetchedObjects objectAtIndex:i];
-    m.from = @"hehe";
     [id_lookup setObject:@"true" forKey:[m.message_id description]];
   }  
-  
-  NSLog([id_lookup description]);
-  
+    
   [fetcher release];
 	[fetchRequest release];
   
@@ -126,6 +123,9 @@
   	Message *m = (Message *)[NSEntityDescription insertNewObjectForEntityForName:@"Message" 
                                                  inManagedObjectContext:context];
     m.from = [dict objectForKey:@"fromLine"];
+    
+    NSMutableDictionary *body = [dict objectForKey:@"body"];
+    m.plain_body = [body objectForKey:@"plain"];
         
     NSString *createdAt = [dict objectForKey:@"created_at"];
     NSString *front = [createdAt substringToIndex:10];
@@ -138,8 +138,8 @@
     m.privacy   = [[NSNumber alloc] initWithBool:NO];
     m.threading = [[NSNumber alloc] initWithBool:NO];
   }
-  NSError *error2;
-  [context save:&error2];
+
+  [context save:&error];
   
   return false;
 }
