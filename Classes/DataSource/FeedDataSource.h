@@ -13,18 +13,19 @@
   NSMutableArray *messages;
   BOOL olderAvailable;
   BOOL fetchingMore;
-  NSString *statusMessage;
+  NSString *feed;
   NSFetchedResultsController *fetcher;
 }
 
 @property (nonatomic,retain) NSMutableArray *messages;
 @property BOOL olderAvailable;
 @property BOOL fetchingMore;
-@property (nonatomic,retain) NSString *statusMessage;
+@property (nonatomic,retain) NSString *feed;
 @property (nonatomic,retain) NSFetchedResultsController *fetcher;
 
 - (id)initWithEmpty;
-- (id)initWithFetch;
+- (id)initWithFeed:(NSString *)url;
+- (void)fetch;
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed;
 - (NSMutableDictionary *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;

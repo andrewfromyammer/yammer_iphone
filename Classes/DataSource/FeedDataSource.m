@@ -21,7 +21,7 @@
 @synthesize messages;
 @synthesize olderAvailable;
 @synthesize fetchingMore;
-@synthesize statusMessage;
+@synthesize feed;
 @synthesize fetcher;
 
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
@@ -42,14 +42,25 @@
   return self;
 }
 
-- (id)initWithFetch {
+- (id)initWithFeed:(NSString *)url {
+  self.feed = [FeedCache feedCacheUniqueID:url];
+  [self fetch];
+  return self;
+}
+
+- (void)fetch {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];
 
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
-	
+  [fetchRequest setFetchOffset:0];
+  [fetchRequest setFetchLimit:100];
+  
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
+  [fetchRequest setPredicate:feedPredicate];
+  
 	NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"message_id" ascending:NO];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:descriptor, nil];
 	[fetchRequest setSortDescriptors:sortDescriptors];
@@ -67,8 +78,6 @@
 	[fetchRequest release];
 	[descriptor release];
 	[sortDescriptors release];  
-  
-  return self;
 }
 
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore {
@@ -255,7 +264,7 @@
 
 - (void)dealloc {
   [messages release];
-  [statusMessage release];
+  [feed release];
   [fetcher release];
   [super dealloc];
 }

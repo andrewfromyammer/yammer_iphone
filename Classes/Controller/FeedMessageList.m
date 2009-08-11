@@ -62,12 +62,14 @@
 	self.theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	self.theTableView.delegate = self;
-  self.dataSource = [[FeedDataSource alloc] initWithFetch];
+  self.dataSource = [[FeedDataSource alloc] initWithFeed:[feed objectForKey:@"url"]];
 	self.theTableView.dataSource = self.dataSource;
     
   //[spinnerWithText displayLoadingCache];
-  //[spinnerWithText showTheSpinner];
   //[NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];    
+  [self.spinnerWithText displayCheckingNew];
+  [spinnerWithText showTheSpinner];
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
 	return self;
 }
 
@@ -96,24 +98,27 @@
     
   NSDecimalNumber *newerThan=nil;
   @try {
-    NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
-    newerThan = [message objectForKey:@"id"];
+//    NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
+ //   newerThan = [message objectForKey:@"id"];
   } @catch (NSException *theErr) {}
     
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan style:style];
   if (dict) {
-    BOOL previousValue = dataSource.olderAvailable;
+    //BOOL previousValue = dataSource.olderAvailable;
     
     NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
-    NSMutableArray *messages = [result objectForKey:@"messages"];
+    //NSMutableArray *messages = [result objectForKey:@"messages"];
     
-    [dataSource processImagesAndTime:messages];
+    //[dataSource processImagesAndTime:messages];
     
     if (![result objectForKey:@"replace_all"] && newerThan != nil) {
-      [messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
-      dataSource.olderAvailable = previousValue;
+      //[messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
+      //dataSource.olderAvailable = previousValue;
     }
-    dataSource.messages = messages;
+    //dataSource.messages = messages;
+    
+    self.dataSource.feed = [FeedCache feedCacheUniqueID:[feed objectForKey:@"url"]];
+    [dataSource fetch];
     [theTableView reloadData];
   }
   

@@ -78,15 +78,53 @@
 
 + (BOOL)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
   NSString *feed = [FeedCache feedCacheUniqueID:url];    
+
+  NSMutableArray *ids = [NSMutableArray array];
+  NSMutableDictionary *id_lookup = [NSMutableDictionary dictionary];
+  int i=0;
+  for (; i<[messages count]; i++) {
+    NSMutableDictionary *dict = [messages objectAtIndex:i];
+    [ids addObject:[[dict objectForKey:@"id"] description]];
+  }
   
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];
   
-  int i=0;
-  for (; i<[messages count]; i++) {
+  NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+  
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@ AND message_id IN %@", feed, ids];
+  [fetchRequest setPredicate:feedPredicate];
+	[fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
+                                                                     initWithKey:@"message_id" ascending:NO], nil]];
+  
+	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                                              managedObjectContext:context 
+                                                                                              sectionNameKeyPath:@"message_id" 
+                                                                                                      cacheName:@"Root"];  
+  NSError *error1;
+	[fetcher performFetch:&error1];
+  
+  for (i=0; i<[fetcher.fetchedObjects count]; i++) {
+    Message *m = [fetcher.fetchedObjects objectAtIndex:i];
+    m.from = @"hehe";
+    [id_lookup setObject:@"true" forKey:[m.message_id description]];
+  }  
+  
+  NSLog([id_lookup description]);
+  
+  [fetcher release];
+	[fetchRequest release];
+  
+  for (i=0; i<[messages count]; i++) {
+    NSMutableDictionary *dict = [messages objectAtIndex:i];
+
+    if ([id_lookup objectForKey:[[dict objectForKey:@"id"] description]])
+      continue;
+    
   	Message *m = (Message *)[NSEntityDescription insertNewObjectForEntityForName:@"Message" 
                                                  inManagedObjectContext:context];
-    NSMutableDictionary *dict = [messages objectAtIndex:i];
     m.from = [dict objectForKey:@"fromLine"];
         
     NSString *createdAt = [dict objectForKey:@"created_at"];
@@ -100,8 +138,8 @@
     m.privacy   = [[NSNumber alloc] initWithBool:NO];
     m.threading = [[NSNumber alloc] initWithBool:NO];
   }
-  NSError *error;
-  [context save:&error];
+  NSError *error2;
+  [context save:&error2];
   
   return false;
 }
