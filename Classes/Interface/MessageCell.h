@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-
+#import "Message.h"
 
 @interface MessageCell : UITableViewCell {
   UILabel *from;
@@ -28,8 +28,9 @@
 @property (nonatomic, retain) UIImageView *actorPhoto;
 @property (nonatomic, retain) UIImageView *lockImage;
 
-- (void)setMessage:(NSMutableDictionary *)message;
+- (void)setMessage:(Message *)message;
 - (void)setHeightByPreview;
 - (void)setTimeLength;
+- (void)setFromLengthForLock;
 
 @end

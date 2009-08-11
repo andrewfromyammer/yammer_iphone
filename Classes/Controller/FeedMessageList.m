@@ -62,12 +62,12 @@
 	self.theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	self.theTableView.delegate = self;
-  self.dataSource = [[FeedDataSource alloc] initWithEmpty];
+  self.dataSource = [[FeedDataSource alloc] initWithFetch];
 	self.theTableView.dataSource = self.dataSource;
     
-  [spinnerWithText displayLoadingCache];
-  [spinnerWithText showTheSpinner];
-  [NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];    
+  //[spinnerWithText displayLoadingCache];
+  //[spinnerWithText showTheSpinner];
+  //[NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];    
 	return self;
 }
 

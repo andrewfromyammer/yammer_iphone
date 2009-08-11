@@ -8,6 +8,7 @@
 
 #import "LocalStorage.h"
 #import "OAuthGateway.h"
+#import "NSString+SBJSON.h"
 
 static NSString *ACCOUNT_DIR   = @"/account";
 static NSString *PHOTO_DIR     = @"/photos";
@@ -115,6 +116,10 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [LocalStorage removeFile:REQUEST_TOKEN];
 }
 
++ (void)removeAccessToken {
+  [LocalStorage removeFile:ACCESS_TOKEN];
+}
+
 + (void)saveAccessToken:(NSString *)token {
   [LocalStorage saveFile:ACCESS_TOKEN data:token];
   [LocalStorage removeRequestToken];
@@ -141,6 +146,7 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [LocalStorage removeFile:USER_CURRENT];
   [LocalStorage removeFile:DIRECTORY_CACHE];
   [LocalStorage removeFile:SETTINGS];
+  [LocalStorage removeFile:@"yammer.sqlite"];
 }
 
 + (void)saveFeedInfo:(NSMutableDictionary *)feed {

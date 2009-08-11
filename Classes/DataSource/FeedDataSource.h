@@ -14,14 +14,17 @@
   BOOL olderAvailable;
   BOOL fetchingMore;
   NSString *statusMessage;
+  NSFetchedResultsController *fetcher;
 }
 
 @property (nonatomic,retain) NSMutableArray *messages;
 @property BOOL olderAvailable;
 @property BOOL fetchingMore;
 @property (nonatomic,retain) NSString *statusMessage;
+@property (nonatomic,retain) NSFetchedResultsController *fetcher;
 
 - (id)initWithEmpty;
+- (id)initWithFetch;
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed;
 - (NSMutableDictionary *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed;

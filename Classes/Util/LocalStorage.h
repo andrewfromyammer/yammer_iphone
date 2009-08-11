@@ -28,6 +28,7 @@
 + (void)saveRequestToken:(NSString *)token;
 + (void)saveAccessToken:(NSString *)token;
 + (void)removeRequestToken;
++ (void)removeAccessToken;
 
 + (NSString *)getBaseURL;
 + (void)saveBaseURL:(NSString *)string;

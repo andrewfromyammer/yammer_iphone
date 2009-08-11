@@ -13,6 +13,8 @@
 #import "NSDate-Ago.h"
 #import "FeedCache.h"
 #import "SpinnerCell.h"
+#import "Message.h"
+#import "YammerAppDelegate.h"
 
 @implementation FeedDataSource
 
@@ -20,6 +22,7 @@
 @synthesize olderAvailable;
 @synthesize fetchingMore;
 @synthesize statusMessage;
+@synthesize fetcher;
 
 + (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
   
@@ -36,6 +39,35 @@
 - (id)initWithEmpty {
   self.messages = [NSMutableArray array];
   self.olderAvailable = false;
+  return self;
+}
+
+- (id)initWithFetch {
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
+
+  NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"message_id" ascending:NO];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:descriptor, nil];
+	[fetchRequest setSortDescriptors:sortDescriptors];
+	
+	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                                              managedObjectContext:context 
+                                                                                                sectionNameKeyPath:@"message_id" 
+                                                                                                         cacheName:@"Root"];
+	self.fetcher = aFetchedResultsController;
+  
+  NSError *error;
+	[fetcher performFetch:&error];
+	
+	[aFetchedResultsController release];
+	[fetchRequest release];
+	[descriptor release];
+	[sortDescriptors release];  
+  
   return self;
 }
 
@@ -85,7 +117,7 @@
       [message setObject:[actor objectForKey:@"id"] forKey:@"actor_id"];
       [message setObject:[actor objectForKey:@"type"] forKey:@"actor_type"];
       
-      [message setObject:[actor objectForKey:@"name"] forKey:@"sender"];      
+      [message setObject:[actor objectForKey:@"name"] forKey:@"sender"];
       referencesById = [referencesByType objectForKey:@"message"];
       NSMutableDictionary *messageRef = [referencesById objectForKey:[message objectForKey:@"replied_to_id"]];
       
@@ -139,7 +171,7 @@
       
       [message setObject:fromLine forKey:@"fromLine"];
     } @catch (NSException *theErr) {}
-  }    
+  }
   
   NSMutableDictionary *result = [NSMutableDictionary dictionary];
   if ([FeedCache writeFeed:[feed objectForKey:@"url"] messages:[NSMutableArray arrayWithArray:tempMessages] more:self.olderAvailable])
@@ -177,7 +209,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   if (section == 0)
-  	return [messages count];
+  	return [[fetcher sections] count];
   return 1;
 }
 
@@ -188,7 +220,9 @@
     if (cell == nil)
       cell = [[[MessageCell alloc] init] autorelease];
     
-    [cell setMessage:[messages objectAtIndex:indexPath.row]];    
+    Message *message = [fetcher.fetchedObjects objectAtIndex:indexPath.row];
+    
+    [cell setMessage:message];
     return cell;
   } else if (indexPath.section == 1) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
@@ -217,10 +251,12 @@
   	return cell;
   }
   return nil;
-}
+}   
 
 - (void)dealloc {
   [messages release];
+  [statusMessage release];
+  [fetcher release];
   [super dealloc];
 }
 

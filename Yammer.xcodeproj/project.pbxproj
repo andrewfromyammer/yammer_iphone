@@ -45,6 +45,9 @@
 		006B09DC101A755C0089CB57 /* ComposeMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006B09DB101A755C0089CB57 /* ComposeMessageController.m */; };
 		0077C1BE0F9FD1290097605D /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0077C1BD0F9FD1290097605D /* Entitlements.plist */; };
 		007BE6390F336CE5006C79D1 /* DirectoryTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 007BE6380F336CE5006C79D1 /* DirectoryTableDataSource.m */; };
+		007E43D51031CD81008C3A04 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007E43D41031CD81008C3A04 /* CoreData.framework */; };
+		007E43DA1031D0A2008C3A04 /* Yammer.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 007E43D91031D0A2008C3A04 /* Yammer.xcdatamodel */; };
+		007E44171031D412008C3A04 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 007E44151031D412008C3A04 /* Message.m */; };
 		0080512E0F3371BC00592204 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0080512D0F3371BC00592204 /* ImageCache.m */; };
 		00808FBF0F37ABA8004AB665 /* thread_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00808FBD0F37ABA8004AB665 /* thread_gray.png */; };
 		00808FC00F37ABA8004AB665 /* user_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00808FBE0F37ABA8004AB665 /* user_gray.png */; };
@@ -165,6 +168,10 @@
 		0077C1BD0F9FD1290097605D /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		007BE6370F336CE5006C79D1 /* DirectoryTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DirectoryTableDataSource.h; path = DataSource/DirectoryTableDataSource.h; sourceTree = "<group>"; };
 		007BE6380F336CE5006C79D1 /* DirectoryTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DirectoryTableDataSource.m; path = DataSource/DirectoryTableDataSource.m; sourceTree = "<group>"; };
+		007E43D41031CD81008C3A04 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		007E43D91031D0A2008C3A04 /* Yammer.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Yammer.xcdatamodel; sourceTree = "<group>"; };
+		007E44141031D412008C3A04 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = Models/Message.h; sourceTree = "<group>"; };
+		007E44151031D412008C3A04 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = Models/Message.m; sourceTree = "<group>"; };
 		0080512C0F3371BC00592204 /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageCache.h; path = Util/ImageCache.h; sourceTree = "<group>"; };
 		0080512D0F3371BC00592204 /* ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageCache.m; path = Util/ImageCache.m; sourceTree = "<group>"; };
 		00808FBD0F37ABA8004AB665 /* thread_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = thread_gray.png; path = Images/thread_gray.png; sourceTree = "<group>"; };
@@ -244,6 +251,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				0037FE570F3128F600A6A599 /* Security.framework in Frameworks */,
+				007E43D51031CD81008C3A04 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +270,15 @@
 				006335C00F30F08600B4F38F /* SBJSON.m */,
 			);
 			name = JSON;
+			sourceTree = "<group>";
+		};
+		007E43DB1031D0B9008C3A04 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				007E44141031D412008C3A04 /* Message.h */,
+				007E44151031D412008C3A04 /* Message.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		00B464AB100CDEE400A62118 /* Settings */ = {
@@ -442,6 +459,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				007E43DB1031D0B9008C3A04 /* Models */,
 				006335B90F30F07600B4F38F /* JSON */,
 				00DCE7B80F30D6D70020F864 /* DataSource */,
 				00D5215F0F2FBE3300FB3A8A /* OAuth */,
@@ -488,6 +506,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				007E43D91031D0A2008C3A04 /* Yammer.xcdatamodel */,
 				003D26EE1028DE36006BB140 /* ComposeMessage.xib */,
 				00DAF50E10225D9900F56F36 /* MainWindow.xib */,
 				00D050D80FFD4D4E00CEF89D /* yammer_sound.wav */,
@@ -502,6 +521,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				007E43D41031CD81008C3A04 /* CoreData.framework */,
 				0037FE560F3128F600A6A599 /* Security.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -640,6 +660,8 @@
 				00FBF5C3101A90C400B5B7BF /* SpinnerWithText.m in Sources */,
 				008576671022031F00F6B747 /* ToolbarWithText.m in Sources */,
 				0056322A102B206D00FCA490 /* MessageCell.m in Sources */,
+				007E43DA1031D0A2008C3A04 /* Yammer.xcdatamodel in Sources */,
+				007E44171031D412008C3A04 /* Message.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

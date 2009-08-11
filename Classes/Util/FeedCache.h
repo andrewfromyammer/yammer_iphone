@@ -21,5 +21,6 @@ static int MAX_FEED_CACHE = 60;
 + (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 + (NSString *)niceDate:(NSDate *)date;
 + (NSDate *)loadFeedDate:(NSString *)url;
++ (NSString *)feedCacheUniqueID:(NSString *)url;
 
 @end

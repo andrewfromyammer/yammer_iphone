@@ -12,8 +12,26 @@
 #import "NSObject+SBJSON.h"
 #import "NSString+SBJSON.h"
 #import "ImageCache.h"
+#import "Message.h"
+#import "YammerAppDelegate.h"
 
 @implementation FeedCache
+
+
++ (NSString *)feedCacheUniqueID:(NSString *)url {
+  // http://23434234/api/v1/messages/wefwef
+  // http://23434234/api/v1/messages
+  // /api/v1/messages/wefwef
+  // /api/v1/messages
+  
+  NSRange range = [url rangeOfString:@"/messages"];
+  
+  if (range.location != NSNotFound)
+    return [url substringFromIndex:range.location+8];
+
+  return nil;
+}
+
 
 + (NSString *)feedCacheFilePath:(NSString *)url {
   NSString *file;
@@ -59,6 +77,36 @@
 }
 
 + (BOOL)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
+  NSString *feed = [FeedCache feedCacheUniqueID:url];    
+  
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
+  
+  int i=0;
+  for (; i<[messages count]; i++) {
+  	Message *m = (Message *)[NSEntityDescription insertNewObjectForEntityForName:@"Message" 
+                                                 inManagedObjectContext:context];
+    NSMutableDictionary *dict = [messages objectAtIndex:i];
+    m.from = [dict objectForKey:@"fromLine"];
+        
+    NSString *createdAt = [dict objectForKey:@"created_at"];
+    NSString *front = [createdAt substringToIndex:10];
+    NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];    
+    m.created_at = [NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]];
+    m.feed = feed;
+    m.message_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"id"] longValue]];
+    m.network_id = yam.network_id;
+    m.latest_reply_id = [[NSNumber alloc] initWithLong:23423];
+    m.privacy   = [[NSNumber alloc] initWithBool:NO];
+    m.threading = [[NSNumber alloc] initWithBool:NO];
+  }
+  NSError *error;
+  [context save:&error];
+  
+  return false;
+}
+
++ (BOOL)writeFeed2:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
   [ImageCache deleteOldestFile:[NSString stringWithFormat:@"%@%@", [LocalStorage localPath], [LocalStorage feedDirectory]]];
   
   NSString *path = [FeedCache feedCacheFilePath:url];    

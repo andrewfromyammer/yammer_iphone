@@ -1,5 +1,6 @@
 
 #import "MessageCell.h"
+#import "LocalStorage.h"
 
 #define ACTOR_IMAGE_X  5
 #define ACTOR_IMAGE_Y  5
@@ -47,7 +48,7 @@
     self.group = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,FONT_12_HEIGHT)];
     self.group.font = [UIFont boldSystemFontOfSize:10];
     
-    self.lockImage = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_MARGIN,4,12,12)];
+    self.lockImage = [[UIImageView alloc] initWithFrame:CGRectMake(MIDDLE_WIDTH+LEFT_MARGIN-12,4,12,12)];
     self.lockImage.image = [UIImage imageNamed:@"lock.png"];
     self.lockImage.hidden = true;
 
@@ -74,14 +75,14 @@
   return self;
 }
 
-- (void)setMessage:(NSMutableDictionary *)message {
-  self.actorPhoto.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
-  self.from.text = [message objectForKey:@"fromLine"];
+- (void)setMessage:(Message *)message {
+  //self.actorPhoto.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+  self.from.text = message.from; //[message objectForKey:@"fromLine"];
   
-  NSMutableDictionary *body = [message objectForKey:@"body"];
-  self.preview.text = [body objectForKey:@"plain"];
+//  NSMutableDictionary *body = [message objectForKey:@"body"];
+  self.preview.text = @"test"; //[body objectForKey:@"plain"];
   
-  NSString *group_name = [message objectForKey:@"group_full_name"];
+  NSString *group_name = nil; //[message objectForKey:@"group_full_name"];
   if (group_name) {
     self.group.text = group_name;
     self.theWordIn.text = @"in";
@@ -91,25 +92,40 @@
     self.theWordIn.text = @"";
   }
   
-  NSString *thread_updates = [message objectForKey:@"thread_updates"];
-  if (thread_updates)
-    self.replyCount.text = [thread_updates description];
+  NSString *thread_updates = nil; //[message objectForKey:@"thread_updates"];
+  if (thread_updates && [LocalStorage threadedMode]) {
+    if ([thread_updates intValue] > 99)
+      self.replyCount.text = @"99";
+    else
+      self.replyCount.text = [thread_updates description];
+  }
   else
     self.replyCount.text = @"";
   
   [self setHeightByPreview];
   
-  self.time.text = [message objectForKey:@"timeLine"];
+  self.time.text = @"1 hour ago"; //[message objectForKey:@"timeLine"];
   [self setTimeLength];
-  if ([message objectForKey:@"lock"]) {
+  if (message.privacy) {
+    [self setFromLengthForLock];
     self.lockImage.hidden = false;
-    self.from.frame = CGRectMake(LEFT_MARGIN+15, from.frame.origin.y, 
-                                 MIDDLE_WIDTH-15, from.frame.size.height);
   } else {
-    self.lockImage.hidden = true;    
-    self.from.frame = CGRectMake(LEFT_MARGIN, from.frame.origin.y, 
-                                 MIDDLE_WIDTH, from.frame.size.height);
+    self.lockImage.hidden = true;
+    self.from.frame = CGRectMake(from.frame.origin.x, from.frame.origin.y, 
+                                 MIDDLE_WIDTH, from.frame.size.height);    
   }
+}
+
+- (void)setFromLengthForLock {
+  CGSize stringSize = [from.text sizeWithFont:from.font 
+                       constrainedToSize: CGSizeMake(MIDDLE_WIDTH-15, from.frame.size.height)
+                       lineBreakMode:from.lineBreakMode];
+  
+  self.from.frame = CGRectMake(from.frame.origin.x, from.frame.origin.y,
+                               stringSize.width, from.frame.size.height);
+  
+  self.lockImage.frame = CGRectMake(LEFT_MARGIN+stringSize.width+2,4,12,12); 
+  
 }
 
 - (void)setHeightByPreview {
@@ -129,7 +145,7 @@
   self.footer.frame = CGRectMake(footer.frame.origin.x, newHeight - FONT_12_HEIGHT,
                                  footer.frame.size.width, footer.frame.size.height);
   
-  self.replyCount.frame = CGRectMake(replyCount.frame.origin.x, (self.bounds.size.height / 2) - 10,
+  self.replyCount.frame = CGRectMake(replyCount.frame.origin.x, (self.bounds.size.height / 2) - 11,
                                      replyCount.frame.size.width, replyCount.frame.size.height);
   
   
