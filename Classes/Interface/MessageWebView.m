@@ -8,6 +8,7 @@
 
 #import "MessageWebView.h"
 #import "OAuthGateway.h"
+#import "NSString+SBJSON.h"
 
 @implementation MessageWebView
 
@@ -30,9 +31,8 @@
  possible regex: /((http(s?))\:\/\/)([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]+)?(\/([\w#!:.?+=&%@~*\';,\-\/\$])*)?/g;
  or  /((?:http(?:s?)\:\/\/|www\.[^\.])\S+[A-z0-9\/])/g;
  */
-- (void)setHTML:(NSMutableDictionary *)message bgcolor:(NSString *)bgcolor {
-  NSMutableDictionary *body = [message objectForKey:@"body"];
-  NSString *plain = [body objectForKey:@"plain"];
+- (void)setHTML:(Message *)message bgcolor:(NSString *)bgcolor {
+  NSString *plain = message.plain_body;
   
   NSMutableArray *startPoints = [NSMutableArray array];
   NSMutableArray *urlLengths = [NSMutableArray array];
@@ -98,7 +98,8 @@
   preRange.length = [plain length] - preRange.location;
   [buff appendString:[plain substringWithRange:preRange]];  
   
-  NSMutableArray *attachments = [message objectForKey:@"attachments"];
+  
+  NSMutableArray *attachments = (NSMutableArray *)[message.attachments_json JSONValue];
   for (i=0; i<[attachments count]; i++) {
     NSMutableDictionary *attachment = [attachments objectAtIndex:i];
     [buff appendString:@"<p>"];
@@ -109,7 +110,7 @@
     [buff appendString:@"\">"];
     [buff appendString:[attachment objectForKey:@"name"]];
     [buff appendString:@"</a></p>"];
-  }  
+  }
   
   [self loadHTMLString:[NSString stringWithFormat:@"<html><body bgcolor=\"%@\" style=\"font-size: 16px; font-family: arial;\">%@</body></html>", 
                        bgcolor,

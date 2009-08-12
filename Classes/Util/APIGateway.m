@@ -103,8 +103,8 @@
   return nil;
 }
 
-+ (BOOL)createMessage:(NSString *)body repliedToId:(NSDecimalNumber *)repliedToId 
-                                       groupId:(NSDecimalNumber *)groupId
++ (BOOL)createMessage:(NSString *)body repliedToId:(NSNumber *)repliedToId 
+                                       groupId:(NSNumber *)groupId
                                        imageData:(NSData *)imageData {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   

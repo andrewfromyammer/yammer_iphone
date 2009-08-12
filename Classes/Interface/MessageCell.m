@@ -94,12 +94,10 @@
     [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:message];
   self.from.text = message.from; //[message objectForKey:@"fromLine"];
   
-//  NSMutableDictionary *body = [message objectForKey:@"body"];
   self.preview.text = message.plain_body;
   
-  NSString *group_name = nil; //[message objectForKey:@"group_full_name"];
-  if (group_name) {
-    self.group.text = group_name;
+  if (message.group_full_name) {
+    self.group.text = message.group_full_name;
     self.theWordIn.text = @"in";
   }
   else {
@@ -121,7 +119,7 @@
   
   self.time.text = [message.created_at agoDate];
   [self setTimeLength];
-  if (message.privacy) {
+  if ([message.privacy boolValue]) {
     [self setFromLengthForLock];
     self.lockImage.hidden = false;
   } else {

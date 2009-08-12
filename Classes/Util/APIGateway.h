@@ -23,8 +23,8 @@
 + (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSNumber *)newerThan style:(NSString *)style;
 + (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSNumber *)olderThan newerThan:(NSNumber *)newerThan style:(NSString *)style;
 
-+ (BOOL)createMessage:(NSString *)body repliedToId:(NSDecimalNumber *)repliedToId 
-              groupId:(NSDecimalNumber *)groupId
++ (BOOL)createMessage:(NSString *)body repliedToId:(NSNumber *)repliedToId 
+              groupId:(NSNumber *)groupId
                 imageData:(NSData *)imageData;  
 + (BOOL)followingUser:(NSString *)theUserId;
 + (BOOL)removeFollow:(NSString *)theUserId;

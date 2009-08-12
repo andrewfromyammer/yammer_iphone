@@ -14,6 +14,8 @@
 #import "FeedMessageList.h"
 #import "ComposeMessageController.h"
 #import "Message.h"
+#import "NSDate-Ago.h"
+#import "ImageCache.h"
 
 @implementation MessageViewController
 
@@ -32,25 +34,22 @@
   self.title = [NSString stringWithFormat:@"%d of %d", theIndex+1, [theList count]];
   Message *message = [theList objectAtIndex:theIndex];
   
-  //if ([[message objectForKey:@"sender_type"] isEqualToString:@"user"])
-  if (true)
+  if ([message.actor_type isEqualToString:@"user"])
     [self setupToolbar:true];
   else
     [self setupToolbar:false];
   
-  fromLine.text = message.from;//[message objectForKey:@"fromLine"];
-  timeLine.text = @"123"; //[message objectForKey:@"timeLine"];
-  //image.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+  fromLine.text = message.from;
+  timeLine.text = [message.created_at agoDate];
+  NSData *imageData = [ImageCache getImage:[message.actor_id description] type:message.actor_type];
+  if (imageData)
+    image.image = [[UIImage alloc] initWithData:imageData];
   
-  /*
   lockImage.image = nil;
-  if ([message objectForKey:@"lock"])
+  if ([message.privacy boolValue])
     lockImage.image = [UIImage imageNamed:@"lock.png"];
   
-  if ([message objectForKey:@"lockColor"])  
-    [webView setHTML:message bgcolor:@"#DEDEDE"];
-  else
-    [webView setHTML:message bgcolor:@"#FFFFFF"]; */
+  [webView setHTML:message bgcolor:@"#FFFFFF"];
 }
 
 - (void)setupToolbar:(BOOL)showUserIcon {
@@ -176,11 +175,11 @@
 }
 
 - (void)reply {
-  NSMutableDictionary *message = [theList objectAtIndex:theIndex];
+  Message *message = [theList objectAtIndex:theIndex];
   NSMutableDictionary *meta = [NSMutableDictionary dictionary];
   
-  [meta setObject:[message objectForKey:@"id"] forKey:@"replied_to_id"];
-  [meta setObject:[NSString stringWithFormat:@"Replying to %@", [message objectForKey:@"sender"]] forKey:@"display"];
+  [meta setObject:message.message_id forKey:@"replied_to_id"];
+  [meta setObject:[NSString stringWithFormat:@"Re: %@", message.sender] forKey:@"display"];
   
   [self presentModalViewController:[ComposeMessageController getNav:meta] animated:YES];
 }

@@ -293,11 +293,15 @@
     m.message_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"id"] longValue]];
     m.network_id = yam.network_id;
     m.latest_reply_id = [[NSNumber alloc] initWithLong:23423];
-    m.privacy   = [[NSNumber alloc] initWithBool:NO];
+    if ([dict objectForKey:@"lock"])
+      m.privacy = [[NSNumber alloc] initWithBool:YES];
     
     m.actor_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"actor_id"] longValue]];
     m.actor_type = [dict objectForKey:@"actor_type"];
     m.actor_mugshot_url = [dict objectForKey:@"actor_mugshot_url"];
+    m.group_full_name = [dict objectForKey:@"group_full_name"];
+    m.attachments_json = [[dict objectForKey:@"attachments"] JSONRepresentation];
+    m.sender = [dict objectForKey:@"sender"];
   }
 
   NSError *error;

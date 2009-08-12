@@ -16,5 +16,9 @@
 @dynamic actor_mugshot_url;
 @dynamic actor_id;
 @dynamic actor_type;
+@dynamic group_full_name;
+@dynamic attachments_json;
+
+@dynamic sender;
 
 @end

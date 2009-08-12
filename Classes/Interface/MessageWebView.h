@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "Message.h"
 
 @interface MessageWebView : UIWebView <UIWebViewDelegate> {
 
 }
 
 - (id)init;
-- (void)setHTML:(NSMutableDictionary *)message bgcolor:(NSString *)bgcolor;
+- (void)setHTML:(Message *)message bgcolor:(NSString *)bgcolor;
 
 
 @end

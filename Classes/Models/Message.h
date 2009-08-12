@@ -17,5 +17,10 @@
 @property (nonatomic, retain) NSString *actor_mugshot_url;
 @property (nonatomic, retain) NSNumber *actor_id;
 @property (nonatomic, retain) NSString *actor_type;
+@property (nonatomic, retain) NSString *group_full_name;
+@property (nonatomic, retain) NSString *attachments_json;
+
+@property (nonatomic, retain) NSString *sender;
+
 
 @end
