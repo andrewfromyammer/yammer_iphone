@@ -54,7 +54,7 @@
   if ([fetcher.fetchedObjects count] > 500) {
     FeedMetaData *fmd = [fetcher.fetchedObjects objectAtIndex:0];
     NSString *feedCopy = [NSString stringWithString:fmd.feed];
-    [context deleteObject:fmd];     
+    [context deleteObject:fmd];
     [context save:&error];
     
     [FeedCache deleteOldMessages:feedCopy limit:false];
@@ -294,6 +294,10 @@
     m.network_id = yam.network_id;
     m.latest_reply_id = [[NSNumber alloc] initWithLong:23423];
     m.privacy   = [[NSNumber alloc] initWithBool:NO];
+    
+    m.actor_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"actor_id"] longValue]];
+    m.actor_type = [dict objectForKey:@"actor_type"];
+    m.actor_mugshot_url = [dict objectForKey:@"actor_mugshot_url"];
   }
 
   NSError *error;

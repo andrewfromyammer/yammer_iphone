@@ -13,9 +13,9 @@
 
 }
 
-+ (NSData *)getImageAndSave:(NSString *)url user_id:(NSString *)user_id type:(NSString *)type;
-+ (NSData *)getImage:(NSString *)user_id type:(NSString *)type;
-+ (void)saveImage:(NSString *)url user_id:(NSString *)user_id type:(NSString *)type;
++ (NSData *)getImageAndSave:(NSString *)url actor_id:(NSString *)actor_id type:(NSString *)type;
++ (NSData *)getImage:(NSString *)actor_id type:(NSString *)type;
++ (void)saveImage:(NSString *)url actor_id:(NSString *)actor_id type:(NSString *)type;
 + (void)deleteOldestFile:(NSString *)path;
 
 @end

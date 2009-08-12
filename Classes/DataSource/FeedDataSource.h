@@ -28,7 +28,6 @@
 - (void)fetch;
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
 - (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew;
-- (void)processImagesAndTime:(NSMutableArray *)listToUpdate;
 
 
 @end

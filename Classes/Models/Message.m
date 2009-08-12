@@ -11,7 +11,10 @@
 @dynamic feed;
 
 @dynamic created_at;
-
 @dynamic network_id;
+
+@dynamic actor_mugshot_url;
+@dynamic actor_id;
+@dynamic actor_type;
 
 @end

@@ -10,7 +10,6 @@
 #import "APIGateway.h"
 #import "ImageCache.h"
 #import "MessageCell.h"
-#import "NSDate-Ago.h"
 #import "FeedCache.h"
 #import "SpinnerCell.h"
 #import "Message.h"
@@ -189,28 +188,9 @@
  // [result setObject:tempMessages forKey:@"messages"]; 
 }
 
-- (void)processImagesAndTime:(NSMutableArray *)listToUpdate {
-  int i=0;
-  for (i=0; i < [listToUpdate count]; i++) {
-    @try {
-      NSMutableDictionary *message = [listToUpdate objectAtIndex:i];
-      
-      [message setObject:[ImageCache getImageAndSave:[message objectForKey:@"actor_mugshot_url"] 
-                                             user_id:[message objectForKey:@"actor_id"] 
-                                                type:[message objectForKey:@"actor_type"]] forKey:@"imageData"];
-      
-      NSString *createdAt = [message objectForKey:@"created_at"];
-      NSString *front = [createdAt substringToIndex:10];
-      NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
-      
-      NSString *timeLine = [[NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]] agoDate];    
-      [message setObject:timeLine forKey:@"timeLine"];      
-    } @catch (NSException *theErr) {}
-  }  
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-  if (olderAvailable)
+  if (olderAvailable && [fetcher.fetchedObjects count] < MAX_FEED_CACHE)
     return 2;
 	return 1;
 }

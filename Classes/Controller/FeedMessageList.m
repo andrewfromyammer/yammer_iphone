@@ -92,6 +92,10 @@
   if (dict) {
     [dataSource proccesMessages:dict checkNew:true];
     [dataSource fetch];
+    
+    //[dataSource processImagesAndTime];
+    
+    
     [theTableView reloadData];
   }
   

@@ -71,7 +71,7 @@
   
   UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
   [topLayer addSubview:image];
-  image.image = [[UIImage alloc] initWithData:[ImageCache getImageAndSave:[user objectForKey:@"mugshot_url"] user_id:theUserId type:@"user"]];
+  image.image = [[UIImage alloc] initWithData:[ImageCache getImageAndSave:[user objectForKey:@"mugshot_url"] actor_id:theUserId type:@"user"]];
   [image release];
     
   if (![loggedInId isEqualToString:theUserId]) {

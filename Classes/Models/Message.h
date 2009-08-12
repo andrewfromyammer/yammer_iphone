@@ -13,4 +13,9 @@
 @property (nonatomic, retain) NSDate *created_at;
 @property (nonatomic, retain) NSNumber *network_id;
 
+
+@property (nonatomic, retain) NSString *actor_mugshot_url;
+@property (nonatomic, retain) NSNumber *actor_id;
+@property (nonatomic, retain) NSString *actor_type;
+
 @end

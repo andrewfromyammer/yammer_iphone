@@ -12,20 +12,20 @@
 
 @implementation ImageCache
 
-+ (NSData *)getImageAndSave:(NSString *)url user_id:(NSString *)user_id type:(NSString *)type {
-  NSData *imageData = [ImageCache getImage:user_id type:type];
++ (NSData *)getImageAndSave:(NSString *)url actor_id:(NSString *)actor_id type:(NSString *)type {
+  NSData *imageData = [ImageCache getImage:actor_id type:type];
   if (!imageData) {
-    [ImageCache saveImage:url user_id:user_id type:type];
-    return [ImageCache getImage:user_id type:type];  
+    [ImageCache saveImage:url actor_id:actor_id type:type];
+    return [ImageCache getImage:actor_id type:type];  
   }
   return imageData;
 }
 
-+ (NSData *)getImage:(NSString *)user_id type:(NSString *)type {
++ (NSData *)getImage:(NSString *)actor_id type:(NSString *)type {
   NSString *documentsDirectory = [LocalStorage localPath];
   NSFileManager *fileManager = [NSFileManager defaultManager];
   
-  NSString *pic = [NSString stringWithFormat:@"%@/%@_%@", [LocalStorage photoDirectory], user_id, type];
+  NSString *pic = [NSString stringWithFormat:@"%@/%@_%@", [LocalStorage photoDirectory], actor_id, type];
 
   if ([fileManager fileExistsAtPath:[documentsDirectory 
                                      stringByAppendingPathComponent:pic]]) {
@@ -57,11 +57,11 @@
   }  
 }
 
-+ (void)saveImage:(NSString *)url user_id:(NSString *)user_id type:(NSString *)type {
++ (void)saveImage:(NSString *)url actor_id:(NSString *)actor_id type:(NSString *)type {
   if (url == nil)
     return;
   
-  if ([ImageCache getImage:user_id type:type] != nil)
+  if ([ImageCache getImage:actor_id type:type] != nil)
     return;
   
   NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -82,7 +82,7 @@
   @catch (NSException *theErr) {
     data = UIImageJPEGRepresentation([UIImage imageNamed:@"no_photo_small.png"], 90);
   }
-  [fileManager createFileAtPath:[photoDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@", user_id, type]]
+  [fileManager createFileAtPath:[photoDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@", actor_id, type]]
                        contents:data attributes:nil];
 }
 

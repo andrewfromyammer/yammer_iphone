@@ -49,6 +49,7 @@
   [self.view addSubview:toggle];
   
   [LocalStorage removeFile:@"yammer.sqlite"];
+  [LocalStorage removeFile:@"photos"];
 }
 
 

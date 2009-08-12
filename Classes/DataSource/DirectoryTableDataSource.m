@@ -35,7 +35,7 @@
   int i=0;
   for (; i< [array count]; i++) {
     NSMutableDictionary *dict = [array objectAtIndex:i];
-    [dict setObject:[ImageCache getImageAndSave:[dict objectForKey:@"mugshot_url"] user_id:[dict objectForKey:@"id"] type:@"user"] forKey:@"imageData"];    
+    [dict setObject:[ImageCache getImageAndSave:[dict objectForKey:@"mugshot_url"] actor_id:[dict objectForKey:@"id"] type:@"user"] forKey:@"imageData"];    
   }  
   self.lastSize = [array count];
   [self.users addObjectsFromArray:array];

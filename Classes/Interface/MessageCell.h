@@ -32,5 +32,6 @@
 - (void)setHeightByPreview;
 - (void)setTimeLength;
 - (void)setFromLengthForLock;
+- (void)loadThatImage:(Message *)message;
 
 @end

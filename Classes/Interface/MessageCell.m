@@ -1,6 +1,8 @@
 
 #import "MessageCell.h"
 #import "LocalStorage.h"
+#import "ImageCache.h"
+#import "NSDate-Ago.h"
 
 #define ACTOR_IMAGE_X  5
 #define ACTOR_IMAGE_Y  5
@@ -75,8 +77,21 @@
   return self;
 }
 
+- (void)loadThatImage:(Message *)message {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  @synchronized ([UIApplication sharedApplication]) {  
+    NSData *imageData = [ImageCache getImageAndSave:message.actor_mugshot_url actor_id:[message.actor_id description] type:message.actor_type];
+    self.actorPhoto.image = [[UIImage alloc] initWithData:imageData];
+  }
+  [autoreleasepool release];
+}
+
 - (void)setMessage:(Message *)message {
-  //self.actorPhoto.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+  NSData *imageData = [ImageCache getImage:[message.actor_id description] type:message.actor_type];
+  if (imageData)
+    self.actorPhoto.image = [[UIImage alloc] initWithData:imageData];
+  else
+    [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:message];
   self.from.text = message.from; //[message objectForKey:@"fromLine"];
   
 //  NSMutableDictionary *body = [message objectForKey:@"body"];
@@ -104,7 +119,7 @@
   
   [self setHeightByPreview];
   
-  self.time.text = @"1 hour ago"; //[message objectForKey:@"timeLine"];
+  self.time.text = [message.created_at agoDate];
   [self setTimeLength];
   if (message.privacy) {
     [self setFromLengthForLock];
