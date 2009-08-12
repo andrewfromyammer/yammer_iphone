@@ -8,20 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-static int MAX_FEED_CACHE = 100;
+static int MAX_FEED_CACHE = 1000;
 
 
 @interface FeedCache : NSObject {
 
 }
 
-+ (NSString *)feedCacheFilePath:(NSString *)url;
-+ (NSMutableDictionary *)loadFeed:(NSString *)url;
-
 + (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 + (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 
-+ (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 + (NSString *)niceDate:(NSDate *)date;
 + (NSDate *)loadFeedDate:(NSString *)url;
 + (NSString *)feedCacheUniqueID:(NSString *)url;

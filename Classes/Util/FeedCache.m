@@ -33,48 +33,37 @@
   return nil;
 }
 
-
-+ (NSString *)feedCacheFilePath:(NSString *)url {
-  NSString *file;
-  
-  if (![url hasPrefix:@"http"])
-    file = [NSString stringWithFormat:@"%@%@", [OAuthGateway baseURL], url];
-  else
-    file = [NSString stringWithFormat:@"%@", url];
-  
-  file = [file stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
-  file = [file stringByReplacingOccurrencesOfString:@":" withString:@"_"];
-  file = [file stringByReplacingOccurrencesOfString:@"." withString:@"_"];
-  
-  NSString *suffix = @"";
-  if ([LocalStorage threadedMode])
-    suffix = @".t";
-  
-  return [[LocalStorage localPath] stringByAppendingPathComponent: 
-          [NSString stringWithFormat:@"%@/%@%@", [LocalStorage feedDirectory], file, suffix]];  
-}
-
 + (NSDate *)loadFeedDate:(NSString *)url {
-  NSString *path = [FeedCache feedCacheFilePath:url];  
-  NSFileManager *fileManager = [NSFileManager defaultManager];
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
   
-  if ([fileManager fileExistsAtPath:path]) {    
-    NSDictionary *fileAttributes = [fileManager fileAttributesAtPath:path traverseLink:YES];
-    return (NSDate *)[fileAttributes objectForKey:NSFileModificationDate];
+  NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+  
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", [FeedCache feedCacheUniqueID:url]];
+  [fetchRequest setPredicate:feedPredicate];
+  [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
+                                                                     initWithKey:@"feed" ascending:NO], nil]];
+  
+	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                            managedObjectContext:context 
+                                                                              sectionNameKeyPath:@"feed" 
+                                                                                       cacheName:@"Root"];
+  NSError *error;
+	[fetcher performFetch:&error];
+  
+  NSDate *date = nil;
+  if ([fetcher.fetchedObjects count] == 1) {
+    FeedMetaData *fmd = [fetcher.fetchedObjects objectAtIndex:0];
+    date = [NSDate dateWithTimeIntervalSince1970:[fmd.last_update timeIntervalSince1970]];
   }
-  return nil;
-}
-
-
-+ (NSMutableDictionary *)loadFeed:(NSString *)url {
-  NSString *path = [FeedCache feedCacheFilePath:url];  
-  NSFileManager *fileManager = [NSFileManager defaultManager];
-
-  if ([fileManager fileExistsAtPath:path]) {
-    return (NSMutableDictionary*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
-                                               encoding:NSUTF8StringEncoding] JSONValue];
-  }
-  return nil;
+  
+  [fetcher release];
+	[fetchRequest release];
+  [context release];
+  
+  return date;
 }
 
 + (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages {
@@ -113,6 +102,7 @@
   
   [fetcher release];
 	[fetchRequest release];
+  [context release];
   
   return id_lookup;
 }
@@ -146,6 +136,8 @@
   
   [fetcher release];
 	[fetchRequest release];  
+  [context release];
+
 }
 
 + (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
@@ -230,12 +222,14 @@
   else if (older && [older isEqualToString:@"false"])
     fmd.older_available = [[NSNumber alloc] initWithBool:false];
 
+  BOOL return_val = [fmd.older_available boolValue];
   [context save:&error];
   
   [fetcher release];
 	[fetchRequest release];
+  [context release];
   
-  return [fmd.older_available boolValue];
+  return return_val;
 }
 
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup {
@@ -272,82 +266,12 @@
 
   NSError *error;
   [context save:&error];  
-}
+  [context release];
 
-+ (BOOL)writeFeed2:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
-  [ImageCache deleteOldestFile:[NSString stringWithFormat:@"%@%@", [LocalStorage localPath], [LocalStorage feedDirectory]]];
-  
-  NSString *path = [FeedCache feedCacheFilePath:url];    
-  NSFileManager *fileManager = [NSFileManager defaultManager];  
-  if ([fileManager fileExistsAtPath:path]) {
-    NSMutableDictionary *dict = (NSMutableDictionary*)[[[NSString alloc] initWithData:[fileManager contentsAtPath:path] 
-                                                                       encoding:NSUTF8StringEncoding] JSONValue];
-    NSMutableArray *existing = [dict objectForKey:@"messages"];
-    BOOL existingOlderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"];
-    
-    if ([messages count] == 0) {
-      [FeedCache trimArrayAndWrite:path messages:existing more:existingOlderAvailable];
-      return false;
-    }
-    
-    if ([existing count] == 0) {
-      [FeedCache trimArrayAndWrite:path messages:messages more:olderAvailable];
-      return false;
-    }
-    
-    NSMutableDictionary *lastNew       = [messages lastObject];
-    NSMutableDictionary *firstNew      = [messages objectAtIndex:0];
-    NSMutableDictionary *firstExisting = [existing objectAtIndex:0];
-    NSMutableDictionary *lastExisting  = [existing lastObject];    
-
-    if ([[lastNew objectForKey:@"id"] intValue] > [[firstExisting objectForKey:@"id"] intValue]) {
-      
-      // make another http call here for the next twenty, older than the last id
-      // if our existing first id is within that next batch, line 'er up
-      // if not, delete all the existing, just have 40 cached.
-      
-      if (olderAvailable) {
-        [FeedCache trimArrayAndWrite:path messages:messages more:true];
-        return true;
-      } else {
-        [messages addObjectsFromArray:existing];
-        [FeedCache trimArrayAndWrite:path messages:messages more:existingOlderAvailable];
-      }
-    }
-    else if ([[lastExisting objectForKey:@"id"] intValue] > [[firstNew objectForKey:@"id"] intValue]) {
-      [existing addObjectsFromArray:messages];
-      [FeedCache trimArrayAndWrite:path messages:existing more:olderAvailable];
-    }
-  } else
-    [FeedCache trimArrayAndWrite:path messages:messages more:olderAvailable];
-  return false;
-}
-
-+ (void)trimArrayAndWrite:(NSString *)path messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {  
-  NSFileManager *fileManager = [NSFileManager defaultManager];  
-
-  NSRange range;
-  range.location = MAX_FEED_CACHE;
-  range.length = [messages count] - MAX_FEED_CACHE;
-  if ([messages count] > MAX_FEED_CACHE) {
-    olderAvailable = true;
-    [messages removeObjectsInRange:range];
-  }
-  
-  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-  [dict setObject:messages forKey:@"messages"];
-  NSMutableDictionary *meta = [NSMutableDictionary dictionary];
-  if (olderAvailable)
-    [meta setObject:@"t" forKey:@"olderAvailable"];
-  else
-    [meta setObject:@"f" forKey:@"olderAvailable"];
-  
-  [dict setObject:meta forKey:@"meta"];
-  [fileManager createFileAtPath:path contents:[[dict JSONRepresentation] dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
 }
 
 + (NSString *)niceDate:(NSDate *)date {
-  if (date == nil) {
+  if (!date) {
     return @"Network out of range.";
   }
   

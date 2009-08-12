@@ -27,7 +27,6 @@
 - (id)initWithFeed:(NSString *)url;
 - (void)fetch;
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
-+ (FeedDataSource *)getMessages:(NSMutableDictionary *)feed;
 - (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew;
 - (void)processImagesAndTime:(NSMutableArray *)listToUpdate;
 

@@ -24,17 +24,6 @@
 @synthesize feed;
 @synthesize fetcher;
 
-+ (FeedDataSource *)getMessages:(NSMutableDictionary *)feed {
-  
-  NSMutableDictionary *dict = [FeedCache loadFeed:[feed objectForKey:@"url"]];
-  
-  if (dict) {
-    BOOL olderAvailable = [[[dict objectForKey:@"meta"] objectForKey:@"olderAvailable"] isEqualToString:@"t"]; 
-    return [[FeedDataSource alloc] initWithMessages:[dict objectForKey:@"messages"] feed:feed more:olderAvailable];
-  }
-
-  return [[FeedDataSource alloc] initWithEmpty];
-}
 
 - (id)initWithEmpty {
   self.messages = [NSMutableArray array];
@@ -78,6 +67,7 @@
 	[fetchRequest release];
 	[descriptor release];
 	[sortDescriptors release];  
+  [context release];
 }
 
 - (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore {

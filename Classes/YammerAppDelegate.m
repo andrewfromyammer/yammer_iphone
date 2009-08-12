@@ -129,18 +129,15 @@
   [feed release];
 }
 
-- (NSManagedObjectContext *) managedObjectContext {
+- (NSManagedObjectContext *)managedObjectContext {
 	
-  if (managedObjectContext != nil) {
-    return managedObjectContext;
-  }
-	
+	NSManagedObjectContext *context;
   NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
   if (coordinator != nil) {
-    managedObjectContext = [[NSManagedObjectContext alloc] init];
-    [managedObjectContext setPersistentStoreCoordinator: coordinator];
+    context = [[NSManagedObjectContext alloc] init];
+    [context setPersistentStoreCoordinator: coordinator];
   }
-  return managedObjectContext;
+  return context;
 }
 
 - (NSManagedObjectModel *)managedObjectModel {	

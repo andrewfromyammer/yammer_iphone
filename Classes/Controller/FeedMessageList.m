@@ -66,8 +66,6 @@
   self.dataSource = [[FeedDataSource alloc] initWithFeed:[feed objectForKey:@"url"]];
 	self.theTableView.dataSource = self.dataSource;
     
-  //[spinnerWithText displayLoadingCache];
-  //[NSThread detachNewThreadSelector:@selector(loadCachedMessages) toTarget:self withObject:nil];    
   [self.spinnerWithText displayCheckingNew];
   [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
@@ -81,19 +79,6 @@
   self.view = tableAndSpinner;
 }
 
-- (void)loadCachedMessages {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-    
-  self.dataSource = [FeedDataSource getMessages:feed];
- 	self.theTableView.dataSource = self.dataSource;
-  
-  [self.theTableView reloadData];
-
-  [self.spinnerWithText displayCheckingNew];
-  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
-  [autoreleasepool release];
-}
-
 - (void)checkForNewMessages:(NSString *)style {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
     
@@ -105,20 +90,7 @@
     
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan style:style];
   if (dict) {
-    //BOOL previousValue = dataSource.olderAvailable;
-    
     [dataSource proccesMessages:dict checkNew:true];
-    //NSMutableArray *messages = [result objectForKey:@"messages"];
-    
-    //[dataSource processImagesAndTime:messages];
-    
-   // if (![result objectForKey:@"replace_all"] && newerThan != nil) {
-      //[messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
-      //dataSource.olderAvailable = previousValue;
-    //}
-    //dataSource.messages = messages;
-    
-//    self.dataSource.feed = [FeedCache feedCacheUniqueID:[feed objectForKey:@"url"]];
     [dataSource fetch];
     [theTableView reloadData];
   }
@@ -185,7 +157,7 @@
     [self.navigationController pushViewController:localMessageViewController animated:YES];
     [localMessageViewController release];
   } else {
-    if ([dataSource.messages count] < 999) {
+    if ([dataSource.fetcher.fetchedObjects count] < MAX_FEED_CACHE) {
       SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];
       [cell showSpinner];
       [cell.displayText setText:@"Loading More..."];
