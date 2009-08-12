@@ -72,16 +72,16 @@
   return nil;
 }
 
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan style:(NSString *)style {
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSNumber *)olderThan style:(NSString *)style {
   return [APIGateway messages:url olderThan:olderThan newerThan:nil style:style];
 }
 
-+ (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSDecimalNumber *)newerThan style:(NSString *)style {
++ (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSNumber *)newerThan style:(NSString *)style {
   return [APIGateway messages:url olderThan:nil newerThan:newerThan style:style];
 }
 
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSDecimalNumber *)olderThan 
-                                                           newerThan:(NSDecimalNumber *)newerThan
++ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSNumber *)olderThan 
+                                                          newerThan:(NSNumber *)newerThan
                                                           style:(NSString *)style {
   
   NSMutableString *params = [NSMutableString stringWithCapacity:10];

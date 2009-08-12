@@ -13,6 +13,7 @@
 #import "DirectoryUserProfile.h"
 #import "FeedMessageList.h"
 #import "ComposeMessageController.h"
+#import "Message.h"
 
 @implementation MessageViewController
 
@@ -29,16 +30,19 @@
 
 - (void)displayMessage {
   self.title = [NSString stringWithFormat:@"%d of %d", theIndex+1, [theList count]];
-  NSMutableDictionary *message = [theList objectAtIndex:theIndex];
+  Message *message = [theList objectAtIndex:theIndex];
   
-  if ([[message objectForKey:@"sender_type"] isEqualToString:@"user"])
+  //if ([[message objectForKey:@"sender_type"] isEqualToString:@"user"])
+  if (true)
     [self setupToolbar:true];
   else
     [self setupToolbar:false];
   
-  fromLine.text = [message objectForKey:@"fromLine"];
-  timeLine.text = [message objectForKey:@"timeLine"];
-  image.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+  fromLine.text = message.from;//[message objectForKey:@"fromLine"];
+  timeLine.text = @"123"; //[message objectForKey:@"timeLine"];
+  //image.image = [[UIImage alloc] initWithData:[message objectForKey:@"imageData"]];
+  
+  /*
   lockImage.image = nil;
   if ([message objectForKey:@"lock"])
     lockImage.image = [UIImage imageNamed:@"lock.png"];
@@ -46,7 +50,7 @@
   if ([message objectForKey:@"lockColor"])  
     [webView setHTML:message bgcolor:@"#DEDEDE"];
   else
-    [webView setHTML:message bgcolor:@"#FFFFFF"];
+    [webView setHTML:message bgcolor:@"#FFFFFF"]; */
 }
 
 - (void)setupToolbar:(BOOL)showUserIcon {
@@ -99,7 +103,7 @@
   [toolbar setItems:items animated:NO];
 }
 
-- (id)initWithBooleanForThreadIcon:(BOOL)showThreadIcon list:(NSMutableArray *)list index:(int)index {
+- (id)initWithBooleanForThreadIcon:(BOOL)showThreadIcon list:(NSArray *)list index:(int)index {
   self.theList = list;
   self.theIndex = index;
   self.threadIcon = showThreadIcon;

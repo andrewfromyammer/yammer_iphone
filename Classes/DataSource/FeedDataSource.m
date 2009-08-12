@@ -87,7 +87,7 @@
   return self;
 }
 
-- (NSMutableDictionary *)proccesMessages:(NSMutableDictionary *)dict feed:(NSMutableDictionary *)feed {
+- (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew {
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
   NSNumber *older = [meta objectForKey:@"older_available"];
   self.olderAvailable = false;
@@ -182,12 +182,18 @@
     } @catch (NSException *theErr) {}
   }
   
-  NSMutableDictionary *result = [NSMutableDictionary dictionary];
-  if ([FeedCache writeFeed:[feed objectForKey:@"url"] messages:[NSMutableArray arrayWithArray:tempMessages] more:self.olderAvailable])
-    [result setObject:@"1" forKey:@"replace_all"];
-  [result setObject:tempMessages forKey:@"messages"];
- 
-  return result;
+  if (checkNew)
+    [FeedCache writeCheckNew:feed
+                  messages:[NSMutableArray arrayWithArray:tempMessages] 
+                  more:self.olderAvailable];
+  else
+    [FeedCache writeFetchMore:feed
+                messages:[NSMutableArray arrayWithArray:tempMessages] 
+                    more:self.olderAvailable];
+
+  //  NSMutableDictionary *result = [NSMutableDictionary dictionary];
+  //   [result setObject:@"1" forKey:@"replace_all"];
+ // [result setObject:tempMessages forKey:@"messages"]; 
 }
 
 - (void)processImagesAndTime:(NSMutableArray *)listToUpdate {

@@ -76,11 +76,9 @@
   return nil;
 }
 
-+ (BOOL)writeFeed:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
-  NSString *feed = [FeedCache feedCacheUniqueID:url];    
-
++ (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages {
+  // SELECT OUT ALL MESSAGES CURRENTLY IN DB FOR UPDATING:
   NSMutableArray *ids = [NSMutableArray array];
-  NSMutableDictionary *id_lookup = [NSMutableDictionary dictionary];
   int i=0;
   for (; i<[messages count]; i++) {
     NSMutableDictionary *dict = [messages objectAtIndex:i];
@@ -100,24 +98,108 @@
                                                                      initWithKey:@"message_id" ascending:NO], nil]];
   
 	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
-                                                                                              managedObjectContext:context 
-                                                                                              sectionNameKeyPath:@"message_id" 
-                                                                                                      cacheName:@"Root"];  
+                                                                            managedObjectContext:context 
+                                                                              sectionNameKeyPath:@"message_id" 
+                                                                                       cacheName:@"Root"];  
   NSError *error;
 	[fetcher performFetch:&error];
   
+  NSMutableDictionary *id_lookup = [NSMutableDictionary dictionary];
   for (i=0; i<[fetcher.fetchedObjects count]; i++) {
     Message *m = [fetcher.fetchedObjects objectAtIndex:i];
     [id_lookup setObject:@"true" forKey:[m.message_id description]];
   }  
-    
+  
   [fetcher release];
 	[fetchRequest release];
   
+  return id_lookup;
+}
+
++ (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit {  
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
+  
+  NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+  
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
+  [fetchRequest setPredicate:feedPredicate];
+  if (limit)
+    [fetchRequest setFetchOffset:MAX_FEED_CACHE];
+  [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
+                                                                     initWithKey:@"message_id" ascending:NO], nil]];
+  
+	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                            managedObjectContext:context 
+                                                                              sectionNameKeyPath:@"message_id" 
+                                                                                       cacheName:@"Root"];
+  NSError *error;
+	[fetcher performFetch:&error];
+  
+  int i;
+  for (i=0; i<[fetcher.fetchedObjects count]; i++) {
+    Message *m = [fetcher.fetchedObjects objectAtIndex:i];
+    [context deleteObject:m];
+  }  
+  [context save:&error];
+  
+  [fetcher release];
+	[fetchRequest release];  
+}
+
++ (void)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
+
+  if (olderAvailable) {
+    // truncate entire feed
+    [FeedCache deleteOldMessages:feed limit:false];
+    // add messages
+    [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
+    // set more = true
+  } else {
+    // update existing messages
+    // add new messages
+    [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
+    // delete old ones past limit
+    [FeedCache deleteOldMessages:feed limit:true];
+    // set more = orig
+  }
+}
+
++ (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
+  
+  if (olderAvailable) {
+    // update existing messages
+    // add new messages
+    [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
+    // delete old ones past limit
+    [FeedCache deleteOldMessages:feed limit:true];
+    // set more = true
+  } else {
+    // update existing messages
+    // add new messages
+    [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
+    // delete old ones past limit
+    [FeedCache deleteOldMessages:feed limit:true];
+    // set more = false
+  }
+}
+
+
+
++ (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup {
+  
+  //NSMutableDictionary *id_lookup = [FeedCache updateLastReplyIds:feed messages:messages];
+  
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
+  
+  int i;
   for (i=0; i<[messages count]; i++) {
     NSMutableDictionary *dict = [messages objectAtIndex:i];
 
-    if ([id_lookup objectForKey:[[dict objectForKey:@"id"] description]])
+    if ([lookup objectForKey:[[dict objectForKey:@"id"] description]])
       continue;
     
   	Message *m = (Message *)[NSEntityDescription insertNewObjectForEntityForName:@"Message" 
@@ -139,9 +221,8 @@
     m.threading = [[NSNumber alloc] initWithBool:NO];
   }
 
-  [context save:&error];
-  
-  return false;
+  NSError *error;
+  [context save:&error];  
 }
 
 + (BOOL)writeFeed2:(NSString *)url messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {

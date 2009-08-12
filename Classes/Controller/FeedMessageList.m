@@ -97,30 +97,28 @@
 - (void)checkForNewMessages:(NSString *)style {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
     
-  NSDecimalNumber *newerThan=nil;
+  NSNumber *newerThan=nil;
   @try {
     Message *m = [dataSource.fetcher.fetchedObjects objectAtIndex:0];
-    NSLog([m.message_id description]);
-//    NSMutableDictionary *message = [dataSource.messages objectAtIndex:0];
- //   newerThan = [message objectForKey:@"id"];
+    newerThan = m.message_id;
   } @catch (NSException *theErr) {}
     
   NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan style:style];
   if (dict) {
     //BOOL previousValue = dataSource.olderAvailable;
     
-    NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
+    [dataSource proccesMessages:dict checkNew:true];
     //NSMutableArray *messages = [result objectForKey:@"messages"];
     
     //[dataSource processImagesAndTime:messages];
     
-    if (![result objectForKey:@"replace_all"] && newerThan != nil) {
+   // if (![result objectForKey:@"replace_all"] && newerThan != nil) {
       //[messages addObjectsFromArray:[NSMutableArray arrayWithArray:dataSource.messages]];
       //dataSource.olderAvailable = previousValue;
-    }
+    //}
     //dataSource.messages = messages;
     
-    self.dataSource.feed = [FeedCache feedCacheUniqueID:[feed objectForKey:@"url"]];
+//    self.dataSource.feed = [FeedCache feedCacheUniqueID:[feed objectForKey:@"url"]];
     [dataSource fetch];
     [theTableView reloadData];
   }
@@ -182,7 +180,7 @@
   if (indexPath.section == 0) {
     MessageViewController *localMessageViewController = [[MessageViewController alloc] 
                                                          initWithBooleanForThreadIcon:threadIcon 
-                                                         list:[dataSource messages] 
+                                                         list:dataSource.fetcher.fetchedObjects
                                                          index:indexPath.row];
     [self.navigationController pushViewController:localMessageViewController animated:YES];
     [localMessageViewController release];
@@ -199,13 +197,13 @@
 - (void)fetchMore {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
-  NSMutableDictionary *message = [dataSource.messages objectAtIndex:[dataSource.messages count]-1];
-  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:[message objectForKey:@"id"] style:nil];
+  Message *m = [dataSource.fetcher.fetchedObjects lastObject];
+  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:m.message_id style:nil];
   if (dict) {
-    NSMutableDictionary *result = [dataSource proccesMessages:dict feed:feed];
-    NSMutableArray *messages = [result objectForKey:@"messages"];
-    [dataSource processImagesAndTime:messages];
-    [dataSource.messages addObjectsFromArray:messages];
+    [dataSource proccesMessages:dict checkNew:false];
+    //NSMutableArray *messages = [result objectForKey:@"messages"];
+    //[dataSource processImagesAndTime:messages];
+    //[dataSource.messages addObjectsFromArray:messages];
   }
   
   NSUInteger newIndex[] = {1, 0};
@@ -216,6 +214,7 @@
   [cell hideSpinner];
   [cell displayMore];
 
+  [dataSource fetch];
   [theTableView reloadData];
   [autoreleasepool release];
 }

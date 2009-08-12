@@ -10,7 +10,7 @@
 #import "MessageWebView.h"
 
 @interface MessageViewController : UIViewController {
-  NSMutableArray *theList;
+  NSArray *theList;
   BOOL threadIcon;
   int theIndex;  
   MessageWebView *webView;
@@ -23,7 +23,7 @@
   UIToolbar *toolbar;
 }
 
-@property (nonatomic,retain) NSMutableArray *theList;
+@property (nonatomic,retain) NSArray *theList;
 @property (nonatomic,retain) MessageWebView *webView;
 @property (nonatomic,retain) UISegmentedControl *upDownArrows;
 @property int theIndex;
@@ -34,7 +34,7 @@
 @property (nonatomic,retain) UILabel *timeLine;
 @property (nonatomic,retain) UIToolbar *toolbar;
 
-- (id)initWithBooleanForThreadIcon:(BOOL)showThreadIcon list:(NSMutableArray *)list index:(int)index;
+- (id)initWithBooleanForThreadIcon:(BOOL)showThreadIcon list:(NSArray *)list index:(int)index;
 - (void)setupToolbar:(BOOL)showUserIcon;
 
 @end
