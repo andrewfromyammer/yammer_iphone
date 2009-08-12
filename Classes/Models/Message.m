@@ -9,7 +9,6 @@
 @dynamic plain_body;
 @dynamic privacy;
 @dynamic feed;
-@dynamic threading;
 
 @dynamic created_at;
 

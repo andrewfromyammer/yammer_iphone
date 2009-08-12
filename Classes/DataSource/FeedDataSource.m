@@ -183,13 +183,13 @@
   }
   
   if (checkNew)
-    [FeedCache writeCheckNew:feed
+    self.olderAvailable = [FeedCache writeCheckNew:feed
                   messages:[NSMutableArray arrayWithArray:tempMessages] 
-                  more:self.olderAvailable];
+                  more:olderAvailable];
   else
     [FeedCache writeFetchMore:feed
                 messages:[NSMutableArray arrayWithArray:tempMessages] 
-                    more:self.olderAvailable];
+                    more:olderAvailable];
 
   //  NSMutableDictionary *result = [NSMutableDictionary dictionary];
   //   [result setObject:@"1" forKey:@"replace_all"];

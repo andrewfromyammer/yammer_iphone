@@ -13,6 +13,7 @@
 #import "NSString+SBJSON.h"
 #import "ImageCache.h"
 #import "Message.h"
+#import "FeedMetaData.h"
 #import "YammerAppDelegate.h"
 
 @implementation FeedCache
@@ -139,17 +140,15 @@
 	[fetcher performFetch:&error];
   
   int i;
-  for (i=0; i<[fetcher.fetchedObjects count]; i++) {
-    Message *m = [fetcher.fetchedObjects objectAtIndex:i];
-    [context deleteObject:m];
-  }  
+  for (i=0; i<[fetcher.fetchedObjects count]; i++)
+    [context deleteObject:[fetcher.fetchedObjects objectAtIndex:i]];
   [context save:&error];
   
   [fetcher release];
 	[fetchRequest release];  
 }
 
-+ (void)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
++ (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
 
   if (olderAvailable) {
     // truncate entire feed
@@ -157,6 +156,8 @@
     // add messages
     [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
     // set more = true
+    [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
+    return true;
   } else {
     // update existing messages
     // add new messages
@@ -164,6 +165,7 @@
     // delete old ones past limit
     [FeedCache deleteOldMessages:feed limit:true];
     // set more = orig
+    return [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:nil];
   }
 }
 
@@ -176,6 +178,7 @@
     // delete old ones past limit
     [FeedCache deleteOldMessages:feed limit:true];
     // set more = true
+    [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
   } else {
     // update existing messages
     // add new messages
@@ -183,10 +186,57 @@
     // delete old ones past limit
     [FeedCache deleteOldMessages:feed limit:true];
     // set more = false
+    [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"false"];
   }
 }
 
++ (BOOL)createOrUpdateMetaData:(NSString *)feed updateOlderAvailable:(NSString *)older {
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
+  
+  NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+  
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
+  [fetchRequest setPredicate:feedPredicate];
+  [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
+                                                                     initWithKey:@"feed" ascending:NO], nil]];
+  
+	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                            managedObjectContext:context 
+                                                                              sectionNameKeyPath:@"feed" 
+                                                                                       cacheName:@"Root"];
+  NSError *error;
+	[fetcher performFetch:&error];
 
+  FeedMetaData *fmd = nil;
+  int i;
+  if ([fetcher.fetchedObjects count] > 1) {
+    for (i=0; i<[fetcher.fetchedObjects count]; i++)
+      [context deleteObject:[fetcher.fetchedObjects objectAtIndex:i]];
+    fmd = (FeedMetaData *)[NSEntityDescription insertNewObjectForEntityForName:@"FeedMetaData" 
+                                                        inManagedObjectContext:context];
+  } else if ([fetcher.fetchedObjects count] == 1)
+    fmd = [fetcher.fetchedObjects objectAtIndex:0];
+  else
+    fmd = (FeedMetaData *)[NSEntityDescription insertNewObjectForEntityForName:@"FeedMetaData" 
+                                                          inManagedObjectContext:context];
+  fmd.last_update = [NSDate date];
+  fmd.network_id = yam.network_id;
+  fmd.feed = feed;
+  if (older && [older isEqualToString:@"true"])
+    fmd.older_available = [[NSNumber alloc] initWithBool:true];
+  else if (older && [older isEqualToString:@"false"])
+    fmd.older_available = [[NSNumber alloc] initWithBool:false];
+
+  [context save:&error];
+  
+  [fetcher release];
+	[fetchRequest release];
+  
+  return [fmd.older_available boolValue];
+}
 
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup {
   
@@ -218,7 +268,6 @@
     m.network_id = yam.network_id;
     m.latest_reply_id = [[NSNumber alloc] initWithLong:23423];
     m.privacy   = [[NSNumber alloc] initWithBool:NO];
-    m.threading = [[NSNumber alloc] initWithBool:NO];
   }
 
   NSError *error;
