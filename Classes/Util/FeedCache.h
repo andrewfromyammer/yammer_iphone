@@ -26,5 +26,6 @@ static int MAX_FEED_CACHE = 1000;
 + (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit;
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup;
 + (BOOL)createOrUpdateMetaData:(NSString *)feed updateOlderAvailable:(NSString *)older;
++ (void)purgeOldFeeds;
 
 @end

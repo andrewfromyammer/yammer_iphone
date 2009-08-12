@@ -33,6 +33,38 @@
   return nil;
 }
 
++ (void)purgeOldFeeds {
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
+  
+  NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+  
+  [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
+                                                                     initWithKey:@"last_update" ascending:YES], nil]];
+  
+	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                            managedObjectContext:context 
+                                                                              sectionNameKeyPath:@"last_update" 
+                                                                                       cacheName:@"Root"];
+  NSError *error;
+	[fetcher performFetch:&error];
+  
+  if ([fetcher.fetchedObjects count] > 500) {
+    FeedMetaData *fmd = [fetcher.fetchedObjects objectAtIndex:0];
+    NSString *feedCopy = [NSString stringWithString:fmd.feed];
+    [context deleteObject:fmd];     
+    [context save:&error];
+    
+    [FeedCache deleteOldMessages:feedCopy limit:false];
+  }
+
+  [fetcher release];
+	[fetchRequest release];
+  [context release];
+}
+
 + (NSDate *)loadFeedDate:(NSString *)url {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];

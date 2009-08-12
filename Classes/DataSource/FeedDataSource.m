@@ -44,8 +44,8 @@
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
-  [fetchRequest setFetchOffset:0];
-  [fetchRequest setFetchLimit:100];
+//  [fetchRequest setFetchOffset:0];
+//  [fetchRequest setFetchLimit:100];
   
   NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
   [fetchRequest setPredicate:feedPredicate];
@@ -55,7 +55,7 @@
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	
 	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
-                                                                                              managedObjectContext:context 
+                                                                                                 managedObjectContext:context 
                                                                                                 sectionNameKeyPath:@"message_id" 
                                                                                                          cacheName:@"Root"];
 	self.fetcher = aFetchedResultsController;
@@ -172,14 +172,17 @@
     } @catch (NSException *theErr) {}
   }
   
-  if (checkNew)
-    self.olderAvailable = [FeedCache writeCheckNew:feed
-                  messages:[NSMutableArray arrayWithArray:tempMessages] 
-                  more:olderAvailable];
-  else
-    [FeedCache writeFetchMore:feed
-                messages:[NSMutableArray arrayWithArray:tempMessages] 
+  @synchronized ([UIApplication sharedApplication]) {  
+    [FeedCache purgeOldFeeds];
+    if (checkNew)
+      self.olderAvailable = [FeedCache writeCheckNew:feed
+                    messages:[NSMutableArray arrayWithArray:tempMessages] 
                     more:olderAvailable];
+    else
+      [FeedCache writeFetchMore:feed
+                  messages:[NSMutableArray arrayWithArray:tempMessages] 
+                      more:olderAvailable];
+  }
 
   //  NSMutableDictionary *result = [NSMutableDictionary dictionary];
   //   [result setObject:@"1" forKey:@"replace_all"];

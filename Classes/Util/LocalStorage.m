@@ -180,6 +180,9 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
 }
 
 + (BOOL)threadedMode {
+  if (true)
+    return NO;
+  
   if ([LocalStorage getFile:SETTINGS]) {
     NSMutableDictionary *dict = [[LocalStorage getFile:SETTINGS] JSONValue];
     return [[dict objectForKey:@"threaded_mode"] isEqualToString:@"on"];
