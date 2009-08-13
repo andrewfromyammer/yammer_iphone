@@ -28,7 +28,7 @@
 @property (nonatomic, retain) UIImageView *actorPhoto;
 @property (nonatomic, retain) UIImageView *lockImage;
 
-- (void)setMessage:(Message *)message;
+- (void)setMessage:(Message *)message showReplyCounts:(BOOL)showReplyCounts;
 - (void)setHeightByPreview;
 - (void)setTimeLength;
 - (void)setFromLengthForLock;

@@ -19,18 +19,23 @@
 @implementation FeedCache
 
 
-+ (NSString *)feedCacheUniqueID:(NSString *)url {
++ (NSString *)feedCacheUniqueID:(NSMutableDictionary *)feed {
   // http://23434234/api/v1/messages/wefwef
   // http://23434234/api/v1/messages
   // /api/v1/messages/wefwef
   // /api/v1/messages
+  NSString *url = [feed objectForKey:@"url"];
+  NSString *result = nil;
   
   NSRange range = [url rangeOfString:@"/messages"];
   
   if (range.location != NSNotFound)
-    return [url substringFromIndex:range.location+8];
+    result = [url substringFromIndex:range.location+8];
+  
+  if ([LocalStorage threading] && [feed objectForKey:@"isThread"] == nil)
+    result = [NSString stringWithFormat:@"%@ t", result];
 
-  return nil;
+  return result;
 }
 
 + (void)purgeOldFeeds {
@@ -65,7 +70,7 @@
   [context release];
 }
 
-+ (NSDate *)loadFeedDate:(NSString *)url {
++ (NSDate *)loadFeedDate:(NSMutableDictionary *)feed {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];
   
@@ -73,7 +78,7 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
   
-  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", [FeedCache feedCacheUniqueID:url]];
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", [FeedCache feedCacheUniqueID:feed]];
   [fetchRequest setPredicate:feedPredicate];
   [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
                                                                      initWithKey:@"feed" ascending:NO], nil]];
@@ -101,10 +106,12 @@
 + (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages {
   // SELECT OUT ALL MESSAGES CURRENTLY IN DB FOR UPDATING:
   NSMutableArray *ids = [NSMutableArray array];
+  NSMutableDictionary *replyCounts = [NSMutableDictionary dictionary];
   int i=0;
   for (; i<[messages count]; i++) {
     NSMutableDictionary *dict = [messages objectAtIndex:i];
     [ids addObject:[[dict objectForKey:@"id"] description]];
+    [replyCounts setObject:[dict objectForKey:@"thread_latest_reply_id"] forKey:[[dict objectForKey:@"id"] description]];
   }
   
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -129,8 +136,10 @@
   NSMutableDictionary *id_lookup = [NSMutableDictionary dictionary];
   for (i=0; i<[fetcher.fetchedObjects count]; i++) {
     Message *m = [fetcher.fetchedObjects objectAtIndex:i];
+    m.latest_reply_id = [[NSNumber alloc] initWithLong:[[replyCounts objectForKey:[m.message_id description]] longValue]];
     [id_lookup setObject:@"true" forKey:[m.message_id description]];
   }  
+  [context save:&error];
   
   [fetcher release];
 	[fetchRequest release];
@@ -185,7 +194,7 @@
   } else {
     // update existing messages
     // add new messages
-    [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
+    [FeedCache writeNewMessages:feed messages:messages lookup:[FeedCache updateLastReplyIds:feed messages:messages]];
     // delete old ones past limit
     [FeedCache deleteOldMessages:feed limit:true];
     // set more = orig
@@ -292,7 +301,7 @@
     m.feed = feed;
     m.message_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"id"] longValue]];
     m.network_id = yam.network_id;
-    m.latest_reply_id = [[NSNumber alloc] initWithLong:23423];
+    m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
     if ([dict objectForKey:@"lock"])
       m.privacy = [[NSNumber alloc] initWithBool:YES];
     
@@ -302,6 +311,8 @@
     m.group_full_name = [dict objectForKey:@"group_full_name"];
     m.attachments_json = [[dict objectForKey:@"attachments"] JSONRepresentation];
     m.sender = [dict objectForKey:@"sender"];
+    m.thread_url = [dict objectForKey:@"thread_url"];
+    m.thread_updates = [[NSNumber alloc] initWithInt:[[dict objectForKey:@"thread_updates"] intValue]];
   }
 
   NSError *error;

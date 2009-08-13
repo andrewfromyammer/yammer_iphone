@@ -9,6 +9,7 @@
 #import "LocalStorage.h"
 #import "OAuthGateway.h"
 #import "NSString+SBJSON.h"
+#import "YammerAppDelegate.h"
 
 static NSString *ACCOUNT_DIR   = @"/account";
 static NSString *PHOTO_DIR     = @"/photos";
@@ -146,7 +147,7 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [LocalStorage removeFile:USER_CURRENT];
   [LocalStorage removeFile:DIRECTORY_CACHE];
   [LocalStorage removeFile:SETTINGS];
-  [LocalStorage removeFile:@"yammer.sqlite"];
+  [LocalStorage removeFile:MESSAGE_CACHE];
 }
 
 + (void)saveFeedInfo:(NSMutableDictionary *)feed {
@@ -179,10 +180,12 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   return dic;
 }
 
-+ (BOOL)threadedMode {
-  if (true)
-    return NO;
-  
++ (BOOL)threading {
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  return yam.threading;
+}
+
++ (BOOL)threadingFromDisk {
   if ([LocalStorage getFile:SETTINGS]) {
     NSMutableDictionary *dict = [[LocalStorage getFile:SETTINGS] JSONValue];
     return [[dict objectForKey:@"threaded_mode"] isEqualToString:@"on"];

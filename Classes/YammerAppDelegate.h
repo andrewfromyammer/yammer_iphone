@@ -18,13 +18,15 @@
   NSManagedObjectModel *managedObjectModel;
   NSManagedObjectContext *managedObjectContext;	    
   NSPersistentStoreCoordinator *persistentStoreCoordinator;
+  
+  BOOL threading;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) NSString *launchURL;
 @property (nonatomic, retain) IBOutlet UIViewController *mainView;
 @property (nonatomic, retain) NSNumber *network_id;
-
+@property BOOL threading;
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;

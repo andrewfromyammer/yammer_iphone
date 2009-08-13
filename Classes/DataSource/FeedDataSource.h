@@ -15,18 +15,19 @@
   BOOL fetchingMore;
   NSString *feed;
   NSFetchedResultsController *fetcher;
+  BOOL showReplyCounts;
 }
 
 @property (nonatomic,retain) NSMutableArray *messages;
 @property BOOL olderAvailable;
 @property BOOL fetchingMore;
+@property BOOL showReplyCounts;
 @property (nonatomic,retain) NSString *feed;
 @property (nonatomic,retain) NSFetchedResultsController *fetcher;
 
 - (id)initWithEmpty;
-- (id)initWithFeed:(NSString *)url;
+- (id)initWithFeed:(NSMutableDictionary *)theFeed;
 - (void)fetch;
-- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore;
 - (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew;
 
 

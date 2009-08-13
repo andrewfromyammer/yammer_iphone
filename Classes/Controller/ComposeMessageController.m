@@ -42,8 +42,9 @@
 }
 
 - (void)viewDidLoad {
-  [self.topLabel setText:[meta objectForKey:@"display"]];
-  self.navigationItem.titleView = self.topLabel;
+  //[self.topLabel setText:[meta objectForKey:@"display"]];
+  //self.navigationItem.titleView = self.topLabel;
+  self.title = [meta objectForKey:@"display"];
 
   UIBarButtonItem *draft=[[UIBarButtonItem alloc] init];
   draft.title=@"Close";

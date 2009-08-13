@@ -19,8 +19,8 @@ static int MAX_FEED_CACHE = 200;
 + (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
 
 + (NSString *)niceDate:(NSDate *)date;
-+ (NSDate *)loadFeedDate:(NSString *)url;
-+ (NSString *)feedCacheUniqueID:(NSString *)url;
++ (NSDate *)loadFeedDate:(NSMutableDictionary *)feed;
++ (NSString *)feedCacheUniqueID:(NSMutableDictionary *)feed;
 + (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages;
 
 + (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit;

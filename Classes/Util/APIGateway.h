@@ -19,9 +19,9 @@
 + (NSMutableArray *)users:(int)page style:(NSString *)style;
 + (NSMutableDictionary *)userById:(NSString *)theUserId;
 
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSNumber *)olderThan style:(NSString *)style;
-+ (NSMutableDictionary *)messages:(NSString *)url newerThan:(NSNumber *)newerThan style:(NSString *)style;
-+ (NSMutableDictionary *)messages:(NSString *)url olderThan:(NSNumber *)olderThan newerThan:(NSNumber *)newerThan style:(NSString *)style;
++ (NSMutableDictionary *)messages:(NSMutableDictionary *)feed olderThan:(NSNumber *)olderThan style:(NSString *)style;
++ (NSMutableDictionary *)messages:(NSMutableDictionary *)feed newerThan:(NSNumber *)newerThan style:(NSString *)style;
++ (NSMutableDictionary *)messages:(NSMutableDictionary *)feed olderThan:(NSNumber *)olderThan newerThan:(NSNumber *)newerThan style:(NSString *)style;
 
 + (BOOL)createMessage:(NSString *)body repliedToId:(NSNumber *)repliedToId 
               groupId:(NSNumber *)groupId

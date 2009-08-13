@@ -19,6 +19,7 @@
 @synthesize launchURL;
 @synthesize mainView;
 @synthesize network_id;
+@synthesize threading;
 
 - (void)askLoginOrSignup {
   UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please login or signup:"
@@ -32,6 +33,7 @@
 - (void)setupMainView {
   long nid = [[[[LocalStorage getFile:USER_CURRENT] JSONValue] objectForKey:@"network_id"] longValue];
   self.network_id = [[NSNumber alloc] initWithLong:nid];
+  self.threading = [LocalStorage threadingFromDisk];
   
   mainView = [[MainTabBarController alloc] init];
   
@@ -153,7 +155,7 @@
     return persistentStoreCoordinator;
   }
 	
-	NSString *storePath = [[LocalStorage localPath] stringByAppendingPathComponent: @"yammer.sqlite"];  
+	NSString *storePath = [[LocalStorage localPath] stringByAppendingPathComponent: MESSAGE_CACHE];  
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
 	
 	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];	

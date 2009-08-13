@@ -63,7 +63,7 @@
 	self.theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	self.theTableView.delegate = self;
-  self.dataSource = [[FeedDataSource alloc] initWithFeed:[feed objectForKey:@"url"]];
+  self.dataSource = [[FeedDataSource alloc] initWithFeed:feed];
 	self.theTableView.dataSource = self.dataSource;
     
   [self.spinnerWithText displayCheckingNew];
@@ -88,7 +88,7 @@
     newerThan = m.message_id;
   } @catch (NSException *theErr) {}
     
-  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] newerThan:newerThan style:style];
+  NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
   if (dict) {
     [dataSource proccesMessages:dict checkNew:true];
     [dataSource fetch];
@@ -105,7 +105,7 @@
 }
 
 - (void)displayLastUpdated {
-  NSDate *date = [FeedCache loadFeedDate:[feed objectForKey:@"url"]];  
+  NSDate *date = [FeedCache loadFeedDate:feed];  
   if (date)
     [self.spinnerWithText setText:[FeedCache niceDate:date]];
   else
@@ -120,7 +120,7 @@
     [meta setObject:[feed objectForKey:@"group_id"] forKey:@"group_id"];
   else
     name = @"My Colleagues";
-  [meta setObject:[NSString stringWithFormat:@"Share something with %@:", name] forKey:@"display"];
+  [meta setObject:[NSString stringWithFormat:@"To: %@", name] forKey:@"display"];
 
   
   [self presentModalViewController:[ComposeMessageController getNav:meta] animated:YES];
@@ -136,30 +136,32 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (indexPath.section == 1)
     return 50.0;
-  // NSString UIKit Additions Reference
-  // UILineBreakModeTailTruncation UILineBreakModeWordWrap
-  // [NSString sizeWithFont] 
-  // CGSize maxSize = CGSizeMake(mViewBounds.size.width, [UIFont labelFontSize]);
-  // mTempSize = [text sizeWithFont:font constrainedToSize:maxSize lineBreakMode:UILineBreakModeTailTruncation];
-  // [self prepLayoutForCellAtIndex:index];
   UITableViewCell *cell = [dataSource tableView: tableView cellForRowAtIndexPath: indexPath];
   return cell.bounds.size.height;
-
-  //MessageTableCell *cell = (MessageTableCell *)[dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
-  //if ([cell length] > 50)
-  //  return 65.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
   if (indexPath.section == 0) {
-    MessageViewController *localMessageViewController = [[MessageViewController alloc] 
-                                                         initWithBooleanForThreadIcon:threadIcon 
-                                                         list:dataSource.fetcher.fetchedObjects
-                                                         index:indexPath.row];
-    [self.navigationController pushViewController:localMessageViewController animated:YES];
-    [localMessageViewController release];
+    if ([LocalStorage threading] && [feed objectForKey:@"isThread"] == nil) {
+      Message *message = [dataSource.fetcher.fetchedObjects objectAtIndex:indexPath.row];
+      NSMutableDictionary *threadFeed = [NSMutableDictionary dictionary];
+      [threadFeed setObject:message.thread_url forKey:@"url"];
+      [threadFeed setObject:@"true" forKey:@"isThread"];
+      
+      FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:threadFeed threadIcon:false refresh:false compose:false];
+      localFeedMessageList.title = @"Thread";
+      [self.navigationController pushViewController:localFeedMessageList animated:YES];
+      [localFeedMessageList release];    
+    } else {
+      MessageViewController *localMessageViewController = [[MessageViewController alloc] 
+                                                           initWithBooleanForThreadIcon:threadIcon 
+                                                           list:dataSource.fetcher.fetchedObjects
+                                                           index:indexPath.row];
+      [self.navigationController pushViewController:localMessageViewController animated:YES];
+      [localMessageViewController release];    
+    }
   } else {
     if ([dataSource.fetcher.fetchedObjects count] < MAX_FEED_CACHE) {
       SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];

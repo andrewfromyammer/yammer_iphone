@@ -46,10 +46,7 @@
   
   [toggle addTarget:self action:@selector(handleClick) forControlEvents:UIControlEventTouchUpInside];
     
-  [self.view addSubview:toggle];
-  
-  [LocalStorage removeFile:@"yammer.sqlite"];
-  [LocalStorage removeFile:@"photos"];
+  [self.view addSubview:toggle];  
 }
 
 

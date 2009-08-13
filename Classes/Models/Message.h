@@ -21,6 +21,8 @@
 @property (nonatomic, retain) NSString *attachments_json;
 
 @property (nonatomic, retain) NSString *sender;
+@property (nonatomic, retain) NSString *thread_url;
+@property (nonatomic, retain) NSNumber *thread_updates;
 
 
 @end

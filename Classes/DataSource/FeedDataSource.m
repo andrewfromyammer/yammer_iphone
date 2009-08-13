@@ -14,6 +14,7 @@
 #import "SpinnerCell.h"
 #import "Message.h"
 #import "YammerAppDelegate.h"
+#import "LocalStorage.h"
 
 @implementation FeedDataSource
 
@@ -22,7 +23,7 @@
 @synthesize fetchingMore;
 @synthesize feed;
 @synthesize fetcher;
-
+@synthesize showReplyCounts;
 
 - (id)initWithEmpty {
   self.messages = [NSMutableArray array];
@@ -30,8 +31,11 @@
   return self;
 }
 
-- (id)initWithFeed:(NSString *)url {
-  self.feed = [FeedCache feedCacheUniqueID:url];
+- (id)initWithFeed:(NSMutableDictionary *)theFeed {
+  self.feed = [FeedCache feedCacheUniqueID:theFeed];
+  self.showReplyCounts = false;
+  if ([LocalStorage threading] && [theFeed objectForKey:@"isThread"] == nil)
+    self.showReplyCounts = true;
   [self fetch];
   return self;
 }
@@ -69,12 +73,6 @@
   [context release];
 }
 
-- (id)initWithMessages:(NSMutableArray *)cachedMessages feed:(NSMutableDictionary *)feed more:(BOOL)hasMore {
-  self.messages = cachedMessages;
-  [self processImagesAndTime:self.messages];
-  self.olderAvailable = hasMore;
-  return self;
-}
 
 - (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew {
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
@@ -128,7 +126,7 @@
       referencesById = [referencesByType objectForKey:@"thread"];
       NSMutableDictionary *threadRef = [referencesById objectForKey:[message objectForKey:@"thread_id"]];
       if (threadRef) {  
-        [message setObject:[threadRef objectForKey:@"web_url"] forKey:@"thread_url"];
+        [message setObject:[threadRef objectForKey:@"url"] forKey:@"thread_url"];
         NSMutableDictionary *threadStats = [threadRef objectForKey:@"stats"];
         [message setObject:[threadStats objectForKey:@"updates"] forKey:@"thread_updates"];
         [message setObject:[threadStats objectForKey:@"first_reply_id"] forKey:@"thread_first_reply_id"];
@@ -182,10 +180,6 @@
                   messages:[NSMutableArray arrayWithArray:tempMessages] 
                       more:olderAvailable];
   }
-
-  //  NSMutableDictionary *result = [NSMutableDictionary dictionary];
-  //   [result setObject:@"1" forKey:@"replace_all"];
- // [result setObject:tempMessages forKey:@"messages"]; 
 }
 
 
@@ -210,7 +204,7 @@
     
     Message *message = [fetcher.fetchedObjects objectAtIndex:indexPath.row];
     
-    [cell setMessage:message];
+    [cell setMessage:message showReplyCounts:showReplyCounts];
     return cell;
   } else if (indexPath.section == 1) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];

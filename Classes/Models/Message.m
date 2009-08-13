@@ -20,5 +20,7 @@
 @dynamic attachments_json;
 
 @dynamic sender;
+@dynamic thread_url;
+@dynamic thread_updates;
 
 @end

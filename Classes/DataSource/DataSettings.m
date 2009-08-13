@@ -12,6 +12,7 @@
 #import "OAuthCustom.h"
 #import "NSString+SBJSON.h"
 #import "NSObject+SBJSON.h"
+#import "YammerAppDelegate.h"
 
 @implementation DataSettings
 
@@ -72,12 +73,12 @@
   } else {
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if (indexPath.row == 0) {
-      cell.textLabel.text = @"Threaded Mode";
+      cell.textLabel.text = @"Threading";
       cell.imageView.image = [UIImage imageNamed:@"threaded_mode.png"];
       cell.accessoryType = UITableViewCellAccessoryNone;
       UISwitch *switchView = [[UISwitch alloc] init];
       cell.accessoryView = switchView;
-      [switchView setOn:[LocalStorage threadedMode] animated:NO];
+      [switchView setOn:[LocalStorage threading] animated:NO];
       [switchView addTarget:self action:@selector(switchWasChanged:) forControlEvents:UIControlEventValueChanged];
       [switchView release];
     } else if (indexPath.row == 1) {
@@ -104,6 +105,9 @@
     [dict setObject:@"off" forKey:@"threaded_mode"];
 
   [LocalStorage saveFile:SETTINGS data:[dict JSONRepresentation]];
+  
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  yam.threading = switchView.on;
 }
 
 - (void)dealloc {

@@ -155,9 +155,10 @@
 }
 
 - (void)threadView {
-  NSMutableDictionary *message = [theList objectAtIndex:theIndex];
+  Message *message = [theList objectAtIndex:theIndex];
   NSMutableDictionary *feed = [NSMutableDictionary dictionary];
-  [feed setObject:[NSString stringWithFormat:@"/api/v1/messages/in_thread/%@", [message objectForKey:@"thread_id"]] forKey:@"url"];
+  [feed setObject:message.thread_url forKey:@"url"];
+  [feed setObject:@"true" forKey:@"isThread"];
   
   FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:feed threadIcon:false refresh:false compose:false];
   localFeedMessageList.title = @"Thread";
@@ -166,9 +167,9 @@
 }
 
 - (void)userView {
-  NSMutableDictionary *message = [theList objectAtIndex:theIndex];
+  Message *message = [theList objectAtIndex:theIndex];
   DirectoryUserProfile *localDirectoryUserProfile = [[DirectoryUserProfile alloc] 
-                                                     initWithUserId:[[message objectForKey:@"sender_id"] description]
+                                                     initWithUserId:[message.actor_id description]
                                                      tabs:false];
   [self.navigationController pushViewController:localDirectoryUserProfile animated:YES];
   [localDirectoryUserProfile release];

@@ -86,7 +86,7 @@
   [autoreleasepool release];
 }
 
-- (void)setMessage:(Message *)message {
+- (void)setMessage:(Message *)message showReplyCounts:(BOOL)showReplyCounts {
   NSData *imageData = [ImageCache getImage:[message.actor_id description] type:message.actor_type];
   if (imageData)
     self.actorPhoto.image = [[UIImage alloc] initWithData:imageData];
@@ -105,12 +105,11 @@
     self.theWordIn.text = @"";
   }
   
-  NSString *thread_updates = nil; //[message objectForKey:@"thread_updates"];
-  if (thread_updates && [LocalStorage threadedMode]) {
-    if ([thread_updates intValue] > 99)
+  if (showReplyCounts) {
+    if ([message.thread_updates intValue] > 99)
       self.replyCount.text = @"99";
     else
-      self.replyCount.text = [thread_updates description];
+      self.replyCount.text = [message.thread_updates description];
   }
   else
     self.replyCount.text = @"";
