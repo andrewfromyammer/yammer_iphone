@@ -126,6 +126,9 @@
 }
 
 - (void)refresh {
+  self.dataSource = [[FeedDataSource alloc] initWithFeed:feed];
+	self.theTableView.dataSource = self.dataSource;
+  
   [spinnerWithText displayCheckingNew];
   [spinnerWithText showTheSpinner];
   
@@ -143,16 +146,26 @@
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
   if (indexPath.section == 0) {
+    Message *message = [dataSource.fetcher.fetchedObjects objectAtIndex:indexPath.row];
+
     if ([LocalStorage threading] && [feed objectForKey:@"isThread"] == nil) {
-      Message *message = [dataSource.fetcher.fetchedObjects objectAtIndex:indexPath.row];
-      NSMutableDictionary *threadFeed = [NSMutableDictionary dictionary];
-      [threadFeed setObject:message.thread_url forKey:@"url"];
-      [threadFeed setObject:@"true" forKey:@"isThread"];
-      
-      FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:threadFeed threadIcon:false refresh:false compose:false];
-      localFeedMessageList.title = @"Thread";
-      [self.navigationController pushViewController:localFeedMessageList animated:YES];
-      [localFeedMessageList release];    
+      if ([message.thread_updates intValue] > 1) {
+        NSMutableDictionary *threadFeed = [NSMutableDictionary dictionary];
+        [threadFeed setObject:message.thread_url forKey:@"url"];
+        [threadFeed setObject:@"true" forKey:@"isThread"];
+        
+        FeedMessageList *localFeedMessageList = [[FeedMessageList alloc] initWithDict:threadFeed threadIcon:false refresh:false compose:false];
+        localFeedMessageList.title = @"Thread";
+        [self.navigationController pushViewController:localFeedMessageList animated:YES];
+        [localFeedMessageList release];
+      } else {
+        MessageViewController *localMessageViewController = [[MessageViewController alloc] 
+                                                             initWithBooleanForThreadIcon:threadIcon 
+                                                             list:[NSArray arrayWithObjects: message, nil]
+                                                             index:0];
+        [self.navigationController pushViewController:localMessageViewController animated:YES];
+        [localMessageViewController release];        
+      }
     } else {
       MessageViewController *localMessageViewController = [[MessageViewController alloc] 
                                                            initWithBooleanForThreadIcon:threadIcon 

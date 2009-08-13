@@ -35,7 +35,7 @@
   self.network_id = [[NSNumber alloc] initWithLong:nid];
   self.threading = [LocalStorage threadingFromDisk];
   
-  mainView = [[MainTabBarController alloc] init];
+  self.mainView = [[MainTabBarController alloc] init];
   
   UIView *image = [[self.window subviews] objectAtIndex:0];
   [image removeFromSuperview];
@@ -121,11 +121,10 @@
 }
 
 - (void)teleportToUserFeed:(FeedMessageList *)feed {
-  MainTabBarController *tabBarController = (MainTabBarController *)mainView;
-  UINavigationController *nav = (UINavigationController *)[tabBarController selectedViewController];
+  UINavigationController *nav = (UINavigationController *)[mainView selectedViewController];
   [nav popToRootViewControllerAnimated:NO];
-  tabBarController.selectedIndex = 2;
-  nav = (UINavigationController *)[tabBarController selectedViewController];
+  mainView.selectedIndex = 2;
+  nav = (UINavigationController *)[mainView selectedViewController];
   [nav popToRootViewControllerAnimated:NO];
   [nav pushViewController:feed animated:NO];
   [feed release];
@@ -160,6 +159,21 @@
 		exit(-1);  // Fail
   }
   return coordinator;
+}
+
+- (void)resetForNewThreadingValue {
+  int i=0;
+  for (i=0; i<2; i++) {
+    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
+    [nav popToRootViewControllerAnimated:NO];
+    FeedMessageList *fml = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
+    [fml refresh];
+  }
+  
+  for (i=2; i<5; i++) {
+    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
+    [nav popToRootViewControllerAnimated:NO];
+  }
 }
 
 

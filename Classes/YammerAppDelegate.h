@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "FeedMessageList.h"
+#import "MainTabBarController.h"
 
 @interface YammerAppDelegate : NSObject <UIApplicationDelegate, UIActionSheetDelegate> {
   UIWindow *window;
-  UIViewController *mainView;
+  MainTabBarController *mainView;
   NSString *launchURL;
   NSNumber *network_id;
                                            
@@ -24,7 +25,7 @@
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) NSString *launchURL;
-@property (nonatomic, retain) IBOutlet UIViewController *mainView;
+@property (nonatomic, retain) IBOutlet MainTabBarController *mainView;
 @property (nonatomic, retain) NSNumber *network_id;
 @property BOOL threading;
 
@@ -36,6 +37,6 @@
 - (void)teleportToUserFeed:(FeedMessageList *)feed;
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url;
 + (void)showError:(NSString *)error style:(NSString *)style;
-
+- (void)resetForNewThreadingValue;
 @end
 
