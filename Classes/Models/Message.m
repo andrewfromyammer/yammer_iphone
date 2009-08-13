@@ -11,6 +11,7 @@
 @dynamic feed;
 
 @dynamic created_at;
+@dynamic latest_reply_at;
 @dynamic network_id;
 
 @dynamic actor_mugshot_url;

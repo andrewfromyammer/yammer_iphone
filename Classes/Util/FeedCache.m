@@ -139,6 +139,7 @@
     NSMutableDictionary *dict = [counts objectForKey:[m.message_id description]];
     m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
     m.thread_updates  = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_updates"] longValue]];
+    m.latest_reply_at = [FeedCache dateFromText:[dict objectForKey:@"thread_latest_reply_at"]];    
     [id_lookup setObject:@"true" forKey:[m.message_id description]];
   }  
   [context save:&error];
@@ -301,10 +302,9 @@
     NSMutableDictionary *body = [dict objectForKey:@"body"];
     m.plain_body = [body objectForKey:@"plain"];
         
-    NSString *createdAt = [dict objectForKey:@"created_at"];
-    NSString *front = [createdAt substringToIndex:10];
-    NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
-    m.created_at = [NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]];
+    m.created_at = [FeedCache dateFromText:[dict objectForKey:@"created_at"]];
+    m.latest_reply_at = [FeedCache dateFromText:[dict objectForKey:@"thread_latest_reply_at"]];
+
     m.feed = feed;
     m.message_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"id"] longValue]];
     m.network_id = yam.network_id;
@@ -327,6 +327,16 @@
   [context save:&error];  
   [context release];
 
+}
+
++ (NSDate *)dateFromText:(NSString *)text {
+  @try {
+    NSString *front = [text substringToIndex:10];
+    NSString *end = [[text substringFromIndex:11] substringToIndex:8];
+    return [NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]];
+  } @catch (NSException *error) {}
+  
+  return nil;
 }
 
 + (NSString *)niceDate:(NSDate *)date {

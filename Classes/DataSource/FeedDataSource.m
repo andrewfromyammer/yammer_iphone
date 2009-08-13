@@ -133,7 +133,8 @@
         [message setObject:[threadStats objectForKey:@"updates"] forKey:@"thread_updates"];
         [message setObject:[threadStats objectForKey:@"first_reply_id"] forKey:@"thread_first_reply_id"];
         [message setObject:[threadStats objectForKey:@"first_reply_at"] forKey:@"thread_first_reply_at"];
-        [message setObject:[threadStats objectForKey:@"latest_reply_id"] forKey:@"thread_latest_reply_id"];        
+        [message setObject:[threadStats objectForKey:@"latest_reply_id"] forKey:@"thread_latest_reply_id"];
+        [message setObject:[threadStats objectForKey:@"latest_reply_at"] forKey:@"thread_latest_reply_at"];
       }
       
       referencesById = [referencesByType objectForKey:@"group"];

@@ -108,6 +108,8 @@
   if (showReplyCounts) {
     if ([message.thread_updates intValue] > 99)
       self.replyCount.text = @"99";
+    else if ([message.thread_updates intValue] <= 0)
+      self.replyCount.text = @"1";
     else
       self.replyCount.text = [message.thread_updates description];
   }
@@ -116,7 +118,11 @@
   
   [self setHeightByPreview];
   
-  self.time.text = [message.created_at agoDate];
+  if (showReplyCounts && message.latest_reply_at != nil)
+    self.time.text = [message.latest_reply_at agoDate];  
+  else
+    self.time.text = [message.created_at agoDate];
+  
   [self setTimeLength];
   if ([message.privacy boolValue]) {
     [self setFromLengthForLock];

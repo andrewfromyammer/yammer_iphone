@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-static int MAX_FEED_CACHE = 200;
+static int MAX_FEED_CACHE = 60;
 
 
 @interface FeedCache : NSObject {
@@ -27,5 +27,6 @@ static int MAX_FEED_CACHE = 200;
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup;
 + (BOOL)createOrUpdateMetaData:(NSString *)feed updateOlderAvailable:(NSString *)older;
 + (void)purgeOldFeeds;
++ (NSDate *)dateFromText:(NSString *)text;
 
 @end

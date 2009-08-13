@@ -55,9 +55,10 @@
   self.tableAndSpinner = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   self.tableAndSpinner.backgroundColor = [UIColor whiteColor];
   
-  int height = 337;
-  if (!self.threadIcon)
-    height = 385;
+  int height = 385;
+  if (self.threadIcon || ([feed objectForKey:@"isThread"] != nil && [LocalStorage threading]))
+    height = 337;
+  
   self.theTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, height) style:UITableViewStylePlain];
 	self.theTableView.autoresizingMask = (UIViewAutoresizingNone);
 	self.theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;

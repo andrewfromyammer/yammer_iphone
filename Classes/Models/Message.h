@@ -11,6 +11,7 @@
 @property (nonatomic, retain) NSString *feed;
 
 @property (nonatomic, retain) NSDate *created_at;
+@property (nonatomic, retain) NSDate *latest_reply_at;
 @property (nonatomic, retain) NSNumber *network_id;
 
 
