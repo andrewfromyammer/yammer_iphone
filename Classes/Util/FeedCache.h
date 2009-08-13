@@ -15,15 +15,15 @@ static int MAX_FEED_CACHE = 200;
 
 }
 
-+ (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
-+ (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable;
++ (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable useLatestReply:(BOOL)useLatestReply;
++ (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable useLatestReply:(BOOL)useLatestReply;
 
 + (NSString *)niceDate:(NSDate *)date;
 + (NSDate *)loadFeedDate:(NSMutableDictionary *)feed;
 + (NSString *)feedCacheUniqueID:(NSMutableDictionary *)feed;
 + (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages;
 
-+ (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit;
++ (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit useLatestReply:(BOOL)useLatestReply;
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup;
 + (BOOL)createOrUpdateMetaData:(NSString *)feed updateOlderAvailable:(NSString *)older;
 + (void)purgeOldFeeds;

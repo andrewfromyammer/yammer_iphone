@@ -24,6 +24,7 @@
 @synthesize feed;
 @synthesize fetcher;
 @synthesize showReplyCounts;
+@synthesize context;
 
 - (id)initWithEmpty {
   self.messages = [NSMutableArray array];
@@ -41,8 +42,12 @@
 }
 
 - (void)fetch {
+  NSString *order_by = @"message_id";
+  if (showReplyCounts)
+    order_by = @"latest_reply_id";
+  
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSManagedObjectContext *context = [yam managedObjectContext];
+  self.context = [yam managedObjectContext];
 
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
@@ -53,24 +58,21 @@
   NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
   [fetchRequest setPredicate:feedPredicate];
   
-	NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"message_id" ascending:NO];
+	NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:order_by ascending:NO];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:descriptor, nil];
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	
-	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
-                                                                                                 managedObjectContext:context 
-                                                                                                sectionNameKeyPath:@"message_id" 
-                                                                                                         cacheName:@"Root"];
-	self.fetcher = aFetchedResultsController;
+	self.fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                     managedObjectContext:context 
+                                                                     sectionNameKeyPath:order_by 
+                                                                     cacheName:@"Root"];
   
   NSError *error;
 	[fetcher performFetch:&error];
 	
-	[aFetchedResultsController release];
 	[fetchRequest release];
 	[descriptor release];
 	[sortDescriptors release];  
-  [context release];
 }
 
 
@@ -174,11 +176,13 @@
     if (checkNew)
       self.olderAvailable = [FeedCache writeCheckNew:feed
                     messages:[NSMutableArray arrayWithArray:tempMessages] 
-                    more:olderAvailable];
+                    more:olderAvailable
+                    useLatestReply:showReplyCounts];
     else
       [FeedCache writeFetchMore:feed
                   messages:[NSMutableArray arrayWithArray:tempMessages] 
-                      more:olderAvailable];
+                      more:olderAvailable
+                      useLatestReply:showReplyCounts];
   }
 }
 
@@ -239,6 +243,7 @@
   [messages release];
   [feed release];
   [fetcher release];
+  [context release];
   [super dealloc];
 }
 

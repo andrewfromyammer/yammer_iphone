@@ -92,8 +92,8 @@
     self.actorPhoto.image = [[UIImage alloc] initWithData:imageData];
   else
     [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:message];
-  self.from.text = message.from; //[message objectForKey:@"fromLine"];
-  
+  self.from.text = message.from;
+
   self.preview.text = message.plain_body;
   
   if (message.group_full_name) {

@@ -143,30 +143,23 @@
 }
 
 - (NSManagedObjectModel *)managedObjectModel {	
-  if (managedObjectModel != nil) {
-    return managedObjectModel;
-  }
-  managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
-  return managedObjectModel;
+  return [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+//  return managedObjectModel;
 }
 
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {	
-  if (persistentStoreCoordinator != nil) {
-    return persistentStoreCoordinator;
-  }
-	
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {		
 	NSString *storePath = [[LocalStorage localPath] stringByAppendingPathComponent: MESSAGE_CACHE];  
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
 	
-	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];	
-  persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: [self managedObjectModel]];
+	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+  NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: [self managedObjectModel]];
   
 	NSError *error;
-	if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
+	if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		exit(-1);  // Fail
   }
-  return persistentStoreCoordinator;
+  return coordinator;
 }
 
 

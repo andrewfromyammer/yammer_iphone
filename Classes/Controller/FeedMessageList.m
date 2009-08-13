@@ -85,17 +85,16 @@
   NSNumber *newerThan=nil;
   @try {
     Message *m = [dataSource.fetcher.fetchedObjects objectAtIndex:0];
-    newerThan = m.message_id;
+    if ([LocalStorage threading] && [feed objectForKey:@"isThread"] == nil) 
+      newerThan = m.latest_reply_id;
+    else
+      newerThan = m.message_id;
   } @catch (NSException *theErr) {}
     
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
   if (dict) {
     [dataSource proccesMessages:dict checkNew:true];
-    [dataSource fetch];
-    
-    //[dataSource processImagesAndTime];
-    
-    
+    [dataSource fetch];    
     [theTableView reloadData];
   }
   
@@ -176,13 +175,9 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
   Message *m = [dataSource.fetcher.fetchedObjects lastObject];
-  NSMutableDictionary *dict = [APIGateway messages:[feed objectForKey:@"url"] olderThan:m.message_id style:nil];
-  if (dict) {
+  NSMutableDictionary *dict = [APIGateway messages:feed olderThan:m.message_id style:nil];
+  if (dict)
     [dataSource proccesMessages:dict checkNew:false];
-    //NSMutableArray *messages = [result objectForKey:@"messages"];
-    //[dataSource processImagesAndTime:messages];
-    //[dataSource.messages addObjectsFromArray:messages];
-  }
   
   NSUInteger newIndex[] = {1, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];

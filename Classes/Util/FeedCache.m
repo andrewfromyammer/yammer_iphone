@@ -62,7 +62,7 @@
     [context deleteObject:fmd];
     [context save:&error];
     
-    [FeedCache deleteOldMessages:feedCopy limit:false];
+    [FeedCache deleteOldMessages:feedCopy limit:false useLatestReply:false];
   }
 
   [fetcher release];
@@ -106,12 +106,12 @@
 + (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages {
   // SELECT OUT ALL MESSAGES CURRENTLY IN DB FOR UPDATING:
   NSMutableArray *ids = [NSMutableArray array];
-  NSMutableDictionary *replyCounts = [NSMutableDictionary dictionary];
+  NSMutableDictionary *counts = [NSMutableDictionary dictionary];
   int i=0;
   for (; i<[messages count]; i++) {
     NSMutableDictionary *dict = [messages objectAtIndex:i];
     [ids addObject:[[dict objectForKey:@"id"] description]];
-    [replyCounts setObject:[dict objectForKey:@"thread_latest_reply_id"] forKey:[[dict objectForKey:@"id"] description]];
+    [counts setObject:dict forKey:[[dict objectForKey:@"id"] description]];
   }
   
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -136,7 +136,9 @@
   NSMutableDictionary *id_lookup = [NSMutableDictionary dictionary];
   for (i=0; i<[fetcher.fetchedObjects count]; i++) {
     Message *m = [fetcher.fetchedObjects objectAtIndex:i];
-    m.latest_reply_id = [[NSNumber alloc] initWithLong:[[replyCounts objectForKey:[m.message_id description]] longValue]];
+    NSMutableDictionary *dict = [counts objectForKey:[m.message_id description]];
+    m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
+    m.thread_updates  = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_updates"] longValue]];
     [id_lookup setObject:@"true" forKey:[m.message_id description]];
   }  
   [context save:&error];
@@ -144,11 +146,16 @@
   [fetcher release];
 	[fetchRequest release];
   [context release];
+  [counts release];
   
   return id_lookup;
 }
 
-+ (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit {  
++ (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit useLatestReply:(BOOL)useLatestReply {
+  NSString *order_by = @"message_id";
+  if (useLatestReply)
+    order_by = @"latest_reply_id";
+  
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];
   
@@ -161,11 +168,11 @@
   if (limit)
     [fetchRequest setFetchOffset:MAX_FEED_CACHE];
   [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
-                                                                     initWithKey:@"message_id" ascending:NO], nil]];
+                                                                     initWithKey:order_by ascending:NO], nil]];
   
 	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
                                                                             managedObjectContext:context 
-                                                                              sectionNameKeyPath:@"message_id" 
+                                                                              sectionNameKeyPath:order_by 
                                                                                        cacheName:@"Root"];
   NSError *error;
 	[fetcher performFetch:&error];
@@ -181,11 +188,11 @@
 
 }
 
-+ (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
++ (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable useLatestReply:(BOOL)useLatestReply {
 
   if (olderAvailable) {
     // truncate entire feed
-    [FeedCache deleteOldMessages:feed limit:false];
+    [FeedCache deleteOldMessages:feed limit:false useLatestReply:false];
     // add messages
     [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
     // set more = true
@@ -196,20 +203,20 @@
     // add new messages
     [FeedCache writeNewMessages:feed messages:messages lookup:[FeedCache updateLastReplyIds:feed messages:messages]];
     // delete old ones past limit
-    [FeedCache deleteOldMessages:feed limit:true];
+    [FeedCache deleteOldMessages:feed limit:true useLatestReply:useLatestReply];
     // set more = orig
     return [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:nil];
   }
 }
 
-+ (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable {
++ (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable useLatestReply:(BOOL)useLatestReply {
   
   if (olderAvailable) {
     // update existing messages
     // add new messages
     [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
     // delete old ones past limit
-    [FeedCache deleteOldMessages:feed limit:true];
+    [FeedCache deleteOldMessages:feed limit:true useLatestReply:useLatestReply];
     // set more = true
     [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
   } else {
@@ -217,7 +224,7 @@
     // add new messages
     [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
     // delete old ones past limit
-    [FeedCache deleteOldMessages:feed limit:true];
+    [FeedCache deleteOldMessages:feed limit:true useLatestReply:useLatestReply];
     // set more = false
     [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"false"];
   }
@@ -296,12 +303,13 @@
         
     NSString *createdAt = [dict objectForKey:@"created_at"];
     NSString *front = [createdAt substringToIndex:10];
-    NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];    
+    NSString *end = [[createdAt substringFromIndex:11] substringToIndex:8];
     m.created_at = [NSDate dateWithString:[NSString stringWithFormat:@"%@ %@ -0000", front, end]];
     m.feed = feed;
     m.message_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"id"] longValue]];
     m.network_id = yam.network_id;
     m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
+        
     if ([dict objectForKey:@"lock"])
       m.privacy = [[NSNumber alloc] initWithBool:YES];
     
