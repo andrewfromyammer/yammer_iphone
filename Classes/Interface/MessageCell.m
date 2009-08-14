@@ -106,12 +106,13 @@
   }
   
   if (showReplyCounts) {
-    if ([message.thread_updates intValue] > 99)
+    int rcount = [message.thread_updates intValue] - 1;
+    if (rcount > 99)
       self.replyCount.text = @"99";
-    else if ([message.thread_updates intValue] <= 0)
-      self.replyCount.text = @"1";
+    else if (rcount <= 0)
+      self.replyCount.text = @"";
     else
-      self.replyCount.text = [message.thread_updates description];
+      self.replyCount.text = [NSString stringWithFormat:@"%d", rcount];
   }
   else
     self.replyCount.text = @"";

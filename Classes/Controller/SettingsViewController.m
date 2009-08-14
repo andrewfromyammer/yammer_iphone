@@ -58,7 +58,6 @@
 - (void)loadUserCurrent {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   
-  sleep(2);
   NSMutableDictionary *dict;
   NSString *cached = [LocalStorage getFile:USER_CURRENT];
   if (cached)

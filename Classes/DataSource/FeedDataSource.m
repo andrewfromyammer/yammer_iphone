@@ -47,10 +47,9 @@
     order_by = @"latest_reply_id";
   
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  self.context = [yam managedObjectContext];
 
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:[yam managedObjectContext]];
 	[fetchRequest setEntity:entity];
 //  [fetchRequest setFetchOffset:0];
 //  [fetchRequest setFetchLimit:100];
@@ -63,7 +62,7 @@
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	
 	self.fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
-                                                                     managedObjectContext:context 
+                                                                     managedObjectContext:[yam managedObjectContext] 
                                                                      sectionNameKeyPath:order_by 
                                                                      cacheName:@"Root"];
   

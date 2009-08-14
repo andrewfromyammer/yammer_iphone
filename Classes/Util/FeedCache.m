@@ -56,18 +56,19 @@
   NSError *error;
 	[fetcher performFetch:&error];
   
+  NSString *feedCopy = nil;
   if ([fetcher.fetchedObjects count] > 500) {
     FeedMetaData *fmd = [fetcher.fetchedObjects objectAtIndex:0];
-    NSString *feedCopy = [NSString stringWithString:fmd.feed];
+    feedCopy = [NSString stringWithString:fmd.feed];
     [context deleteObject:fmd];
-    [context save:&error];
-    
-    [FeedCache deleteOldMessages:feedCopy limit:false useLatestReply:false];
+    [context save:&error];    
   }
 
-  [fetcher release];
-	[fetchRequest release];
-  [context release];
+//  [fetcher release];
+//	[fetchRequest release];
+  
+  if (feedCopy)
+    [FeedCache deleteOldMessages:feedCopy limit:false useLatestReply:false];
 }
 
 + (NSDate *)loadFeedDate:(NSMutableDictionary *)feed {
@@ -96,9 +97,8 @@
     date = [NSDate dateWithTimeIntervalSince1970:[fmd.last_update timeIntervalSince1970]];
   }
   
-  [fetcher release];
-	[fetchRequest release];
-  [context release];
+  //[fetcher release];
+	//[fetchRequest release];
   
   return date;
 }
@@ -144,10 +144,9 @@
   }  
   [context save:&error];
   
-  [fetcher release];
-	[fetchRequest release];
-  [context release];
-  [counts release];
+  //[fetcher release];
+	//[fetchRequest release];
+  //[counts release];
   
   return id_lookup;
 }
@@ -183,10 +182,8 @@
     [context deleteObject:[fetcher.fetchedObjects objectAtIndex:i]];
   [context save:&error];
   
-  [fetcher release];
-	[fetchRequest release];  
-  [context release];
-
+  //[fetcher release];
+	//[fetchRequest release];
 }
 
 + (BOOL)writeCheckNew:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable useLatestReply:(BOOL)useLatestReply {
@@ -274,16 +271,16 @@
   BOOL return_val = [fmd.older_available boolValue];
   [context save:&error];
   
-  [fetcher release];
-	[fetchRequest release];
-  [context release];
+  //[fetcher release];
+	//[fetchRequest release];
   
   return return_val;
 }
 
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup {
   
-  //NSMutableDictionary *id_lookup = [FeedCache updateLastReplyIds:feed messages:messages];
+  if ([messages count] == 0)
+    return;
   
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];
@@ -325,8 +322,6 @@
 
   NSError *error;
   [context save:&error];  
-  [context release];
-
 }
 
 + (NSDate *)dateFromText:(NSString *)text {

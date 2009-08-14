@@ -36,5 +36,6 @@
 
 - (void)checkForNewMessages:(NSString *)style;
 - (void)displayLastUpdated;
+- (void)refresh;
 
 @end

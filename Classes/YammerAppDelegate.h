@@ -21,6 +21,7 @@
   NSPersistentStoreCoordinator *persistentStoreCoordinator;
   
   BOOL threading;
+  NSString *pushToken;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -28,6 +29,8 @@
 @property (nonatomic, retain) IBOutlet MainTabBarController *mainView;
 @property (nonatomic, retain) NSNumber *network_id;
 @property BOOL threading;
+@property (nonatomic, retain) NSString *pushToken;
+
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;

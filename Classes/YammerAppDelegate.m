@@ -20,6 +20,7 @@
 @synthesize mainView;
 @synthesize network_id;
 @synthesize threading;
+@synthesize pushToken;
 
 - (void)askLoginOrSignup {
   UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please login or signup:"
@@ -39,16 +40,22 @@
   
   UIView *image = [[self.window subviews] objectAtIndex:0];
   [image removeFromSuperview];
+
+  if (true) {
+    self.pushToken = @"testing124";
+    [APIGateway sendPushToken:pushToken];
+  } else
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
   
-//  [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
   [self.window addSubview:mainView.view];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-  [APIGateway sendPushToken:[[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
+  self.pushToken = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
                                                         stringByReplacingOccurrencesOfString:@">" withString:@""]
-                                                        stringByReplacingOccurrencesOfString:@" " withString:@""]
-                             ];
+                                                        stringByReplacingOccurrencesOfString:@" " withString:@""];
+  
+  [APIGateway sendPushToken:pushToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -91,7 +98,8 @@
     [LocalStorage removeAccessToken];
     
     mainView = [UIViewController alloc];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"yammer_header.png"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+    imageView.frame = CGRectMake(0, -60, 320, 480);
     [mainView.view addSubview:imageView];
     [imageView release];
     
@@ -130,35 +138,44 @@
   [feed release];
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-	
-	NSManagedObjectContext *context;
+- (NSManagedObjectContext *)managedObjectContext {	
+  if (managedObjectContext != nil) {
+    return managedObjectContext;
+  }
   NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
   if (coordinator != nil) {
-    context = [[NSManagedObjectContext alloc] init];
-    [context setPersistentStoreCoordinator: coordinator];
+    managedObjectContext = [[NSManagedObjectContext alloc] init];
+    [managedObjectContext setPersistentStoreCoordinator: coordinator];
   }
-  return context;
+  return managedObjectContext;
 }
 
-- (NSManagedObjectModel *)managedObjectModel {	
-  return [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
-//  return managedObjectModel;
+- (NSManagedObjectModel *)managedObjectModel {
+	
+  if (managedObjectModel != nil) {
+    return managedObjectModel;
+  }
+  managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+  return managedObjectModel;
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {		
+  if (persistentStoreCoordinator != nil) {
+    return persistentStoreCoordinator;
+  }
+  
 	NSString *storePath = [[LocalStorage localPath] stringByAppendingPathComponent: MESSAGE_CACHE];  
 	NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
 	
 	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
-  NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: [self managedObjectModel]];
+  persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: [self managedObjectModel]];
   
 	NSError *error;
-	if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
+	if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		exit(-1);  // Fail
   }
-  return coordinator;
+  return persistentStoreCoordinator;
 }
 
 - (void)resetForNewThreadingValue {
@@ -183,6 +200,7 @@
   [persistentStoreCoordinator release];
   
   [network_id release];
+  [pushToken release];
   [window release];
   [mainView release];
   [super dealloc];

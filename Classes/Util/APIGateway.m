@@ -41,7 +41,7 @@
 
 + (NSMutableDictionary *)pushSettings {
   
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/user_clients/ApplePushDevice.json" style:nil];
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/feed_clients/ApplePushDevice.json" style:nil];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
@@ -149,11 +149,10 @@
 + (BOOL)sendPushToken:(NSString *)token {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
-  [params setObject:token forKey:@"user_client[client_id]"];
-  [params setObject:@"true" forKey:@"user_client[verified]"];
-  [params setObject:@"ApplePushDevice" forKey:@"client_type"];
+  [params setObject:token forKey:@"feed_client[client_id]"];
+  [params setObject:@"ApplePushDevice" forKey:@"feed_client[type]"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/user_clients" method:@"POST"];  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST"];  
 }
 
 + (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue {
