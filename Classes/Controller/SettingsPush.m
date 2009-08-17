@@ -17,7 +17,7 @@
 @synthesize parent;
 
 - (id)init {
-  self.title = @"Push Notice Feeds";
+  self.title = @"Push Settings";
   return self;
 }
 
@@ -34,6 +34,7 @@
   NSMutableArray *homeTabs = [APIGateway homeTabs];
   NSMutableArray *filteredHomeTabs = [NSMutableArray array];
   NSMutableDictionary *pushSettings = [APIGateway pushSettings];
+    
   NSMutableArray *notifications = [pushSettings objectForKey:@"notifications"];
   NSMutableDictionary *notificationDict = [NSMutableDictionary dictionary];
   int i=0;
@@ -47,7 +48,7 @@
       [filteredHomeTabs addObject:tab];
   }
   
-  self.dataSource = [[DataSettingsPush alloc] initWithArray:filteredHomeTabs pushSettings:notificationDict];
+  self.dataSource = [[DataSettingsPush alloc] initWithArray:filteredHomeTabs notificationDict:notificationDict pushSettings:pushSettings];
 	theTableView.dataSource = self.dataSource;  
   self.view = theTableView;
   

@@ -43,7 +43,7 @@
 
   if (true) {
     self.pushToken = @"testing124";
-    [APIGateway sendPushToken:pushToken];
+//    [APIGateway sendPushToken:pushToken];
   } else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
   
@@ -98,8 +98,8 @@
     [LocalStorage removeAccessToken];
     
     mainView = [UIViewController alloc];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
-    imageView.frame = CGRectMake(0, -60, 320, 480);
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"yammer_header.png"]];
+    imageView.frame = CGRectMake(0, 0, 320, 480);
     [mainView.view addSubview:imageView];
     [imageView release];
     

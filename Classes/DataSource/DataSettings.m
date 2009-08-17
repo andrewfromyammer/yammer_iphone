@@ -82,7 +82,7 @@
       [switchView addTarget:self action:@selector(switchWasChanged:) forControlEvents:UIControlEventValueChanged];
       [switchView release];
     } else if (indexPath.row == 1) {
-      cell.textLabel.text = @"Push Notifications";
+      cell.textLabel.text = @"Push Settings";
       cell.imageView.image = [UIImage imageNamed:@"push.png"];
     } else if (indexPath.row == 2) {
       cell.textLabel.text = @"Advanced";

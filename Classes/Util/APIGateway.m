@@ -30,21 +30,30 @@
 
 + (NSMutableArray *)homeTabs {
   
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json" style:nil];
-  
-  if (json) {
-    NSMutableDictionary *dict = [(NSMutableDictionary *)[json JSONValue] objectForKey:@"web_preferences"];
+  NSString *cached = [LocalStorage getFile:USER_CURRENT];
+  if (cached) {
+    NSMutableDictionary *dict = [(NSMutableDictionary *)[cached JSONValue] objectForKey:@"web_preferences"];
     return (NSMutableArray*)[dict objectForKey:@"home_tabs"];
   }
+  
   return nil;
 }
 
 + (NSMutableDictionary *)pushSettings {
-  
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/feed_clients/ApplePushDevice.json" style:nil];
-  
-  if (json)
-    return (NSMutableDictionary *)[json JSONValue];
+
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/feed_clients.json" style:nil];
+  if (json) {
+    NSMutableArray *clients = (NSMutableArray *)[json JSONValue];
+    int i=0; 
+    for (; i<[clients count]; i++) {
+      NSMutableDictionary *client = [clients objectAtIndex:i];
+      if ([[client objectForKey:@"type"] isEqualToString:@"ApplePushDevice"]) {        
+        json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/feed_clients/%@.json", [[client objectForKey:@"id"] description]] style:nil];
+        if (json)
+          return (NSMutableDictionary *)[json JSONValue];
+      }
+    }
+  }
   
   return nil;
 }
@@ -155,14 +164,25 @@
   return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST"];  
 }
 
-+ (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue {
++ (BOOL)updatePushProtocol:(NSString *)protocol theId:(NSNumber *)theId {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
-  [params setObject:statusValue forKey:[NSString stringWithFormat:@"notifications[%@]", feed_key]];
+  [params setObject:protocol forKey:@"feed_client[protocol]"];
   [params setObject:@"PUT" forKey:@"_method"];
-  
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/user_clients/ApplePushDevice" method:@"POST"];
+    
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST"];
   return true;
 }
+
++ (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue theId:(NSNumber *)theId {
+  NSMutableDictionary *params = [NSMutableDictionary dictionary];
+  
+  [params setObject:statusValue forKey:[NSString stringWithFormat:@"feed_client[notifications][%@]", feed_key]];
+  [params setObject:@"PUT" forKey:@"_method"];
+  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST"];
+  return true;
+}
+
 
 @end
