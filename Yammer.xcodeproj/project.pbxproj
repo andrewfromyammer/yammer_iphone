@@ -74,6 +74,9 @@
 		00CACB0B0F3384460010886C /* DirectoryUserDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CACB0A0F3384460010886C /* DirectoryUserDataSource.m */; };
 		00CD2BBA0F37950F002714AD /* arrow_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CD2BB80F37950F002714AD /* arrow_down.png */; };
 		00CD2BBB0F37950F002714AD /* arrow_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CD2BB90F37950F002714AD /* arrow_up.png */; };
+		00CD49EF103AFD59002C6B69 /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CD49EC103AFD59002C6B69 /* note.png */; };
+		00CD49F0103AFD59002C6B69 /* push_feeds.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CD49ED103AFD59002C6B69 /* push_feeds.png */; };
+		00CD49F1103AFD59002C6B69 /* sleep.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CD49EE103AFD59002C6B69 /* sleep.png */; };
 		00D050D90FFD4D4E00CEF89D /* yammer_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 00D050D80FFD4D4E00CEF89D /* yammer_sound.wav */; };
 		00D2B18C0F3398AD00551085 /* FeedMessageList.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D2B18B0F3398AD00551085 /* FeedMessageList.m */; };
 		00D2B18F0F339A5800551085 /* FeedDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D2B18E0F339A5800551085 /* FeedDataSource.m */; };
@@ -212,6 +215,9 @@
 		00CACB0A0F3384460010886C /* DirectoryUserDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DirectoryUserDataSource.m; path = DataSource/DirectoryUserDataSource.m; sourceTree = "<group>"; };
 		00CD2BB80F37950F002714AD /* arrow_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_down.png; path = Images/arrow_down.png; sourceTree = "<group>"; };
 		00CD2BB90F37950F002714AD /* arrow_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_up.png; path = Images/arrow_up.png; sourceTree = "<group>"; };
+		00CD49EC103AFD59002C6B69 /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = note.png; path = Images/note.png; sourceTree = "<group>"; };
+		00CD49ED103AFD59002C6B69 /* push_feeds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = push_feeds.png; path = Images/push_feeds.png; sourceTree = "<group>"; };
+		00CD49EE103AFD59002C6B69 /* sleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sleep.png; path = Images/sleep.png; sourceTree = "<group>"; };
 		00D050D80FFD4D4E00CEF89D /* yammer_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = yammer_sound.wav; path = ../yammerfox/chrome/content/yammer_sound.wav; sourceTree = SOURCE_ROOT; };
 		00D2B18A0F3398AD00551085 /* FeedMessageList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedMessageList.h; path = Controller/FeedMessageList.h; sourceTree = "<group>"; };
 		00D2B18B0F3398AD00551085 /* FeedMessageList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedMessageList.m; path = Controller/FeedMessageList.m; sourceTree = "<group>"; };
@@ -317,6 +323,9 @@
 		00D521550F2FBDCB00FB3A8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00CD49EC103AFD59002C6B69 /* note.png */,
+				00CD49ED103AFD59002C6B69 /* push_feeds.png */,
+				00CD49EE103AFD59002C6B69 /* sleep.png */,
 				0046B8F31030948000F5AD9C /* threaded_mode.png */,
 				00A5ECFB102B7373007C8B80 /* tab_right.png */,
 				003A81481028912400565FE1 /* received.png */,
@@ -602,6 +611,9 @@
 				003D26EF1028DE36006BB140 /* ComposeMessage.xib in Resources */,
 				00A5ECFC102B7373007C8B80 /* tab_right.png in Resources */,
 				0046B8F41030948000F5AD9C /* threaded_mode.png in Resources */,
+				00CD49EF103AFD59002C6B69 /* note.png in Resources */,
+				00CD49F0103AFD59002C6B69 /* push_feeds.png in Resources */,
+				00CD49F1103AFD59002C6B69 /* sleep.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

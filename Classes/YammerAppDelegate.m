@@ -43,7 +43,6 @@
 
   if (true) {
     self.pushToken = @"testing124";
-//    [APIGateway sendPushToken:pushToken];
   } else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
   
