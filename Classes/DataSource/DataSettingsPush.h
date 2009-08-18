@@ -14,6 +14,6 @@
 - (id)initWithArray:(NSMutableArray *)theFeeds notificationDict:(NSMutableDictionary *)theNotificationDict pushSettings:(NSMutableDictionary *)thePushSettings;
 
 - (NSMutableDictionary *)feedAtIndex:(int)index;
-
++ (NSString *)timeToAMPM:(NSNumber *)time;
 
 @end

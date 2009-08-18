@@ -9,15 +9,24 @@
 #import "SettingsPush.h"
 #import "LocalStorage.h"
 #import "APIGateway.h"
+#import "MainTabBarController.h"
 
 @implementation SettingsPush
 
 @synthesize dataSource;
 @synthesize theTableView;
 @synthesize parent;
+@synthesize timeChooser;
+@synthesize picker;
 
 - (id)init {
   self.title = @"Push Settings";
+  
+  UIBarButtonItem *temporaryBarButtonItem=[[UIBarButtonItem alloc] init];
+  temporaryBarButtonItem.title=@"Back";
+  self.navigationItem.backBarButtonItem = temporaryBarButtonItem;
+  [temporaryBarButtonItem release];
+
   return self;
 }
 
@@ -58,6 +67,79 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
   [theTableView deselectRowAtIndexPath:indexPath animated:YES];
+  
+  if (indexPath.section == 1 && indexPath.row > 0) {
+    self.timeChooser = [UIViewController alloc];
+    timeChooser.view.backgroundColor = [UIColor groupTableViewBackgroundColor];    
+    UIBarButtonItem *back = [[UIBarButtonItem alloc] init];
+    back.title=@"Save";
+    back.target = self;
+    timeChooser.navigationItem.rightBarButtonItem = back;
+    
+    self.picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
+    picker.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    picker.datePickerMode = UIDatePickerModeTime;
+    
+    NSDateFormatter *matter = [[NSDateFormatter alloc] init];
+    [matter setDateFormat:@"HH"];
+
+    [timeChooser.view addSubview:picker];
+
+    if (indexPath.row == 1) {
+      timeChooser.title = @"Stop Time";
+      [picker setDate:[matter dateFromString:[[dataSource.pushSettings objectForKey:@"sleep_hour_start"] description]] animated:false];
+      back.action = @selector(setStopTime);
+    }
+    else {
+      timeChooser.title = @"Resume Time";
+      [picker setDate:[matter dateFromString:[[dataSource.pushSettings objectForKey:@"sleep_hour_end"] description]] animated:false];
+      back.action = @selector(setResumeTime);
+    }
+
+    UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:timeChooser];
+    [modal.navigationBar setTintColor:[MainTabBarController yammerGray]];
+
+    [self presentModalViewController:modal animated:YES];
+  }
+}
+
+- (void)setStopTime {
+  NSDateFormatter *matter = [[NSDateFormatter alloc] init];
+  [matter setDateFormat:@"HH"];  
+  int hour = [[matter stringFromDate:[picker date]] intValue];
+  [dataSource.pushSettings setObject:[[NSNumber alloc] initWithInt:hour] forKey:@"sleep_hour_start"];
+  
+  NSMutableArray *array = [NSMutableArray array];
+  [array addObject:@"sleep_hour_start"];
+  [array addObject:[matter stringFromDate:[picker date]]];
+  [NSThread detachNewThreadSelector:@selector(updateTime:) toTarget:self withObject:array];  
+  [timeChooser dismissModalViewControllerAnimated:YES];
+  [timeChooser release];
+  [picker release];
+  [theTableView reloadData];
+}
+
+- (void)setResumeTime {
+  NSDateFormatter *matter = [[NSDateFormatter alloc] init];
+  [matter setDateFormat:@"HH"];  
+  int hour = [[matter stringFromDate:[picker date]] intValue];
+  [dataSource.pushSettings setObject:[[NSNumber alloc] initWithInt:hour] forKey:@"sleep_hour_end"];
+
+  NSMutableArray *array = [NSMutableArray array];
+  [array addObject:@"sleep_hour_end"];
+  [array addObject:[matter stringFromDate:[picker date]]];
+  
+  [NSThread detachNewThreadSelector:@selector(updateTime:) toTarget:self withObject:array];
+  [timeChooser dismissModalViewControllerAnimated:YES];
+  [timeChooser release];
+  [picker release];
+  [theTableView reloadData];
+}
+
+- (void)updateTime:(NSMutableArray *)array {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  [APIGateway updatePushField:[array objectAtIndex:0] value:[array objectAtIndex:1] theId:[dataSource.pushSettings objectForKey:@"id"]];  
+  [autoreleasepool release];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -68,6 +150,8 @@
   [dataSource release];
   [theTableView release];
   [parent release];
+  [timeChooser release];
+  [picker release];
   [super dealloc];
 }
 

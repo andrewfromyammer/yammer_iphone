@@ -30,7 +30,7 @@
 + (BOOL)removeFollow:(NSString *)theUserId;
 + (BOOL)addFollow:(NSString *)theUserId;
 + (BOOL)sendPushToken:(NSString *)token;
-+ (BOOL)updatePushProtocol:(NSString *)protocol theId:(NSNumber *)theId;
++ (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId;
 + (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue theId:(NSNumber *)theId;
 
 @end

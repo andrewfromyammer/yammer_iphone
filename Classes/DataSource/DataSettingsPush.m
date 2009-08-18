@@ -74,9 +74,9 @@
       cell.textLabel.numberOfLines = 2;
       cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.row == 1)
-      cell.textLabel.text = @"Stop 12:00 AM";
+      cell.textLabel.text = [NSString stringWithFormat:@"Stop %@", [DataSettingsPush timeToAMPM:[pushSettings objectForKey:@"sleep_hour_start"]]];
     else
-      cell.textLabel.text = @"Resume 7:00 AM";
+      cell.textLabel.text = [NSString stringWithFormat:@"Resume %@", [DataSettingsPush timeToAMPM:[pushSettings objectForKey:@"sleep_hour_end"]]];
   } else if (indexPath.section == 0) {
     if (indexPath.row == 0) {
       cell.imageView.image = [UIImage imageNamed:@"note.png"];
@@ -100,6 +100,19 @@
 	return cell;
 }
 
++ (NSString *)timeToAMPM:(NSNumber *)time {
+  int value = [time intValue];
+  
+  if (value == 0)
+    return @"12:00 AM";
+  if (value > 12) {
+    value -= 12;
+    return [NSString stringWithFormat:@"%d:00 PM", value];
+  }
+  
+  return [NSString stringWithFormat:@"%d:00 AM", value];
+}
+
 - (void)soundSwitchWasChanged:(id)sender {
   UISwitch *switchView = (UISwitch *)sender;
   [NSThread detachNewThreadSelector:@selector(updateSoundPushSettingsThread:) toTarget:self withObject:switchView];  
@@ -114,11 +127,11 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   if (switchView.on) {
     [pushSettings setObject:@"sound" forKey:@"protocol"];
-    [APIGateway updatePushProtocol:@"sound" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushField:@"protocol" value:@"sound" theId:[pushSettings objectForKey:@"id"]];
   }
   else {
     [pushSettings setObject:@"text" forKey:@"protocol"];
-    [APIGateway updatePushProtocol:@"text" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushField:@"protocol" value:@"text" theId:[pushSettings objectForKey:@"id"]];
   }
   
   [autoreleasepool release];

@@ -164,15 +164,16 @@
   return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST"];  
 }
 
-+ (BOOL)updatePushProtocol:(NSString *)protocol theId:(NSNumber *)theId {
++ (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
-  [params setObject:protocol forKey:@"feed_client[protocol]"];
+  [params setObject:value forKey:[NSString stringWithFormat:@"feed_client[%@]", field]];
   [params setObject:@"PUT" forKey:@"_method"];
-    
+  
   return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST"];
   return true;
 }
+
 
 + (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue theId:(NSNumber *)theId {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
