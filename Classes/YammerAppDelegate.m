@@ -21,6 +21,7 @@
 @synthesize network_id;
 @synthesize threading;
 @synthesize pushToken;
+@synthesize showFullNames;
 
 - (void)askLoginOrSignup {
   UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please login or signup:"
@@ -41,7 +42,7 @@
   UIView *image = [[self.window subviews] objectAtIndex:0];
   [image removeFromSuperview];
 
-  if (true) {
+  if (false) {
     self.pushToken = @"testing124";
   } else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
@@ -65,13 +66,14 @@
    self.launchURL = [url description];
    return true;
 }
-
+// show-full-names
 - (void)applicationDidFinishLaunching:(UIApplication *)application {     
   self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   self.window.backgroundColor = [UIColor whiteColor];
   UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
   image.frame = CGRectMake(0, 0, 320, 480);
   [self.window addSubview:image];
+  [image release];
   [self.window makeKeyAndVisible];
   
   [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  
@@ -202,6 +204,7 @@
   [pushToken release];
   [window release];
   [mainView release];
+  [showFullNames release];
   [super dealloc];
 }
 

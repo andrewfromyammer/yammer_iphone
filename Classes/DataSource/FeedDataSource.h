@@ -17,6 +17,7 @@
   NSFetchedResultsController *fetcher;
   BOOL showReplyCounts;
   NSManagedObjectContext *context;
+  NSString *nameField;
 }
 
 @property (nonatomic,retain) NSMutableArray *messages;
@@ -26,8 +27,8 @@
 @property (nonatomic,retain) NSString *feed;
 @property (nonatomic,retain) NSFetchedResultsController *fetcher;
 @property (nonatomic,retain) NSManagedObjectContext *context;
+@property (nonatomic,retain) NSString *nameField;
 
-- (id)initWithEmpty;
 - (id)initWithFeed:(NSMutableDictionary *)theFeed;
 - (void)fetch;
 - (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew;

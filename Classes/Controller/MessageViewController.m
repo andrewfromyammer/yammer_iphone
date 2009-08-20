@@ -67,11 +67,7 @@
                                  CGRectGetWidth(mainViewBounds),
                                  toolbarHeight)];
     [self.view addSubview:toolbar];
-	} else {
-    int i=0;
-    for (i=0; i<[[toolbar items] count]; i++)
-      [[[toolbar items] objectAtIndex:i] release];
-  }
+	}
     
   UIBarButtonItem *reply = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply
                                                                          target:self
@@ -100,6 +96,12 @@
   if (!showUserIcon)
     [user setEnabled:false];
   [toolbar setItems:items animated:NO];
+  
+  [reply release];
+  [flexItem2 release];
+  [flexItem release];
+  [thread release];
+  [user release];
 }
 
 - (id)initWithBooleanForThreadIcon:(BOOL)showThreadIcon list:(NSArray *)list index:(int)index {

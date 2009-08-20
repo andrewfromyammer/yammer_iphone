@@ -139,9 +139,7 @@
 }
 
 - (void)showFeed {
-  FeedMessageList *localFeedMessageList = [self getUserFeed];
-  [self.navigationController pushViewController:localFeedMessageList animated:YES];
-  [localFeedMessageList release];
+  [self.navigationController pushViewController:[self getUserFeed] animated:YES];
 }
 
 - (void)showFeedByTeleport {

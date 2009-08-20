@@ -52,9 +52,9 @@
   int i=0;
   for (; i<[array count]; i++) {
     if ([email hasSuffix:[array objectAtIndex:i]])
-      return 3;
+      return 2;
   }
-  return 2;
+  return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -72,7 +72,7 @@
       cell.textLabel.text = self.email;
   } else {
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    if (indexPath.row == 0) {
+    if (indexPath.row == 10) {
       cell.textLabel.text = @"Threading";
       cell.imageView.image = [UIImage imageNamed:@"threaded_mode.png"];
       cell.accessoryType = UITableViewCellAccessoryNone;
@@ -81,10 +81,10 @@
       [switchView setOn:[LocalStorage threading] animated:NO];
       [switchView addTarget:self action:@selector(switchWasChanged:) forControlEvents:UIControlEventValueChanged];
       [switchView release];
-    } else if (indexPath.row == 1) {
+    } else if (indexPath.row == 0) {
       cell.textLabel.text = @"Push Settings";
       cell.imageView.image = [UIImage imageNamed:@"push.png"];
-    } else if (indexPath.row == 2) {
+    } else if (indexPath.row == 1) {
       cell.textLabel.text = @"Advanced";
       cell.imageView.image = [UIImage imageNamed:@"advanced.png"];
     }

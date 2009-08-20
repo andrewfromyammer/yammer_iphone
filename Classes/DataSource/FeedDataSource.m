@@ -25,14 +25,12 @@
 @synthesize fetcher;
 @synthesize showReplyCounts;
 @synthesize context;
-
-- (id)initWithEmpty {
-  self.messages = [NSMutableArray array];
-  self.olderAvailable = false;
-  return self;
-}
+@synthesize nameField;
 
 - (id)initWithFeed:(NSMutableDictionary *)theFeed {
+  
+  self.nameField = [LocalStorage getNameField];
+  
   self.feed = [FeedCache feedCacheUniqueID:theFeed];
   self.showReplyCounts = false;
   if ([LocalStorage threading] && [theFeed objectForKey:@"isThread"] == nil)
@@ -81,7 +79,7 @@
   self.olderAvailable = false;
   if (older && [older intValue] == 1)
     self.olderAvailable = true;
-  
+    
   NSMutableArray *references = [dict objectForKey:@"references"];
   
   NSMutableDictionary *referencesByType = [NSMutableDictionary dictionary];
@@ -114,14 +112,14 @@
       [message setObject:[actor objectForKey:@"id"] forKey:@"actor_id"];
       [message setObject:[actor objectForKey:@"type"] forKey:@"actor_type"];
       
-      [message setObject:[actor objectForKey:@"name"] forKey:@"sender"];
+      [message setObject:[actor objectForKey:nameField] forKey:@"sender"];
       referencesById = [referencesByType objectForKey:@"message"];
       NSMutableDictionary *messageRef = [referencesById objectForKey:[message objectForKey:@"replied_to_id"]];
       
       if (messageRef) {
         referencesById = [referencesByType objectForKey:[messageRef objectForKey:@"sender_type"]];
         NSMutableDictionary *actor = [referencesById objectForKey:[messageRef objectForKey:@"sender_id"]];
-        [message setObject:[actor objectForKey:@"name"] forKey:@"reply_name"];
+        [message setObject:[actor objectForKey:nameField] forKey:@"reply_name"];
       }
       
       referencesById = [referencesByType objectForKey:@"thread"];
@@ -156,7 +154,7 @@
       NSString *replyName = [message objectForKey:@"reply_name"];
       
       if (directRef) {
-        fromLine = [NSString stringWithFormat:@"%@ to: %@", [message objectForKey:@"sender"], [directRef objectForKey:@"name"]];
+        fromLine = [NSString stringWithFormat:@"%@ to: %@", [message objectForKey:@"sender"], [directRef objectForKey:nameField]];
         [message setObject:@"true" forKey:@"lock"];
         [message setObject:@"true" forKey:@"lockColor"];
       }
@@ -244,6 +242,7 @@
   [feed release];
   [fetcher release];
   [context release];
+  [nameField release];
   [super dealloc];
 }
 

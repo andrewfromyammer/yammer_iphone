@@ -22,6 +22,7 @@
   
   BOOL threading;
   NSString *pushToken;
+  NSNumber *showFullNames;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -30,6 +31,7 @@
 @property (nonatomic, retain) NSNumber *network_id;
 @property BOOL threading;
 @property (nonatomic, retain) NSString *pushToken;
+@property (nonatomic, retain) NSNumber *showFullNames;
 
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;

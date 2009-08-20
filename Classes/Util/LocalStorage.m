@@ -182,7 +182,8 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
 
 + (BOOL)threading {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  return yam.threading;
+  return false;
+  //return yam.threading;
 }
 
 + (BOOL)threadingFromDisk {
@@ -193,5 +194,21 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   return YES;
 }
 
++ (NSString *)getNameField {
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  
+  if (yam.showFullNames == nil) {  
+    NSString *cached = [LocalStorage getFile:USER_CURRENT];
+    if (cached) {
+      NSMutableDictionary *dict = [(NSMutableDictionary *)[cached JSONValue] objectForKey:@"web_preferences"];
+      yam.showFullNames = [dict objectForKey:@"show_full_names"];
+    } else
+      yam.showFullNames = [[NSNumber alloc] initWithBool:true];
+  }
+  
+  if ([yam.showFullNames boolValue])
+    return @"full_name";
+  return @"name";
+}
 
 @end

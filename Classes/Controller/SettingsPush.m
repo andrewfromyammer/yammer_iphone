@@ -107,12 +107,13 @@
   NSDateFormatter *matter = [[NSDateFormatter alloc] init];
   [matter setDateFormat:@"HH"];  
   int hour = [[matter stringFromDate:[picker date]] intValue];
-  [dataSource.pushSettings setObject:[[NSNumber alloc] initWithInt:hour] forKey:@"sleep_hour_start"];
+  [dataSource.pushSettings setObject:[[[NSNumber alloc] initWithInt:hour] autorelease] forKey:@"sleep_hour_start"];
   
   NSMutableArray *array = [NSMutableArray array];
   [array addObject:@"sleep_hour_start"];
   [array addObject:[matter stringFromDate:[picker date]]];
-  [NSThread detachNewThreadSelector:@selector(updateTime:) toTarget:self withObject:array];  
+  [matter release];
+  [NSThread detachNewThreadSelector:@selector(updateTime:) toTarget:self withObject:array]; 
   [timeChooser dismissModalViewControllerAnimated:YES];
   [timeChooser release];
   [picker release];
@@ -123,7 +124,7 @@
   NSDateFormatter *matter = [[NSDateFormatter alloc] init];
   [matter setDateFormat:@"HH"];  
   int hour = [[matter stringFromDate:[picker date]] intValue];
-  [dataSource.pushSettings setObject:[[NSNumber alloc] initWithInt:hour] forKey:@"sleep_hour_end"];
+  [dataSource.pushSettings setObject:[[[NSNumber alloc] initWithInt:hour] autorelease] forKey:@"sleep_hour_end"];
 
   NSMutableArray *array = [NSMutableArray array];
   [array addObject:@"sleep_hour_end"];

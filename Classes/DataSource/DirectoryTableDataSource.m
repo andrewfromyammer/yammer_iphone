@@ -10,12 +10,14 @@
 #import "APIGateway.h"
 #import "ImageCache.h"
 #import "SpinnerCell.h"
+#import "LocalStorage.h"
 
 @implementation DirectoryTableDataSource
 
 @synthesize users;
 @synthesize lastSize;
 @synthesize page;
+@synthesize nameField;
 
 + (DirectoryTableDataSource *)getUsers {
   NSMutableArray *array = [APIGateway users:1 style:nil];
@@ -27,6 +29,7 @@
 - (id)init {
   self.page = 1;
   self.users = [NSMutableArray array];
+  self.nameField = [LocalStorage getNameField];
   return self;
 }
 
@@ -67,7 +70,7 @@
     }
     
     NSMutableDictionary *dict = [users objectAtIndex:indexPath.row];
-    cell.textLabel.text = [dict objectForKey:@"name"];
+    cell.textLabel.text = [dict objectForKey:nameField];
     cell.imageView.image = [[UIImage alloc] initWithData:[dict objectForKey:@"imageData"]];
     cell.textLabel.textColor = [UIColor blackColor];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -91,6 +94,7 @@
 
 - (void)dealloc {
   [users release];
+  [nameField release];
   [super dealloc];
 }
 

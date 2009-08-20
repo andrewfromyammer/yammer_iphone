@@ -122,9 +122,9 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   
   responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
   
-  if (response == nil || responseData == nil || error != nil || [(NSHTTPURLResponse *)response statusCode] >= 400) {
+  if (response == nil || responseData == nil || error != nil || [(NSHTTPURLResponse *)response statusCode] >= 400)
     return false;
-  } else {
+  else {
     NSString *responseBody = [[NSString alloc] initWithData:responseData
                                                    encoding:NSUTF8StringEncoding];
     

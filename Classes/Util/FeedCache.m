@@ -46,8 +46,11 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
   
-  [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
-                                                                     initWithKey:@"last_update" ascending:YES], nil]];
+  NSSortDescriptor *sortLastUpdate = [[NSSortDescriptor alloc] initWithKey:@"last_update" ascending:YES];
+  NSArray *sortDescriptions = [[NSArray alloc] initWithObjects:sortLastUpdate, nil];
+  [fetchRequest setSortDescriptors:sortDescriptions];
+  [sortDescriptions release];
+  [sortLastUpdate release];
   
 	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
                                                                             managedObjectContext:context 
@@ -143,10 +146,7 @@
     [id_lookup setObject:@"true" forKey:[m.message_id description]];
   }  
   [context save:&error];
-  
-  //[fetcher release];
-	//[fetchRequest release];
-  //[counts release];
+//  [fetcher release];
   
   return id_lookup;
 }

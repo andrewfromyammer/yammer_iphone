@@ -13,9 +13,11 @@
   NSMutableArray *users;
   int lastSize;
   int page;
+  NSString *nameField;
 }
 
 @property (nonatomic,retain) NSMutableArray *users;
+@property (nonatomic,retain) NSString *nameField;
 @property int lastSize;
 @property int page;
 
