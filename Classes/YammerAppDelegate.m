@@ -42,7 +42,7 @@
   UIView *image = [[self.window subviews] objectAtIndex:0];
   [image removeFromSuperview];
 
-  if (false) {
+  if (true) {
     self.pushToken = @"testing124";
   } else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];

@@ -66,10 +66,9 @@
 	self.theTableView.delegate = self;
   self.dataSource = [[FeedDataSource alloc] initWithFeed:feed];
 	self.theTableView.dataSource = self.dataSource;
-    
-  [self.spinnerWithText displayCheckingNew];
-  [spinnerWithText showTheSpinner];
-  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
+  
+  [self.spinnerWithText displayLoadingCache];    
+  [NSThread detachNewThreadSelector:@selector(loadFromCache) toTarget:self withObject:nil];  
 	return self;
 }
 
@@ -78,6 +77,18 @@
   [tableAndSpinner addSubview:self.theTableView];
 
   self.view = tableAndSpinner;
+}
+
+- (void)loadFromCache {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+//  @synchronized ([UIApplication sharedApplication]) {  
+    [dataSource fetch];    
+    [theTableView reloadData];
+//  }
+  [self.spinnerWithText displayCheckingNew];
+  [spinnerWithText showTheSpinner];
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
+  [autoreleasepool release];
 }
 
 - (void)checkForNewMessages:(NSString *)style {
@@ -95,8 +106,10 @@
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
   if (dict) {
     [dataSource proccesMessages:dict checkNew:true];
-    [dataSource fetch];    
-    [theTableView reloadData];
+    //@synchronized ([UIApplication sharedApplication]) {  
+      [dataSource fetch];
+      [theTableView reloadData];
+    //}
   }
   
   [self displayLastUpdated];

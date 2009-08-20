@@ -157,10 +157,14 @@
   int newHeight = stringSize.height + FONT_12_HEIGHT + FONT_12_HEIGHT;
   if (newHeight < MIN_HEIGHT)
     newHeight = MIN_HEIGHT;
-  
+
+  self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, 
+                          self.frame.size.width, newHeight);
+
   self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, 
                            self.bounds.size.width, newHeight);
-  
+
+
   self.footer.frame = CGRectMake(footer.frame.origin.x, newHeight - FONT_12_HEIGHT,
                                  footer.frame.size.width, footer.frame.size.height);
   

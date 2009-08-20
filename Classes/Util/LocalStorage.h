@@ -48,5 +48,6 @@
 
 + (BOOL)threading;
 + (BOOL)threadingFromDisk;
++ (NSString *)getNameField;
 
 @end

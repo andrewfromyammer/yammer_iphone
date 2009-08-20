@@ -35,7 +35,6 @@
   self.showReplyCounts = false;
   if ([LocalStorage threading] && [theFeed objectForKey:@"isThread"] == nil)
     self.showReplyCounts = true;
-  [self fetch];
   return self;
 }
 
@@ -65,11 +64,7 @@
                                                                      cacheName:@"Root"];
   
   NSError *error;
-	[fetcher performFetch:&error];
-	
-	[fetchRequest release];
-	[descriptor release];
-	[sortDescriptors release];  
+	[fetcher performFetch:&error];	
 }
 
 
@@ -202,7 +197,7 @@
     MessageCell *cell = (MessageCell *)[tableView dequeueReusableCellWithIdentifier:@"MessageCell"];
 
     if (cell == nil)
-      cell = [[[MessageCell alloc] init] autorelease];
+      cell = [[MessageCell alloc] init];
     
     Message *message = [fetcher.fetchedObjects objectAtIndex:indexPath.row];
     
@@ -211,10 +206,10 @@
   } else if (indexPath.section == 1) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"MoreCell"];
 	  if (cell == nil) {
-		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero 
+		  cell = [[SpinnerCell alloc] initWithFrame:CGRectZero 
                                    reuseIdentifier:@"MoreCell"
                                    spinRect:CGRectMake(60, 12, 20, 20)
-                                   textRect:CGRectMake(100, 12, 200, 20)] autorelease];
+                                   textRect:CGRectMake(100, 12, 200, 20)];
     }
     
     [cell displayMore];
@@ -223,10 +218,10 @@
   } else if (indexPath.section == 3) {
     SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell"];
 	  if (cell == nil) {
-		  cell = [[[SpinnerCell alloc] initWithFrame:CGRectZero 
+		  cell = [[SpinnerCell alloc] initWithFrame:CGRectZero 
                                  reuseIdentifier:@"StatusCell"
                                         spinRect:CGRectMake(60, 4, 20, 20)
-                                        textRect:CGRectMake(100, 4, 200, 20)] autorelease];
+                                        textRect:CGRectMake(100, 4, 200, 20)];
       [cell showSpinner];
       [cell displayCheckNew];
     }

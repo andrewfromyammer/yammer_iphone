@@ -37,5 +37,6 @@
 - (void)checkForNewMessages:(NSString *)style;
 - (void)displayLastUpdated;
 - (void)refresh;
+- (void)loadFromCache;
 
 @end
