@@ -38,10 +38,22 @@
   int i=0;
   for (; i< [array count]; i++) {
     NSMutableDictionary *dict = [array objectAtIndex:i];
-    [dict setObject:[ImageCache getImageAndSave:[dict objectForKey:@"mugshot_url"] actor_id:[dict objectForKey:@"id"] type:@"user"] forKey:@"imageData"];    
+
+    if ([ImageCache getImage:[[dict objectForKey:@"id"] description] type:@"user"])
+      continue;
+    
+    [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:dict];
   }  
   self.lastSize = [array count];
   [self.users addObjectsFromArray:array];
+}
+
+- (void)loadThatImage:(NSMutableDictionary *)dict {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  @synchronized ([UIApplication sharedApplication]) {
+    [ImageCache getImageAndSave:[dict objectForKey:@"mugshot_url"] actor_id:[dict objectForKey:@"id"] type:@"user"];
+  }
+  [autoreleasepool release];
 }
 
 - (NSMutableDictionary *)getUser:(int)index {
@@ -65,13 +77,18 @@
   if (indexPath.section == 0) {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell"];
     
-    if (cell == nil) {
+    if (cell == nil)
       cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"UserCell"] autorelease];
-    }
+    
     
     NSMutableDictionary *dict = [users objectAtIndex:indexPath.row];
     cell.textLabel.text = [dict objectForKey:nameField];
-    cell.imageView.image = [[UIImage alloc] initWithData:[dict objectForKey:@"imageData"]];
+    
+    cell.imageView.image = nil;
+    NSData *imageData = [ImageCache getImage:[[dict objectForKey:@"id"] description] type:@"user"];
+    if (imageData)
+      cell.imageView.image = [[UIImage alloc] initWithData:imageData];
+    
     cell.textLabel.textColor = [UIColor blackColor];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;

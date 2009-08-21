@@ -99,8 +99,8 @@
     [LocalStorage removeAccessToken];
     
     mainView = [UIViewController alloc];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"yammer_header.png"]];
-    imageView.frame = CGRectMake(0, 0, 320, 480);
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+    imageView.frame = CGRectMake(0, -20, 320, 480);
     [mainView.view addSubview:imageView];
     [imageView release];
     

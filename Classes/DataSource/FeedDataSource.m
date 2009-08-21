@@ -64,9 +64,25 @@
                                                                      cacheName:@"Root"];
   
   NSError *error;
-	[fetcher performFetch:&error];	
+	[fetcher performFetch:&error];
+  
+  int i=0;
+  for (; i<[fetcher.fetchedObjects count]; i++) {
+    Message *message = [fetcher.fetchedObjects objectAtIndex:i];
+    if ([ImageCache getImage:[message.actor_id description] type:message.actor_type])
+      continue;
+    
+    [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:message];
+  }  
 }
 
+- (void)loadThatImage:(Message *)message {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  @synchronized ([UIApplication sharedApplication]) {  
+    [ImageCache getImageAndSave:message.actor_mugshot_url actor_id:[message.actor_id description] type:message.actor_type];
+  }
+  [autoreleasepool release];
+}
 
 - (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew {
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
@@ -186,21 +202,21 @@
 	return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {  
   if (section == 0)
-  	return [[fetcher sections] count];
+  	return [fetcher.fetchedObjects count];
   return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  if (indexPath.section == 0) {
+  if (indexPath.section == 0) {    
     MessageCell *cell = (MessageCell *)[tableView dequeueReusableCellWithIdentifier:@"MessageCell"];
 
     if (cell == nil)
       cell = [[MessageCell alloc] init];
     
     Message *message = [fetcher.fetchedObjects objectAtIndex:indexPath.row];
-    
+
     [cell setMessage:message showReplyCounts:showReplyCounts];
     return cell;
   } else if (indexPath.section == 1) {
@@ -215,20 +231,8 @@
     [cell displayMore];
     [cell hideSpinner];
   	return cell;
-  } else if (indexPath.section == 3) {
-    SpinnerCell *cell = (SpinnerCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell"];
-	  if (cell == nil) {
-		  cell = [[SpinnerCell alloc] initWithFrame:CGRectZero 
-                                 reuseIdentifier:@"StatusCell"
-                                        spinRect:CGRectMake(60, 4, 20, 20)
-                                        textRect:CGRectMake(100, 4, 200, 20)];
-      [cell showSpinner];
-      [cell displayCheckNew];
-    }
-    
-    cell.displayText.font = [UIFont systemFontOfSize:12];
-  	return cell;
-  }
+  } 
+  
   return nil;
 }   
 

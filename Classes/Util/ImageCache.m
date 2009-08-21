@@ -74,16 +74,20 @@
   
   @try
   {
-    if ([url hasPrefix:@"http"])
+    if ([url hasSuffix:@"/images/no_photo_small.gif"])
+      data = UIImageJPEGRepresentation([UIImage imageNamed:@"no_photo_small.png"], 90);
+    else if ([url hasPrefix:@"http"])
       data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url] options:0 error:&error];
     else
       data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [OAuthGateway baseURL], url]] options:0 error:&error];
   }
   @catch (NSException *theErr) {
-    data = UIImageJPEGRepresentation([UIImage imageNamed:@"no_photo_small.png"], 90);
+    return;
   }
-  [fileManager createFileAtPath:[photoDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@", actor_id, type]]
-                       contents:data attributes:nil];
+  
+  if ([data length] > 0)
+    [fileManager createFileAtPath:[photoDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@", actor_id, type]]
+                         contents:data attributes:nil];
 }
 
 @end

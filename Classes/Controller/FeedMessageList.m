@@ -81,10 +81,8 @@
 
 - (void)loadFromCache {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-//  @synchronized ([UIApplication sharedApplication]) {  
-    [dataSource fetch];    
-    [theTableView reloadData];
-//  }
+  [dataSource fetch];    
+  [theTableView reloadData];
   [self.spinnerWithText displayCheckingNew];
   [spinnerWithText showTheSpinner];
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
@@ -106,10 +104,15 @@
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
   if (dict) {
     [dataSource proccesMessages:dict checkNew:true];
-    //@synchronized ([UIApplication sharedApplication]) {  
-      [dataSource fetch];
-      [theTableView reloadData];
-    //}
+    [dataSource fetch];
+    [theTableView reloadData];
+  }
+  
+  if ([dataSource.fetcher.fetchedObjects count] == 0) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Note"
+                                                    message:@"No messages in this feed yet." delegate:self 
+                                          cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];    
   }
   
   [self displayLastUpdated];

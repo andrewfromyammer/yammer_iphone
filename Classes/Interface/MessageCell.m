@@ -44,9 +44,11 @@
     self.footer = [[UIView alloc] initWithFrame:CGRectMake(LEFT_MARGIN,0,MIDDLE_WIDTH,FONT_12_HEIGHT)];
     self.time = [[UILabel alloc] initWithFrame:CGRectMake(0,0,50,FONT_12_HEIGHT)];
     self.time.font = [UIFont systemFontOfSize:10];
+
     self.theWordIn = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,FONT_12_HEIGHT)];
     self.theWordIn.font = [UIFont systemFontOfSize:10];
     self.theWordIn.text = @"in";
+
     self.group = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,FONT_12_HEIGHT)];
     self.group.font = [UIFont boldSystemFontOfSize:10];
     
@@ -77,21 +79,11 @@
   return self;
 }
 
-- (void)loadThatImage:(Message *)message {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  @synchronized ([UIApplication sharedApplication]) {  
-    NSData *imageData = [ImageCache getImageAndSave:message.actor_mugshot_url actor_id:[message.actor_id description] type:message.actor_type];
-    self.actorPhoto.image = [[UIImage alloc] initWithData:imageData];
-  }
-  [autoreleasepool release];
-}
-
 - (void)setMessage:(Message *)message showReplyCounts:(BOOL)showReplyCounts {
   NSData *imageData = [ImageCache getImage:[message.actor_id description] type:message.actor_type];
+  self.actorPhoto.image = nil;
   if (imageData)
     self.actorPhoto.image = [[UIImage alloc] initWithData:imageData];
-  else
-    [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:message];
   self.from.text = message.from;
 
   self.preview.text = message.plain_body;
