@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-static int MAX_FEED_CACHE = 60;
+static int MAX_FEED_CACHE = 1000;
 
 
 @interface FeedCache : NSObject {

@@ -30,7 +30,7 @@
 @property (nonatomic,retain) NSString *nameField;
 
 - (id)initWithFeed:(NSMutableDictionary *)theFeed;
-- (void)fetch;
+- (void)fetch:(NSNumber *)offset;
 - (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew;
 
 

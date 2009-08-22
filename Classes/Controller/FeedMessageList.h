@@ -18,8 +18,8 @@
   NSMutableDictionary *feed;
   BOOL threadIcon;
   BOOL homeTab;
-    
   SpinnerWithText *spinnerWithText;
+  int curOffset;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
@@ -29,6 +29,7 @@
 @property (nonatomic,retain) SpinnerWithText *spinnerWithText;
 @property BOOL threadIcon;
 @property BOOL homeTab;
+@property int curOffset;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   refresh:(BOOL)showRefresh

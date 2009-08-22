@@ -28,11 +28,13 @@
 @synthesize threadIcon;
 @synthesize homeTab;
 @synthesize spinnerWithText;
+@synthesize curOffset;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   refresh:(BOOL)showRefresh
                                                   compose:(BOOL)showCompose {
   self.feed = dict;
+  self.curOffset = 0;
   self.title = [feed objectForKey:@"name"];
   self.threadIcon = showThreadIcon;
   
@@ -81,7 +83,8 @@
 
 - (void)loadFromCache {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  [dataSource fetch];    
+  self.curOffset = 0;
+  [dataSource fetch:nil];    
   [theTableView reloadData];
   [self.spinnerWithText displayCheckingNew];
   [spinnerWithText showTheSpinner];
@@ -94,7 +97,7 @@
     
   NSNumber *newerThan=nil;
   @try {
-    Message *m = [dataSource.fetcher.fetchedObjects objectAtIndex:0];
+    Message *m = [dataSource.messages objectAtIndex:0];
     if ([LocalStorage threading] && [feed objectForKey:@"isThread"] == nil) 
       newerThan = m.latest_reply_id;
     else
@@ -104,11 +107,13 @@
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
   if (dict) {
     [dataSource proccesMessages:dict checkNew:true];
-    [dataSource fetch];
+    [dataSource.messages removeAllObjects];
+    self.curOffset = 0;
+    [dataSource fetch:nil];
     [theTableView reloadData];
   }
   
-  if ([dataSource.fetcher.fetchedObjects count] == 0) {
+  if ([dataSource.messages count] == 0) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Note"
                                                     message:@"No messages in this feed yet." delegate:self 
                                           cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -163,7 +168,7 @@
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
   if (indexPath.section == 0) {
-    Message *message = [dataSource.fetcher.fetchedObjects objectAtIndex:indexPath.row];
+    Message *message = [dataSource.messages objectAtIndex:indexPath.row];
 
     if ([LocalStorage threading] && [feed objectForKey:@"isThread"] == nil) {
       if ([message.thread_updates intValue] > 1) {
@@ -186,28 +191,33 @@
     } else {
       MessageViewController *localMessageViewController = [[MessageViewController alloc] 
                                                            initWithBooleanForThreadIcon:threadIcon 
-                                                           list:dataSource.fetcher.fetchedObjects
+                                                           list:dataSource.messages
                                                            index:indexPath.row];
       [self.navigationController pushViewController:localMessageViewController animated:YES];
       [localMessageViewController release];    
     }
   } else {
-    if ([dataSource.fetcher.fetchedObjects count] < MAX_FEED_CACHE) {
-      SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];
-      [cell showSpinner];
-      [cell.displayText setText:@"Loading More..."];
-      [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];
-    }
+    SpinnerCell *cell = (SpinnerCell *)[tableView cellForRowAtIndexPath:indexPath];
+    [cell showSpinner];
+    [cell.displayText setText:@"Loading More..."];
+    [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:self withObject:nil];
   }
 }
 
 - (void)fetchMore {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
-  Message *m = [dataSource.fetcher.fetchedObjects lastObject];
-  NSMutableDictionary *dict = [APIGateway messages:feed olderThan:m.message_id style:nil];
-  if (dict)
-    [dataSource proccesMessages:dict checkNew:false];
+  int before = [dataSource.messages count];
+  curOffset += 20;  
+  [dataSource fetch:[NSNumber numberWithInt:curOffset]];
+  
+  if (before == [dataSource.messages count]) {
+    Message *m = [dataSource.messages lastObject];
+    NSMutableDictionary *dict = [APIGateway messages:feed olderThan:m.message_id style:nil];
+    if (dict)
+      [dataSource proccesMessages:dict checkNew:false];
+    [dataSource fetch:[NSNumber numberWithInt:curOffset]];
+  }
   
   NSUInteger newIndex[] = {1, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
@@ -217,7 +227,6 @@
   [cell hideSpinner];
   [cell displayMore];
 
-  [dataSource fetch];
   [theTableView reloadData];
   [autoreleasepool release];
 }

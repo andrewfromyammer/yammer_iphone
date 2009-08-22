@@ -30,7 +30,7 @@
 - (id)initWithFeed:(NSMutableDictionary *)theFeed {
   
   self.nameField = [LocalStorage getNameField];
-  
+  self.messages = [NSMutableArray array];
   self.feed = [FeedCache feedCacheUniqueID:theFeed];
   self.showReplyCounts = false;
   if ([LocalStorage threading] && [theFeed objectForKey:@"isThread"] == nil)
@@ -38,7 +38,7 @@
   return self;
 }
 
-- (void)fetch {
+- (void)fetch:(NSNumber *)offset {
   NSString *order_by = @"message_id";
   if (showReplyCounts)
     order_by = @"latest_reply_id";
@@ -48,8 +48,10 @@
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:[yam managedObjectContext]];
 	[fetchRequest setEntity:entity];
-//  [fetchRequest setFetchOffset:0];
-//  [fetchRequest setFetchLimit:100];
+  [fetchRequest setFetchOffset:0];
+  if (offset)
+    [fetchRequest setFetchOffset:[offset intValue]];
+  [fetchRequest setFetchLimit:20];
   
   NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
   [fetchRequest setPredicate:feedPredicate];
@@ -69,10 +71,9 @@
   int i=0;
   for (; i<[fetcher.fetchedObjects count]; i++) {
     Message *message = [fetcher.fetchedObjects objectAtIndex:i];
-    if ([ImageCache getImage:[message.actor_id description] type:message.actor_type])
-      continue;
-    
-    [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:message];
+    if ([ImageCache getImage:[message.actor_id description] type:message.actor_type] == nil)
+      [NSThread detachNewThreadSelector:@selector(loadThatImage:) toTarget:self withObject:message];
+    [messages addObject:message];
   }  
 }
 
@@ -197,14 +198,14 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-  if (olderAvailable && [fetcher.fetchedObjects count] < MAX_FEED_CACHE)
+  if (olderAvailable && [messages count] < MAX_FEED_CACHE)
     return 2;
 	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {  
   if (section == 0)
-  	return [fetcher.fetchedObjects count];
+  	return [messages count];
   return 1;
 }
 
@@ -215,7 +216,7 @@
     if (cell == nil)
       cell = [[MessageCell alloc] init];
     
-    Message *message = [fetcher.fetchedObjects objectAtIndex:indexPath.row];
+    Message *message = [messages objectAtIndex:indexPath.row];
 
     [cell setMessage:message showReplyCounts:showReplyCounts];
     return cell;
