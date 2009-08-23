@@ -48,7 +48,7 @@
     
   [self.view addSubview:toggle];
 
-  [LocalStorage removeFile:@"photos"];
+//  [LocalStorage removeFile:@"photos"];
 }
 
 

@@ -148,8 +148,9 @@
 }
 
 - (void)refresh {
-  self.dataSource = [[FeedDataSource alloc] initWithFeed:feed];
-	self.theTableView.dataSource = self.dataSource;
+  // deal with with threading mode is back
+  //self.dataSource = [[FeedDataSource alloc] initWithFeed:feed];
+	//self.theTableView.dataSource = self.dataSource;
   
   [spinnerWithText displayCheckingNew];
   [spinnerWithText showTheSpinner];
@@ -216,8 +217,9 @@
     NSMutableDictionary *dict = [APIGateway messages:feed olderThan:m.message_id style:nil];
     if (dict)
       [dataSource proccesMessages:dict checkNew:false];
-    [dataSource fetch:[NSNumber numberWithInt:curOffset]];
-  }
+    [dataSource fetch:[NSNumber numberWithInt:curOffset-20]];
+  } else
+    curOffset += [dataSource.messages count] - before;
   
   NSUInteger newIndex[] = {1, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
