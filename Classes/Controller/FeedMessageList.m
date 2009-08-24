@@ -216,10 +216,14 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
   int before = [dataSource.messages count];
-  curOffset += 20;  
+  curOffset += 20;
+  
+  NSLog(@"%d", curOffset);
   [dataSource fetch:[NSNumber numberWithInt:curOffset]];
   
   if (before == [dataSource.messages count]) {
+    NSLog(@"1111111111");
+
     Message *m = [dataSource.messages lastObject];
     NSMutableDictionary *dict = [APIGateway messages:feed olderThan:m.message_id style:nil];
     if (dict)

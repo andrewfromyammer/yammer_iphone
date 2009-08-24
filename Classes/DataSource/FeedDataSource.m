@@ -182,20 +182,24 @@
       [message setObject:fromLine forKey:@"fromLine"];
     } @catch (NSException *theErr) {}
   }
-  
-  if (checkNew) {
-    if (newerThan == nil && olderAvailable == false) {
-      // set last_id to last message
-      [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
-    } else if (newerThan != nil && olderAvailable == true) {
-      // blow feed away, last id set to zero
-      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
-    }
-  } else if (olderAvailable == false) {
-    // set last_id to last message
-    [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
-  }
 
+  if (checkNew) {
+    if (newerThan == nil && olderAvailable == false)
+      [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
+    else if (newerThan == nil && olderAvailable == true)
+      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
+    else if (newerThan != nil && olderAvailable == false)
+      ;
+    else if (newerThan != nil && olderAvailable == true)
+      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
+  }
+  else {
+    if (olderAvailable == false)
+      [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
+    else if (olderAvailable == true)
+      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
+  }
+    
   @synchronized ([UIApplication sharedApplication]) {  
     [FeedCache purgeOldFeeds];
     if (checkNew)
@@ -221,7 +225,7 @@
   
   FeedMetaData *fmd = [FeedCache loadFeedMeta:feed];
   Message *m = [messages lastObject];
-  if (m.message_id != fmd.last_message_id)
+  if ([m.message_id intValue] != [fmd.last_message_id intValue])
     return 2;
 
 	return 1;
