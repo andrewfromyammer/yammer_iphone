@@ -11,7 +11,7 @@
 #define USER_CURRENT    @"/account/user_current.json"
 #define DIRECTORY_CACHE @"/account/directory_cache.json"
 #define SETTINGS        @"/account/settngs.json"
-#define MESSAGE_CACHE   @"message_cache.sqlite"
+#define MESSAGE_CACHE   @"message_cache_v2.sqlite"
 
 @interface LocalStorage : NSObject {
 

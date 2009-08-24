@@ -4,7 +4,7 @@
 @implementation FeedMetaData 
 
 @dynamic feed;
-@dynamic older_available;
+@dynamic last_message_id;
 @dynamic last_update;
 @dynamic network_id;
 

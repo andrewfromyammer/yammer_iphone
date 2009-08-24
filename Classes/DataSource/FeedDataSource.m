@@ -15,6 +15,7 @@
 #import "Message.h"
 #import "YammerAppDelegate.h"
 #import "LocalStorage.h"
+#import "FeedMetaData.h"
 
 @implementation FeedDataSource
 
@@ -85,13 +86,14 @@
   [autoreleasepool release];
 }
 
-- (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew {
+- (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew newerThan:(NSNumber *)newerThan {
+
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
   NSNumber *older = [meta objectForKey:@"older_available"];
   self.olderAvailable = false;
   if (older && [older intValue] == 1)
     self.olderAvailable = true;
-    
+      
   NSMutableArray *references = [dict objectForKey:@"references"];
   
   NSMutableDictionary *referencesByType = [NSMutableDictionary dictionary];
@@ -181,10 +183,23 @@
     } @catch (NSException *theErr) {}
   }
   
+  if (checkNew) {
+    if (newerThan == nil && olderAvailable == false) {
+      // set last_id to last message
+      [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
+    } else if (newerThan != nil && olderAvailable == true) {
+      // blow feed away, last id set to zero
+      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
+    }
+  } else if (olderAvailable == false) {
+    // set last_id to last message
+    [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
+  }
+
   @synchronized ([UIApplication sharedApplication]) {  
     [FeedCache purgeOldFeeds];
     if (checkNew)
-      self.olderAvailable = [FeedCache writeCheckNew:feed
+      [FeedCache writeCheckNew:feed
                     messages:[NSMutableArray arrayWithArray:tempMessages] 
                     more:olderAvailable
                     useLatestReply:showReplyCounts];
@@ -198,8 +213,17 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-  if (olderAvailable && [messages count] < MAX_FEED_CACHE)
+  if ([messages count] >= MAX_FEED_CACHE)
+    return 1;
+  
+  if ([messages count] == 0)
+    return 1;
+  
+  FeedMetaData *fmd = [FeedCache loadFeedMeta:feed];
+  Message *m = [messages lastObject];
+  if (m.message_id != fmd.last_message_id)
     return 2;
+
 	return 1;
 }
 

@@ -74,7 +74,15 @@
     [FeedCache deleteOldMessages:feedCopy limit:false useLatestReply:false];
 }
 
-+ (NSDate *)loadFeedDate:(NSMutableDictionary *)feed {
++ (NSDate *)loadFeedDate:(NSMutableDictionary *)dict {
+  NSDate *date = nil;
+  FeedMetaData *fmd = [FeedCache loadFeedMeta:[FeedCache feedCacheUniqueID:dict]];
+  if (fmd)
+    date = [NSDate dateWithTimeIntervalSince1970:[fmd.last_update timeIntervalSince1970]];
+  return date;
+}
+
++ (FeedMetaData *)loadFeedMeta:(NSString *)feed {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];
   
@@ -82,7 +90,7 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
   
-  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", [FeedCache feedCacheUniqueID:feed]];
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
   [fetchRequest setPredicate:feedPredicate];
   [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
                                                                      initWithKey:@"feed" ascending:NO], nil]];
@@ -94,16 +102,10 @@
   NSError *error;
 	[fetcher performFetch:&error];
   
-  NSDate *date = nil;
   if ([fetcher.fetchedObjects count] == 1) {
-    FeedMetaData *fmd = [fetcher.fetchedObjects objectAtIndex:0];
-    date = [NSDate dateWithTimeIntervalSince1970:[fmd.last_update timeIntervalSince1970]];
-  }
-  
-  //[fetcher release];
-	//[fetchRequest release];
-  
-  return date;
+    return [fetcher.fetchedObjects objectAtIndex:0];
+  }  
+  return nil;
 }
 
 + (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages {
@@ -194,7 +196,7 @@
     // add messages
     [FeedCache writeNewMessages:feed messages:messages lookup:[NSMutableDictionary dictionary]];
     // set more = true
-    [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
+    //[FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
     return true;
   } else {
     // update existing messages
@@ -203,7 +205,8 @@
     // delete old ones past limit
     [FeedCache deleteOldMessages:feed limit:true useLatestReply:useLatestReply];
     // set more = orig
-    return [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:nil];
+    //return [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:nil];
+    return true;
   }
 }
 
@@ -216,7 +219,7 @@
     // delete old ones past limit
     [FeedCache deleteOldMessages:feed limit:true useLatestReply:useLatestReply];
     // set more = true
-    [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
+    //[FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
   } else {
     // update existing messages
     // add new messages
@@ -224,11 +227,11 @@
     // delete old ones past limit
     [FeedCache deleteOldMessages:feed limit:true useLatestReply:useLatestReply];
     // set more = false
-    [FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"false"];
+    //[FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"false"];
   }
 }
 
-+ (BOOL)createOrUpdateMetaData:(NSString *)feed updateOlderAvailable:(NSString *)older {
++ (BOOL)createOrUpdateMetaData:(NSString *)feed lastMessageId:(NSNumber *)lastMessageId {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   NSManagedObjectContext *context = [yam managedObjectContext];
   
@@ -263,18 +266,11 @@
   fmd.last_update = [NSDate date];
   fmd.network_id = yam.network_id;
   fmd.feed = feed;
-  if (older && [older isEqualToString:@"true"])
-    fmd.older_available = [[NSNumber alloc] initWithBool:true];
-  else if (older && [older isEqualToString:@"false"])
-    fmd.older_available = [[NSNumber alloc] initWithBool:false];
-
-  BOOL return_val = [fmd.older_available boolValue];
+  fmd.last_message_id = [NSNumber numberWithInt:0];
+  if (lastMessageId != nil)
+    fmd.last_message_id = lastMessageId; 
   [context save:&error];
-  
-  //[fetcher release];
-	//[fetchRequest release];
-  
-  return return_val;
+  return true;
 }
 
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup {

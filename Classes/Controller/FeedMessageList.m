@@ -29,6 +29,7 @@
 @synthesize homeTab;
 @synthesize spinnerWithText;
 @synthesize curOffset;
+@synthesize isChecking;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   refresh:(BOOL)showRefresh
@@ -94,7 +95,8 @@
 
 - (void)checkForNewMessages:(NSString *)style {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-    
+  
+  self.isChecking = true;
   NSNumber *newerThan=nil;
   @try {
     Message *m = [dataSource.messages objectAtIndex:0];
@@ -106,7 +108,7 @@
     
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
   if (dict) {
-    [dataSource proccesMessages:dict checkNew:true];
+    [dataSource proccesMessages:dict checkNew:true newerThan:newerThan];
     [dataSource.messages removeAllObjects];
     self.curOffset = 0;
     [dataSource fetch:nil];
@@ -122,11 +124,12 @@
   
   [self displayLastUpdated];
   [spinnerWithText hideTheSpinner];
+  self.isChecking = false;
   [autoreleasepool release];
 }
 
 - (void)displayLastUpdated {
-  NSDate *date = [FeedCache loadFeedDate:feed];  
+  NSDate *date = [FeedCache loadFeedDate:feed];
   if (date)
     [self.spinnerWithText setText:[FeedCache niceDate:date]];
   else
@@ -190,6 +193,10 @@
         [localMessageViewController release];        
       }
     } else {
+      
+      if (indexPath.row > 20 && isChecking)
+        return;
+      
       MessageViewController *localMessageViewController = [[MessageViewController alloc] 
                                                            initWithBooleanForThreadIcon:threadIcon 
                                                            list:dataSource.messages
@@ -216,10 +223,10 @@
     Message *m = [dataSource.messages lastObject];
     NSMutableDictionary *dict = [APIGateway messages:feed olderThan:m.message_id style:nil];
     if (dict)
-      [dataSource proccesMessages:dict checkNew:false];
-    [dataSource fetch:[NSNumber numberWithInt:curOffset-20]];
+      [dataSource proccesMessages:dict checkNew:false newerThan:nil];
+    [dataSource fetch:[NSNumber numberWithInt:curOffset]];
   } else
-    curOffset += [dataSource.messages count] - before;
+    curOffset -= 20 - ([dataSource.messages count] - before);
   
   NSUInteger newIndex[] = {1, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];

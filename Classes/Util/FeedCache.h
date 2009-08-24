@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FeedMetaData.h"
 
 static int MAX_FEED_CACHE = 1000;
 
@@ -19,13 +20,14 @@ static int MAX_FEED_CACHE = 1000;
 + (void)writeFetchMore:(NSString *)feed messages:(NSMutableArray *)messages more:(BOOL)olderAvailable useLatestReply:(BOOL)useLatestReply;
 
 + (NSString *)niceDate:(NSDate *)date;
-+ (NSDate *)loadFeedDate:(NSMutableDictionary *)feed;
++ (NSDate *)loadFeedDate:(NSMutableDictionary *)dict;
++ (FeedMetaData *)loadFeedMeta:(NSString *)feed;
 + (NSString *)feedCacheUniqueID:(NSMutableDictionary *)feed;
 + (NSMutableDictionary *)updateLastReplyIds:(NSString *)feed messages:(NSMutableArray *)messages;
 
 + (void)deleteOldMessages:(NSString *)feed limit:(BOOL)limit useLatestReply:(BOOL)useLatestReply;
 + (void)writeNewMessages:(NSString *)feed messages:(NSMutableArray *)messages lookup:(NSMutableDictionary *)lookup;
-+ (BOOL)createOrUpdateMetaData:(NSString *)feed updateOlderAvailable:(NSString *)older;
++ (BOOL)createOrUpdateMetaData:(NSString *)feed lastMessageId:(NSNumber *)lastMessageId;
 + (void)purgeOldFeeds;
 + (NSDate *)dateFromText:(NSString *)text;
 

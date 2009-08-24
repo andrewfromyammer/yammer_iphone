@@ -31,8 +31,10 @@
 @synthesize threadIcon;
 
 - (void)displayMessage {
-  self.title = [NSString stringWithFormat:@"%d of %d", theIndex+1, [theList count]];
   Message *message = [theList objectAtIndex:theIndex];
+
+  self.title = [NSString stringWithFormat:@"%d of %d", theIndex+1, [theList count]];
+  
   
   if ([message.actor_type isEqualToString:@"user"])
     [self setupToolbar:true];
