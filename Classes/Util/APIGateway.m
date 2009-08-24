@@ -108,6 +108,8 @@
     [params appendString:@"&threaded=true"];
   else if (threadedOkay)
     [params appendString:@"?threaded=true"];
+  
+  
   NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, params] style:(NSString *)style];
   
   if (json)

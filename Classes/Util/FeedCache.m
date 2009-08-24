@@ -199,6 +199,8 @@
     //[FeedCache createOrUpdateMetaData:feed updateOlderAvailable:@"true"];
     return true;
   } else {
+    if ([messages count] == 0)
+      return true;
     // update existing messages
     // add new messages
     [FeedCache writeNewMessages:feed messages:messages lookup:[FeedCache updateLastReplyIds:feed messages:messages]];
@@ -266,7 +268,6 @@
   fmd.last_update = [NSDate date];
   fmd.network_id = yam.network_id;
   fmd.feed = feed;
-  fmd.last_message_id = [NSNumber numberWithInt:0];
   if (lastMessageId != nil)
     fmd.last_message_id = lastMessageId; 
   [context save:&error];

@@ -31,7 +31,7 @@
 
 - (id)initWithFeed:(NSMutableDictionary *)theFeed;
 - (void)fetch:(NSNumber *)offset;
-- (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew newerThan:(NSNumber *)newerThan;
+- (int)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew newerThan:(NSNumber *)newerThan;
 
 
 @end

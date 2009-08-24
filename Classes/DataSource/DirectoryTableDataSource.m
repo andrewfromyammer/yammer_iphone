@@ -82,7 +82,10 @@
     
     
     NSMutableDictionary *dict = [users objectAtIndex:indexPath.row];
-    cell.textLabel.text = [dict objectForKey:nameField];
+    
+    cell.textLabel.text = @"";
+    if (![[dict objectForKey:nameField] isKindOfClass:[NSNull class]])
+      cell.textLabel.text = [dict objectForKey:nameField];
     
     cell.imageView.image = nil;
     NSData *imageData = [ImageCache getImage:[[dict objectForKey:@"id"] description] type:@"user"];

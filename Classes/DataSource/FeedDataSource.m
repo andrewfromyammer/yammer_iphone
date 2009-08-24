@@ -67,7 +67,9 @@
                                                                      cacheName:@"Root"];
   
   NSError *error;
-	[fetcher performFetch:&error];
+	if (![fetcher performFetch:&error]) {
+    NSLog(@"error %@", [error description]);
+  }
   
   int i=0;
   for (; i<[fetcher.fetchedObjects count]; i++) {
@@ -86,7 +88,7 @@
   [autoreleasepool release];
 }
 
-- (void)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew newerThan:(NSNumber *)newerThan {
+- (int)proccesMessages:(NSMutableDictionary *)dict checkNew:(BOOL)checkNew newerThan:(NSNumber *)newerThan {
 
   NSMutableDictionary *meta = [dict objectForKey:@"meta"];
   NSNumber *older = [meta objectForKey:@"older_available"];
@@ -126,14 +128,22 @@
       [message setObject:[actor objectForKey:@"id"] forKey:@"actor_id"];
       [message setObject:[actor objectForKey:@"type"] forKey:@"actor_type"];
       
-      [message setObject:[actor objectForKey:nameField] forKey:@"sender"];
+      if ([[actor objectForKey:nameField] isKindOfClass:[NSNull class]])
+        [message setObject:@"" forKey:@"sender"];
+      else
+        [message setObject:[actor objectForKey:nameField] forKey:@"sender"];
+      
       referencesById = [referencesByType objectForKey:@"message"];
       NSMutableDictionary *messageRef = [referencesById objectForKey:[message objectForKey:@"replied_to_id"]];
       
       if (messageRef) {
         referencesById = [referencesByType objectForKey:[messageRef objectForKey:@"sender_type"]];
         NSMutableDictionary *actor = [referencesById objectForKey:[messageRef objectForKey:@"sender_id"]];
-        [message setObject:[actor objectForKey:nameField] forKey:@"reply_name"];
+        
+        if ([[actor objectForKey:nameField] isKindOfClass:[NSNull class]])
+          [message setObject:@"" forKey:@"reply_name"];
+        else          
+          [message setObject:[actor objectForKey:nameField] forKey:@"reply_name"];
       }
       
       referencesById = [referencesByType objectForKey:@"thread"];
@@ -168,7 +178,12 @@
       NSString *replyName = [message objectForKey:@"reply_name"];
       
       if (directRef) {
-        fromLine = [NSString stringWithFormat:@"%@ to: %@", [message objectForKey:@"sender"], [directRef objectForKey:nameField]];
+        
+        NSString *theName = @"";
+        if (![[directRef objectForKey:nameField] isKindOfClass:[NSNull class]])
+          theName = [directRef objectForKey:nameField];
+        
+        fromLine = [NSString stringWithFormat:@"%@ to: %@", [message objectForKey:@"sender"], theName];
         [message setObject:@"true" forKey:@"lock"];
         [message setObject:@"true" forKey:@"lockColor"];
       }
@@ -183,25 +198,26 @@
     } @catch (NSException *theErr) {}
   }
 
-  if (checkNew) {
-    if (newerThan == nil && olderAvailable == false)
-      [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
-    else if (newerThan == nil && olderAvailable == true)
-      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
-    else if (newerThan != nil && olderAvailable == false)
-      ;
-    else if (newerThan != nil && olderAvailable == true)
-      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
-  }
-  else {
-    if (olderAvailable == false)
-      [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
-    else if (olderAvailable == true)
-      [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
-  }
+  @synchronized ([UIApplication sharedApplication]) {
+    if (checkNew) {
+      if (newerThan == nil && olderAvailable == false)
+        [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
+      else if (newerThan == nil && olderAvailable == true)
+        [FeedCache createOrUpdateMetaData:feed lastMessageId:[NSNumber numberWithInt:0]];
+      else if (newerThan != nil && olderAvailable == false)
+        [FeedCache createOrUpdateMetaData:feed lastMessageId:nil];
+      else if (newerThan != nil && olderAvailable == true)
+        [FeedCache createOrUpdateMetaData:feed lastMessageId:[NSNumber numberWithInt:0]];
+    }
+    else {
+      if (olderAvailable == false)
+        [FeedCache createOrUpdateMetaData:feed lastMessageId:[[tempMessages lastObject] objectForKey:@"id"]];
+      else if (olderAvailable == true)
+        [FeedCache createOrUpdateMetaData:feed lastMessageId:[NSNumber numberWithInt:0]];
+    }
     
-  @synchronized ([UIApplication sharedApplication]) {  
-    [FeedCache purgeOldFeeds];
+    if ([tempMessages count] > 0)
+      [FeedCache purgeOldFeeds];
     if (checkNew)
       [FeedCache writeCheckNew:feed
                     messages:[NSMutableArray arrayWithArray:tempMessages] 
@@ -213,6 +229,8 @@
                       more:olderAvailable
                       useLatestReply:showReplyCounts];
   }
+  
+  return [tempMessages count];
 }
 
 
@@ -223,7 +241,10 @@
   if ([messages count] == 0)
     return 1;
   
-  FeedMetaData *fmd = [FeedCache loadFeedMeta:feed];
+  FeedMetaData *fmd = nil;
+  @synchronized ([UIApplication sharedApplication]) {  
+    fmd = [FeedCache loadFeedMeta:feed];
+  }
   Message *m = [messages lastObject];
   if ([m.message_id intValue] != [fmd.last_message_id intValue])
     return 2;

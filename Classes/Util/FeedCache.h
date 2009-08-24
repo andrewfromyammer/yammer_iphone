@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FeedMetaData.h"
 
-static int MAX_FEED_CACHE = 1000;
+static int MAX_FEED_CACHE = 200;
 
 
 @interface FeedCache : NSObject {

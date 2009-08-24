@@ -57,6 +57,7 @@
 	theTableView.delegate = self;
   
   self.user = [APIGateway userById:theUserId];
+  NSLog([user description]);
   self.dataSource = [[DirectoryUserDataSource alloc] initWithDict:self.user];
 	theTableView.dataSource = self.dataSource;
   
@@ -65,7 +66,8 @@
   
   UILabel *fullname = [[UILabel alloc] initWithFrame:CGRectMake(55, 10, 260, 30)];
   [fullname setFont:[UIFont boldSystemFontOfSize:16]];
-  fullname.text = [user objectForKey:@"full_name"];
+  if (![[user objectForKey:@"full_name"] isKindOfClass:[NSNull class]])
+    fullname.text = [user objectForKey:@"full_name"];
   [topLayer addSubview:fullname];
   [fullname release];
   

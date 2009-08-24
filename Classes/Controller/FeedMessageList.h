@@ -21,6 +21,7 @@
   SpinnerWithText *spinnerWithText;
   int curOffset;
   BOOL isChecking;
+  int lastNumMessages;
 }
 
 @property (nonatomic,retain) UITableView *theTableView;
@@ -31,6 +32,7 @@
 @property BOOL threadIcon;
 @property BOOL homeTab;
 @property int curOffset;
+@property int lastNumMessages;
 @property BOOL isChecking;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon

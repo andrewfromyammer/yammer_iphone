@@ -30,6 +30,7 @@
 @synthesize spinnerWithText;
 @synthesize curOffset;
 @synthesize isChecking;
+@synthesize lastNumMessages;
 
 - (id)initWithDict:(NSMutableDictionary *)dict threadIcon:(BOOL)showThreadIcon
                                                   refresh:(BOOL)showRefresh
@@ -85,7 +86,11 @@
 - (void)loadFromCache {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   self.curOffset = 0;
-  [dataSource fetch:nil];    
+  @synchronized ([UIApplication sharedApplication]) {  
+    [dataSource fetch:nil];    
+  }
+  self.lastNumMessages = [dataSource.messages count];
+  
   [theTableView reloadData];
   [self.spinnerWithText displayCheckingNew];
   [spinnerWithText showTheSpinner];
@@ -105,13 +110,18 @@
     else
       newerThan = m.message_id;
   } @catch (NSException *theErr) {}
-    
+
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
   if (dict) {
     [dataSource proccesMessages:dict checkNew:true newerThan:newerThan];
     [dataSource.messages removeAllObjects];
     self.curOffset = 0;
-    [dataSource fetch:nil];
+    @synchronized ([UIApplication sharedApplication]) {  
+      [dataSource fetch:nil];
+    }
+    
+    self.lastNumMessages = [dataSource.messages count];
+
     [theTableView reloadData];
   }
   
@@ -216,21 +226,25 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
   int before = [dataSource.messages count];
-  curOffset += 20;
+  curOffset += lastNumMessages;
   
-  NSLog(@"%d", curOffset);
-  [dataSource fetch:[NSNumber numberWithInt:curOffset]];
+  @synchronized ([UIApplication sharedApplication]) {
+    [dataSource fetch:[NSNumber numberWithInt:curOffset]];
+  }
   
   if (before == [dataSource.messages count]) {
-    NSLog(@"1111111111");
-
     Message *m = [dataSource.messages lastObject];
     NSMutableDictionary *dict = [APIGateway messages:feed olderThan:m.message_id style:nil];
-    if (dict)
-      [dataSource proccesMessages:dict checkNew:false newerThan:nil];
-    [dataSource fetch:[NSNumber numberWithInt:curOffset]];
+    if (dict) {
+      int numMessages = [dataSource proccesMessages:dict checkNew:false newerThan:nil];
+      if (numMessages > 0)
+        self.lastNumMessages = numMessages;
+    }
+    @synchronized ([UIApplication sharedApplication]) {
+      [dataSource fetch:[NSNumber numberWithInt:curOffset]];
+    }
   } else
-    curOffset -= 20 - ([dataSource.messages count] - before);
+    curOffset -= lastNumMessages - ([dataSource.messages count] - before);
   
   NSUInteger newIndex[] = {1, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];

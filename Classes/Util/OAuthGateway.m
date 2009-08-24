@@ -18,16 +18,16 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 @implementation OAuthGateway
 
 + (NSString *)baseURL {
-  return @"http://192.168.1.67:3000";   
-//  return @"http://192.168.1.151:3000";   
+//  return @"http://192.168.1.67:3000";
+//  return @"http://192.168.1.151:3000";
 // return @"https://staging.yammer.com";
   
   NSString *url = [LocalStorage getBaseURL];
   if (url)
     return url;
 
-  //return @"http://aa.com:3000";  
-  //return @"https://www.yammer.com";  
+  //return @"http://aa.com:3000";
+  return @"https://www.yammer.com";  
 }
 
 + (void)logout {

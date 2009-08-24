@@ -13,7 +13,7 @@
   UIView *footer;
 
   UIImageView *actorPhoto;
-  UIImageView *lockImage;  
+  UIImageView *lockImage;
 
   UILabel *replyCount;
 }
