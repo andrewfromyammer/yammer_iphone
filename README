@@ -36,6 +36,16 @@ You also need to checkout three20 we have a fork of it here:
 
 http://github.com/andrewfromyammer/three20
 
+It should be placed at the same directory level as the yammer_iphone directory.
+
+So if you have a directory called "myprojects" you'll want:
+
+myprojects
+  yammer_iphone
+  three20
+  
+because yammer_iphone will look for "../three20/src" and the .. means up on directory from where you are.
+
 
 -----------
 Open Source Code
