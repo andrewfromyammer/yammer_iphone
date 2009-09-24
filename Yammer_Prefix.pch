@@ -1,9 +1,0 @@
-//
-// Prefix header for all source files of the 'Yammer' target in the 'Yammer' project
-//
-
-#ifdef __OBJC__
-    #import <Foundation/Foundation.h>
-    #import <UIKit/UIKit.h>
-    #import <CoreData/CoreData.h>
-#endif
