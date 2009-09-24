@@ -1,0 +1,79 @@
+Yammer iPhone App README
+
+Welcome to the Yammer iPhone App open source project.  The first version of this app was released via the iTunes store in September of 2008.  Yammer won TechCrunch50 that year:
+
+http://www.techcrunch.com/2008/09/10/yammer-takes-techcrunch50s-top-prize/
+
+and has been gaining momentum as a tool to make companies and organizations more efficient.  We are excited you would like to help make the Yammer iPhone app even better.
+
+To run a copy of the code on your iPhone simulator via xcode you will need to register a new application:
+
+https://www.yammer.com/client_applications/new
+
+For general information on developing iphone apps please see:
+
+http://developer.apple.com/iphone/
+
+After you have checked out a copy of the code, you should make a new file with any text editor called OAuthCustom.m and place it in the Classes directory:
+
+#import "OAuthCustom.h"
+
+@implementation OAuthCustom
+
++ (NSString*)theKey        { return @"REPLACE_WITH_KEY"; }
++ (NSString*)secret        { return @"REPLACE_WITH_SECRET"; }
+
++ (NSString*)devServer     { return @""; }
++ (NSString*)devNetworks   { return @""; }
++ (BOOL)callbackTokenInURL { return NO; }
+
+@end
+
+Use the values for REPLACE_WITH_KEY and REPLACE_WITH_SECRET from the new application you registered on yammer.
+You can leave the other values as they are.
+
+You also need to checkout three20 we have a fork of it here:
+
+http://github.com/andrewfromyammer/three20
+
+
+-----------
+Open Source Code
+-----------
+This project uses the following open source code:
+
+1. oauthconsumer
+An OAuth Consumer implementation in Objective-C
+http://code.google.com/p/oauthconsumer/
+
+2. json-framework
+A strict JSON parser/generator for Objective-C
+http://code.google.com/p/json-framework/
+
+3. three20
+an Objective-C library for iPhone developers
+http://github.com/joehewitt/three20
+
+-----------
+License
+-----------
+
+Copyright (c) 2009 Yammer, Inc.
+
+The Yammer name and Yammer logos associated with and integrated into this application are trademarks of Yammer, Inc., and all rights to such name and such logos are exclusively the property of and expressly reserved by Yammer Inc.  Use of the Yammer name and Yammer logos is not granted under this license.
+
+With the express exception of the foregoing, the Yammer application hereunder is provided in accordance with The MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-----------
+Questions?
+-----------
+
+Contact Andrew Arrow
+andrew@yammer-inc.com
+
+or visit
+
+http://forum.yammer.com/
