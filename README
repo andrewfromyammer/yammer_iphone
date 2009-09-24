@@ -14,7 +14,29 @@ For general information on developing iphone apps please see:
 
 http://developer.apple.com/iphone/
 
-After you have checked out a copy of the code, you should make a new file with any text editor called OAuthCustom.m and place it in the Classes directory:
+Clone both yammer_iphone and three20 like so:
+
+demo 505 $ git clone git://github.com/andrewfromyammer/yammer_iphone.git
+Initialized empty Git repository in /Users/aa/demo/yammer_iphone/.git/
+remote: Counting objects: 1710, done.
+remote: Compressing objects: 100% (1663/1663), done.
+remote: Total 1710 (delta 1298), reused 76 (delta 43)
+Receiving objects: 100% (1710/1710), 1.00 MiB | 853 KiB/s, done.
+Resolving deltas: 100% (1298/1298), done.
+
+demo 506 $ git clone git://github.com/andrewfromyammer/three20.git
+Initialized empty Git repository in /Users/aa/demo/three20/.git/
+remote: Counting objects: 5321, done.
+remote: Compressing objects: 100% (1361/1361), done.
+remote: Total 5321 (delta 4265), reused 4748 (delta 3715)
+Receiving objects: 100% (5321/5321), 1.13 MiB | 1929 KiB/s, done.
+Resolving deltas: 100% (4265/4265), done.
+
+Then run this command to create this empty file:
+
+demo 507 $ touch yammer_iphone/Classes/OAuthCustom.m
+
+Now open the "Yammer.xcodeproj" project.  And select that OAuthCustom.m file in the left hand side and paste in this:
 
 #import "OAuthCustom.h"
 
@@ -32,20 +54,18 @@ After you have checked out a copy of the code, you should make a new file with a
 Use the values for REPLACE_WITH_KEY and REPLACE_WITH_SECRET from the new application you registered on yammer.
 You can leave the other values as they are.
 
-You also need to checkout three20 we have a fork of it here:
+three20 should be placed at the same directory level as the yammer_iphone directory.
 
-http://github.com/andrewfromyammer/three20
+So if you have a directory called "demo" you'll want:
 
-It should be placed at the same directory level as the yammer_iphone directory.
-
-So if you have a directory called "myprojects" you'll want:
-
-myprojects
+demo
   yammer_iphone
   three20
   
 because yammer_iphone will look for "../three20/src" and the .. means up on directory from where you are.
 
+
+Built and run in the simulator and it should all work.  No need to configure three20 anymore, all the settings should work as is.
 
 -----------
 Open Source Code
