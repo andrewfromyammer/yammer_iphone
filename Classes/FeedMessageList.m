@@ -46,8 +46,6 @@
     FeedMessageData* list = [FeedMessageData feed:self.feed];
     self.dataSource = list;
     
-//    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
     [NSThread detachNewThreadSelector:@selector(loadFromCache) toTarget:self withObject:nil];
   }
   return self;
@@ -120,9 +118,9 @@
     [feedDataSource proccesMessages:dict checkNew:true newerThan:newerThan];
 
     if ([self.title isEqualToString:@"My Feed"])
-      [yammer performSelectorOnMainThread:@selector(setBadges)
-                             withObject:nil
-                          waitUntilDone:YES];    
+      [yammer performSelectorOnMainThread:@selector(setBadges:)
+                             withObject:style
+                          waitUntilDone:YES];
     
     NSDate *date = [FeedCache loadFeedDate:feed];
     
@@ -155,7 +153,7 @@
     [self showModel:YES];
   }
 
-  if ([(FeedMessageData*)self.dataSource count] == 0) {
+  if ([(FeedMessageData*)self.dataSource count] == 0 && ![self.title isEqualToString:@"Received"]) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Note"
                                                     message:@"No messages in this feed yet." delegate:self 
                                           cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -224,6 +222,8 @@
 }
 
 - (void)refreshFeedClick {
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  
+
   if ([self.title isEqualToString:@"Received"]) {
     YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -240,10 +240,10 @@
     [yammer refreshMyFeed];
   }
   else
-    [self refreshFeed];
+    [self refreshFeed:nil];
 }
 
-- (void)refreshFeed {  
+- (void)refreshFeed:(NSString*)silent {
   NSUInteger newIndex[] = {0, 0};
   NSIndexPath *newPath = [[NSIndexPath alloc] initWithIndexes:newIndex length:2];
 
@@ -254,7 +254,7 @@
   data.spinnerItem.display = @"Checking for new messages...";
   [self showModel:YES];
 
-  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:nil];
+  [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:silent];
 }
 
 - (void)replaceFeed {

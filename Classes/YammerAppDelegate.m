@@ -143,7 +143,7 @@
   }  
 }
 
-- (void)setBadges {
+- (void)setBadges:(NSString*)style {
   TTNavigator* navigator = [TTNavigator navigator];
   MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
   UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:0];
@@ -154,7 +154,7 @@
   [self setBadge:myfeed   count:self.unseen_message_count_following];
   [self setBadge:received count:self.unseen_message_count_received];
   
-  [received refreshFeed];
+  [received refreshFeed:@"silent"];
 }
 
 - (void)refreshMyFeed {
@@ -162,7 +162,7 @@
   MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
   UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:0];
   FeedMessageList *myfeed = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
-  [myfeed refreshFeed];
+  [myfeed refreshFeed:nil];
 }
 
 - (void)resetForNewThreadingValue {

@@ -86,7 +86,7 @@
                                                           style:(NSString *)style {
   
   NSString *url = [feed objectForKey:@"url"];
-  
+
   NSMutableArray *params = [NSMutableArray array];
   
   if ([url hasSuffix:@"/following"] && olderThan == nil) 

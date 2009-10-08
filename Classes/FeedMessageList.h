@@ -16,7 +16,7 @@
 @property BOOL isThread;
 
 - (id)initWithFeed:(FeedDictionary*)theFeed refresh:(BOOL)refresh compose:(BOOL)compose thread:(BOOL)thread;
-- (void)refreshFeed;
+- (void)refreshFeed:(NSString*)silent;
 - (void)replaceFeed;
 - (void)refreshFeedClick;
 

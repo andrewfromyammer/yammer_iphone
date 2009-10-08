@@ -25,7 +25,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   if (url)
     return url;
 
-  return @"https://www.yammer.com";  
+  return [OAuthCustom baseURL];
 }
 
 + (void)logout {

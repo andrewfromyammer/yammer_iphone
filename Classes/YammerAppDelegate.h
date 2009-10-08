@@ -34,7 +34,7 @@
 + (void)showError:(NSString *)error style:(NSString *)style;
 - (void)setupNavigator;
 - (void)resetForNewThreadingValue;
-- (void)setBadges;
+- (void)setBadges:(NSString*)style;
 - (void)setBadge:(FeedMessageList*)fml count:(int)count;
 - (void)refreshMyFeed;
 - (NSString*)version;
