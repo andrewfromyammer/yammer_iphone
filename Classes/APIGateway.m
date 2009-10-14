@@ -81,9 +81,9 @@
   return [APIGateway messages:feed olderThan:nil newerThan:newerThan style:style];
 }
 
-+ (NSMutableDictionary *)messages:(FeedDictionary *)feed olderThan:(NSNumber *)olderThan 
-                                                          newerThan:(NSNumber *)newerThan
-                                                          style:(NSString *)style {
++ (NSMutableDictionary *)messages:(FeedDictionary *)feed olderThan:(NSNumber*)olderThan 
+                                                          newerThan:(NSNumber*)newerThan
+                                                          style:(NSString*)style {
   
   NSString *url = [feed objectForKey:@"url"];
 
@@ -107,7 +107,7 @@
   }
 
 //  NSLog(paramString);
-  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, paramString] style:(NSString *)style];
+  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"%@.json%@", url, paramString] style:style];
   
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
@@ -129,7 +129,7 @@
   if (imageData)
     return [OAuthPostMultipart makeHTTPConnection:params path:@"/api/v1/messages" data:imageData];
   else
-    return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages" method:@"POST"];
+    return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages" method:@"POST" style:nil];
 }
 
 + (BOOL)followingUser:(NSString *)theUserId {
@@ -142,7 +142,7 @@
   [params setObject:theUserId forKey:@"target_id"];
   [params setObject:@"User" forKey:@"target_type"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"DELETE"];    
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"DELETE" style:nil];    
 }
 
 + (BOOL)addFollow:(NSString *)theUserId {
@@ -151,7 +151,7 @@
   [params setObject:theUserId forKey:@"target_id"];
   [params setObject:@"User" forKey:@"target_type"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"POST"];  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"POST" style:nil];
 }
 
 + (BOOL)sendPushToken:(NSString *)token {
@@ -160,7 +160,7 @@
   [params setObject:token forKey:@"feed_client[client_id]"];
   [params setObject:@"ApplePushDevice" forKey:@"feed_client[type]"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST"];  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST" style:@"silent"];  
 }
 
 + (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId {
@@ -169,7 +169,7 @@
   [params setObject:value forKey:[NSString stringWithFormat:@"feed_client[%@]", field]];
   [params setObject:@"PUT" forKey:@"_method"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST"];
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil];
   return true;
 }
 
@@ -180,7 +180,7 @@
   [params setObject:statusValue forKey:[NSString stringWithFormat:@"feed_client[notifications][%@]", feed_key]];
   [params setObject:@"PUT" forKey:@"_method"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST"];
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil];
   return true;
 }
 

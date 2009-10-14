@@ -44,6 +44,7 @@ Now open the "Yammer.xcodeproj" project.  And select that OAuthCustom.m file in 
 
 + (NSString*)theKey        { return @"REPLACE_WITH_KEY"; }
 + (NSString*)secret        { return @"REPLACE_WITH_SECRET"; }
++ (NSString*)baseURL       { return @"https://www.yammer.com"; }
 
 + (NSString*)devServer     { return @""; }
 + (NSString*)devNetworks   { return @""; }

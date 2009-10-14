@@ -13,6 +13,6 @@
 
 }
 
-+ (BOOL)makeHTTPConnection:(NSMutableDictionary *)params path:(NSString *)path method:(NSString *)method;
++ (BOOL)makeHTTPConnection:(NSMutableDictionary *)params path:(NSString *)path method:(NSString *)method style:(NSString*)style;
 
 @end

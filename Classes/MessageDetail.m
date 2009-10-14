@@ -20,6 +20,10 @@
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
   
   NSObject* object = [_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
+  
+  if ([object isKindOfClass:[TTTableYammerItem class]])
+    return;
+  
   if ([object isKindOfClass:[TTTableImageItem class]]) {
     TTTableImageItem* item = (TTTableImageItem*)object;
     FullSizePhoto* view = [[[FullSizePhoto alloc] initWithAttachment:item.userInfo] autorelease];

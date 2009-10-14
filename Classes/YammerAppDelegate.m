@@ -32,7 +32,7 @@
 }
 
 - (NSString*)version {
-  return @"2.0";
+  return @"2.0.1";
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication*)application {
@@ -133,8 +133,6 @@
 
 - (void)setBadge:(FeedMessageList*)fml count:(int)count {
   fml.tabBarItem.badgeValue = nil;
-  if (false)
-    return;
   if (count > 0) {
     if (count > 60)
       fml.tabBarItem.badgeValue = @"60+";

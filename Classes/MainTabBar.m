@@ -28,7 +28,7 @@
   
   UINavigationController *localNavigationController;
   NSMutableArray *localViewControllersArray = [[NSMutableArray alloc] initWithCapacity:5];
-  
+
   FeedMessageList *theView = [[[FeedMessageList alloc] initWithFeed:[LocalStorage getFeedInfo] refresh:YES compose:YES thread:NO] autorelease];
   [self setupView:theView title:@"My Feed" image:@"home.png"];
 	localNavigationController = [[[UINavigationController alloc] initWithRootViewController:theView] autorelease];

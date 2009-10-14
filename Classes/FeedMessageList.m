@@ -42,11 +42,15 @@
         
     self.navigationBarTintColor = [MainTabBar yammerGray];
 
+    self.curOffset = 0;    
+    FeedMessageData* feedDataSource = [FeedMessageData feed:self.feed];
+    [feedDataSource.items addObject:[SpinnerWithTextItem itemWithYammer]];
     
-    FeedMessageData* list = [FeedMessageData feed:self.feed];
-    self.dataSource = list;
+    [feedDataSource fetch:nil];
+    self.dataSource = feedDataSource;
     
-    [NSThread detachNewThreadSelector:@selector(loadFromCache) toTarget:self withObject:nil];
+    if (![self.title isEqualToString:@"Received"])
+      [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];        
   }
   return self;
 }
@@ -76,27 +80,6 @@
   [autoreleasepool release];
 }
 
-- (void)loadFromCache {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  
-  FeedMessageData* feedDataSource = [FeedMessageData feed:self.feed];
-  [feedDataSource.items addObject:[SpinnerWithTextItem itemWithYammer]];
-
-  self.curOffset = 0;
-  @synchronized ([UIApplication sharedApplication]) {  
-    [feedDataSource fetch:nil];
-  }
-  self.lastNumMessages = [feedDataSource count];  
-  
-  [self performSelectorOnMainThread:@selector(setDataSource:)
-                         withObject:feedDataSource
-                      waitUntilDone:YES];  
-  if (![self.title isEqualToString:@"Received"])
-    [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:@"silent"];  
-    
-  [autoreleasepool release];
-}
-
 - (void)checkForNewMessages:(NSString *)style {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -120,7 +103,7 @@
     if ([self.title isEqualToString:@"My Feed"])
       [yammer performSelectorOnMainThread:@selector(setBadges:)
                              withObject:style
-                          waitUntilDone:YES];
+                          waitUntilDone:NO];
     
     NSDate *date = [FeedCache loadFeedDate:feed];
     
@@ -149,6 +132,9 @@
       data.spinnerItem.display = [FeedCache niceDate:date];
     else
       data.spinnerItem.display = @"No updates yet.";
+    
+    if ([self.title isEqualToString:@"My Feed"])
+      [yammer performSelectorOnMainThread:@selector(setBadges:) withObject:style waitUntilDone:NO];
     
     [self showModel:YES];
   }

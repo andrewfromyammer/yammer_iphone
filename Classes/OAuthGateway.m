@@ -17,10 +17,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 
 @implementation OAuthGateway
 
-+ (NSString *)baseURL {
-//  return @"http://192.168.1.151:3000";
-//  return @"https://staging.yammer.com";
-  
++ (NSString *)baseURL {  
   NSString *url = [LocalStorage getBaseURL];
   if (url)
     return url;
@@ -142,7 +139,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   return [NSURL URLWithString:[NSString stringWithFormat:@"%@", path]];
 }
 
-+ (NSString *)handleConnection:(OAMutableURLRequest *)request style:(NSString *)style {
++ (NSString *)handleConnection:(OAMutableURLRequest *)request style:(NSString *)style {  
   NSHTTPURLResponse *response;
   NSError *error;
   NSData *responseData;

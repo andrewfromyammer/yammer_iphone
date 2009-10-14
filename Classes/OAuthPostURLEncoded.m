@@ -16,7 +16,7 @@
 
 @implementation OAuthPostURLEncoded
 
-+ (BOOL)makeHTTPConnection:(NSMutableDictionary *)params path:(NSString *)path method:(NSString *)method {  
++ (BOOL)makeHTTPConnection:(NSMutableDictionary *)params path:(NSString *)path method:(NSString *)method style:(NSString*)style {  
   
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   
@@ -44,7 +44,7 @@
   [request setParameters:oauthParams];
   [request prepare];
       
-  return [OAuthGateway handleConnection:request style:nil] != nil;
+  return [OAuthGateway handleConnection:request style:style] != nil;
 }
 
 @end
