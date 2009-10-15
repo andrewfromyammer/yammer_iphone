@@ -38,7 +38,7 @@
 
 @implementation MessageDetail
 
-@synthesize messageData = _messageData, index, upDown = _upDown, toolbar = _toolbar, user = _user, thread = _thread;
+@synthesize messageData = _messageData, index, upDown = _upDown, toolbar = _toolbar, user = _user, thread = _thread, like = _like;
 @synthesize isThread;
 
 - (id<UITableViewDelegate>)createDelegate {
@@ -199,25 +199,26 @@
   UIBarButtonItem *reply = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply
                                                                          target:self
                                                                          action:@selector(reply)];
+  
   UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                             target:nil
-                                                                            action:nil];
-  UIBarButtonItem *flexItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                             target:nil
-                                                                             action:nil];
-  
+                                                                            action:nil];  
   
   self.thread = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"thread_gray.png"]
                                                              style:UIBarButtonItemStylePlain
                                                             target:self
                                                             action:@selector(threadView)];
+  [self.thread setTitle:@"Thread"];
+  
   
   self.user = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user_gray.png"]
                                                            style:UIBarButtonItemStylePlain
                                                           target:self //[[UIApplication sharedApplication] delegate]
                                                           action:@selector(userView)];
+  [self.user setTitle:@"Profile"];
+
   
-  NSMutableArray *items = [NSMutableArray arrayWithObjects: reply, flexItem, _thread, flexItem2, _user, nil];
+  NSMutableArray *items = [NSMutableArray arrayWithObjects: reply, flexItem, _thread, flexItem, _user, nil];
 
   [_user setEnabled:false];
   [_thread setEnabled:false];
@@ -265,6 +266,7 @@
   TT_RELEASE_SAFELY(_toolbar);
   TT_RELEASE_SAFELY(_user);
   TT_RELEASE_SAFELY(_thread);
+  TT_RELEASE_SAFELY(_like);  
   [super dealloc];
 }
 

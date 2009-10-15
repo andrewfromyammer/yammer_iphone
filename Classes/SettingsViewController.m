@@ -51,7 +51,16 @@
 }
 
 - (void)logout {
-  [OAuthGateway logout];
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logout"
+                                                  message:@"Click the confirm button below to logout from this account and exit the Yammer Application." delegate:self 
+                                        cancelButtonTitle:nil otherButtonTitles: @"Cancel", @"Confirm", nil];
+  [alert show];
+  [alert release];  
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+  if (buttonIndex == 1)
+    [OAuthGateway logout];
 }
 
 - (void)loadView {  

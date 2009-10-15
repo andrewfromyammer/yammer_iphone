@@ -3,7 +3,7 @@
 #import "SpinnerViewController.h"
 #import "DataSettings.h"
 
-@interface SettingsViewController : TTViewController <UITableViewDelegate> {
+@interface SettingsViewController : TTViewController <UITableViewDelegate, UIAlertViewDelegate> {
 	UITableView *theTableView;
   NSMutableDictionary *usersCurrent;
   DataSettings *dataSource;

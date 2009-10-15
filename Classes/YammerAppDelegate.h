@@ -2,7 +2,7 @@
 #import <Three20/Three20.h>
 #import "FeedMessageList.h"
 
-@interface YammerAppDelegate : NSObject <UIApplicationDelegate, UIActionSheetDelegate> {
+@interface YammerAppDelegate : NSObject <UIApplicationDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
   NSManagedObjectModel *managedObjectModel;
   NSManagedObjectContext *managedObjectContext;	    
   NSPersistentStoreCoordinator *persistentStoreCoordinator;  
@@ -11,6 +11,7 @@
   NSString *launchURL;
   NSNumber *network_id;
   BOOL threading;
+  BOOL createNewAccount;
   int unseen_message_count_following;
   int unseen_message_count_received;
   long last_seen_message_id;
@@ -25,6 +26,7 @@
 @property (nonatomic, retain) NSNumber *network_id;
 @property (nonatomic, retain) NSString *launchURL;
 @property BOOL threading;
+@property BOOL createNewAccount;
 
 @property int unseen_message_count_following;
 @property int unseen_message_count_received;

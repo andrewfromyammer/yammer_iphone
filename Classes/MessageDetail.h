@@ -7,6 +7,7 @@
   UIToolbar* _toolbar;
   UIBarButtonItem* _user;
   UIBarButtonItem* _thread;
+  UIBarButtonItem* _like;
   int index;
   BOOL isThread;
 }
@@ -16,6 +17,7 @@
 @property(nonatomic,retain) UIToolbar* toolbar;
 @property(nonatomic,retain) UIBarButtonItem* user;
 @property(nonatomic,retain) UIBarButtonItem* thread;
+@property(nonatomic,retain) UIBarButtonItem* like;
 @property int index;
 @property BOOL isThread;
 
