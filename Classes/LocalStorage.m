@@ -54,6 +54,7 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:PASSFILE] error:&error];  
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:FEEDFILE_OLD] error:&error];  
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:CURRENTFILE] error:&error];  
+  [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:@"message_cache_v2.sqlite"] error:&error];
 }
 
 + (NSString *)getFile:(NSString *)name {  

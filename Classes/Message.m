@@ -23,12 +23,14 @@
 @dynamic sender;
 @dynamic thread_url;
 @dynamic thread_updates;
+@dynamic likes;
 
 - (NSMutableDictionary*)safeMessage {
   NSMutableDictionary* dict = [NSMutableDictionary dictionary];
 
-  [dict setObject:[NSNumber numberWithLong:[self.thread_updates intValue]-1] forKey:@"thread_updates"];
-  [dict setObject:[NSNumber numberWithLong:[self.privacy intValue]] forKey:@"privacy"];
+  [dict setObject:[NSNumber numberWithInt:[self.thread_updates intValue]-1] forKey:@"thread_updates"];
+  [dict setObject:[NSNumber numberWithInt:[self.privacy intValue]] forKey:@"privacy"];
+  [dict setObject:[NSNumber numberWithInt:[self.likes intValue]] forKey:@"likes"];
   [dict setObject:[NSNumber numberWithLong:[self.message_id longValue]] forKey:@"message_id"];
   [dict setObject:[NSNumber numberWithLong:[self.latest_reply_id longValue]] forKey:@"latest_reply_id"];  
   [dict setObject:[NSNumber numberWithLong:[self.actor_id longValue]] forKey:@"actor_id"];

@@ -27,7 +27,7 @@
     self.navigationBarTintColor = [MainTabBar yammerGray];
 
     UIBarButtonItem *logout=[[UIBarButtonItem alloc] init];
-    logout.title=@"Logout";
+    logout.title=@"Log Out";
     logout.target = self;
     logout.action = @selector(logout);
     self.navigationItem.rightBarButtonItem = logout;
@@ -51,8 +51,8 @@
 }
 
 - (void)logout {
-  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logout"
-                                                  message:@"Click the confirm button below to logout from this account and exit the Yammer Application." delegate:self 
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log Out"
+                                                  message:@"Click the confirm button below to log out from this account and exit the Yammer Application." delegate:self 
                                         cancelButtonTitle:nil otherButtonTitles: @"Cancel", @"Confirm", nil];
   [alert show];
   [alert release];  

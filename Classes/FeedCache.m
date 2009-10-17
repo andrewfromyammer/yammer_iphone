@@ -137,7 +137,8 @@
     Message *m = [fetcher.fetchedObjects objectAtIndex:i];
     NSMutableDictionary *dict = [counts objectForKey:[m.message_id description]];
     m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
-    m.thread_updates  = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_updates"] longValue]];
+    m.thread_updates = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_updates"] intValue]];
+    m.likes = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"likes"] intValue]];
     m.latest_reply_at = [FeedCache dateFromText:[dict objectForKey:@"thread_latest_reply_at"]];    
     [id_lookup setObject:@"true" forKey:[m.message_id description]];
   }  
@@ -309,6 +310,8 @@
     m.sender = [dict objectForKey:@"sender"];
     m.thread_url = [dict objectForKey:@"thread_url"];
     m.thread_updates = [[NSNumber alloc] initWithInt:[[dict objectForKey:@"thread_updates"] intValue]];
+    m.likes = [[NSNumber alloc] initWithInt:[[dict objectForKey:@"likes"] intValue]];
+    
   }
 
   NSError *error;

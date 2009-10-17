@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSString *sender;
 @property (nonatomic, retain) NSString *thread_url;
 @property (nonatomic, retain) NSNumber *thread_updates;
+@property (nonatomic, retain) NSNumber *likes;
 
 - (NSMutableDictionary*)safeMessage;
 + (NSString*)timeString:(TTTableYammerItem*)item;

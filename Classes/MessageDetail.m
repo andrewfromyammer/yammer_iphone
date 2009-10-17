@@ -204,21 +204,22 @@
                                                                             target:nil
                                                                             action:nil];  
   
+  self.like = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"smile_gray.png"]
+                                                 style:UIBarButtonItemStylePlain
+                                                target:self
+                                                action:@selector(threadView)];
+
   self.thread = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"thread_gray.png"]
-                                                             style:UIBarButtonItemStylePlain
-                                                            target:self
-                                                            action:@selector(threadView)];
-  [self.thread setTitle:@"Thread"];
-  
+                                                 style:UIBarButtonItemStylePlain
+                                                target:self
+                                                action:@selector(threadView)];  
   
   self.user = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user_gray.png"]
                                                            style:UIBarButtonItemStylePlain
                                                           target:self //[[UIApplication sharedApplication] delegate]
                                                           action:@selector(userView)];
-  [self.user setTitle:@"Profile"];
-
   
-  NSMutableArray *items = [NSMutableArray arrayWithObjects: reply, flexItem, _thread, flexItem, _user, nil];
+  NSMutableArray *items = [NSMutableArray arrayWithObjects: reply, flexItem, _like, flexItem, _thread, flexItem, _user, nil];
 
   [_user setEnabled:false];
   [_thread setEnabled:false];

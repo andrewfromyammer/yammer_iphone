@@ -49,6 +49,16 @@
     if (item.isDetail == YES) {
       [_messageView timeLineToOriginalPosition];
       [_messageView adjustFromLineIcons:item];
+
+      _messageView.iconLike.hidden = YES;
+      _messageView.messageText.hidden = YES;
+      _messageView.messageText.text = @"";
+      if ([[item.message objectForKey:@"likes"] intValue] > 0) {
+        _messageView.iconLike.hidden = NO;
+        _messageView.messageText.hidden = NO;
+        _messageView.messageText.text = [NSString stringWithFormat:@"Liked by %d people.", [[item.message objectForKey:@"likes"] intValue]];
+        _messageView.messageText.frame = CGRectMake(71, 19, 200, 15);
+      }
       return;
     }
 

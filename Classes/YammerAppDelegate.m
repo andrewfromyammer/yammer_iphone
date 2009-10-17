@@ -111,9 +111,9 @@
     [LocalStorage removeAccessToken];
     
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please login or signup:"
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please log in or sign up:"
                                                         delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil
-                                                        otherButtonTitles:@"Login", @"Signup", nil];
+                                                        otherButtonTitles:@"Log In", @"Sign Up", nil];
     actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [actionSheet showInView:[[TTNavigator navigator] window]];
     [actionSheet release];    

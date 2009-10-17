@@ -10,7 +10,7 @@
   TTImageView* _iconClip;
   TTImageView* _iconLock;
   TTImageView* _iconPhoto;
-
+  TTImageView* _iconLike;
 }
 
 @property (nonatomic, retain) UILabel* fromLine;
@@ -22,6 +22,7 @@
 @property (nonatomic, retain) TTImageView* iconClip;
 @property (nonatomic, retain) TTImageView* iconLock;
 @property (nonatomic, retain) TTImageView* iconPhoto;
+@property (nonatomic, retain) TTImageView* iconLike;
 
 - (void)adjustWidthsAndHeights:(TTTableYammerItem*)item;
 - (void)timeLineToOriginalPosition;

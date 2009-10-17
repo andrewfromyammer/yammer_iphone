@@ -8,7 +8,7 @@ static const CGFloat leftX = 55;
 @implementation MessageView
 
 @synthesize fromLine = _fromLine, timeLine = _timeLine, messageText = _messageText;
-@synthesize mugshot = _mugshot, iconPhoto = _iconPhoto, iconLock = _iconLock, iconClip = _iconClip;
+@synthesize mugshot = _mugshot, iconPhoto = _iconPhoto, iconLock = _iconLock, iconClip = _iconClip, iconLike = _iconLike;
 
 - (id)init {
   if (self = [super initWithFrame:CGRectMake(0, 0, 320, 100)]) {
@@ -41,6 +41,10 @@ static const CGFloat leftX = 55;
     self.iconPhoto = [[TTImageView alloc] initWithFrame:CGRectMake(0, 4, 15, 14)];
     _iconPhoto.image = [UIImage imageNamed:@"photos15x14.png"];
     _iconPhoto.hidden = YES;
+
+    self.iconLike = [[TTImageView alloc] initWithFrame:CGRectMake(leftX, 21, 12, 12)];
+    _iconLike.image = [UIImage imageNamed:@"smile12x12.png"];
+    _iconLike.hidden = YES; 
     
 		[self addSubview:_fromLine];
 		[self addSubview:_messageText];
@@ -50,6 +54,7 @@ static const CGFloat leftX = 55;
     [self addSubview:_iconClip];
     [self addSubview:_iconLock];
     [self addSubview:_iconPhoto];
+    [self addSubview:_iconLike];
   }
   
   return self;
@@ -116,6 +121,7 @@ static const CGFloat leftX = 55;
   TT_RELEASE_SAFELY(_iconPhoto);
   TT_RELEASE_SAFELY(_iconClip);
   TT_RELEASE_SAFELY(_iconLock);  
+  TT_RELEASE_SAFELY(_iconLike);
   [super dealloc];
 }
 

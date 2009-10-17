@@ -175,11 +175,17 @@
   if (older && [older intValue] == 1)
     olderAvailable = true;
   
+  NSMutableDictionary *liked_ids = [NSMutableDictionary dictionary];
+  int i=0;
+  for (i=0; i < [[meta objectForKey:@"liked_message_ids"] count]; i++)
+    [liked_ids setObject:@"1" forKey:[[[meta objectForKey:@"liked_message_ids"] objectAtIndex:i] description]];
+  
+  NSLog([liked_ids description]);
+  
   NSMutableArray *references = [dict objectForKey:@"references"];
   
   NSMutableDictionary *referencesByType = [NSMutableDictionary dictionary];
   
-  int i=0;
   for (i=0; i < [references count]; i++) {
     NSMutableDictionary *reference = [references objectAtIndex:i];
     NSString *type = [reference objectForKey:@"type"];
@@ -266,6 +272,13 @@
       
       
       [message setObject:fromLine forKey:@"fromLine"];
+            
+      NSMutableDictionary *likedDict = [message objectForKey:@"liked_by"];
+      [message setObject:[likedDict objectForKey:@"count"] forKey:@"likes"];
+      
+      if ([liked_ids objectForKey:[[message objectForKey:@"id"] description]])
+        [message setObject:@"1" forKey:@"liked_by_me"];
+      
     } @catch (NSException *theErr) {}
   }
     

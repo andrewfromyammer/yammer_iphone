@@ -12,7 +12,7 @@
 #define USER_CURRENT    @"/account/user_current.json"
 #define DIRECTORY_CACHE @"/account/directory_cache.json"
 #define SETTINGS        @"/account/settngs.json"
-#define MESSAGE_CACHE   @"message_cache_v2.sqlite"
+#define MESSAGE_CACHE   @"message_cache_v3.sqlite"
 
 #define ATTACHMENTS             @"/attachments"
 #define ATTACHMENT_THUMBNAILS   @"/attachment_thumbnails"
