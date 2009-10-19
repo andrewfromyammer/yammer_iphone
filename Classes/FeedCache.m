@@ -279,6 +279,7 @@
   
   int i;
   for (i=0; i<[messages count]; i++) {
+    @try {
     NSMutableDictionary *dict = [messages objectAtIndex:i];
 
     if ([lookup objectForKey:[[dict objectForKey:@"id"] description]])
@@ -292,13 +293,17 @@
     m.plain_body = [body objectForKey:@"plain"];
         
     m.created_at = [FeedCache dateFromText:[dict objectForKey:@"created_at"]];
-    m.latest_reply_at = [FeedCache dateFromText:[dict objectForKey:@"thread_latest_reply_at"]];
+    
+    if ([dict objectForKey:@"thread_latest_reply_at"])
+      m.latest_reply_at = [FeedCache dateFromText:[dict objectForKey:@"thread_latest_reply_at"]];
+    if ([dict objectForKey:@"thread_latest_reply_id"])
+      m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
 
     m.feed = feed;
     m.message_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"id"] longValue]];
-    m.network_id = yam.network_id;
-    m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
-        
+    m.network_id = yam.network_id;    
+
+
     if ([dict objectForKey:@"lock"])
       m.privacy = [[NSNumber alloc] initWithBool:YES];
     
@@ -310,7 +315,13 @@
     m.sender = [dict objectForKey:@"sender"];
     m.thread_url = [dict objectForKey:@"thread_url"];
     m.thread_updates = [[NSNumber alloc] initWithInt:[[dict objectForKey:@"thread_updates"] intValue]];
+    
     m.likes = [[NSNumber alloc] initWithInt:[[dict objectForKey:@"likes"] intValue]];
+    if ([dict objectForKey:@"liked_by_me"])
+      m.liked_by_me = [[NSNumber alloc] initWithBool:YES];
+    
+      
+    } @catch (NSException *error) {}
     
   }
 

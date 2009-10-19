@@ -207,7 +207,7 @@
   self.like = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"smile_gray.png"]
                                                  style:UIBarButtonItemStylePlain
                                                 target:self
-                                                action:@selector(threadView)];
+                                                action:@selector(toggleLike)];
 
   self.thread = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"thread_gray.png"]
                                                  style:UIBarButtonItemStylePlain
@@ -237,6 +237,14 @@
   [meta setObject:[NSString stringWithFormat:@"Re: %@", [m objectForKey:@"sender"]] forKey:@"display"];
   
   [self presentModalViewController:[ComposeMessage getNav:meta] animated:YES];
+}
+
+- (void)toggleLike {
+  NSMutableDictionary *m = [_messageData objectAtIndex:index];
+  if ([[m objectForKey:@"liked_by_me"] boolValue])
+    NSLog(@"me");
+  else
+    NSLog(@"no");
 }
 
 - (void)threadView {

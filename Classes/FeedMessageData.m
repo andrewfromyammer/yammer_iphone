@@ -179,9 +179,7 @@
   int i=0;
   for (i=0; i < [[meta objectForKey:@"liked_message_ids"] count]; i++)
     [liked_ids setObject:@"1" forKey:[[[meta objectForKey:@"liked_message_ids"] objectAtIndex:i] description]];
-  
-  NSLog([liked_ids description]);
-  
+    
   NSMutableArray *references = [dict objectForKey:@"references"];
   
   NSMutableDictionary *referencesByType = [NSMutableDictionary dictionary];
