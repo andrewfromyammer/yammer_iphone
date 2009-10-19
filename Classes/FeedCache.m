@@ -330,7 +330,36 @@
 }
 
 + (BOOL)fetchAndUpdateMessage:(NSDictionary *)safe_message {
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSManagedObjectContext *context = [yam managedObjectContext];
+
+  NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];  
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"message_id = %@", [[safe_message objectForKey:@"message_id"] description]];
+  [fetchRequest setPredicate:feedPredicate];
   
+	NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"message_id" ascending:NO];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:descriptor, nil];
+	[fetchRequest setSortDescriptors:sortDescriptors];
+	
+	NSFetchedResultsController *fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest 
+                                                                            managedObjectContext:context 
+                                                                              sectionNameKeyPath:@"message_id" 
+                                                                                       cacheName:@"Root"];
+  
+  NSError *error;
+	if (![fetcher performFetch:&error]) {
+    NSLog(@"error %@", [error description]);
+  }
+  
+  Message* m = [fetcher.fetchedObjects objectAtIndex:0];
+  m.likes = (NSNumber*)[safe_message objectForKey:@"likes"];
+  m.liked_by_me = (NSNumber*)[safe_message objectForKey:@"liked_by_me"];
+  
+  [context save:&error]; 
+  
+  return true;
 }
 
 + (NSDate *)dateFromText:(NSString *)text {

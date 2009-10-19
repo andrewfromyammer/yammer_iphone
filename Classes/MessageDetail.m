@@ -11,6 +11,7 @@
 #import "ImageCache.h"
 #import "LocalStorage.h"
 #import "APIGateway.h"
+#import "FeedCache.h"
 
 @interface MessageDetailDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -243,8 +244,9 @@
 - (void)toggleLike {
   NSMutableDictionary *m = [_messageData objectAtIndex:index];
   int likes = [[m objectForKey:@"likes"] intValue];
-  BOOL liked_by_me;
+  BOOL liked_by_me = [[m objectForKey:@"liked_by_me"] boolValue];
   
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
   if ([[m objectForKey:@"liked_by_me"] boolValue]) {
     if ([APIGateway unlikeMessage:[m objectForKey:@"message_id"]]) {
       likes--;
@@ -257,7 +259,8 @@
       liked_by_me = YES;
     }
   }
-  
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
   [m setObject:[NSNumber numberWithBool:liked_by_me] forKey:@"liked_by_me"];  
   [m setObject:[NSNumber numberWithInt:likes] forKey:@"likes"];
   [FeedCache fetchAndUpdateMessage:m];
