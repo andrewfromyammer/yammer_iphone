@@ -184,5 +184,24 @@
   return true;
 }
 
++ (BOOL)likeMessage:(NSNumber *)message_id {
+  NSMutableDictionary *params = [NSMutableDictionary dictionary];
+  
+  [params setObject:[message_id description] forKey:@"message_id"];
+  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages/liked_by" method:@"POST" style:nil];
+  return true;  
+}
+
++ (BOOL)unlikeMessage:(NSNumber *)message_id {
+  NSMutableDictionary *params = [NSMutableDictionary dictionary];
+  
+  [params setObject:[message_id description] forKey:@"message_id"];
+  [params setObject:@"DELETE" forKey:@"_method"];
+  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages/liked_by" method:@"POST" style:nil];
+  return true;  
+}
+
 
 @end

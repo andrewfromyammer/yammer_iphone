@@ -10,6 +10,7 @@
 #import "FullSizePhoto.h"
 #import "ImageCache.h"
 #import "LocalStorage.h"
+#import "APIGateway.h"
 
 @interface MessageDetailDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -241,10 +242,26 @@
 
 - (void)toggleLike {
   NSMutableDictionary *m = [_messageData objectAtIndex:index];
-  if ([[m objectForKey:@"liked_by_me"] boolValue])
-    NSLog(@"me");
-  else
-    NSLog(@"no");
+  int likes = [[m objectForKey:@"likes"] intValue];
+  BOOL liked_by_me;
+  
+  if ([[m objectForKey:@"liked_by_me"] boolValue]) {
+    if ([APIGateway unlikeMessage:[m objectForKey:@"message_id"]]) {
+      likes--;
+      liked_by_me = NO;
+    }
+  }
+  else {
+    if ([APIGateway likeMessage:[m objectForKey:@"message_id"]]) {
+      likes++;
+      liked_by_me = YES;
+    }
+  }
+  
+  [m setObject:[NSNumber numberWithBool:liked_by_me] forKey:@"liked_by_me"];  
+  [m setObject:[NSNumber numberWithInt:likes] forKey:@"likes"];
+  [FeedCache fetchAndUpdateMessage:m];
+  [self loadMessage];
 }
 
 - (void)threadView {

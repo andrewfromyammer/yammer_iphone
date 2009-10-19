@@ -329,6 +329,10 @@
   [context save:&error];  
 }
 
++ (BOOL)fetchAndUpdateMessage:(NSDictionary *)safe_message {
+  
+}
+
 + (NSDate *)dateFromText:(NSString *)text {
   @try {
     NSString *front = [text substringToIndex:10];

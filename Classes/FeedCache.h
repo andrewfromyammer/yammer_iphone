@@ -22,4 +22,6 @@
 + (void)purgeOldFeeds;
 + (NSDate *)dateFromText:(NSString *)text;
 
++ (BOOL)fetchAndUpdateMessage:(NSDictionary *)safe_message;
+
 @end
