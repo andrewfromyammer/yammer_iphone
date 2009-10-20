@@ -310,7 +310,7 @@
 							<real>264</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1 122 1920 1056 0 0 1920 1178 </string>
+						<string>35 122 1920 1056 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -340,7 +340,7 @@
 										<key>_historyCapacity</key>
 										<integer>10</integer>
 										<key>bookmark</key>
-										<string>004BDC13108D1C3B00EDAA26</string>
+										<string>00DF6845108E31E30002C68C</string>
 										<key>history</key>
 										<array>
 											<string>00D32E07108D19F300B2E64C</string>
@@ -352,7 +352,7 @@
 											<string>00D32E1B108D1AAE00B2E64C</string>
 											<string>004BDC0E108D1C3B00EDAA26</string>
 											<string>004BDC0F108D1C3B00EDAA26</string>
-											<string>004BDC10108D1C3B00EDAA26</string>
+											<string>004BDC13108D1C3B00EDAA26</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -364,7 +364,6 @@
 											<string>00D32E10108D19F300B2E64C</string>
 											<string>00D32E12108D19F300B2E64C</string>
 											<string>00D32E20108D1AAE00B2E64C</string>
-											<string>004BDC11108D1C3B00EDAA26</string>
 											<string>004BDC12108D1C3B00EDAA26</string>
 										</array>
 									</dict>
@@ -379,7 +378,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1634, 1010}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1 122 1920 1056 0 0 1920 1178 </string>
+								<string>35 122 1920 1056 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -399,7 +398,7 @@
 								<key>Frame</key>
 								<string>{{0, 1015}, {1634, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1 122 1920 1056 0 0 1920 1178 </string>
+								<string>35 122 1920 1056 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -423,9 +422,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>004BDBFD108D1B3700EDAA26</string>
+				<string>00DF6846108E31E30002C68C</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>004BDBFE108D1B3700EDAA26</string>
+				<string>00DF6847108E31E30002C68C</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -559,15 +558,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>004BDC16108D1C3B00EDAA26</string>
-		<string>004BDC17108D1C3B00EDAA26</string>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>00901E4B10445F0F008E7C7D</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Users/aa/ginc/yammer_iphone/Yammer.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1 122 1920 1056 0 0 1920 1178 </string>
+	<string>35 122 1920 1056 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -764,13 +759,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>004BDBFF108D1B3700EDAA26</string>
+				<string>00DF6848108E31E30002C68C</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>004BDC00108D1B3700EDAA26</string>
-				<string>004BDC01108D1B3700EDAA26</string>
-				<string>004BDC02108D1B3700EDAA26</string>
-				<string>004BDC03108D1B3700EDAA26</string>
-				<string>004BDC04108D1B3700EDAA26</string>
+				<string>00DF6849108E31E30002C68C</string>
+				<string>00DF684A108E31E30002C68C</string>
+				<string>00DF684B108E31E30002C68C</string>
+				<string>00DF684C108E31E30002C68C</string>
+				<string>00DF684D108E31E30002C68C</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
