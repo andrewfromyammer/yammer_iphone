@@ -285,13 +285,14 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>87</integer>
+									<integer>68</integer>
+									<integer>64</integer>
 									<integer>5</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 1024}, {264, 997}}</string>
+							<string>{{0, 643}, {264, 997}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -310,7 +311,7 @@
 							<real>264</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>35 122 1920 1056 0 0 1920 1178 </string>
+						<string>-3 121 1920 1056 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -328,7 +329,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>YammerAppDelegate.m</string>
+								<string>FeedMessageData.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -336,14 +337,13 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>YammerAppDelegate.m</string>
+										<string>FeedMessageData.m</string>
 										<key>_historyCapacity</key>
 										<integer>10</integer>
 										<key>bookmark</key>
-										<string>00DF6845108E31E30002C68C</string>
+										<string>00191918108E603C00FA58CF</string>
 										<key>history</key>
 										<array>
-											<string>00D32E07108D19F300B2E64C</string>
 											<string>00D32E08108D19F300B2E64C</string>
 											<string>00D32E09108D19F300B2E64C</string>
 											<string>00D32E0A108D19F300B2E64C</string>
@@ -352,7 +352,8 @@
 											<string>00D32E1B108D1AAE00B2E64C</string>
 											<string>004BDC0E108D1C3B00EDAA26</string>
 											<string>004BDC0F108D1C3B00EDAA26</string>
-											<string>004BDC13108D1C3B00EDAA26</string>
+											<string>00191915108E603C00FA58CF</string>
+											<string>00191916108E603C00FA58CF</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -360,11 +361,11 @@
 											<string>00609CFC108CF87000CB55D5</string>
 											<string>008988AF108D143800FF8443</string>
 											<string>008988B3108D143800FF8443</string>
-											<string>008988B7108D143800FF8443</string>
 											<string>00D32E10108D19F300B2E64C</string>
 											<string>00D32E12108D19F300B2E64C</string>
 											<string>00D32E20108D1AAE00B2E64C</string>
 											<string>004BDC12108D1C3B00EDAA26</string>
+											<string>00191917108E603C00FA58CF</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -378,7 +379,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1634, 1010}}</string>
 								<key>RubberWindowFrame</key>
-								<string>35 122 1920 1056 0 0 1920 1178 </string>
+								<string>-3 121 1920 1056 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -398,7 +399,7 @@
 								<key>Frame</key>
 								<string>{{0, 1015}, {1634, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>35 122 1920 1056 0 0 1920 1178 </string>
+								<string>-3 121 1920 1056 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -422,9 +423,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>00DF6846108E31E30002C68C</string>
+				<string>001918FD108E321A00FA58CF</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>00DF6847108E31E30002C68C</string>
+				<string>001918FE108E321A00FA58CF</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -558,11 +559,13 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C78EAAD065D492600B07095</string>
+		<string>00901E4B10445F0F008E7C7D</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Users/aa/ginc/yammer_iphone/Yammer.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>35 122 1920 1056 0 0 1920 1178 </string>
+	<string>-3 121 1920 1056 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -639,7 +642,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>00901E4B10445F0F008E7C7D</string>
-				<string>004BDC14108D1C3B00EDAA26</string>
+				<string>00191907108E3FA400FA58CF</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -759,13 +762,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>00DF6848108E31E30002C68C</string>
+				<string>001918FF108E321A00FA58CF</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>00DF6849108E31E30002C68C</string>
-				<string>00DF684A108E31E30002C68C</string>
-				<string>00DF684B108E31E30002C68C</string>
-				<string>00DF684C108E31E30002C68C</string>
-				<string>00DF684D108E31E30002C68C</string>
+				<string>00191900108E321A00FA58CF</string>
+				<string>00191901108E321A00FA58CF</string>
+				<string>00191902108E321A00FA58CF</string>
+				<string>00191903108E321A00FA58CF</string>
+				<string>00191904108E321A00FA58CF</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -892,6 +895,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -927,7 +932,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>004BDC15108D1C3B00EDAA26</string>
+				<string>00191908108E3FA400FA58CF</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>

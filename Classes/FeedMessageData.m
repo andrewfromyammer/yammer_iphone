@@ -156,6 +156,12 @@
   
   if (indexPath.section == 0)
     return [_items objectAtIndex:indexPath.row];
+
+  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+  int n = yam.unseen_message_count_following - (_items.count - 1);
+  if (n > 0)
+    return [TTTableMoreButton itemWithText:[NSString stringWithFormat:@"    Show %d more new messages", n]];
   return [TTTableMoreButton itemWithText:@"                       More"];
 }
 
@@ -286,7 +292,7 @@
       if ([[_feedDictionary objectForKey:@"url"] hasSuffix:@"/following"] && checkNew) {
         yam.unseen_message_count_following = [[meta objectForKey:@"unseen_message_count_following"] intValue];
         yam.unseen_message_count_received = [[meta objectForKey:@"unseen_message_count_received"] intValue];
-        yam.last_seen_message_id = [[meta objectForKey:@"last_seen_message_id"] longValue];
+        yam.last_seen_message_id = [[meta objectForKey:@"last_seen_message_id"] longValue];        
       }
     } @catch (NSException *err) { }
     
