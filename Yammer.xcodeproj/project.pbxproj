@@ -68,6 +68,7 @@
 		00705D1C10485559005D7A3F /* SettingsPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1810485559005D7A3F /* SettingsPush.m */; };
 		00705D1D10485559005D7A3F /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1A10485559005D7A3F /* SettingsViewController.m */; };
 		00705D21104855BE005D7A3F /* SpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D20104855BE005D7A3F /* SpinnerViewController.m */; };
+		00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 00780FDA108FABEA00F6FA36 /* DirectorySearchDataSource.m */; };
 		00901E1710445C8A008E7C7D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00901E1610445C8A008E7C7D /* QuartzCore.framework */; };
 		00901E2010445E82008E7C7D /* libThree20.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00901E1F10445E72008E7C7D /* libThree20.a */; };
 		00901E3910445EB9008E7C7D /* Three20.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00901E3810445EB9008E7C7D /* Three20.bundle */; };
@@ -221,6 +222,8 @@
 		00705D1A10485559005D7A3F /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		00705D1F104855BE005D7A3F /* SpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpinnerViewController.h; sourceTree = "<group>"; };
 		00705D20104855BE005D7A3F /* SpinnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpinnerViewController.m; sourceTree = "<group>"; };
+		00780FD9108FABEA00F6FA36 /* DirectorySearchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectorySearchDataSource.h; sourceTree = "<group>"; };
+		00780FDA108FABEA00F6FA36 /* DirectorySearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectorySearchDataSource.m; sourceTree = "<group>"; };
 		00901E1610445C8A008E7C7D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		00901E1A10445E72008E7C7D /* Three20.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Three20.xcodeproj; path = ../three20/src/Three20.xcodeproj; sourceTree = SOURCE_ROOT; };
 		00901E3810445EB9008E7C7D /* Three20.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Three20.bundle; path = ../three20/src/Three20.bundle; sourceTree = SOURCE_ROOT; };
@@ -510,6 +513,8 @@
 				00BA7A241045EC1A0002AB75 /* FeedData.m */,
 				00901EE2104481F8008E7C7D /* FeedMessageData.h */,
 				00901EE3104481F8008E7C7D /* FeedMessageData.m */,
+				00780FD9108FABEA00F6FA36 /* DirectorySearchDataSource.h */,
+				00780FDA108FABEA00F6FA36 /* DirectorySearchDataSource.m */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -746,6 +751,7 @@
 				003B8A5E10505D6A002BA526 /* FeedDictionary.m in Sources */,
 				00BEE584106ABA57009B1678 /* OAuthCustom.m in Sources */,
 				00BEE5D6106AD481009B1678 /* EnterCallbackToken.m in Sources */,
+				00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

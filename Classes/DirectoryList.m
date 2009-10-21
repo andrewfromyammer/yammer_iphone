@@ -6,6 +6,7 @@
 #import "MainTabBar.h"
 #import "UserProfile.h"
 #import "SpinnerWithTextCell.h"
+#import "DirectorySearchDataSource.h"
 
 @interface DirectoryListDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -61,6 +62,12 @@
 
 - (void)loadView {
   [super loadView];
+  
+  TTTableViewController* searchController = [[[TTTableViewController alloc] init] autorelease];
+  searchController.dataSource = [[[DirectorySearchDataSource alloc] init] autorelease];
+  self.searchViewController = searchController;
+  self.tableView.tableHeaderView = _searchController.searchBar;
+  
 }
 
 
