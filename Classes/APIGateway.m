@@ -73,6 +73,15 @@
   return nil;
 }
 
++ (NSMutableDictionary*)autocomplete:(NSString*)prefix {
+  NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/autocomplete.json?prefix=%@", prefix] style:nil];
+  
+  if (json)
+    return (NSMutableDictionary *)[json JSONValue];
+  
+  return nil;  
+}
+
 + (NSMutableDictionary *)messages:(FeedDictionary *)feed olderThan:(NSNumber *)olderThan style:(NSString *)style {
   return [APIGateway messages:feed olderThan:olderThan newerThan:nil style:style];
 }

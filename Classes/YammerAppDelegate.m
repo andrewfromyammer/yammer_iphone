@@ -18,6 +18,7 @@
 @synthesize network_id;
 @synthesize threading, createNewAccount;
 @synthesize unseen_message_count_following, unseen_message_count_received, last_seen_message_id;
+@synthesize lastAutocomplete;
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   NSString* token = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
@@ -41,6 +42,7 @@
   self.unseen_message_count_following = -1;
   self.unseen_message_count_received = -1;
   self.last_seen_message_id = -1;
+  self.lastAutocomplete = [NSDate date];
   
   UIWindow* window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   window.backgroundColor = [UIColor whiteColor];
@@ -253,6 +255,7 @@
   [network_id release];
   [showFullNames release];
   [launchURL release];
+  [lastAutocomplete release];
   [super dealloc];
 }
 

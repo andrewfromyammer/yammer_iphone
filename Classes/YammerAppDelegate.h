@@ -15,6 +15,7 @@
   int unseen_message_count_following;
   int unseen_message_count_received;
   long last_seen_message_id;
+  NSDate* lastAutocomplete;
 }
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
@@ -25,6 +26,7 @@
 @property (nonatomic, retain) NSNumber *showFullNames;
 @property (nonatomic, retain) NSNumber *network_id;
 @property (nonatomic, retain) NSString *launchURL;
+@property (nonatomic, retain) NSDate* lastAutocomplete;
 @property BOOL threading;
 @property BOOL createNewAccount;
 
