@@ -63,10 +63,10 @@
 - (void)loadView {
   [super loadView];
   
-  TTTableViewController* searchController = [[[TTTableViewController alloc] init] autorelease];
-  searchController.dataSource = [[[DirectorySearchDataSource alloc] init] autorelease];
-  self.searchViewController = searchController;
-  self.tableView.tableHeaderView = _searchController.searchBar;
+  //TTTableViewController* searchController = [[[TTTableViewController alloc] init] autorelease];
+  //searchController.dataSource = [[[DirectorySearchDataSource alloc] initWithDuration:1.5] autorelease];
+  //self.searchViewController = searchController;
+  //self.tableView.tableHeaderView = _searchController.searchBar;
   
 }
 
@@ -146,5 +146,8 @@
   [super dealloc];
 }
 
+- (void)textField:(TTSearchTextField*)textField didSelectObject:(id)object {
+  NSLog(@"222222222");
+}
 
 @end

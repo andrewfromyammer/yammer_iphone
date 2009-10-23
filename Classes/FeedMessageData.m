@@ -62,7 +62,7 @@
     [fetchRequest setFetchOffset:[offset intValue]];
   [fetchRequest setFetchLimit:20];
   
-  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@ and network_id = %@", feed, [yam.network_id description]];
   [fetchRequest setPredicate:feedPredicate];
   
 	NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:order_by ascending:NO];

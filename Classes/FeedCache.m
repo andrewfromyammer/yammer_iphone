@@ -84,7 +84,7 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
   
-  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@ and network_id = %@", feed, [yam.network_id description]];
   [fetchRequest setPredicate:feedPredicate];
   [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
                                                                      initWithKey:@"feed" ascending:NO], nil]];
@@ -160,7 +160,7 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
   
-  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@ and network_id = %@", feed, [yam.network_id description]];
   [fetchRequest setPredicate:feedPredicate];
   if (limit)
     [fetchRequest setFetchOffset:[FeedCache maxSize]];
@@ -236,7 +236,7 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedMetaData" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
   
-  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@", feed];
+  NSPredicate *feedPredicate = [NSPredicate predicateWithFormat:@"feed = %@ and network_id = %@", feed, [yam.network_id description]];
   [fetchRequest setPredicate:feedPredicate];
   [fetchRequest setSortDescriptors:[[NSArray alloc] initWithObjects:[[NSSortDescriptor alloc]
                                                                      initWithKey:@"feed" ascending:NO], nil]];

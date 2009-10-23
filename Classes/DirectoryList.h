@@ -1,6 +1,6 @@
 #import <Three20/Three20.h>
 
-@interface DirectoryList : TTTableViewController {
+@interface DirectoryList : TTTableViewController <TTSearchTextFieldDelegate> {
   int page;
 }
 
