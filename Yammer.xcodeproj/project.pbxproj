@@ -97,6 +97,8 @@
 		00E6CDBB1046F7F20042BD9E /* ComposeMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E6CDBA1046F7F20042BD9E /* ComposeMessage.m */; };
 		00E6CDBD1046F7FC0042BD9E /* ComposeMessage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00E6CDBC1046F7FC0042BD9E /* ComposeMessage.xib */; };
 		00EF42601049D40C00CF3CB5 /* thumbnail_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */; };
+		00FA2D0C10979AB000C6F2DF /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FA2D0B10979AB000C6F2DF /* network.png */; };
+		00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */; };
 		1D3623260D0F684500981E51 /* YammerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* YammerAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -268,6 +270,9 @@
 		00E6CDBA1046F7F20042BD9E /* ComposeMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeMessage.m; sourceTree = "<group>"; };
 		00E6CDBC1046F7FC0042BD9E /* ComposeMessage.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeMessage.xib; sourceTree = "<group>"; };
 		00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = thumbnail_loading.png; path = Images/thumbnail_loading.png; sourceTree = "<group>"; };
+		00FA2D0B10979AB000C6F2DF /* network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = network.png; path = Images/network.png; sourceTree = "<group>"; };
+		00FA2D141097A51300C6F2DF /* SettingsSwitchNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSwitchNetwork.h; sourceTree = "<group>"; };
+		00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsSwitchNetwork.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* YammerAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YammerAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* YammerAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YammerAppDelegate.m; sourceTree = "<group>"; };
@@ -408,6 +413,7 @@
 		006ACB9F10457B840078A4BB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00FA2D0B10979AB000C6F2DF /* network.png */,
 				00C4F80C108916910062F370 /* smile12x12.png */,
 				00C4F7F91088D60F0062F370 /* smile_gray.png */,
 				00C4F7F61088D2810062F370 /* smile24x24.png */,
@@ -454,6 +460,8 @@
 				00705D1010485542005D7A3F /* DataSettings.m */,
 				00705D1110485542005D7A3F /* DataSettingsPush.h */,
 				00705D1210485542005D7A3F /* DataSettingsPush.m */,
+				00FA2D141097A51300C6F2DF /* SettingsSwitchNetwork.h */,
+				00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -686,6 +694,7 @@
 				00C4F7F71088D2810062F370 /* smile24x24.png in Resources */,
 				00C4F7FA1088D60F0062F370 /* smile_gray.png in Resources */,
 				00C4F80D108916910062F370 /* smile12x12.png in Resources */,
+				00FA2D0C10979AB000C6F2DF /* network.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -752,6 +761,7 @@
 				00BEE584106ABA57009B1678 /* OAuthCustom.m in Sources */,
 				00BEE5D6106AD481009B1678 /* EnterCallbackToken.m in Sources */,
 				00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */,
+				00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

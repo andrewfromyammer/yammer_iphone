@@ -16,16 +16,12 @@
 
 @implementation DataSettings
 
-@synthesize email;
-
-- (id)init {
-  self.email = @"";
-  return self;
-}
+@synthesize email, network;
 
 - (void)findEmailFromDict:(NSMutableDictionary *)dict {
   
   self.email = @"";
+  self.network = [dict objectForKey:@"network_name"];
   
   NSMutableDictionary *contact = [dict objectForKey:@"contact"];
   NSArray *addresses = [contact objectForKey:@"email_addresses"];
@@ -46,7 +42,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   if (section == 0)
-    return 2;
+    return 3;
   if (section == 2)
     return 1;
   
@@ -54,9 +50,9 @@
   int i=0;
   for (; i<[array count]; i++) {
     if ([email hasSuffix:[array objectAtIndex:i]])
-      return 2;
+      return 3;
   }
-  return 1;
+  return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -72,6 +68,8 @@
       cell.textLabel.text = @"Logged in as:";
     else if (indexPath.row == 1)
       cell.textLabel.text = self.email;    
+    else if (indexPath.row == 2)
+      cell.textLabel.text = [NSString stringWithFormat:@"Network: %@", self.network];
   } else if (indexPath.section == 1) {
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if (indexPath.row == 5) {
@@ -84,9 +82,13 @@
       [switchView addTarget:self action:@selector(switchWasChanged:) forControlEvents:UIControlEventValueChanged];
       [switchView release];
     } else if (indexPath.row == 0) {
+      cell.textLabel.text = @"Switch Networks";
+      cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+      cell.imageView.image = [UIImage imageNamed:@"network.png"];      
+    } else if (indexPath.row == 1) {
       cell.textLabel.text = @"Push Settings";
       cell.imageView.image = [UIImage imageNamed:@"push.png"];
-    } else if (indexPath.row == 1) {
+    } else if (indexPath.row == 2) {
       cell.textLabel.text = @"Advanced";
       cell.imageView.image = [UIImage imageNamed:@"advanced.png"];
     }
@@ -121,6 +123,8 @@
 }
 
 - (void)dealloc {
+  [email release];
+  [network release];
   [super dealloc];
 }
 

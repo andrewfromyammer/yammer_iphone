@@ -23,11 +23,6 @@
   if (self = [super init]) {
     self.navigationBarTintColor = [MainTabBar yammerGray];
     self.title = @"Push Settings";
-    
-    UIBarButtonItem *temporaryBarButtonItem=[[UIBarButtonItem alloc] init];
-    temporaryBarButtonItem.title=@"Back";
-    self.navigationItem.backBarButtonItem = temporaryBarButtonItem;
-    [temporaryBarButtonItem release];
   }
   return self;
 }

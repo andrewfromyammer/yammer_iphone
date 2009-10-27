@@ -15,6 +15,7 @@
 #import "MainTabBar.h"
 #import "SettingsPush.h"
 #import "NSString+SBJSON.h"
+#import "SettingsSwitchNetwork.h"
 
 @implementation SettingsViewController
 
@@ -92,11 +93,16 @@
   
   if (indexPath.section == 1) {
     if (indexPath.row == 0) {
+      SettingsSwitchNetwork *switchNetwork = [[SettingsSwitchNetwork alloc] init];
+      [self.navigationController pushViewController:switchNetwork animated:YES];
+      [switchNetwork release];
+    }
+    else if (indexPath.row == 1) {
       SettingsPush *localSettingPush = [[SettingsPush alloc] init];
       [self.navigationController pushViewController:localSettingPush animated:YES];
       [localSettingPush release];
     }
-    else if (indexPath.row == 1) {
+    else if (indexPath.row == 2) {
       SettingsAdvancedOptions *localSettingsAdvancedOptions = [[SettingsAdvancedOptions alloc] init];
       [self.navigationController pushViewController:localSettingsAdvancedOptions animated:YES];
       [localSettingsAdvancedOptions release];      

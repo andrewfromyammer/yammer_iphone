@@ -124,6 +124,17 @@
   return nil;
 }
 
+
++ (NSMutableArray*)getTokens {
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/oauth/tokens" style:nil];
+  if (json) {
+    [LocalStorage saveFile:TOKENS data:json];
+    return (NSMutableArray *)[json JSONValue];
+  }
+  
+  return nil;
+}
+
 + (BOOL)createMessage:(NSString *)body repliedToId:(NSNumber *)repliedToId 
                                        groupId:(NSNumber *)groupId
                                        imageData:(NSData *)imageData {

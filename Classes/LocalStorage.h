@@ -17,6 +17,8 @@
 #define ATTACHMENTS             @"/attachments"
 #define ATTACHMENT_THUMBNAILS   @"/attachment_thumbnails"
 
+#define TOKENS    @"/account/tokens.json"
+
 @interface LocalStorage : NSObject {
 
 }

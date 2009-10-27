@@ -18,6 +18,8 @@
 + (NSMutableDictionary*)messages:(FeedDictionary*)feed newerThan:(NSNumber*)newerThan style:(NSString*)style;
 + (NSMutableDictionary*)messages:(FeedDictionary*)feed olderThan:(NSNumber*)olderThan newerThan:(NSNumber*)newerThan style:(NSString*)style;
 
++ (NSMutableArray*)getTokens;
+
 + (BOOL)createMessage:(NSString*)body repliedToId:(NSNumber*)repliedToId 
               groupId:(NSNumber*)groupId
                 imageData:(NSData*)imageData;  
