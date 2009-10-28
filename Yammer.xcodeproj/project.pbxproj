@@ -86,8 +86,6 @@
 		00BEE584106ABA57009B1678 /* OAuthCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BEE583106ABA57009B1678 /* OAuthCustom.m */; };
 		00BEE5D6106AD481009B1678 /* EnterCallbackToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BEE5D5106AD481009B1678 /* EnterCallbackToken.m */; };
 		00C08546104861CB00331BF5 /* dist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00C08545104861CB00331BF5 /* dist.plist */; };
-		00C4F7F41088D2420062F370 /* smile33x33.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F7F31088D2420062F370 /* smile33x33.png */; };
-		00C4F7F71088D2810062F370 /* smile24x24.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F7F61088D2810062F370 /* smile24x24.png */; };
 		00C4F7FA1088D60F0062F370 /* smile_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F7F91088D60F0062F370 /* smile_gray.png */; };
 		00C4F80D108916910062F370 /* smile12x12.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F80C108916910062F370 /* smile12x12.png */; };
 		00DBFC74104B1F09005DB685 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DBFC73104B1F09005DB685 /* ImageCache.m */; };
@@ -256,8 +254,6 @@
 		00BEE5D4106AD481009B1678 /* EnterCallbackToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterCallbackToken.h; sourceTree = "<group>"; };
 		00BEE5D5106AD481009B1678 /* EnterCallbackToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterCallbackToken.m; sourceTree = "<group>"; };
 		00C08545104861CB00331BF5 /* dist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dist.plist; sourceTree = "<group>"; };
-		00C4F7F31088D2420062F370 /* smile33x33.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile33x33.png; path = Images/smile33x33.png; sourceTree = "<group>"; };
-		00C4F7F61088D2810062F370 /* smile24x24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile24x24.png; path = Images/smile24x24.png; sourceTree = "<group>"; };
 		00C4F7F91088D60F0062F370 /* smile_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile_gray.png; path = Images/smile_gray.png; sourceTree = "<group>"; };
 		00C4F80C108916910062F370 /* smile12x12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile12x12.png; path = Images/smile12x12.png; sourceTree = "<group>"; };
 		00DBFC72104B1F09005DB685 /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCache.h; sourceTree = "<group>"; };
@@ -416,8 +412,6 @@
 				00FA2D0B10979AB000C6F2DF /* network.png */,
 				00C4F80C108916910062F370 /* smile12x12.png */,
 				00C4F7F91088D60F0062F370 /* smile_gray.png */,
-				00C4F7F61088D2810062F370 /* smile24x24.png */,
-				00C4F7F31088D2420062F370 /* smile33x33.png */,
 				0032F0E51062AC4D00929C5E /* photos15x14.png */,
 				00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */,
 				006ACBA110457BE00078A4BB /* advanced.png */,
@@ -690,8 +684,6 @@
 				00C08546104861CB00331BF5 /* dist.plist in Resources */,
 				00EF42601049D40C00CF3CB5 /* thumbnail_loading.png in Resources */,
 				0032F0E71062AC4D00929C5E /* photos15x14.png in Resources */,
-				00C4F7F41088D2420062F370 /* smile33x33.png in Resources */,
-				00C4F7F71088D2810062F370 /* smile24x24.png in Resources */,
 				00C4F7FA1088D60F0062F370 /* smile_gray.png in Resources */,
 				00C4F80D108916910062F370 /* smile12x12.png in Resources */,
 				00FA2D0C10979AB000C6F2DF /* network.png in Resources */,

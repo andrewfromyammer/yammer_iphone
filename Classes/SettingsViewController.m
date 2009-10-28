@@ -94,8 +94,10 @@
   if (indexPath.section == 1) {
     if (indexPath.row == 0) {
       SettingsSwitchNetwork *switchNetwork = [[SettingsSwitchNetwork alloc] init];
-      [self.navigationController pushViewController:switchNetwork animated:YES];
-      [switchNetwork release];
+      UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:switchNetwork];
+      [modal.navigationBar setTintColor:[MainTabBar yammerGray]];
+
+      [self presentModalViewController:modal animated:YES];
     }
     else if (indexPath.row == 1) {
       SettingsPush *localSettingPush = [[SettingsPush alloc] init];
