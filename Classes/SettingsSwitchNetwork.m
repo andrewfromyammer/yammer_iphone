@@ -4,6 +4,9 @@
 #import "LocalStorage.h"
 #import "NSString+SBJSON.h"
 #import "APIGateway.h"
+#import "LocalStorage.h"
+#import "APIGateway.h"
+#import "YammerAppDelegate.h"
 
 @interface SwitchNetworkDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -15,8 +18,11 @@
   
   //NSObject* object = [_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
 
-  [[_controller.navigationController visibleViewController] dismissModalViewControllerAnimated:YES];
+  SettingsSwitchNetwork* switchView = (SettingsSwitchNetwork*)[_controller.navigationController visibleViewController];
+  
+  //[[_controller.navigationController visibleViewController] dismissModalViewControllerAnimated:YES];
 
+  [switchView madeSelection:indexPath.row];
 }
 
 @end
@@ -89,6 +95,35 @@
 
 - (void)cancel {
   [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)madeSelection:(int)row {
+  self.navigationItem.leftBarButtonItem = nil;
+  self.navigationItem.rightBarButtonItem = nil;
+  self.dataSource = nil;
+  [NSThread detachNewThreadSelector:@selector(doTheSwitch:) toTarget:self withObject:[NSNumber numberWithInt:row]];
+}
+
+- (void)doTheSwitch:(NSNumber*)index {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  
+  NSMutableArray* tokens = (NSMutableArray *)[[LocalStorage getFile:TOKENS] JSONValue];
+  NSMutableDictionary* token = [tokens objectAtIndex:[index intValue]];
+
+  NSString* previous = [LocalStorage getAccessToken];
+  
+  [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
+  
+  NSMutableDictionary* usersCurrent = [APIGateway usersCurrent:nil];
+  if (usersCurrent) {
+    long nid = [[usersCurrent objectForKey:@"network_id"] longValue];
+    YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+    yammer.network_id = [[NSNumber alloc] initWithLong:nid];
+  } else
+    [LocalStorage saveAccessToken:previous];
+
+  [self dismissModalViewControllerAnimated:YES];
+  [autoreleasepool release];
 }
 
 @end

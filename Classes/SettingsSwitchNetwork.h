@@ -5,5 +5,6 @@
 }
 
 - (TTListDataSource*)sourceFromArray:(NSMutableArray*)array;
+- (void)madeSelection:(int)row;
 
 @end

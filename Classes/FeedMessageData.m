@@ -292,7 +292,7 @@
       if ([[_feedDictionary objectForKey:@"url"] hasSuffix:@"/following"] && checkNew) {
         yam.unseen_message_count_following = [[meta objectForKey:@"unseen_message_count_following"] intValue];
         yam.unseen_message_count_received = [[meta objectForKey:@"unseen_message_count_received"] intValue];
-        yam.last_seen_message_id = [[meta objectForKey:@"last_seen_message_id"] longValue];        
+        yam.last_seen_message_id = [[meta objectForKey:@"last_seen_message_id"] longValue];
       }
     } @catch (NSException *err) { }
     
