@@ -244,9 +244,12 @@
 }
 
 - (void)replaceFeed {
-  FeedMessageData* list = [FeedMessageData feed:self.feed];
-  self.dataSource = list;
-  [NSThread detachNewThreadSelector:@selector(loadFromCache) toTarget:self withObject:nil];
+  self.curOffset = 0;
+  FeedMessageData* feedDataSource = [FeedMessageData feed:self.feed];
+  [feedDataSource.items addObject:[SpinnerWithTextItem itemWithYammer]];
+  
+  [feedDataSource fetch:nil];
+  self.dataSource = feedDataSource;
 }
 
 - (void)dealloc {

@@ -2,7 +2,7 @@
 
 #define U_R_LOGGED_IN_AS    @"You are logged in as:"
 
-@interface Settings : TTTableViewController {
+@interface Settings : TTTableViewController <UIAlertViewDelegate> {
 
 }
 

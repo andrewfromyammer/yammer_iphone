@@ -7,6 +7,7 @@
 #import "SettingsPush.h"
 #import "SettingsAdvancedOptions.h"
 #import "SettingsSwitchNetwork.h"
+#import "OAuthGateway.h"
 
 @interface SettingsDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -18,10 +19,10 @@
   
   TTTableImageItem* item = (TTTableImageItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
   if ([item.text isEqualToString:@"Switch Networks"]) {
-    SettingsSwitchNetwork *switchNetwork = [[SettingsSwitchNetwork alloc] init];
+    SettingsSwitchNetwork *switchNetwork = [[SettingsSwitchNetwork alloc] initWithControllerReference:(Settings*)_controller];
     UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:switchNetwork];
     [modal.navigationBar setTintColor:[MainTabBar yammerGray]];
-    [_controller presentModalViewController:modal animated:YES];    
+    [_controller presentModalViewController:modal animated:YES];
   } else if ([item.text isEqualToString:@"Push Settings"]) {
     SettingsPush *localSettingPush = [[SettingsPush alloc] init];
     [_controller.navigationController pushViewController:localSettingPush animated:YES];
@@ -54,6 +55,19 @@
     [self gatherData];
   }  
   return self;
+}
+
+- (void)logout {
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log Out"
+                                                  message:@"Click the confirm button below to log out from this account and exit the Yammer Application." delegate:self 
+                                        cancelButtonTitle:nil otherButtonTitles: @"Cancel", @"Confirm", nil];
+  [alert show];
+  [alert release];  
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+  if (buttonIndex == 1)
+    [OAuthGateway logout];
 }
 
 - (id<UITableViewDelegate>)createDelegate {

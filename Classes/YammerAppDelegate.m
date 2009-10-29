@@ -192,6 +192,27 @@
   }  
 }
 
+- (void)resetForNewNetwork {
+  TTNavigator* navigator = [TTNavigator navigator];
+  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
+  
+  int i=0;
+  for (i=0; i<2; i++) {
+    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
+    [nav popToRootViewControllerAnimated:NO];
+    FeedMessageList *fml = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
+    [fml replaceFeed];    
+  }
+  
+  [self refreshMyFeed];
+  
+  for (i=2; i<5; i++) {
+    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
+    [nav popToRootViewControllerAnimated:NO];
+  }  
+}
+
+
 - (NSManagedObjectContext *) managedObjectContext {
 	
   if (managedObjectContext != nil) {

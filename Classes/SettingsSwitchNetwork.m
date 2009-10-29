@@ -30,8 +30,11 @@
 
 @implementation SettingsSwitchNetwork
 
-- (id)init {
+@synthesize settingsReference = _settingsReference;
+
+- (id)initWithControllerReference:(Settings*)settings {
   if (self = [super init]) {
+    self.settingsReference = settings;
     self.navigationBarTintColor = [MainTabBar yammerGray];
     self.title = @"Switch Network";
     
@@ -53,6 +56,11 @@
       [NSThread detachNewThreadSelector:@selector(loadTokens) toTarget:self withObject:nil];
   }
   return self;
+}
+
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_settingsReference);
+  [super dealloc];
 }
 
 - (id<UITableViewDelegate>)createDelegate {
@@ -119,6 +127,8 @@
     long nid = [[usersCurrent objectForKey:@"network_id"] longValue];
     YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
     yammer.network_id = [[NSNumber alloc] initWithLong:nid];
+    [_settingsReference gatherData];
+    [yammer resetForNewNetwork];
   } else
     [LocalStorage saveAccessToken:previous];
 

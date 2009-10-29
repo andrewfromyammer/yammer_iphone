@@ -66,7 +66,6 @@
 		00705D1410485542005D7A3F /* DataSettingsPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1210485542005D7A3F /* DataSettingsPush.m */; };
 		00705D1B10485559005D7A3F /* SettingsAdvancedOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1610485559005D7A3F /* SettingsAdvancedOptions.m */; };
 		00705D1C10485559005D7A3F /* SettingsPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1810485559005D7A3F /* SettingsPush.m */; };
-		00705D1D10485559005D7A3F /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1A10485559005D7A3F /* SettingsViewController.m */; };
 		00705D21104855BE005D7A3F /* SpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D20104855BE005D7A3F /* SpinnerViewController.m */; };
 		00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 00780FDA108FABEA00F6FA36 /* DirectorySearchDataSource.m */; };
 		00901E1710445C8A008E7C7D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00901E1610445C8A008E7C7D /* QuartzCore.framework */; };
@@ -219,8 +218,6 @@
 		00705D1610485559005D7A3F /* SettingsAdvancedOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsAdvancedOptions.m; sourceTree = "<group>"; };
 		00705D1710485559005D7A3F /* SettingsPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsPush.h; sourceTree = "<group>"; };
 		00705D1810485559005D7A3F /* SettingsPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPush.m; sourceTree = "<group>"; };
-		00705D1910485559005D7A3F /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		00705D1A10485559005D7A3F /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		00705D1F104855BE005D7A3F /* SpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpinnerViewController.h; sourceTree = "<group>"; };
 		00705D20104855BE005D7A3F /* SpinnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpinnerViewController.m; sourceTree = "<group>"; };
 		00780FD9108FABEA00F6FA36 /* DirectorySearchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectorySearchDataSource.h; sourceTree = "<group>"; };
@@ -451,8 +448,6 @@
 				00705D1610485559005D7A3F /* SettingsAdvancedOptions.m */,
 				00705D1710485559005D7A3F /* SettingsPush.h */,
 				00705D1810485559005D7A3F /* SettingsPush.m */,
-				00705D1910485559005D7A3F /* SettingsViewController.h */,
-				00705D1A10485559005D7A3F /* SettingsViewController.m */,
 				00705D0F10485542005D7A3F /* DataSettings.h */,
 				00705D1010485542005D7A3F /* DataSettings.m */,
 				00705D1110485542005D7A3F /* DataSettingsPush.h */,
@@ -748,7 +743,6 @@
 				00705D1410485542005D7A3F /* DataSettingsPush.m in Sources */,
 				00705D1B10485559005D7A3F /* SettingsAdvancedOptions.m in Sources */,
 				00705D1C10485559005D7A3F /* SettingsPush.m in Sources */,
-				00705D1D10485559005D7A3F /* SettingsViewController.m in Sources */,
 				00705D21104855BE005D7A3F /* SpinnerViewController.m in Sources */,
 				009C2306104992290056A7F0 /* SpinnerWithTextCell.m in Sources */,
 				007039FD104AE26100561215 /* FullSizePhoto.m in Sources */,
