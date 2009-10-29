@@ -3,6 +3,7 @@
 #import "YammerAppDelegate.h"
 #import "LocalStorage.h"
 #import "NSString+SBJSON.h"
+#import "OAuthCustom.h"
 
 @implementation Settings
 
@@ -24,24 +25,65 @@
 }
 
 - (void)gatherData {
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-  NSMutableDictionary *dict = (NSMutableDictionary *)[[LocalStorage getFile:USER_CURRENT] JSONValue];
+  NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:USER_CURRENT] JSONValue];
+  NSString* email = [self findEmailFromDict:dict];
+  NSString* name  = [dict objectForKey:@"network_name"];
   
-  self.dataSource = [TTSectionedDataSource dataSourceWithObjects:
-     @"You are logged in as:",
-     [TTTableTextItem itemWithText:[self findEmailFromDict:dict] URL:nil],
-     [TTTableTextItem itemWithText:[NSString stringWithFormat:@"Network: %@", [dict objectForKey:@"network_name"]] URL:nil],
-     @"",
-     [TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"],
-     [TTTableImageItem itemWithText:@"Push Settings" imageURL:@"bundle://push.png" URL:@"1"],
-     [TTTableImageItem itemWithText:@"Advanced Settings" imageURL:@"bundle://advanced.png" URL:@"1"],
-     @"",
-     [TTTableTextItem itemWithText:[NSString stringWithFormat:@"Version: %@", [yammer version]] URL:nil],
-     nil];
+  if ([self emailQualifiesForAdvanced:email])
+    self.dataSource = [TTSectionedDataSource dataSourceWithObjects:
+       U_R_LOGGED_IN_AS,
+       [TTTableTextItem itemWithText:email URL:nil],
+       [self network:name],
+       @"",
+       [self switchNetworks],
+       [self pushSettings],
+       [TTTableImageItem itemWithText:@"Advanced Settings" imageURL:@"bundle://advanced.png" URL:@"1"],
+       @"",
+       [self version],
+       nil];
+  else
+    self.dataSource = [TTSectionedDataSource dataSourceWithObjects:
+                       U_R_LOGGED_IN_AS,
+                       [TTTableTextItem itemWithText:email URL:nil],
+                       [self network:name],
+                       @"",
+                       [self switchNetworks],
+                       [self pushSettings],
+                       @"",
+                       [self version],
+                       nil];
+  
 }
 
-- (NSString*)findEmailFromDict:(NSMutableDictionary *)dict {
+- (TTTableImageItem*)switchNetworks {
+  return [TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"];
+}
+
+- (TTTableImageItem*)pushSettings {
+  return [TTTableImageItem itemWithText:@"Push Settings" imageURL:@"bundle://push.png" URL:@"1"];
+}
+
+- (TTTableTextItem*)version {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  return [TTTableTextItem itemWithText:[NSString stringWithFormat:@"Version: %@", [yammer version]] URL:nil];
+}
+
+- (TTTableTextItem*)network:(NSString*)name {
+  return [TTTableTextItem itemWithText:[NSString stringWithFormat:@"Network: %@", name] URL:nil];
+}
+
+- (BOOL)emailQualifiesForAdvanced:(NSString*)email {
+  NSArray *array = [[OAuthCustom devNetworks] componentsSeparatedByString:@" "];
+  int i=0;
+  for (; i<[array count]; i++) {
+    if ([email hasSuffix:[array objectAtIndex:i]])
+      return YES;
+  }
+  return NO;
+}
+
+- (NSString*)findEmailFromDict:(NSMutableDictionary*)dict {
     
   NSMutableDictionary *contact = [dict objectForKey:@"contact"];
   NSArray *addresses = [contact objectForKey:@"email_addresses"];
