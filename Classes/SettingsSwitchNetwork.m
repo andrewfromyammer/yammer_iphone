@@ -41,12 +41,9 @@
     UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                              target:self
                                                                              action:@selector(refreshClick)];  
-    self.navigationItem.leftBarButtonItem = refresh;
+    self.navigationItem.rightBarButtonItem = refresh;
     
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self
-                                                                             action:@selector(cancel)];  
-    self.navigationItem.rightBarButtonItem = cancel;
-    
+    _tableViewStyle = UITableViewStyleGrouped;
     
     NSString* json = [LocalStorage getFile:TOKENS];
     if (json) {
@@ -71,7 +68,7 @@
   TTListDataSource* list = [[TTListDataSource alloc] init];
   
   for (NSMutableDictionary* dict in array)
-    [list.items addObject:[TTTableTextItem itemWithText:[dict objectForKey:@"network_name"] URL:nil]];  
+    [list.items addObject:[TTTableTextItem itemWithText:[dict objectForKey:@"network_name"] URL:@"1"]];  
   return list;
 }
 
@@ -108,12 +105,17 @@
 - (void)madeSelection:(int)row {
   self.navigationItem.leftBarButtonItem = nil;
   self.navigationItem.rightBarButtonItem = nil;
-  self.dataSource = nil;
   [NSThread detachNewThreadSelector:@selector(doTheSwitch:) toTarget:self withObject:[NSNumber numberWithInt:row]];
 }
 
 - (void)doTheSwitch:(NSNumber*)index {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  
+  sleep(1);
+  
+  [self performSelectorOnMainThread:@selector(setDataSource:)
+                         withObject:nil
+                      waitUntilDone:YES];
   
   NSMutableArray* tokens = (NSMutableArray *)[[LocalStorage getFile:TOKENS] JSONValue];
   NSMutableDictionary* token = [tokens objectAtIndex:[index intValue]];

@@ -20,9 +20,8 @@
   TTTableImageItem* item = (TTTableImageItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
   if ([item.text isEqualToString:@"Switch Networks"]) {
     SettingsSwitchNetwork *switchNetwork = [[SettingsSwitchNetwork alloc] initWithControllerReference:(Settings*)_controller];
-    UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:switchNetwork];
-    [modal.navigationBar setTintColor:[MainTabBar yammerGray]];
-    [_controller presentModalViewController:modal animated:YES];
+    [_controller.navigationController pushViewController:switchNetwork animated:YES];
+    [switchNetwork release];
   } else if ([item.text isEqualToString:@"Push Settings"]) {
     SettingsPush *localSettingPush = [[SettingsPush alloc] init];
     [_controller.navigationController pushViewController:localSettingPush animated:YES];
