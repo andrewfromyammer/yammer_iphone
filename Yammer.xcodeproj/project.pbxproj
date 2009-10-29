@@ -94,6 +94,7 @@
 		00E6CDB81046F7E00042BD9E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E6CDB71046F7E00042BD9E /* Icon.png */; };
 		00E6CDBB1046F7F20042BD9E /* ComposeMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E6CDBA1046F7F20042BD9E /* ComposeMessage.m */; };
 		00E6CDBD1046F7FC0042BD9E /* ComposeMessage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00E6CDBC1046F7FC0042BD9E /* ComposeMessage.xib */; };
+		00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EDAF001099F56F00D3F5E9 /* Settings.m */; };
 		00EF42601049D40C00CF3CB5 /* thumbnail_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */; };
 		00FA2D0C10979AB000C6F2DF /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FA2D0B10979AB000C6F2DF /* network.png */; };
 		00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */; };
@@ -265,6 +266,8 @@
 		00E6CDB91046F7F20042BD9E /* ComposeMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeMessage.h; sourceTree = "<group>"; };
 		00E6CDBA1046F7F20042BD9E /* ComposeMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeMessage.m; sourceTree = "<group>"; };
 		00E6CDBC1046F7FC0042BD9E /* ComposeMessage.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeMessage.xib; sourceTree = "<group>"; };
+		00EDAEFF1099F56F00D3F5E9 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		00EDAF001099F56F00D3F5E9 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = thumbnail_loading.png; path = Images/thumbnail_loading.png; sourceTree = "<group>"; };
 		00FA2D0B10979AB000C6F2DF /* network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = network.png; path = Images/network.png; sourceTree = "<group>"; };
 		00FA2D141097A51300C6F2DF /* SettingsSwitchNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSwitchNetwork.h; sourceTree = "<group>"; };
@@ -456,6 +459,8 @@
 				00705D1210485542005D7A3F /* DataSettingsPush.m */,
 				00FA2D141097A51300C6F2DF /* SettingsSwitchNetwork.h */,
 				00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */,
+				00EDAEFF1099F56F00D3F5E9 /* Settings.h */,
+				00EDAF001099F56F00D3F5E9 /* Settings.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -754,6 +759,7 @@
 				00BEE5D6106AD481009B1678 /* EnterCallbackToken.m in Sources */,
 				00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */,
 				00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */,
+				00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

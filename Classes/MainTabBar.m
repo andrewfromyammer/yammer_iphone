@@ -3,7 +3,7 @@
 #import "LocalStorage.h"
 #import "FeedList.h"
 #import "DirectoryList.h"
-#import "SettingsViewController.h"
+#import "Settings.h"
 
 @implementation MainTabBar
 
@@ -49,7 +49,7 @@
 	localNavigationController = [[[UINavigationController alloc] initWithRootViewController:directory] autorelease];
   [localViewControllersArray addObject:localNavigationController];
   
-  SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
+  Settings *settingsViewController = [[Settings alloc] init];
   [self setupView:settingsViewController title:@"Settings" image:@"settings.png"];
 	localNavigationController = [[[UINavigationController alloc] initWithRootViewController:settingsViewController] autorelease];
   [localViewControllersArray addObject:localNavigationController];

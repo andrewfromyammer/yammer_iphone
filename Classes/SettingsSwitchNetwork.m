@@ -63,7 +63,7 @@
   TTListDataSource* list = [[TTListDataSource alloc] init];
   
   for (NSMutableDictionary* dict in array)
-    [list.items addObject:[TTTableTextItem itemWithText:[dict objectForKey:@"network_name"] URL:@"1"]];  
+    [list.items addObject:[TTTableTextItem itemWithText:[dict objectForKey:@"network_name"] URL:nil]];  
   return list;
 }
 
