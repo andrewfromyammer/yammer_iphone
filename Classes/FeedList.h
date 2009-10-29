@@ -2,6 +2,8 @@
 
 @interface FeedList : TTTableViewController { }
 
+- (void)resetForNetworkSwitch;
+
 @end
 
 @interface FeedTableImageItem : TTTableImageItem {}

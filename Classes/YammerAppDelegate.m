@@ -10,22 +10,24 @@
 #import "NSString+SBJSON.h"
 #import "EnterCallbackToken.h"
 #import "OAuthCustom.h"
+#import "DirectoryList.h"
+#import "FeedList.h"
 
 @implementation YammerAppDelegate
 
 @synthesize showFullNames;
 @synthesize launchURL;
-@synthesize network_id;
+@synthesize network_id, pushToken;
 @synthesize threading, createNewAccount;
 @synthesize unseen_message_count_following, unseen_message_count_received, last_seen_message_id;
 @synthesize lastAutocomplete;
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-  NSString* token = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
+  self.pushToken = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
                      stringByReplacingOccurrencesOfString:@">" withString:@""]
                     stringByReplacingOccurrencesOfString:@" " withString:@""];
   
-  [APIGateway sendPushToken:token];
+  [APIGateway sendPushToken:self.pushToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -193,6 +195,9 @@
 }
 
 - (void)resetForNewNetwork {
+  if (self.pushToken)
+    [APIGateway sendPushToken:self.pushToken];
+  
   TTNavigator* navigator = [TTNavigator navigator];
   MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
   
@@ -205,11 +210,17 @@
   }
   
   [self refreshMyFeed];
+
+  UINavigationController *feeds = (UINavigationController *)[mainView.viewControllers objectAtIndex:2];
+  [feeds popToRootViewControllerAnimated:NO];
+  FeedList* feedList = [[feeds viewControllers] objectAtIndex:0];
+  [feedList resetForNetworkSwitch];
   
-  for (i=2; i<5; i++) {
-    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
-    [nav popToRootViewControllerAnimated:NO];
-  }  
+  UINavigationController *directory = (UINavigationController *)[mainView.viewControllers objectAtIndex:3];
+  [directory popToRootViewControllerAnimated:NO];
+  DirectoryList* directoryList = [[directory viewControllers] objectAtIndex:0];
+  [directoryList resetForNetworkSwitch];
+  
 }
 
 

@@ -63,6 +63,14 @@
   
 }
 
+- (void)resetForNetworkSwitch {
+  SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
+  [list.items addObject:[SpinnerWithTextItem item]];
+  self.dataSource = list;
+  
+  [NSThread detachNewThreadSelector:@selector(loadFeeds:) toTarget:self withObject:@"silent"];  
+}
+
 - (id<UITableViewDelegate>)createDelegate {
   return [[FeedListDelegate alloc] initWithController:self];
 }

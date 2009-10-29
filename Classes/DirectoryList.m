@@ -60,6 +60,15 @@
   return self;
 }
 
+- (void)resetForNetworkSwitch {
+  [LocalStorage removeFile:DIRECTORY_CACHE];
+  SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
+  [list.items addObject:[SpinnerWithTextItem item]];
+  self.dataSource = list;
+  
+  [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];  
+}
+
 - (void)loadView {
   [super loadView];
   

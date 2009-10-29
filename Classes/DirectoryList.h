@@ -7,5 +7,6 @@
 @property int page;
 
 - (void)handleUsers:(NSArray*)list source:(TTListDataSource*)source;
+- (void)resetForNetworkSwitch;
 
 @end

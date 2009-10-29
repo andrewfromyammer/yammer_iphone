@@ -3,13 +3,14 @@
 #import "FeedMessageList.h"
 
 @interface YammerAppDelegate : NSObject <UIApplicationDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
-  NSManagedObjectModel *managedObjectModel;
-  NSManagedObjectContext *managedObjectContext;	    
-  NSPersistentStoreCoordinator *persistentStoreCoordinator;  
+  NSManagedObjectModel* managedObjectModel;
+  NSManagedObjectContext* managedObjectContext;	    
+  NSPersistentStoreCoordinator* persistentStoreCoordinator;  
   
-  NSNumber *showFullNames;
-  NSString *launchURL;
-  NSNumber *network_id;
+  NSNumber* showFullNames;
+  NSString* launchURL;
+  NSNumber* network_id;
+  NSString* pushToken;
   BOOL threading;
   BOOL createNewAccount;
   int unseen_message_count_following;
@@ -18,14 +19,15 @@
   NSDate* lastAutocomplete;
 }
 
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, retain, readonly) NSManagedObjectModel* managedObjectModel;
+@property (nonatomic, retain, readonly) NSManagedObjectContext* managedObjectContext;
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator* persistentStoreCoordinator;
 
 @property (nonatomic, readonly) NSString *applicationDocumentsDirectory;
-@property (nonatomic, retain) NSNumber *showFullNames;
-@property (nonatomic, retain) NSNumber *network_id;
-@property (nonatomic, retain) NSString *launchURL;
+@property (nonatomic, retain) NSNumber* showFullNames;
+@property (nonatomic, retain) NSNumber* network_id;
+@property (nonatomic, retain) NSString* launchURL;
+@property (nonatomic, retain) NSString* pushToken;
 @property (nonatomic, retain) NSDate* lastAutocomplete;
 @property BOOL threading;
 @property BOOL createNewAccount;
