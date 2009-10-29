@@ -4,6 +4,38 @@
 #import "LocalStorage.h"
 #import "NSString+SBJSON.h"
 #import "OAuthCustom.h"
+#import "SettingsPush.h"
+#import "SettingsAdvancedOptions.h"
+#import "SettingsSwitchNetwork.h"
+
+@interface SettingsDelegate : TTTableViewVarHeightDelegate;
+@end
+
+@implementation SettingsDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
+  [tableView deselectRowAtIndexPath:indexPath animated:YES];
+  
+  TTTableImageItem* item = (TTTableImageItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
+  if ([item.text isEqualToString:@"Switch Networks"]) {
+    SettingsSwitchNetwork *switchNetwork = [[SettingsSwitchNetwork alloc] init];
+    UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:switchNetwork];
+    [modal.navigationBar setTintColor:[MainTabBar yammerGray]];
+    [_controller presentModalViewController:modal animated:YES];    
+  } else if ([item.text isEqualToString:@"Push Settings"]) {
+    SettingsPush *localSettingPush = [[SettingsPush alloc] init];
+    [_controller.navigationController pushViewController:localSettingPush animated:YES];
+    [localSettingPush release];
+  } else if ([item.text isEqualToString:@"Advanced Settings"]) {
+    SettingsAdvancedOptions *localSettingsAdvancedOptions = [[SettingsAdvancedOptions alloc] init];
+    [_controller.navigationController pushViewController:localSettingsAdvancedOptions animated:YES];
+    [localSettingsAdvancedOptions release];    
+  }
+
+  
+}
+
+@end
 
 @implementation Settings
 
@@ -22,6 +54,10 @@
     [self gatherData];
   }  
   return self;
+}
+
+- (id<UITableViewDelegate>)createDelegate {
+  return [[SettingsDelegate alloc] initWithController:self];
 }
 
 - (void)gatherData {
