@@ -158,31 +158,35 @@
 
 - (void)doTheSwitch:(NSNumber*)index {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
   usleep(500000);
-  
-  [self performSelectorOnMainThread:@selector(setDataSource:)
-                         withObject:nil
-                      waitUntilDone:YES];
-  
+
   NSMutableArray* tokens = (NSMutableArray *)[[LocalStorage getFile:TOKENS] JSONValue];
   NSMutableDictionary* token = [tokens objectAtIndex:[index intValue]];
-
-  NSString* previous = [LocalStorage getAccessToken];
   
-  [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
+  long nid = [[token objectForKey:@"network_id"] longValue];
   
-  NSMutableDictionary* usersCurrent = [APIGateway usersCurrent:nil];
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  if (nid != [yammer.network_id longValue]) {  
+    [self performSelectorOnMainThread:@selector(setDataSource:)
+                           withObject:nil
+                        waitUntilDone:YES];
 
-  if (usersCurrent) {
-    long nid = [[usersCurrent objectForKey:@"network_id"] longValue];
-    yammer.network_id = [[NSNumber alloc] initWithLong:nid];
-    [_settingsReference gatherData];
-    [yammer resetForNewNetwork];
-  } else
-    [LocalStorage saveAccessToken:previous];
+    NSString* previous = [LocalStorage getAccessToken];
+    
+    [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
+    
+    NSMutableDictionary* usersCurrent = [APIGateway usersCurrent:nil];
 
+    if (usersCurrent) {
+      long nid = [[usersCurrent objectForKey:@"network_id"] longValue];
+      yammer.network_id = [[NSNumber alloc] initWithLong:nid];
+      [_settingsReference gatherData];
+      [yammer resetForNewNetwork];
+    } else
+      [LocalStorage saveAccessToken:previous];
+  }
+  
   [yammer settingsToRootView];
   [autoreleasepool release];
 }

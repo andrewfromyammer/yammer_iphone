@@ -128,8 +128,10 @@
 + (NSMutableArray*)getTokens {
   NSString *json = [OAuthGateway httpGet:@"/api/v1/oauth/tokens.json" style:nil];
   if (json) {
-    [LocalStorage saveFile:TOKENS data:json];
-    return (NSMutableArray *)[json JSONValue];
+    NSMutableArray* tokens = (NSMutableArray *)[json JSONValue];
+    if ([tokens count] > 1)
+      [LocalStorage saveFile:TOKENS data:json];
+    return tokens;
   }
   
   return nil;
