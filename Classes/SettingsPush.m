@@ -86,8 +86,7 @@
       timeChooser.title = @"Stop Time";
       [picker setDate:[matter dateFromString:[[dataSource.pushSettings objectForKey:@"sleep_hour_start"] description]] animated:false];
       back.action = @selector(setStopTime);
-    }
-    else {
+    } else if (indexPath.row == 2) {
       timeChooser.title = @"Resume Time";
       [picker setDate:[matter dateFromString:[[dataSource.pushSettings objectForKey:@"sleep_hour_end"] description]] animated:false];
       back.action = @selector(setResumeTime);
