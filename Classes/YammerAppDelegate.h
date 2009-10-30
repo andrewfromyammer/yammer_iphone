@@ -47,6 +47,7 @@
 - (NSString*)version;
 - (void)showEnterCallbackTokenScreen;
 - (void)setupNavigator;
+- (void)settingsToRootView;
 
 @end
 

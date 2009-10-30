@@ -27,7 +27,52 @@
 
 @end
 
+// CheckMarkTTTableTextItem
+@interface CheckMarkTTTableTextItem : TTTableTextItem {
+  BOOL isChecked;
+}
+@property BOOL isChecked;
+@end
 
+@implementation CheckMarkTTTableTextItem
+@synthesize isChecked;
++ (CheckMarkTTTableTextItem*)text:(NSString*)text isChecked:(BOOL)isChecked {
+  CheckMarkTTTableTextItem* item = [CheckMarkTTTableTextItem itemWithText:text URL:@"1"];
+  item.isChecked = isChecked;
+  return item;
+}
+@end
+
+@interface CheckMarkCell : TTTableTextItemCell;
+@end
+
+@implementation CheckMarkCell
+- (void)setObject:(id)object {
+  if (_item != object) {
+    [super setObject:object];
+    
+    CheckMarkTTTableTextItem* item = object;
+
+    if (item.isChecked)
+      self.accessoryType = UITableViewCellAccessoryCheckmark;
+    else
+      self.accessoryType = UITableViewCellAccessoryNone;
+  }
+}
+@end
+
+@interface CheckMarkDataSource : TTListDataSource;
+@end
+
+@implementation CheckMarkDataSource
+- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
+  return [CheckMarkCell class];
+}
+@end
+
+
+
+// SettingsSwitchNetwork
 @implementation SettingsSwitchNetwork
 
 @synthesize settingsReference = _settingsReference;
@@ -65,10 +110,13 @@
 }
 
 - (TTListDataSource*)sourceFromArray:(NSMutableArray*)array {
-  TTListDataSource* list = [[TTListDataSource alloc] init];
-  
-  for (NSMutableDictionary* dict in array)
-    [list.items addObject:[TTTableTextItem itemWithText:[dict objectForKey:@"network_name"] URL:@"1"]];  
+  CheckMarkDataSource* list = [[CheckMarkDataSource alloc] init];
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+  for (NSMutableDictionary* dict in array) {
+    long nid = [[dict objectForKey:@"network_id"] longValue];
+    [list.items addObject:[CheckMarkTTTableTextItem text:[dict objectForKey:@"network_name"] isChecked:[yammer.network_id longValue] == nid]];  
+  }
   return list;
 }
 
@@ -111,7 +159,7 @@
 - (void)doTheSwitch:(NSNumber*)index {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   
-  sleep(1);
+  usleep(500000);
   
   [self performSelectorOnMainThread:@selector(setDataSource:)
                          withObject:nil
@@ -125,16 +173,17 @@
   [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
   
   NSMutableDictionary* usersCurrent = [APIGateway usersCurrent:nil];
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+
   if (usersCurrent) {
     long nid = [[usersCurrent objectForKey:@"network_id"] longValue];
-    YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
     yammer.network_id = [[NSNumber alloc] initWithLong:nid];
     [_settingsReference gatherData];
     [yammer resetForNewNetwork];
   } else
     [LocalStorage saveAccessToken:previous];
 
-  [self dismissModalViewControllerAnimated:YES];
+  [yammer settingsToRootView];
   [autoreleasepool release];
 }
 

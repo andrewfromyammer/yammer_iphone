@@ -194,6 +194,14 @@
   }  
 }
 
+- (void)settingsToRootView {
+  TTNavigator* navigator = [TTNavigator navigator];
+  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
+
+  UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:4];
+  [nav popToRootViewControllerAnimated:NO];
+}
+
 - (void)resetForNewNetwork {
   if (self.pushToken)
     [APIGateway sendPushToken:self.pushToken];
