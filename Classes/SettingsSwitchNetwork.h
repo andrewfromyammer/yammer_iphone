@@ -8,7 +8,7 @@
 @property (nonatomic,retain) Settings* settingsReference;
 
 - (id)initWithControllerReference:(Settings*)settings;
-- (TTListDataSource*)sourceFromArray:(NSMutableArray*)array;
+- (TTSectionedDataSource*)sourceFromArray:(NSMutableArray*)array;
 - (void)madeSelection:(int)row;
 
 @end

@@ -74,52 +74,36 @@
 }
 
 - (void)gatherData {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+  NSMutableArray* sections = [NSMutableArray array];
+  NSMutableArray* items = [NSMutableArray array];
+
+  [sections addObject:@"You are logged in as:"];
+  [sections addObject:@""];
+  [sections addObject:@""];
 
   NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:USER_CURRENT] JSONValue];
   NSString* email = [self findEmailFromDict:dict];
   NSString* name  = [dict objectForKey:@"network_name"];
-  
+
+  NSMutableArray* section1 = [NSMutableArray array];
+  [section1 addObject:[TTTableTextItem itemWithText:email URL:nil]];
+  [section1 addObject:[TTTableTextItem itemWithText:[NSString stringWithFormat:@"Network: %@", name] URL:nil]];
+  [items addObject:section1];
+
+  NSMutableArray* section2 = [NSMutableArray array];
+  [section2 addObject:[TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"]];
+  [section2 addObject:[TTTableImageItem itemWithText:@"Push Settings" imageURL:@"bundle://push.png" URL:@"1"]];
   if ([self emailQualifiesForAdvanced:email])
-    self.dataSource = [TTSectionedDataSource dataSourceWithObjects:
-       U_R_LOGGED_IN_AS,
-       [TTTableTextItem itemWithText:email URL:nil],
-       [self network:name],
-       @"",
-       [self switchNetworks],
-       [self pushSettings],
-       [TTTableImageItem itemWithText:@"Advanced Settings" imageURL:@"bundle://advanced.png" URL:@"1"],
-       @"",
-       [self version],
-       nil];
-  else
-    self.dataSource = [TTSectionedDataSource dataSourceWithObjects:
-                       U_R_LOGGED_IN_AS,
-                       [TTTableTextItem itemWithText:email URL:nil],
-                       [self network:name],
-                       @"",
-                       [self switchNetworks],
-                       [self pushSettings],
-                       @"",
-                       [self version],
-                       nil];
+    [section2 addObject:[TTTableImageItem itemWithText:@"Advanced Settings" imageURL:@"bundle://advanced.png" URL:@"1"]];
+  [items addObject:section2];
+
+  NSMutableArray* section3 = [NSMutableArray array];
+  [section3 addObject:[TTTableTextItem itemWithText:[NSString stringWithFormat:@"Version: %@", [yammer version]] URL:nil]];
+  [items addObject:section3];
   
-}
-
-- (TTTableImageItem*)switchNetworks {
-  return [TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"];
-}
-
-- (TTTableImageItem*)pushSettings {
-  return [TTTableImageItem itemWithText:@"Push Settings" imageURL:@"bundle://push.png" URL:@"1"];
-}
-
-- (TTTableTextItem*)version {
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  return [TTTableTextItem itemWithText:[NSString stringWithFormat:@"Version: %@", [yammer version]] URL:nil];
-}
-
-- (TTTableTextItem*)network:(NSString*)name {
-  return [TTTableTextItem itemWithText:[NSString stringWithFormat:@"Network: %@", name] URL:nil];
+  self.dataSource = [[TTSectionedDataSource alloc] initWithItems:items sections:sections];
 }
 
 - (BOOL)emailQualifiesForAdvanced:(NSString*)email {

@@ -61,7 +61,7 @@
 }
 @end
 
-@interface CheckMarkDataSource : TTListDataSource;
+@interface CheckMarkDataSource : TTSectionedDataSource;
 @end
 
 @implementation CheckMarkDataSource
@@ -109,14 +109,21 @@
   return [[SwitchNetworkDelegate alloc] initWithController:self];
 }
 
-- (TTListDataSource*)sourceFromArray:(NSMutableArray*)array {
-  CheckMarkDataSource* list = [[CheckMarkDataSource alloc] init];
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+- (TTSectionedDataSource*)sourceFromArray:(NSMutableArray*)array {
+  NSMutableArray* sections = [NSMutableArray array];
+  NSMutableArray* items = [NSMutableArray array];
+  NSMutableArray* section = [NSMutableArray array];
 
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  
   for (NSMutableDictionary* dict in array) {
     long nid = [[dict objectForKey:@"network_id"] longValue];
-    [list.items addObject:[CheckMarkTTTableTextItem text:[dict objectForKey:@"network_name"] isChecked:[yammer.network_id longValue] == nid]];  
+    [section addObject:[CheckMarkTTTableTextItem text:[dict objectForKey:@"network_name"] isChecked:[yammer.network_id longValue] == nid]];  
   }
+
+  [sections addObject:@"You can link multiple yammer accounts on the website.  Accounts you have linked will appear here."];
+  [items addObject:section];
+  CheckMarkDataSource* list = [[CheckMarkDataSource alloc] initWithItems:items sections:sections];  
   return list;
 }
 
