@@ -46,6 +46,7 @@
   cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
   cell.textLabel.numberOfLines = 1;
   cell.accessoryView = nil;
+  [cell.contentView removeAllSubviews];
   
   if (indexPath.section == 2) {
     [FeedData setupCell:cell dict:[feeds objectAtIndex:indexPath.row]];
@@ -75,14 +76,32 @@
       [switchView addTarget:self action:@selector(quietSwitchWasChanged:) forControlEvents:UIControlEventValueChanged];
       [switchView release];
     }
-    else if (indexPath.row == 1)
-      cell.textLabel.text = [NSString stringWithFormat:@"Stop %@", [DataSettingsPush timeToAMPM:[pushSettings objectForKey:@"sleep_hour_start"]]];
-    else if (indexPath.row == 2)
-      cell.textLabel.text = [NSString stringWithFormat:@"Resume %@", [DataSettingsPush timeToAMPM:[pushSettings objectForKey:@"sleep_hour_end"]]];
+    else {
+      UILabel* mainLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10, 6.0, 260.0, 25.0)] autorelease];
+      mainLabel.font = [UIFont boldSystemFontOfSize:16.0];
+      mainLabel.textAlignment = UITextAlignmentLeft;
+      mainLabel.textColor = [UIColor blackColor];
+
+      mainLabel.text = @"Stop Notifications";
+      if (indexPath.row == 2)
+        mainLabel.text = @"Resume Notifications";        
+
+      [cell.contentView addSubview:mainLabel];
+      
+      UILabel* secondLabel = [[[UILabel alloc] initWithFrame:CGRectMake(190.0, 6.0, 80.0, 25.0)] autorelease];
+      secondLabel.font = [UIFont systemFontOfSize:14.0];
+      secondLabel.textAlignment = UITextAlignmentRight;
+      secondLabel.textColor = [UIColor blueColor];
+      secondLabel.text = [DataSettingsPush timeToAMPM:[pushSettings objectForKey:@"sleep_hour_start"]];
+      if (indexPath.row == 2)
+        secondLabel.text = [DataSettingsPush timeToAMPM:[pushSettings objectForKey:@"sleep_hour_end"]];
+      [cell.contentView addSubview:secondLabel];
+      cell.textLabel.text = nil;
+    }
   } else if (indexPath.section == 0) {
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.image = [UIImage imageNamed:@"note.png"];
-    cell.textLabel.text = @"Sound";
+    cell.textLabel.text = @"Sounds";
     UISwitch *switchView = [[UISwitch alloc] init];
     cell.accessoryView = switchView;
     [switchView setOn:NO animated:NO];
@@ -98,11 +117,11 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
   if (section == 0)
-    return @"Play a sound for each message:";
+    return @"Play notification sounds:";
   if (section == 1)
-    return @"Turn off push messages at night:";
+    return @"Quiet notifications:";
   if (section == 2)
-    return @"Select which feeds to push:";
+    return @"Select which feeds:";
   
   return nil;
 }
