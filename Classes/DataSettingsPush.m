@@ -119,7 +119,7 @@
   if (section == 0)
     return @"Play notification sounds:";
   if (section == 1)
-    return @"Quiet notifications:";
+    return @"Quiet hours:";
   if (section == 2)
     return @"Select which feeds:";
   

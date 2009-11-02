@@ -26,8 +26,13 @@
   self.pushToken = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
                      stringByReplacingOccurrencesOfString:@">" withString:@""]
                     stringByReplacingOccurrencesOfString:@" " withString:@""];
-  
+  [NSThread detachNewThreadSelector:@selector(pushTokenThread) toTarget:self withObject:nil];  
+}
+
+- (void)pushTokenThread {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   [APIGateway sendPushToken:self.pushToken];
+  [autoreleasepool release];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -55,10 +60,6 @@
   [window makeKeyAndVisible];
   
   NSString *user_current = [LocalStorage getFile:USER_CURRENT];
-  if (user_current) {
-    if ([[ NSDate date] timeIntervalSinceDate: [LocalStorage getFileDate:USER_CURRENT] ] > 60 * 60 * 24)
-      [APIGateway usersCurrent:@"silent"];
-  }
   
   // OAuth stores an access token on local hard drive, if there, user is already authenticated
   if ([LocalStorage getAccessToken] && user_current != nil)
