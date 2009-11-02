@@ -10,6 +10,7 @@
 #import "LocalStorage.h"
 #import "APIGateway.h"
 #import "MainTabBar.h"
+#import "SettingsTimeChooser.h"
 
 @implementation SettingsPush
 
@@ -23,6 +24,11 @@
   if (self = [super init]) {
     self.navigationBarTintColor = [MainTabBar yammerGray];
     self.title = @"Push Settings";
+    
+    UIBarButtonItem *temporaryBarButtonItem=[[UIBarButtonItem alloc] init];
+    temporaryBarButtonItem.title=@"Back";
+    self.navigationItem.backBarButtonItem = temporaryBarButtonItem;
+    [temporaryBarButtonItem release];
   }
   return self;
 }
@@ -66,37 +72,23 @@
   [theTableView deselectRowAtIndexPath:indexPath animated:YES];
   
   if (indexPath.section == 1 && indexPath.row > 0) {
-    self.timeChooser = [UIViewController alloc];
-    timeChooser.view.backgroundColor = [UIColor groupTableViewBackgroundColor];    
-    UIBarButtonItem *back = [[UIBarButtonItem alloc] init];
-    back.title=@"Save";
-    back.target = self;
-    timeChooser.navigationItem.rightBarButtonItem = back;
-    
-    self.picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
-    picker.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    picker.datePickerMode = UIDatePickerModeTime;
-    
-    NSDateFormatter *matter = [[NSDateFormatter alloc] init];
-    [matter setDateFormat:@"HH"];
-
-    [timeChooser.view addSubview:picker];
-
-    if (indexPath.row == 1) {
-      timeChooser.title = @"Stop Time";
-      [picker setDate:[matter dateFromString:[[dataSource.pushSettings objectForKey:@"sleep_hour_start"] description]] animated:false];
-      back.action = @selector(setStopTime);
-    } else if (indexPath.row == 2) {
-      timeChooser.title = @"Resume Time";
-      [picker setDate:[matter dateFromString:[[dataSource.pushSettings objectForKey:@"sleep_hour_end"] description]] animated:false];
-      back.action = @selector(setResumeTime);
-    }
-
-    UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:timeChooser];
-    [modal.navigationBar setTintColor:[MainTabBar yammerGray]];
-
-    [self presentModalViewController:modal animated:YES];
+    TTNavigator* navigator = [TTNavigator navigator];
+    if (indexPath.row == 1)
+      [navigator openURL:[NSString stringWithFormat:@"yammer://time?hour=%@&key=sleep_hour_start", [[dataSource.pushSettings objectForKey:@"sleep_hour_start"] description]] animated:YES];
+    else if (indexPath.row == 2)
+      [navigator openURL:[NSString stringWithFormat:@"yammer://time?hour=%@&key=sleep_hour_end", [[dataSource.pushSettings objectForKey:@"sleep_hour_end"] description]] animated:YES];
   }
+}
+
+- (void)updateTime:(NSInteger)hour ampm:(NSInteger)ampm key:(NSString*)key {
+  
+  if (ampm == 0 && hour == 11)
+    [dataSource.pushSettings setObject:[NSNumber numberWithInt:0] forKey:key];
+  else if (ampm == 0)
+    [dataSource.pushSettings setObject:[NSNumber numberWithInt:hour+1] forKey:key];
+  else if (ampm == 1)
+    [dataSource.pushSettings setObject:[NSNumber numberWithInt:hour+13] forKey:key];
+  [theTableView reloadData];
 }
 
 - (void)setStopTime {
@@ -133,7 +125,7 @@
   [theTableView reloadData];
 }
 
-- (void)updateTime:(NSMutableArray *)array {
+- (void)updateTimeThread:(NSMutableArray *)array {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   [APIGateway updatePushField:[array objectAtIndex:0] value:[array objectAtIndex:1] theId:[dataSource.pushSettings objectForKey:@"id"]];  
   [autoreleasepool release];

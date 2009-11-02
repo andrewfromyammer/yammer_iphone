@@ -12,6 +12,7 @@
 #import "OAuthCustom.h"
 #import "DirectoryList.h"
 #import "FeedList.h"
+#import "SettingsTimeChooser.h"
 
 @implementation YammerAppDelegate
 
@@ -101,6 +102,7 @@
   [map from:@"*" toViewController:[TTWebController class]];
   [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
   [map from:@"yammer://user" toViewController:[UserProfile class]];
+  [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
 
   [navigator openURL:@"yammer://tabs" animated:NO];
 }

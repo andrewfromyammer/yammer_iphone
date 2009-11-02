@@ -39,6 +39,7 @@
 		003B458C1045878B00310B73 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 003B458B1045878B00310B73 /* Default.png */; };
 		003B8A5E10505D6A002BA526 /* FeedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 003B8A5D10505D6A002BA526 /* FeedDictionary.m */; };
 		004B11A6104D9AE200590B22 /* ColorBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 004B11A5104D9AE200590B22 /* ColorBackground.m */; };
+		005DB2B2109F4C69001FF9D5 /* SettingsTimeChooser.m in Sources */ = {isa = PBXBuildFile; fileRef = 005DB2B1109F4C69001FF9D5 /* SettingsTimeChooser.m */; };
 		006ACA6010456A220078A4BB /* MainTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 006ACA5F10456A220078A4BB /* MainTabBar.m */; };
 		006ACBB610457BE00078A4BB /* advanced.png in Resources */ = {isa = PBXBuildFile; fileRef = 006ACBA110457BE00078A4BB /* advanced.png */; };
 		006ACBB710457BE00078A4BB /* arrow_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 006ACBA210457BE00078A4BB /* arrow_down.png */; };
@@ -185,6 +186,8 @@
 		003B8A5D10505D6A002BA526 /* FeedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedDictionary.m; sourceTree = "<group>"; };
 		004B11A4104D9AE200590B22 /* ColorBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorBackground.h; sourceTree = "<group>"; };
 		004B11A5104D9AE200590B22 /* ColorBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorBackground.m; sourceTree = "<group>"; };
+		005DB2B0109F4C69001FF9D5 /* SettingsTimeChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTimeChooser.h; sourceTree = "<group>"; };
+		005DB2B1109F4C69001FF9D5 /* SettingsTimeChooser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTimeChooser.m; sourceTree = "<group>"; };
 		006ACA5E10456A220078A4BB /* MainTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBar.h; sourceTree = "<group>"; };
 		006ACA5F10456A220078A4BB /* MainTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBar.m; sourceTree = "<group>"; };
 		006ACBA110457BE00078A4BB /* advanced.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = advanced.png; path = Images/advanced.png; sourceTree = SOURCE_ROOT; };
@@ -456,6 +459,8 @@
 				00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */,
 				00EDAEFF1099F56F00D3F5E9 /* Settings.h */,
 				00EDAF001099F56F00D3F5E9 /* Settings.m */,
+				005DB2B0109F4C69001FF9D5 /* SettingsTimeChooser.h */,
+				005DB2B1109F4C69001FF9D5 /* SettingsTimeChooser.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -754,6 +759,7 @@
 				00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */,
 				00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */,
 				00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */,
+				005DB2B2109F4C69001FF9D5 /* SettingsTimeChooser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
