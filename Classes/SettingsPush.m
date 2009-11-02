@@ -89,40 +89,11 @@
   else if (ampm == 1)
     [dataSource.pushSettings setObject:[NSNumber numberWithInt:hour+13] forKey:key];
   [theTableView reloadData];
-}
-
-- (void)setStopTime {
-  NSDateFormatter *matter = [[NSDateFormatter alloc] init];
-  [matter setDateFormat:@"HH"];  
-  int hour = [[matter stringFromDate:[picker date]] intValue];
-  [dataSource.pushSettings setObject:[[[NSNumber alloc] initWithInt:hour] autorelease] forKey:@"sleep_hour_start"];
   
   NSMutableArray *array = [NSMutableArray array];
-  [array addObject:@"sleep_hour_start"];
-  [array addObject:[matter stringFromDate:[picker date]]];
-  [matter release];
-  [NSThread detachNewThreadSelector:@selector(updateTime:) toTarget:self withObject:array]; 
-  [timeChooser dismissModalViewControllerAnimated:YES];
-  [timeChooser release];
-  [picker release];
-  [theTableView reloadData];
-}
-
-- (void)setResumeTime {
-  NSDateFormatter *matter = [[NSDateFormatter alloc] init];
-  [matter setDateFormat:@"HH"];  
-  int hour = [[matter stringFromDate:[picker date]] intValue];
-  [dataSource.pushSettings setObject:[[[NSNumber alloc] initWithInt:hour] autorelease] forKey:@"sleep_hour_end"];
-
-  NSMutableArray *array = [NSMutableArray array];
-  [array addObject:@"sleep_hour_end"];
-  [array addObject:[matter stringFromDate:[picker date]]];
-  
-  [NSThread detachNewThreadSelector:@selector(updateTime:) toTarget:self withObject:array];
-  [timeChooser dismissModalViewControllerAnimated:YES];
-  [timeChooser release];
-  [picker release];
-  [theTableView reloadData];
+  [array addObject:key];
+  [array addObject:[[dataSource.pushSettings objectForKey:key] description]];
+  [NSThread detachNewThreadSelector:@selector(updateTimeThread:) toTarget:self withObject:array]; 
 }
 
 - (void)updateTimeThread:(NSMutableArray *)array {
