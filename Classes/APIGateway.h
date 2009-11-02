@@ -6,6 +6,7 @@
 
 }
 
++ (NSString*)push_file;
 + (NSMutableDictionary*)usersCurrent:(NSString*)style;
 + (NSMutableArray*)homeTabs;
 + (NSMutableDictionary*)pushSettings;
@@ -27,8 +28,8 @@
 + (BOOL)removeFollow:(NSString*)theUserId;
 + (BOOL)addFollow:(NSString*)theUserId;
 + (BOOL)sendPushToken:(NSString*)token;
-+ (BOOL)updatePushField:(NSString*)field value:(NSString*)value theId:(NSNumber*)theId;
-+ (BOOL)updatePushSetting:(NSString*)feed_key status:(NSString*)statusValue theId:(NSNumber*)theId;
++ (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId pushSettings:(NSMutableDictionary*)pushSettings;
++ (BOOL)updatePushSetting:(NSString*)feed_key status:(NSString*)statusValue theId:(NSNumber*)theId pushSettings:(NSMutableDictionary*)pushSettings;
 + (BOOL)likeMessage:(NSNumber*)message_id;
 + (BOOL)unlikeMessage:(NSNumber*)message_id;
 

@@ -27,8 +27,6 @@
 @property (nonatomic,retain) UIDatePicker* picker;
 
 - (id)init;
-- (void)setStopTime;
-- (void)setResumeTime;
 - (void)updateTime:(NSInteger)hour ampm:(NSInteger)ampm key:(NSString*)key;
 
 @end

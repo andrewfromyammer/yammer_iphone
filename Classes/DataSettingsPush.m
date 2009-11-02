@@ -157,11 +157,11 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   if (switchView.on) {
     [pushSettings setObject:[NSNumber numberWithBool:YES] forKey:@"sleep_enabled"];
-    [APIGateway updatePushField:@"sleep_enabled" value:@"1" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushField:@"sleep_enabled" value:@"1" theId:[pushSettings objectForKey:@"id"] pushSettings:pushSettings];
   }
   else {
     [pushSettings setObject:[NSNumber numberWithBool:NO] forKey:@"sleep_enabled"];
-    [APIGateway updatePushField:@"sleep_enabled" value:@"0" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushField:@"sleep_enabled" value:@"0" theId:[pushSettings objectForKey:@"id"] pushSettings:pushSettings];
   }
   
   [autoreleasepool release];
@@ -171,11 +171,11 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   if (switchView.on) {
     [pushSettings setObject:@"sound" forKey:@"protocol"];
-    [APIGateway updatePushField:@"protocol" value:@"sound" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushField:@"protocol" value:@"sound" theId:[pushSettings objectForKey:@"id"] pushSettings:pushSettings];
   }
   else {
     [pushSettings setObject:@"text" forKey:@"protocol"];
-    [APIGateway updatePushField:@"protocol" value:@"text" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushField:@"protocol" value:@"text" theId:[pushSettings objectForKey:@"id"] pushSettings:pushSettings];
   }
   
   [autoreleasepool release];
@@ -195,14 +195,14 @@
     [tab setObject:@"enabled" forKey:@"status"];
     [notificationDict setObject:tab forKey:name];
 
-    [APIGateway updatePushSetting:feed_key status:@"enabled" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushSetting:feed_key status:@"enabled" theId:[pushSettings objectForKey:@"id"] pushSettings:pushSettings];
   }
   else {
     NSMutableDictionary *tab = [notificationDict objectForKey:name];
     [tab setObject:@"disabled" forKey:@"status"];
     [notificationDict setObject:tab forKey:name];
     
-    [APIGateway updatePushSetting:feed_key status:@"disabled" theId:[pushSettings objectForKey:@"id"]];
+    [APIGateway updatePushSetting:feed_key status:@"disabled" theId:[pushSettings objectForKey:@"id"] pushSettings:pushSettings];
   }
   
   [autoreleasepool release];

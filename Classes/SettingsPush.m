@@ -11,6 +11,8 @@
 #import "APIGateway.h"
 #import "MainTabBar.h"
 #import "SettingsTimeChooser.h"
+#import "YammerAppDelegate.h"
+#import "NSString+SBJSON.h"
 
 @implementation SettingsPush
 
@@ -36,6 +38,8 @@
 - (void)getData {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+
 	theTableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]
                                               style:UITableViewStyleGrouped];
   
@@ -45,8 +49,17 @@
 	theTableView.delegate = self;  
   NSMutableArray *homeTabs = [APIGateway homeTabs];
   NSMutableArray *filteredHomeTabs = [NSMutableArray array];
-  NSMutableDictionary *pushSettings = [APIGateway pushSettings];
-    
+  
+  
+  NSString* json = [LocalStorage getFile:[NSString stringWithFormat:@"account/push_%@.json", yammer.network_id]];
+  
+  NSMutableDictionary *pushSettings = nil;
+  
+  if (json)
+    pushSettings = [json JSONValue];
+  else
+    pushSettings = [APIGateway pushSettings];
+      
   NSMutableArray *notifications = [pushSettings objectForKey:@"notifications"];
   NSMutableDictionary *notificationDict = [NSMutableDictionary dictionary];
   int i=0;
@@ -98,7 +111,9 @@
 
 - (void)updateTimeThread:(NSMutableArray *)array {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  [APIGateway updatePushField:[array objectAtIndex:0] value:[array objectAtIndex:1] theId:[dataSource.pushSettings objectForKey:@"id"]];  
+  [APIGateway updatePushField:[array objectAtIndex:0] value:[array objectAtIndex:1]
+                        theId:[dataSource.pushSettings objectForKey:@"id"] 
+                        pushSettings:dataSource.pushSettings];
   [autoreleasepool release];
 }
 

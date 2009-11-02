@@ -5,6 +5,8 @@
 #import "OAuthPostURLEncoded.h"
 #import "OAuthPostMultipart.h"
 #import "NSString+SBJSON.h"
+#import "NSObject+SBJSON.h"
+#import "YammerAppDelegate.h"
 
 @implementation APIGateway
 
@@ -31,7 +33,13 @@
   return nil;
 }
 
++ (NSString*)push_file {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  return [NSString stringWithFormat:@"account/push_%@.json", yammer.network_id];
+}
+
 + (NSMutableDictionary *)pushSettings {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
 
   NSString *json = [OAuthGateway httpGet:@"/api/v1/feed_clients.json" style:nil];
   if (json) {
@@ -41,8 +49,10 @@
       NSMutableDictionary *client = [clients objectAtIndex:i];
       if ([[client objectForKey:@"type"] isEqualToString:@"ApplePushDevice"]) {        
         json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/feed_clients/%@.json", [[client objectForKey:@"id"] description]] style:nil];
-        if (json)
+        if (json) {
+          [LocalStorage saveFile:[APIGateway push_file] data:json];
           return (NSMutableDictionary *)[json JSONValue];
+        }
       }
     }
   }
@@ -185,24 +195,26 @@
   return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST" style:@"silent"];  
 }
 
-+ (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId {
++ (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId pushSettings:(NSMutableDictionary*)pushSettings {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
   [params setObject:value forKey:[NSString stringWithFormat:@"feed_client[%@]", field]];
   [params setObject:@"PUT" forKey:@"_method"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil];
+  if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
+    [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
   return true;
 }
 
 
-+ (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue theId:(NSNumber *)theId {
++ (BOOL)updatePushSetting:(NSString *)feed_key status:(NSString *)statusValue theId:(NSNumber *)theId pushSettings:(NSMutableDictionary*)pushSettings {
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
   
   [params setObject:statusValue forKey:[NSString stringWithFormat:@"feed_client[notifications][%@]", feed_key]];
   [params setObject:@"PUT" forKey:@"_method"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil];
+  if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
+    [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
   return true;
 }
 
