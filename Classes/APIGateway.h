@@ -30,6 +30,7 @@
 + (BOOL)sendPushToken:(NSString*)token;
 + (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId pushSettings:(NSMutableDictionary*)pushSettings;
 + (BOOL)updatePushSetting:(NSString*)feed_key status:(NSString*)statusValue theId:(NSNumber*)theId pushSettings:(NSMutableDictionary*)pushSettings;
++ (BOOL)updatePushSettingsInBulk:(NSNumber *)theId pushSettings:(NSMutableDictionary*)pushSettings;
 + (BOOL)likeMessage:(NSNumber*)message_id;
 + (BOOL)unlikeMessage:(NSNumber*)message_id;
 

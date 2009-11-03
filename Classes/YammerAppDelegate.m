@@ -206,8 +206,12 @@
 }
 
 - (void)resetForNewNetwork {
-  if (self.pushToken)
-    [APIGateway sendPushToken:self.pushToken];
+  if (self.pushToken && [APIGateway sendPushToken:self.pushToken] && [LocalStorage getFile:[APIGateway push_file]]) {
+    // send existing push settings (if any) to server
+    NSMutableDictionary* pushSettings = [[LocalStorage getFile:[APIGateway push_file]] JSONValue];
+    if (![APIGateway updatePushSettingsInBulk:[pushSettings objectForKey:@"id"] pushSettings:pushSettings])
+      [LocalStorage removeFile:[APIGateway push_file]];
+  }
   
   TTNavigator* navigator = [TTNavigator navigator];
   MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];

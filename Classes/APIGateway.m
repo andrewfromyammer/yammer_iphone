@@ -11,12 +11,20 @@
 @implementation APIGateway
 
 + (NSMutableDictionary *)usersCurrent:(NSString *)style {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
   NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json" style:style];
   
   if (json) {
     [LocalStorage saveFile:USER_CURRENT data:json];
-    return (NSMutableDictionary *)[json JSONValue];
+    NSMutableDictionary* current = (NSMutableDictionary*)[json JSONValue];
+    
+    long nid = [[current objectForKey:@"network_id"] longValue];
+    yammer.network_id = [[NSNumber alloc] initWithLong:nid];
+    
+    [LocalStorage removeFile:[APIGateway push_file]];
+
+    return current;
   }
   
   return nil;
@@ -39,8 +47,6 @@
 }
 
 + (NSMutableDictionary *)pushSettings {
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-
   NSString *json = [OAuthGateway httpGet:@"/api/v1/feed_clients.json" style:nil];
   if (json) {
     NSMutableArray *clients = (NSMutableArray *)[json JSONValue];
@@ -201,8 +207,12 @@
   [params setObject:value forKey:[NSString stringWithFormat:@"feed_client[%@]", field]];
   [params setObject:@"PUT" forKey:@"_method"];
   
-  if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
-    [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
+  @synchronized ([UIApplication sharedApplication]) {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
+      [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  }
   return true;
 }
 
@@ -213,9 +223,35 @@
   [params setObject:statusValue forKey:[NSString stringWithFormat:@"feed_client[notifications][%@]", feed_key]];
   [params setObject:@"PUT" forKey:@"_method"];
   
-  if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
-    [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
+  @synchronized ([UIApplication sharedApplication]) {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
+      [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  }
   return true;
+}
+
++ (BOOL)updatePushSettingsInBulk:(NSNumber *)theId pushSettings:(NSMutableDictionary*)pushSettings {
+  NSMutableDictionary *params = [NSMutableDictionary dictionary];
+  
+  [params setObject:[pushSettings objectForKey:@"protocol"] forKey:@"feed_client[protocol]"];
+  if ([[pushSettings objectForKey:@"sleep_enabled"] boolValue])
+    [params setObject:@"1" forKey:@"feed_client[sleep_enabled]"];
+  else
+    [params setObject:@"0" forKey:@"feed_client[sleep_enabled]"];
+  [params setObject:[[pushSettings objectForKey:@"sleep_hour_start"] description] forKey:@"feed_client[sleep_hour_start]"];
+  [params setObject:[[pushSettings objectForKey:@"sleep_hour_end"] description] forKey:@"feed_client[sleep_hour_end]"];
+  
+  NSMutableArray *notifications = [pushSettings objectForKey:@"notifications"];
+  for (NSMutableDictionary* tab in notifications) {
+    NSString *feed_key = [tab objectForKey:@"feed_key"];
+    [params setObject:[tab objectForKey:@"status"] forKey:[NSString stringWithFormat:@"feed_client[notifications][%@]", feed_key]];    
+  }
+  
+  [params setObject:@"PUT" forKey:@"_method"];
+  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil];
 }
 
 + (BOOL)likeMessage:(NSNumber *)message_id {

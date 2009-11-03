@@ -179,6 +179,9 @@
                            withObject:nil
                         waitUntilDone:YES];
 
+    if ([LocalStorage getFile:[APIGateway push_file]] == nil)
+      [APIGateway pushSettings];
+    
     NSString* previous = [LocalStorage getAccessToken];
     
     [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
@@ -186,8 +189,6 @@
     NSMutableDictionary* usersCurrent = [APIGateway usersCurrent:nil];
 
     if (usersCurrent) {
-      long nid = [[usersCurrent objectForKey:@"network_id"] longValue];
-      yammer.network_id = [[NSNumber alloc] initWithLong:nid];
       [_settingsReference gatherData];
       [yammer resetForNewNetwork];
     } else
