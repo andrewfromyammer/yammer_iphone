@@ -52,7 +52,7 @@
   
   
   NSString* json = [LocalStorage getFile:[NSString stringWithFormat:@"account/push_%@.json", yammer.network_id]];
-  
+    
   NSMutableDictionary *pushSettings = nil;
   
   if (json)

@@ -7,6 +7,8 @@
 }
 
 + (NSString*)push_file;
++ (NSString*)push_file_with_id:(long)theid;
+
 + (NSMutableDictionary*)usersCurrent:(NSString*)style;
 + (NSMutableArray*)homeTabs;
 + (NSMutableDictionary*)pushSettings;

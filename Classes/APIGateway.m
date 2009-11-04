@@ -41,9 +41,13 @@
   return nil;
 }
 
++ (NSString*)push_file_with_id:(long)theid {
+  return [NSString stringWithFormat:@"account/push_%d.json", theid];
+}
+
 + (NSString*)push_file {
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  return [NSString stringWithFormat:@"account/push_%@.json", yammer.network_id];
+  return [APIGateway push_file_with_id:[yammer.network_id longValue]];
 }
 
 + (NSMutableDictionary *)pushSettings {
@@ -250,7 +254,6 @@
   }
   
   [params setObject:@"PUT" forKey:@"_method"];
-  
   return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil];
 }
 

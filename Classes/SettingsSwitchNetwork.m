@@ -186,10 +186,22 @@
     
     [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
     
+    // important to get first because usersCurrent call has to delete this file
+    NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file_with_id:nid]];
+    
     NSMutableDictionary* usersCurrent = [APIGateway usersCurrent:nil];
 
     if (usersCurrent) {
       [_settingsReference gatherData];
+      
+      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
+        // send existing push settings (if any) to server
+        NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
+        NSMutableDictionary* existingPushSettings = [APIGateway pushSettings];
+        [APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
+        [LocalStorage removeFile:[APIGateway push_file]];
+      }
+            
       [yammer resetForNewNetwork];
     } else
       [LocalStorage saveAccessToken:previous];
