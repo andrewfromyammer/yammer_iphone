@@ -159,10 +159,8 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
     return nil;
   } else if ([response statusCode] >= 400) {
     NSString *detail = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    NSLog(detail);
-    if ([detail length] > 30)
-      detail = [detail substringToIndex:30];
-    [YammerAppDelegate showError:[NSString stringWithFormat:@"%d %@", [response statusCode], detail] style:style];
+//    NSLog(detail);
+    [YammerAppDelegate showError:[NSString stringWithFormat:@"We're sorry, something has gone wrong and we've been notified.  Error code: %d", [response statusCode]] style:style];
     return nil;
   }
   
