@@ -31,7 +31,17 @@
   } else {
     TTTableSubtextItem* item = (TTTableSubtextItem*)object;
     if ([item.text hasPrefix:@"Phone"]) {
-      NSURL* theURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", item.caption]];
+      
+      NSMutableString *strippedString = [NSMutableString stringWithCapacity:20];
+      NSString* phoneNumber = item.caption;
+      
+      for (int i=0; i<[phoneNumber length]; i++) {
+        if (isdigit([phoneNumber characterAtIndex:i])) {
+          [strippedString appendFormat:@"%c",[phoneNumber characterAtIndex:i]];
+        }
+      }
+      
+      NSURL* theURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", strippedString]];
       if ([[UIApplication sharedApplication] canOpenURL:theURL])
         [[UIApplication sharedApplication] openURL:theURL];
     }
