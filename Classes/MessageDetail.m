@@ -214,7 +214,7 @@
   self.thread = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"thread_gray.png"]
                                                  style:UIBarButtonItemStylePlain
                                                 target:self
-                                                action:@selector(threadView)];  
+                                                action:@selector(threadView)];
   
   self.user = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"user_gray.png"]
                                                            style:UIBarButtonItemStylePlain
@@ -251,12 +251,14 @@
     if ([APIGateway unlikeMessage:[m objectForKey:@"message_id"]]) {
       likes--;
       liked_by_me = NO;
+      [self.like setImage:[UIImage imageNamed:@"smile_gray.png"]];
     }
   }
   else {
     if ([APIGateway likeMessage:[m objectForKey:@"message_id"]]) {
       likes++;
       liked_by_me = YES;
+      [self.like setImage:[UIImage imageNamed:@"smile_check.png"]];
     }
   }
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];

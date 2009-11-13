@@ -56,7 +56,12 @@
       if ([[item.message objectForKey:@"likes"] intValue] > 0) {
         _messageView.iconLike.hidden = NO;
         _messageView.messageText.hidden = NO;
-        _messageView.messageText.text = [NSString stringWithFormat:@"Liked by %d people.", [[item.message objectForKey:@"likes"] intValue]];
+        int like_int_val = [[item.message objectForKey:@"likes"] intValue];
+        
+        if (like_int_val == 1)
+          _messageView.messageText.text = [NSString stringWithFormat:@"Liked by 1 person."];
+        else
+          _messageView.messageText.text = [NSString stringWithFormat:@"Liked by %d people.", like_int_val];
         _messageView.messageText.frame = CGRectMake(71, 19, 200, 15);
       }
       return;
