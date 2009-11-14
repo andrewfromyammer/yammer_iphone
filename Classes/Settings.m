@@ -8,6 +8,7 @@
 #import "SettingsAdvancedOptions.h"
 #import "SettingsSwitchNetwork.h"
 #import "OAuthGateway.h"
+#import "SettingsFontSize.h"
 
 @interface SettingsDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -21,11 +22,15 @@
   if ([item.text isEqualToString:@"Switch Networks"]) {
     SettingsSwitchNetwork *switchNetwork = [[SettingsSwitchNetwork alloc] initWithControllerReference:(Settings*)_controller];
     [_controller.navigationController pushViewController:switchNetwork animated:YES];
-    [switchNetwork release];
+    [switchNetwork release];    
   } else if ([item.text isEqualToString:@"Push Settings"]) {
     SettingsPush *localSettingPush = [[SettingsPush alloc] init];
     [_controller.navigationController pushViewController:localSettingPush animated:YES];
     [localSettingPush release];
+  } else if ([item.text isEqualToString:@"Font Size"]) {
+    SettingsFontSize *fontSize = [[SettingsFontSize alloc] initWithControllerReference:(Settings*)_controller];
+    [_controller.navigationController pushViewController:fontSize animated:YES];
+    [fontSize release];    
   } else if ([item.text isEqualToString:@"Advanced Settings"]) {
     SettingsAdvancedOptions *localSettingsAdvancedOptions = [[SettingsAdvancedOptions alloc] init];
     [_controller.navigationController pushViewController:localSettingsAdvancedOptions animated:YES];
@@ -95,6 +100,7 @@
   NSMutableArray* section2 = [NSMutableArray array];
   [section2 addObject:[TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"]];
   [section2 addObject:[TTTableImageItem itemWithText:@"Push Settings" imageURL:@"bundle://push.png" URL:@"1"]];
+  [section2 addObject:[TTTableImageItem itemWithText:@"Font Size" imageURL:@"bundle://font.png" URL:@"1"]];
   if ([self emailQualifiesForAdvanced:email])
     [section2 addObject:[TTTableImageItem itemWithText:@"Advanced Settings" imageURL:@"bundle://advanced.png" URL:@"1"]];
   [items addObject:section2];

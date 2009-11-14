@@ -4,9 +4,8 @@
 #import "LocalStorage.h"
 #import "NSString+SBJSON.h"
 #import "APIGateway.h"
-#import "LocalStorage.h"
-#import "APIGateway.h"
 #import "YammerAppDelegate.h"
+#import "CheckMarkCell.h"
 
 @interface SwitchNetworkDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -26,51 +25,6 @@
 }
 
 @end
-
-// CheckMarkTTTableTextItem
-@interface CheckMarkTTTableTextItem : TTTableTextItem {
-  BOOL isChecked;
-}
-@property BOOL isChecked;
-@end
-
-@implementation CheckMarkTTTableTextItem
-@synthesize isChecked;
-+ (CheckMarkTTTableTextItem*)text:(NSString*)text isChecked:(BOOL)isChecked {
-  CheckMarkTTTableTextItem* item = [CheckMarkTTTableTextItem itemWithText:text URL:@"1"];
-  item.isChecked = isChecked;
-  return item;
-}
-@end
-
-@interface CheckMarkCell : TTTableTextItemCell;
-@end
-
-@implementation CheckMarkCell
-- (void)setObject:(id)object {
-  if (_item != object) {
-    [super setObject:object];
-    
-    CheckMarkTTTableTextItem* item = object;
-
-    if (item.isChecked)
-      self.accessoryType = UITableViewCellAccessoryCheckmark;
-    else
-      self.accessoryType = UITableViewCellAccessoryNone;
-  }
-}
-@end
-
-@interface CheckMarkDataSource : TTSectionedDataSource;
-@end
-
-@implementation CheckMarkDataSource
-- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
-  return [CheckMarkCell class];
-}
-@end
-
-
 
 // SettingsSwitchNetwork
 @implementation SettingsSwitchNetwork

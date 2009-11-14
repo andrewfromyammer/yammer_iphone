@@ -13,6 +13,17 @@
 #import "APIGateway.h"
 #import "FeedCache.h"
 
+@interface MessageDetailStyleSheet : TTDefaultStyleSheet
+@end
+
+@implementation MessageDetailStyleSheet
+
+- (TTStyle*)large {
+  return [TTTextStyle styleWithFont:[UIFont systemFontOfSize:32] next:nil];
+}
+
+@end
+
 @interface MessageDetailDelegate : TTTableViewVarHeightDelegate;
 @end
 
@@ -71,6 +82,7 @@
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.frame = CGRectMake(0, 0, 320, 359);
+    [TTStyleSheet setGlobalStyleSheet:[[[MessageDetailStyleSheet alloc] init] autorelease]];
 
     [self loadMessage];
   }
@@ -84,7 +96,7 @@
                          stringByReplacingOccurrencesOfString:@">" withString:@""] 
                         stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
     
-  TTStyledText* fullText = [TTStyledText textFromXHTML:safeText lineBreaks:YES URLs:YES];    
+  TTStyledText* fullText = [TTStyledText textFromXHTML:[NSString stringWithFormat:@"<span class=\"large\">%@</span>", safeText] lineBreaks:YES URLs:YES];
   TTTableStyledTextItem* fullTextItem = [TTTableStyledTextItem itemWithText:fullText URL:nil];
   
   SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
@@ -292,6 +304,8 @@
 }
 
 - (void)dealloc {
+  [TTStyleSheet setGlobalStyleSheet:nil];
+
   TT_RELEASE_SAFELY(_messageData);
   TT_RELEASE_SAFELY(_upDown);
   TT_RELEASE_SAFELY(_toolbar);

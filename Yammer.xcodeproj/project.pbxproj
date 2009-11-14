@@ -89,6 +89,9 @@
 		00C08546104861CB00331BF5 /* dist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00C08545104861CB00331BF5 /* dist.plist */; };
 		00C4F7FA1088D60F0062F370 /* smile_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F7F91088D60F0062F370 /* smile_gray.png */; };
 		00C4F80D108916910062F370 /* smile12x12.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F80C108916910062F370 /* smile12x12.png */; };
+		00C6CC3110AE17FF00C96249 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C6CC3010AE17FF00C96249 /* font.png */; };
+		00C6CC3610AE2B5400C96249 /* CheckMarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C6CC3510AE2B5400C96249 /* CheckMarkCell.m */; };
+		00C6CC3B10AE2C2E00C96249 /* SettingsFontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C6CC3A10AE2C2E00C96249 /* SettingsFontSize.m */; };
 		00DBFC74104B1F09005DB685 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DBFC73104B1F09005DB685 /* ImageCache.m */; };
 		00DE0AF910481CBE00224666 /* DirectoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DE0AF810481CBE00224666 /* DirectoryList.m */; };
 		00E6CDB61046F7AD0042BD9E /* yammer_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 00E6CDB51046F7AD0042BD9E /* yammer_sound.wav */; };
@@ -259,6 +262,11 @@
 		00C08545104861CB00331BF5 /* dist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dist.plist; sourceTree = "<group>"; };
 		00C4F7F91088D60F0062F370 /* smile_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile_gray.png; path = Images/smile_gray.png; sourceTree = "<group>"; };
 		00C4F80C108916910062F370 /* smile12x12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile12x12.png; path = Images/smile12x12.png; sourceTree = "<group>"; };
+		00C6CC3010AE17FF00C96249 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = Images/font.png; sourceTree = "<group>"; };
+		00C6CC3410AE2B5400C96249 /* CheckMarkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckMarkCell.h; sourceTree = "<group>"; };
+		00C6CC3510AE2B5400C96249 /* CheckMarkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckMarkCell.m; sourceTree = "<group>"; };
+		00C6CC3910AE2C2E00C96249 /* SettingsFontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsFontSize.h; sourceTree = "<group>"; };
+		00C6CC3A10AE2C2E00C96249 /* SettingsFontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsFontSize.m; sourceTree = "<group>"; };
 		00DBFC72104B1F09005DB685 /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCache.h; sourceTree = "<group>"; };
 		00DBFC73104B1F09005DB685 /* ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCache.m; sourceTree = "<group>"; };
 		00DE0AF710481CBE00224666 /* DirectoryList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryList.h; sourceTree = "<group>"; };
@@ -414,6 +422,7 @@
 		006ACB9F10457B840078A4BB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00C6CC3010AE17FF00C96249 /* font.png */,
 				0059CA2210ADEC15000D4135 /* smile_check.png */,
 				00FA2D0B10979AB000C6F2DF /* network.png */,
 				00C4F80C108916910062F370 /* smile12x12.png */,
@@ -448,6 +457,8 @@
 		00705D0D10485528005D7A3F /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				00C6CC3910AE2C2E00C96249 /* SettingsFontSize.h */,
+				00C6CC3A10AE2C2E00C96249 /* SettingsFontSize.m */,
 				00705D1F104855BE005D7A3F /* SpinnerViewController.h */,
 				00705D20104855BE005D7A3F /* SpinnerViewController.m */,
 				00705D1510485559005D7A3F /* SettingsAdvancedOptions.h */,
@@ -464,6 +475,8 @@
 				00EDAF001099F56F00D3F5E9 /* Settings.m */,
 				005DB2B0109F4C69001FF9D5 /* SettingsTimeChooser.h */,
 				005DB2B1109F4C69001FF9D5 /* SettingsTimeChooser.m */,
+				00C6CC3410AE2B5400C96249 /* CheckMarkCell.h */,
+				00C6CC3510AE2B5400C96249 /* CheckMarkCell.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -696,6 +709,7 @@
 				00C4F80D108916910062F370 /* smile12x12.png in Resources */,
 				00FA2D0C10979AB000C6F2DF /* network.png in Resources */,
 				0059CA2310ADEC15000D4135 /* smile_check.png in Resources */,
+				00C6CC3110AE17FF00C96249 /* font.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -764,6 +778,8 @@
 				00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */,
 				00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */,
 				005DB2B2109F4C69001FF9D5 /* SettingsTimeChooser.m in Sources */,
+				00C6CC3610AE2B5400C96249 /* CheckMarkCell.m in Sources */,
+				00C6CC3B10AE2C2E00C96249 /* SettingsFontSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
