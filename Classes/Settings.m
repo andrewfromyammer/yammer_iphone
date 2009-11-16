@@ -20,15 +20,17 @@
 @interface TitleWithValueCell : TTTableImageItemCell {
   TTImageView* _iconImageView;
   UILabel* _leftSide;
+  UILabel* _rightSide;
 }
 @property (nonatomic, retain) TTImageView *iconImageView;
 @property (nonatomic, retain) UILabel *leftSide;
+@property (nonatomic, retain) UILabel *rightSide;
 
 @end
 
 @implementation TitleWithValueCell
 
-@synthesize iconImageView = _iconImageView, leftSide = _leftSide;
+@synthesize iconImageView = _iconImageView, leftSide = _leftSide, rightSide = _rightSide;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
   if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
@@ -39,8 +41,15 @@
     _leftSide.text = @"Font Size";
     _leftSide.font = [UIFont boldSystemFontOfSize:18];
 
+    _rightSide = [[UILabel alloc] initWithFrame:CGRectMake(220, 1, 50, 40)];
+    _rightSide.text = @"Small";
+    _rightSide.font = [UIFont systemFontOfSize:14.0];
+    _rightSide.textAlignment = UITextAlignmentRight;
+    _rightSide.textColor = [UIColor blueColor];
+
     [self.contentView addSubview:_iconImageView];
     [self.contentView addSubview:_leftSide];
+    [self.contentView addSubview:_rightSide];
   }
   return self;
 }
@@ -48,6 +57,7 @@
 - (void)dealloc {
   TT_RELEASE_SAFELY(_iconImageView);
   TT_RELEASE_SAFELY(_leftSide);
+  TT_RELEASE_SAFELY(_rightSide);
   [super dealloc];
 }
 
