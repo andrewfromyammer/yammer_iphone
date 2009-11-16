@@ -156,7 +156,6 @@
 }
 
 - (void)textField:(TTSearchTextField*)textField didSelectObject:(id)object {
-  NSLog(@"222222222");
 }
 
 @end

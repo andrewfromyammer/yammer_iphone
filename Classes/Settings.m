@@ -10,6 +10,67 @@
 #import "OAuthGateway.h"
 #import "SettingsFontSize.h"
 
+
+@interface TitleWithValueItem : TTTableImageItem {}
+@end
+
+@implementation TitleWithValueItem
+@end
+
+@interface TitleWithValueCell : TTTableImageItemCell {
+  TTImageView* _iconImageView;
+  UILabel* _leftSide;
+}
+@property (nonatomic, retain) TTImageView *iconImageView;
+@property (nonatomic, retain) UILabel *leftSide;
+
+@end
+
+@implementation TitleWithValueCell
+
+@synthesize iconImageView = _iconImageView, leftSide = _leftSide;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
+    _iconImageView = [[TTImageView alloc] initWithFrame:CGRectMake(10, 10, 24, 24)];
+    _iconImageView.image = [UIImage imageNamed:@"font.png"];
+    
+    _leftSide = [[UILabel alloc] initWithFrame:CGRectMake(47, 1, 100, 40)];
+    _leftSide.text = @"Font Size";
+    _leftSide.font = [UIFont boldSystemFontOfSize:18];
+
+    [self.contentView addSubview:_iconImageView];
+    [self.contentView addSubview:_leftSide];
+  }
+  return self;
+}
+
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_iconImageView);
+  TT_RELEASE_SAFELY(_leftSide);
+  [super dealloc];
+}
+
+- (void)setObject:(id)object {
+  if (_item != object) {
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+  }
+}
+@end
+
+@interface SettingDataSource : TTSectionedDataSource;
+@end
+
+@implementation SettingDataSource
+- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
+  if ([object isKindOfClass:[TitleWithValueItem class]])
+    return [TitleWithValueCell class];
+  return [super tableView:tableView cellClassForObject:object];
+}
+@end
+
+
+
 @interface SettingsDelegate : TTTableViewVarHeightDelegate;
 @end
 
@@ -96,11 +157,11 @@
   [section1 addObject:[TTTableTextItem itemWithText:email URL:nil]];
   [section1 addObject:[TTTableTextItem itemWithText:[NSString stringWithFormat:@"Network: %@", name] URL:nil]];
   [items addObject:section1];
-
+  
   NSMutableArray* section2 = [NSMutableArray array];
   [section2 addObject:[TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"]];
   [section2 addObject:[TTTableImageItem itemWithText:@"Push Settings" imageURL:@"bundle://push.png" URL:@"1"]];
-  [section2 addObject:[TTTableImageItem itemWithText:@"Font Size" imageURL:@"bundle://font.png" URL:@"1"]];
+  [section2 addObject:[TitleWithValueItem itemWithText:@"Font Size" imageURL:@"bundle://font.png" URL:@"1"]];
   if ([self emailQualifiesForAdvanced:email])
     [section2 addObject:[TTTableImageItem itemWithText:@"Advanced Settings" imageURL:@"bundle://advanced.png" URL:@"1"]];
   [items addObject:section2];
@@ -109,7 +170,7 @@
   [section3 addObject:[TTTableTextItem itemWithText:[NSString stringWithFormat:@"Version: %@", [yammer version]] URL:nil]];
   [items addObject:section3];
   
-  self.dataSource = [[TTSectionedDataSource alloc] initWithItems:items sections:sections];
+  self.dataSource = [[SettingDataSource alloc] initWithItems:items sections:sections];
 }
 
 - (BOOL)emailQualifiesForAdvanced:(NSString*)email {
