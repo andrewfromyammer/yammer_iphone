@@ -19,7 +19,7 @@
 @implementation MessageDetailStyleSheet
 
 - (TTStyle*)large {
-  return [TTTextStyle styleWithFont:[UIFont systemFontOfSize:32] next:nil];
+  return [TTTextStyle styleWithFont:[UIFont systemFontOfSize:18] next:nil];
 }
 
 @end
@@ -96,7 +96,10 @@
                          stringByReplacingOccurrencesOfString:@">" withString:@""] 
                         stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
     
-  TTStyledText* fullText = [TTStyledText textFromXHTML:[NSString stringWithFormat:@"<span class=\"large\">%@</span>", safeText] lineBreaks:YES URLs:YES];
+  if ([[LocalStorage fontSize] isEqualToString:@"Large"])
+    safeText = [NSString stringWithFormat:@"<span class=\"large\">%@</span>", safeText];
+  
+  TTStyledText* fullText = [TTStyledText textFromXHTML:safeText lineBreaks:YES URLs:YES];
   TTTableStyledTextItem* fullTextItem = [TTTableStyledTextItem itemWithText:fullText URL:nil];
   
   SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
