@@ -154,6 +154,11 @@
     [_thread setEnabled:NO];
   else
     [_thread setEnabled:YES];
+
+  if ([[m objectForKey:@"liked_by_me"] boolValue])
+    [self.like setImage:[UIImage imageNamed:@"smile_check.png"]];
+  else
+    [self.like setImage:[UIImage imageNamed:@"smile_gray.png"]];
 }
 
 - (void)loadImage:(NSDictionary*)attachment {
