@@ -28,6 +28,7 @@
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   yammer.fontSize = object.text;
   [view.settingsReference showModel:YES];
+  [yammer reloadForFontSizeChange];
   
   [view showModel:YES];
 }

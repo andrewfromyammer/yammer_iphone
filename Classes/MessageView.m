@@ -1,5 +1,6 @@
 
 #import "MessageView.h"
+#import "LocalStorage.h"
 
 static const CGFloat middleWidth = 230;
 static const CGFloat timeLineY = 33;
@@ -13,19 +14,22 @@ static const CGFloat leftX = 55;
 - (id)init {
   if (self = [super initWithFrame:CGRectMake(0, 0, 320, 100)]) {
     
+    BOOL largeFont = [[LocalStorage fontSize] isEqualToString:@"Large"];
+
+    
     self.fromLine = [[UILabel alloc] initWithFrame:CGRectMake(leftX, 0, middleWidth, 20)];
     _fromLine.textColor = [UIColor blackColor];
-    _fromLine.font = [UIFont boldSystemFontOfSize:12];
+    _fromLine.font = [UIFont boldSystemFontOfSize:[self fromLineFontSize]];
 
     self.messageText = [[UILabel alloc] initWithFrame:CGRectMake(leftX, 20, middleWidth, 40)];
     _messageText.textColor = [UIColor blackColor];
-    _messageText.font = [UIFont systemFontOfSize:11];
+    _messageText.font = [UIFont systemFontOfSize:[MessageView previewFontSize]];
     _messageText.hidden = YES;
     _messageText.numberOfLines = 0;
     
     self.timeLine = [[UILabel alloc] initWithFrame:CGRectMake(leftX, timeLineY, middleWidth, 20)];
     _timeLine.textColor = [UIColor darkGrayColor];
-    _timeLine.font = [UIFont systemFontOfSize:10];
+    _timeLine.font = [UIFont systemFontOfSize:[self timeLineFontSize]];
 
     self.mugshot = [[TTImageView alloc] initWithFrame:CGRectMake(0, 0, 48, 48)];
     _mugshot.defaultImage = [UIImage imageNamed:@"no_photo_small.png"];
@@ -60,8 +64,30 @@ static const CGFloat leftX = 55;
   return self;
 }
 
-- (void)adjustWidthsAndHeights:(TTTableYammerItem*)item {
-  CGSize size = [_messageText.text sizeWithFont:[UIFont systemFontOfSize:11]
++ (CGFloat)previewFontSize {
+  if ([[LocalStorage fontSize] isEqualToString:@"Large"])
+    return 14;
+  return 11;
+}
+
+- (CGFloat)fromLineFontSize {
+  if ([[LocalStorage fontSize] isEqualToString:@"Large"])
+    return 14;
+  return 12;
+}
+
+- (CGFloat)timeLineFontSize {
+  if ([[LocalStorage fontSize] isEqualToString:@"Large"])
+    return 12;
+  return 10;
+}
+
+- (void)adjustWidthsAndHeights:(TTTableYammerItem*)item {  
+  _fromLine.font = [UIFont boldSystemFontOfSize:[self fromLineFontSize]];
+  _messageText.font = [UIFont systemFontOfSize:[MessageView previewFontSize]];
+  _timeLine.font = [UIFont systemFontOfSize:[self timeLineFontSize]];
+
+  CGSize size = [_messageText.text sizeWithFont:[UIFont systemFontOfSize:[MessageView previewFontSize]]
                  constrainedToSize:CGSizeMake(middleWidth, [item maxPreviewHeight])
                  lineBreakMode:UILineBreakModeTailTruncation];
   _timeLine.frame = CGRectMake(leftX, 20+size.height, middleWidth, 20);
@@ -90,7 +116,7 @@ static const CGFloat leftX = 55;
   if (icon_width > 0) {
     _fromLine.frame = CGRectMake(leftX, 0, middleWidth - icon_width, 20);
     
-    CGSize size = [_fromLine.text sizeWithFont:[UIFont boldSystemFontOfSize:12]
+    CGSize size = [_fromLine.text sizeWithFont:[UIFont boldSystemFontOfSize:[self fromLineFontSize]]
             constrainedToSize:CGSizeMake(middleWidth - icon_width, 20)
             lineBreakMode:UILineBreakModeTailTruncation];  
     

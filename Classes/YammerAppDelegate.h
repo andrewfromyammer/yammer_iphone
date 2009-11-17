@@ -50,6 +50,7 @@
 - (void)showEnterCallbackTokenScreen;
 - (void)setupNavigator;
 - (void)settingsToRootView;
+- (void)reloadForFontSizeChange;
 
 @end
 

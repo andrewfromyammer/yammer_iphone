@@ -206,6 +206,25 @@
   [nav popToRootViewControllerAnimated:NO];
 }
 
+- (void)reloadForFontSizeChange {
+  TTNavigator* navigator = [TTNavigator navigator];
+  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
+  
+  int i=0;
+  for (i=0; i<2; i++) {
+    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
+    [nav popToRootViewControllerAnimated:NO];
+    FeedMessageList *fml = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
+    [fml showModel:YES];
+  }
+  
+  UINavigationController *feeds = (UINavigationController *)[mainView.viewControllers objectAtIndex:2];
+  [feeds popToRootViewControllerAnimated:NO];
+  
+  UINavigationController *directory = (UINavigationController *)[mainView.viewControllers objectAtIndex:3];
+  [directory popToRootViewControllerAnimated:NO];  
+}
+
 - (void)resetForNewNetwork {
   TTNavigator* navigator = [TTNavigator navigator];
   MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];

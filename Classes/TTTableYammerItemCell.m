@@ -1,6 +1,7 @@
 #import "TTTableYammerItemCell.h"
 #import "TTTableYammerItem.h"
 #import "Message.h"
+#import "MessageView.h"
 #import "ColorBackground.h"
 
 @implementation TTTableYammerItemCell
@@ -10,7 +11,7 @@
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
   TTTableYammerItem* item = object;
   
-  CGSize size = [[item.message objectForKey:@"plain_body"] sizeWithFont:[UIFont systemFontOfSize:11]
+  CGSize size = [[item.message objectForKey:@"plain_body"] sizeWithFont:[UIFont systemFontOfSize:[MessageView previewFontSize]]
                  constrainedToSize:CGSizeMake(230, [item maxPreviewHeight])
                  lineBreakMode:UILineBreakModeTailTruncation];
 

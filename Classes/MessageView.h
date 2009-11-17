@@ -28,5 +28,8 @@
 - (void)timeLineToOriginalPosition;
 - (void)adjustFromLineIcons:(TTTableYammerItem*)item;
 - (void)setMultipleBackgrounds:(UIColor*)color;
++ (CGFloat)previewFontSize;
+- (CGFloat)fromLineFontSize;
+- (CGFloat)timeLineFontSize;
 
 @end
