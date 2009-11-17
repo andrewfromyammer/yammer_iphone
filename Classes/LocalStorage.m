@@ -9,6 +9,7 @@
 #import "LocalStorage.h"
 #import "OAuthGateway.h"
 #import "NSString+SBJSON.h"
+#import "NSObject+SBJSON.h"
 #import "YammerAppDelegate.h"
 
 static NSString *ACCOUNT_DIR   = @"/account";
@@ -196,6 +197,29 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   }
   return YES;
 }
+
++ (NSString*)fontSize {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  return yammer.fontSize;
+}
+
++ (NSString*)fontSizeFromDisk {
+  if ([LocalStorage getFile:SETTINGS]) {
+    NSMutableDictionary *dict = [[LocalStorage getFile:SETTINGS] JSONValue];
+    return [dict objectForKey:@"font_size"];
+  }
+  return @"Small";
+}
+
++ (void)saveSetting:(NSString*)key value:(NSString*)value {
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  if ([LocalStorage getFile:SETTINGS])
+    dict = [[LocalStorage getFile:SETTINGS] JSONValue];
+  
+  [dict setObject:value forKey:key];
+  [LocalStorage saveFile:SETTINGS data:[dict JSONRepresentation]];
+}
+
 
 + (NSString *)getNameField {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];

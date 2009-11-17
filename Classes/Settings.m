@@ -42,7 +42,6 @@
     _leftSide.font = [UIFont boldSystemFontOfSize:18];
 
     _rightSide = [[UILabel alloc] initWithFrame:CGRectMake(220, 1, 50, 40)];
-    _rightSide.text = @"Small";
     _rightSide.font = [UIFont systemFontOfSize:14.0];
     _rightSide.textAlignment = UITextAlignmentRight;
     _rightSide.textColor = [UIColor blueColor];
@@ -64,6 +63,9 @@
 - (void)setObject:(id)object {
   if (_item != object) {
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    _rightSide.text = [LocalStorage fontSize];
+
   }
 }
 @end

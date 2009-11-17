@@ -18,7 +18,7 @@
 
 @synthesize showFullNames;
 @synthesize launchURL;
-@synthesize network_id, pushToken;
+@synthesize network_id, pushToken, fontSize;
 @synthesize threading, createNewAccount;
 @synthesize unseen_message_count_following, unseen_message_count_received, last_seen_message_id;
 @synthesize lastAutocomplete;
@@ -51,6 +51,7 @@
   self.unseen_message_count_received = -1;
   self.last_seen_message_id = -1;
   self.lastAutocomplete = [NSDate date];
+  self.fontSize = [LocalStorage fontSizeFromDisk];
   
   UIWindow* window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   window.backgroundColor = [UIColor whiteColor];

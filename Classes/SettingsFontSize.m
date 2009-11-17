@@ -24,6 +24,11 @@
     
   object.isChecked = YES;
   
+  [LocalStorage saveSetting:@"font_size" value:object.text];
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  yammer.fontSize = object.text;
+  [view.settingsReference showModel:YES];
+  
   [view showModel:YES];
 }
 
@@ -44,8 +49,8 @@
     NSMutableArray* items = [NSMutableArray array];
     NSMutableArray* section = [NSMutableArray array];
     
-    [section addObject:[CheckMarkTTTableTextItem text:@"Small" isChecked:YES]];  
-    [section addObject:[CheckMarkTTTableTextItem text:@"Large" isChecked:NO]];  
+    [section addObject:[CheckMarkTTTableTextItem text:@"Small" isChecked:[[LocalStorage fontSize] isEqualToString:@"Small"]]];  
+    [section addObject:[CheckMarkTTTableTextItem text:@"Large" isChecked:[[LocalStorage fontSize] isEqualToString:@"Large"]]];  
      
     [sections addObject:@""];
     [items addObject:section];
