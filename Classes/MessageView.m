@@ -66,13 +66,13 @@ static const CGFloat leftX = 55;
 
 + (CGFloat)previewFontSize {
   if ([[LocalStorage fontSize] isEqualToString:@"Large"])
-    return 14;
+    return 16;
   return 11;
 }
 
 - (CGFloat)fromLineFontSize {
   if ([[LocalStorage fontSize] isEqualToString:@"Large"])
-    return 14;
+    return 16;
   return 12;
 }
 
