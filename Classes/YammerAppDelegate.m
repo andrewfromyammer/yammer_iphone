@@ -13,6 +13,7 @@
 #import "DirectoryList.h"
 #import "FeedList.h"
 #import "SettingsTimeChooser.h"
+#import "NetworkList.h"
 
 @implementation YammerAppDelegate
 
@@ -41,7 +42,7 @@
 }
 
 - (NSString*)version {
-  return @"2.0.2.28";
+  return @"2.0.2.29";
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication*)application {
@@ -61,12 +62,20 @@
   [image release];
   [window makeKeyAndVisible];
   
-  NSString *user_current = [LocalStorage getFile:USER_CURRENT];
+  [APIGateway networksCurrent:@"silent"];
+  
+  NSString *users_current = [LocalStorage getFile:USERS_CURRENT];
+  NSString *networks_current = [LocalStorage getFile:NETWORKS_CURRENT];
   
   // OAuth stores an access token on local hard drive, if there, user is already authenticated
-  if ([LocalStorage getAccessToken] && user_current != nil)
+  if ([LocalStorage getAccessToken] && users_current != nil && networks_current != nil)
     [self setupNavigator];
-  else if ([LocalStorage getAccessToken] && user_current == nil && [APIGateway usersCurrent:@"silent"])
+  else if ([LocalStorage getAccessToken] && users_current == nil && networks_current != nil && [APIGateway usersCurrent:@"silent"])
+    [self setupNavigator];
+  else if ([LocalStorage getAccessToken] && users_current != nil && networks_current == nil && [APIGateway networksCurrent:@"silent"])
+    [self setupNavigator];
+  else if ([LocalStorage getAccessToken] && users_current == nil && networks_current == nil && 
+           [APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"])
     [self setupNavigator];
   else 
     [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
@@ -85,8 +94,10 @@
 - (void)setupNavigator {  
   UIWindow* window = [[UIApplication sharedApplication] keyWindow];
   [[[window subviews] objectAtIndex:0] removeFromSuperview];
+
+  NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
   
-  long nid = [[[[LocalStorage getFile:USER_CURRENT] JSONValue] objectForKey:@"network_id"] longValue];
+  long nid = [[[[LocalStorage getFile:USERS_CURRENT] JSONValue] objectForKey:@"network_id"] longValue];
   self.network_id = [[NSNumber alloc] initWithLong:nid];
   self.threading = [LocalStorage threadingFromDisk];
 
@@ -104,8 +115,12 @@
   [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
   [map from:@"yammer://user" toViewController:[UserProfile class]];
   [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
+  [map from:@"yammer://networks" toViewController:[NetworkList class]];
 
-  [navigator openURL:@"yammer://tabs" animated:NO];
+  if ([networks count] > 1)
+    [navigator openURL:@"yammer://networks" animated:NO];
+  else
+    [navigator openURL:@"yammer://tabs" animated:NO];
 }
 
 - (void)postFinishLaunch {

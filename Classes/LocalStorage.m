@@ -225,7 +225,7 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
   if (yam.showFullNames == nil) {  
-    NSString *cached = [LocalStorage getFile:USER_CURRENT];
+    NSString *cached = [LocalStorage getFile:USERS_CURRENT];
     if (cached) {
       NSMutableDictionary *dict = [(NSMutableDictionary *)[cached JSONValue] objectForKey:@"web_preferences"];
       yam.showFullNames = [dict objectForKey:@"show_full_names"];

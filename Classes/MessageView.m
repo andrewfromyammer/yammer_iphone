@@ -14,9 +14,6 @@ static const CGFloat leftX = 55;
 - (id)init {
   if (self = [super initWithFrame:CGRectMake(0, 0, 320, 100)]) {
     
-    BOOL largeFont = [[LocalStorage fontSize] isEqualToString:@"Large"];
-
-    
     self.fromLine = [[UILabel alloc] initWithFrame:CGRectMake(leftX, 0, middleWidth, 20)];
     _fromLine.textColor = [UIColor blackColor];
     _fromLine.font = [UIFont boldSystemFontOfSize:[self fromLineFontSize]];

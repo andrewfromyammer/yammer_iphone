@@ -9,15 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "FeedDictionary.h"
 
-#define USER_CURRENT    @"/account/user_current.json"
-#define DIRECTORY_CACHE @"/account/directory_cache.json"
-#define SETTINGS        @"/account/settngs.json"
-#define MESSAGE_CACHE   @"message_cache_v3.sqlite"
+#define USERS_CURRENT    @"/account/user_current.json"
+#define DIRECTORY_CACHE  @"/account/directory_cache.json"
+#define SETTINGS         @"/account/settngs.json"
+#define MESSAGE_CACHE    @"message_cache_v3.sqlite"
 
 #define ATTACHMENTS             @"/attachments"
 #define ATTACHMENT_THUMBNAILS   @"/attachment_thumbnails"
 
-#define TOKENS    @"/account/tokens.json"
+#define TOKENS                  @"/account/tokens.json"
+#define NETWORKS_CURRENT        @"/account/networks_current.json"
 
 @interface LocalStorage : NSObject {
 

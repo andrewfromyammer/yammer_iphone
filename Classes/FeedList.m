@@ -79,7 +79,7 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
 
   NSMutableDictionary *dict;
-  NSString *cached = [LocalStorage getFile:USER_CURRENT];
+  NSString *cached = [LocalStorage getFile:USERS_CURRENT];
   if (cached && style != nil)
     dict = (NSMutableDictionary *)[cached JSONValue];
   else {
@@ -89,7 +89,7 @@
   }
   
   SpinnerListDataSource* source = [[[SpinnerListDataSource alloc] init] autorelease];
-  [source.items addObject:[SpinnerWithTextItem itemWithText:[FeedCache niceDate:[LocalStorage getFileDate:USER_CURRENT]]]];
+  [source.items addObject:[SpinnerWithTextItem itemWithText:[FeedCache niceDate:[LocalStorage getFileDate:USERS_CURRENT]]]];
   
   dict = [dict objectForKey:@"web_preferences"];
   NSArray* list = [dict objectForKey:@"home_tabs"];

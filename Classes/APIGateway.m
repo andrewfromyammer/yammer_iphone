@@ -16,7 +16,7 @@
   NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json" style:style];
   
   if (json) {
-    [LocalStorage saveFile:USER_CURRENT data:json];
+    [LocalStorage saveFile:USERS_CURRENT data:json];
     NSMutableDictionary* current = (NSMutableDictionary*)[json JSONValue];
     
     long nid = [[current objectForKey:@"network_id"] longValue];
@@ -32,7 +32,7 @@
 
 + (NSMutableArray *)homeTabs {
   
-  NSString *cached = [LocalStorage getFile:USER_CURRENT];
+  NSString *cached = [LocalStorage getFile:USERS_CURRENT];
   if (cached) {
     NSMutableDictionary *dict = [(NSMutableDictionary *)[cached JSONValue] objectForKey:@"web_preferences"];
     return (NSMutableArray*)[dict objectForKey:@"home_tabs"];
@@ -144,6 +144,17 @@
   return nil;
 }
 
++ (NSMutableArray*)networksCurrent:(NSString*)style {
+  
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/networks/current.json" style:style];
+  
+  if (json) {
+    [LocalStorage saveFile:NETWORKS_CURRENT data:json];
+    return (NSMutableArray *)[json JSONValue];
+  }
+  
+  return nil;
+}
 
 + (NSMutableArray*)getTokens {
   NSString *json = [OAuthGateway httpGet:@"/api/v1/oauth/tokens.json" style:nil];

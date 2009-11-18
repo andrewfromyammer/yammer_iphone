@@ -161,7 +161,7 @@
   [sections addObject:@""];
   [sections addObject:@""];
 
-  NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:USER_CURRENT] JSONValue];
+  NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:USERS_CURRENT] JSONValue];
   NSString* email = [self findEmailFromDict:dict];
   NSString* name  = [dict objectForKey:@"network_name"];
 

@@ -22,6 +22,7 @@
 + (NSMutableDictionary*)messages:(FeedDictionary*)feed olderThan:(NSNumber*)olderThan newerThan:(NSNumber*)newerThan style:(NSString*)style;
 
 + (NSMutableArray*)getTokens;
++ (NSMutableArray*)networksCurrent:(NSString*)style;
 
 + (BOOL)createMessage:(NSString*)body repliedToId:(NSNumber*)repliedToId 
               groupId:(NSNumber*)groupId
