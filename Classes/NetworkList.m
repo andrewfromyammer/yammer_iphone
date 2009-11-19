@@ -24,16 +24,15 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
   if (self = [super initWithStyle:style reuseIdentifier:identifier]) {    
-    _leftSide = [[UILabel alloc] initWithFrame:CGRectMake(10, 1, 100, 40)];
+    _leftSide = [[UILabel alloc] initWithFrame:CGRectMake(10, 7, 100, 30)];
     _leftSide.text = @"Testing";
     _leftSide.font = [UIFont boldSystemFontOfSize:18];
     
-    _badge = [[TTLabel alloc] initWithFrame:CGRectMake(230, 8, 25, 25)];
+    _badge = [[TTLabel alloc] initWithFrame:CGRectMake(225, 8, 25, 25)];
     _badge.style = TTSTYLE(largeBadge);
     _badge.backgroundColor = [UIColor clearColor];
     _badge.userInteractionEnabled = NO;
-    _badge.text = @"45";
-    [_badge sizeToFit];
+    _badge.text = @"60+";
     
     [self.contentView addSubview:_leftSide];
     [self.contentView addSubview:_badge];
@@ -54,13 +53,19 @@
     _leftSide.text = nli.text;
     
     _badge.text = nli.URL;
+    [_badge sizeToFit];
     
-    if ([nli.URL isEqualToString:@"0"])
+    if (nli.URL == nil)
       _badge.hidden = YES;
     else 
       _badge.hidden = NO;
   }
 }
+
++ (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
+  return 45.0;
+}
+
 @end
 
 @interface NetworkListDataSource : TTSectionedDataSource;
@@ -74,6 +79,21 @@
 }
 @end
 
+@interface NetworkListDelegate : TTTableViewVarHeightDelegate;
+@end
+
+@implementation NetworkListDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
+  [tableView deselectRowAtIndexPath:indexPath animated:YES];
+  
+  NetworkListItem* nli = (NetworkListItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
+  
+}
+
+@end
+
+
 
 @implementation NetworkList
 
@@ -81,7 +101,8 @@
   if (self = [super init]) {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
     self.navigationBarTintColor = [MainTabBar yammerGray];
-
+    self.variableHeightRows = YES;
+    
     _tableViewStyle = UITableViewStyleGrouped;    
     NSMutableArray* sections = [NSMutableArray array];
     NSMutableArray* items = [NSMutableArray array];
@@ -90,13 +111,27 @@
     NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
 
     for (NSMutableDictionary *network in networks) 
-      [section addObject:[NetworkListItem itemWithText:[network objectForKey:@"name"] URL:[[network objectForKey:@"unseen_message_count"] description]]];  
+      [section addObject:[NetworkListItem itemWithText:[network objectForKey:@"name"] URL:[NetworkList badgeFromIntToString:[[network objectForKey:@"unseen_message_count"] intValue]]]];  
     
     [sections addObject:@"Select a network:"];
     [items addObject:section];
     self.dataSource = [[NetworkListDataSource alloc] initWithItems:items sections:sections];    
   }  
   return self;
+}
+
+- (id<UITableViewDelegate>)createDelegate {
+  return [[NetworkListDelegate alloc] initWithController:self];
+}
+
++ (NSString*)badgeFromIntToString:(int)count {
+  if (count > 0) {
+    if (count > 60)
+      return @"60+";
+    else
+      return [NSString stringWithFormat:@"%d", count];   
+  }
+  return nil;
 }
 
 

@@ -164,13 +164,7 @@
 }
 
 - (void)setBadge:(FeedMessageList*)fml count:(int)count {
-  fml.tabBarItem.badgeValue = nil;
-  if (count > 0) {
-    if (count > 60)
-      fml.tabBarItem.badgeValue = @"60+";
-    else
-      fml.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", count];   
-  }  
+  fml.tabBarItem.badgeValue = [NetworkList badgeFromIntToString:count];
 }
 
 - (void)setBadges:(NSString*)style {

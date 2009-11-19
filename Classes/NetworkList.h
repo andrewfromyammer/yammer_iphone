@@ -4,4 +4,6 @@
 
 }
 
++ (NSString*)badgeFromIntToString:(int)count;
+
 @end
