@@ -61,17 +61,18 @@
   [window addSubview:image];
   [image release];
   [window makeKeyAndVisible];
-  
-  [APIGateway networksCurrent:@"silent"];
-  
+    
   NSString *users_current = [LocalStorage getFile:USERS_CURRENT];
   NSString *networks_current = [LocalStorage getFile:NETWORKS_CURRENT];
-  
-  // OAuth stores an access token on local hard drive, if there, user is already authenticated
-  if ([LocalStorage getAccessToken] && users_current != nil && networks_current != nil)
+
+  if ([LocalStorage getAccessToken] && users_current != nil && networks_current != nil) {
+    [APIGateway networksCurrent:@"silent"];
     [self setupNavigator];
-  else if ([LocalStorage getAccessToken] && users_current == nil && networks_current != nil && [APIGateway usersCurrent:@"silent"])
+  }
+  else if ([LocalStorage getAccessToken] && users_current == nil && networks_current != nil && [APIGateway usersCurrent:@"silent"]) {
+    [APIGateway networksCurrent:@"silent"];
     [self setupNavigator];
+  }
   else if ([LocalStorage getAccessToken] && users_current != nil && networks_current == nil && [APIGateway networksCurrent:@"silent"])
     [self setupNavigator];
   else if ([LocalStorage getAccessToken] && users_current == nil && networks_current == nil && 
@@ -125,7 +126,7 @@
 
 - (void)postFinishLaunch {
   if ([LocalStorage getRequestToken] && [OAuthCustom callbackTokenInURL] && 
-      [OAuthGateway getAccessToken:self.launchURL callbackToken:nil] && [APIGateway usersCurrent:@"silent"])
+      [OAuthGateway getAccessToken:self.launchURL callbackToken:nil] && [APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"])    
     [self setupNavigator];
   else if ([LocalStorage getRequestToken] && ![OAuthCustom callbackTokenInURL])
     [self showEnterCallbackTokenScreen];

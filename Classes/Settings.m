@@ -171,7 +171,7 @@
   [items addObject:section1];
   
   NSMutableArray* section2 = [NSMutableArray array];
-  [section2 addObject:[TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"]];
+//  [section2 addObject:[TTTableImageItem itemWithText:@"Switch Networks" imageURL:@"bundle://network.png" URL:@"1"]];
   [section2 addObject:[TTTableImageItem itemWithText:@"Push Settings" imageURL:@"bundle://push.png" URL:@"1"]];
   [section2 addObject:[TitleWithValueItem itemWithText:@"Font Size" imageURL:@"bundle://font.png" URL:@"1"]];
   if ([self emailQualifiesForAdvanced:email])

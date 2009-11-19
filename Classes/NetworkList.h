@@ -5,5 +5,7 @@
 }
 
 + (NSString*)badgeFromIntToString:(int)count;
+- (void)madeSelection:(NSMutableDictionary*)network;
+- (void)createNetworkListDataSource;
 
 @end

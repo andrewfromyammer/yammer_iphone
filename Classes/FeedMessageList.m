@@ -27,10 +27,41 @@
     self.isThread = thread;
 
     if (refresh) {
-      UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                               target:self
-                                                                               action:@selector(refreshFeedClick)];  
-      self.navigationItem.leftBarButtonItem = refresh;
+      //UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+        //                                                                       target:self
+          //                                                                     action:@selector(refreshFeedClick)];  
+      //self.navigationItem.leftBarButtonItem = refresh;
+      
+
+
+      UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle: @"Networks" style:UIBarButtonItemStylePlain 
+                                                                    target:self action:@selector(showListOfNetworks)];
+
+      UIColor* darkBlue = RGBCOLOR(57,67,76);
+
+      TTShapeStyle* style = [TTShapeStyle styleWithShape:[TTRoundedLeftArrowShape shapeWithRadius:4.5] next:
+        [TTShadowStyle styleWithColor:RGBCOLOR(0,0,0) blur:1 offset:CGSizeMake(0, 1) next:
+        [TTReflectiveFillStyle styleWithColor:darkBlue next:
+        [TTBevelBorderStyle styleWithHighlight:[darkBlue shadow]
+                                         shadow:[darkBlue multiplyHue:1 saturation:0.5 value:0.5]
+                                          width:1 lightSource:270 next:
+        [TTInsetStyle styleWithInset:UIEdgeInsetsMake(0, -1, 0, -1) next:
+        [TTBevelBorderStyle styleWithHighlight:nil shadow:RGBACOLOR(0,0,0,0.15)
+                                            width:1 lightSource:270 next:nil]]]]]];
+      
+      TTView* view = [[[TTView alloc] initWithFrame:CGRectMake(0, 0, 75, 33)] autorelease];
+      view.backgroundColor = [UIColor clearColor];
+      view.style = style;
+      UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(13, 3, 60, 25)];
+      label.text = @"Networks";
+      label.backgroundColor = [UIColor clearColor];
+      label.textColor = [UIColor whiteColor];
+      label.font = [UIFont boldSystemFontOfSize:12];
+      [view addSubview:label];
+      backButton.enabled = YES;
+      //backButton.customView = view;
+      if (![self.title isEqualToString:@"Received"])      
+        self.navigationItem.leftBarButtonItem = backButton;
     }
     
     if (compose) {
@@ -250,6 +281,12 @@
   
   [feedDataSource fetch:nil];
   self.dataSource = feedDataSource;
+}
+
+- (void)showListOfNetworks {
+  TTNavigator* navigator = [TTNavigator navigator];
+  [navigator removeAllViewControllers];
+  [navigator openURL:@"yammer://networks" animated:YES];  
 }
 
 - (void)dealloc {

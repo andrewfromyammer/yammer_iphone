@@ -53,7 +53,7 @@
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-  if ([OAuthGateway getAccessToken:nil callbackToken:_input.text] && [APIGateway usersCurrent:@"silent"]) {
+  if ([OAuthGateway getAccessToken:nil callbackToken:_input.text] && [APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"]) {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [yam setupNavigator];
   }

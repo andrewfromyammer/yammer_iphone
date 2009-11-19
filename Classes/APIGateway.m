@@ -147,7 +147,7 @@
 + (NSMutableArray*)networksCurrent:(NSString*)style {
   
   NSString *json = [OAuthGateway httpGet:@"/api/v1/networks/current.json" style:style];
-  
+
   if (json) {
     [LocalStorage saveFile:NETWORKS_CURRENT data:json];
     return (NSMutableArray *)[json JSONValue];
