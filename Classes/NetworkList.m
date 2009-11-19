@@ -11,14 +11,16 @@
 
 @interface NetworkListCell : TTTableTextItemCell {
   UILabel* _leftSide;
+  TTLabel* _badge;
 }
 @property (nonatomic, retain) UILabel *leftSide;
+@property (nonatomic, retain) TTLabel *badge;
 
 @end
 
 @implementation NetworkListCell
 
-@synthesize leftSide = _leftSide;
+@synthesize leftSide = _leftSide, badge = _badge;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
   if (self = [super initWithStyle:style reuseIdentifier:identifier]) {    
@@ -26,7 +28,15 @@
     _leftSide.text = @"Testing";
     _leftSide.font = [UIFont boldSystemFontOfSize:18];
     
+    _badge = [[TTLabel alloc] initWithFrame:CGRectMake(230, 8, 25, 25)];
+    _badge.style = TTSTYLE(largeBadge);
+    _badge.backgroundColor = [UIColor clearColor];
+    _badge.userInteractionEnabled = NO;
+    _badge.text = @"45";
+    [_badge sizeToFit];
+    
     [self.contentView addSubview:_leftSide];
+    [self.contentView addSubview:_badge];
   }
   return self;
 }
@@ -42,6 +52,13 @@
     
     NetworkListItem* nli = (NetworkListItem*)object;
     _leftSide.text = nli.text;
+    
+    _badge.text = nli.URL;
+    
+    if ([nli.URL isEqualToString:@"0"])
+      _badge.hidden = YES;
+    else 
+      _badge.hidden = NO;
   }
 }
 @end
@@ -73,7 +90,7 @@
     NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
 
     for (NSMutableDictionary *network in networks) 
-      [section addObject:[NetworkListItem itemWithText:[network objectForKey:@"name"]]];  
+      [section addObject:[NetworkListItem itemWithText:[network objectForKey:@"name"] URL:[[network objectForKey:@"unseen_message_count"] description]]];  
     
     [sections addObject:@"Select a network:"];
     [items addObject:section];
