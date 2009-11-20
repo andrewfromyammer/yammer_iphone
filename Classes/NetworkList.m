@@ -117,8 +117,6 @@
 
 @end
 
-
-
 @implementation NetworkList
 
 - (id)init {
@@ -132,6 +130,24 @@
   }  
   return self;
 }
+
+- (void)doRefresh {
+  [NSThread detachNewThreadSelector:@selector(refreshList) toTarget:self withObject:nil];
+}
+
+- (void)refreshList {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  [APIGateway networksCurrent:@"silent"];
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  
+  [self createNetworkListDataSource];
+  usleep(500000);
+  [self performSelectorOnMainThread:@selector(doShowModel) withObject:nil waitUntilDone:NO];
+
+  [autoreleasepool release];
+}  
 
 - (void)createNetworkListDataSource {
   NSMutableArray* sections = [NSMutableArray array];

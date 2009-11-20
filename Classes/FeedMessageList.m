@@ -10,6 +10,7 @@
 #import "ComposeMessage.h"
 #import "SpinnerWithTextCell.h"
 #import "YammerAppDelegate.h"
+#import "NetworkList.h"
 
 @implementation FeedMessageList
 
@@ -287,7 +288,11 @@
   
   TTNavigator* navigator = [TTNavigator navigator];
   [navigator removeAllViewControllers];
-  [navigator openURL:@"yammer://networks" animated:YES];  
+  [navigator openURL:@"yammer://networks" animated:YES];
+  
+  NetworkList* networkList = (NetworkList*)[navigator visibleViewController];
+  [networkList doRefresh];
+
 }
 
 - (void)dealloc {

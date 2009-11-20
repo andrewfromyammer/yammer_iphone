@@ -8,5 +8,6 @@
 - (void)madeSelection:(NSMutableDictionary*)network;
 - (void)createNetworkListDataSource;
 - (NSMutableDictionary*)findTokenByNetworkId:(long)network_id;
+- (void)doRefresh;
 
 @end
