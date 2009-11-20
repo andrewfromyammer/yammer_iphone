@@ -11,6 +11,7 @@
 #import "NSString+SBJSON.h"
 #import "NSObject+SBJSON.h"
 #import "YammerAppDelegate.h"
+#import "APIGateway.h"
 
 static NSString *ACCOUNT_DIR   = @"/account";
 static NSString *PHOTO_DIR     = @"/photos";
@@ -56,6 +57,8 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:FEEDFILE_OLD] error:&error];  
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:CURRENTFILE] error:&error];  
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:@"message_cache_v2.sqlite"] error:&error];
+  [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:@"account/user_current.json"] error:&error];
+
 }
 
 + (NSString *)getFile:(NSString *)name {  
@@ -225,7 +228,7 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
   if (yam.showFullNames == nil) {  
-    NSString *cached = [LocalStorage getFile:USERS_CURRENT];
+    NSString *cached = [LocalStorage getFile:[APIGateway user_file]];
     if (cached) {
       NSMutableDictionary *dict = [(NSMutableDictionary *)[cached JSONValue] objectForKey:@"web_preferences"];
       yam.showFullNames = [dict objectForKey:@"show_full_names"];

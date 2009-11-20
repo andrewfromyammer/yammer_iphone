@@ -9,7 +9,7 @@
 #import "SettingsSwitchNetwork.h"
 #import "OAuthGateway.h"
 #import "SettingsFontSize.h"
-
+#import "APIGateway.h"
 
 @interface TitleWithValueItem : TTTableImageItem {}
 @end
@@ -161,7 +161,7 @@
   [sections addObject:@""];
   [sections addObject:@""];
 
-  NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:USERS_CURRENT] JSONValue];
+  NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:[APIGateway user_file]] JSONValue];
   NSString* email = [self findEmailFromDict:dict];
   NSString* name  = [dict objectForKey:@"network_name"];
 

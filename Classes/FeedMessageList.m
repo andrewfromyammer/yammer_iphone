@@ -290,9 +290,7 @@
   [navigator removeAllViewControllers];
   [navigator openURL:@"yammer://networks" animated:YES];
   
-  NetworkList* networkList = (NetworkList*)[navigator visibleViewController];
-  [networkList doRefresh];
-
+  [NSThread detachNewThreadSelector:@selector(refreshList) toTarget:[navigator visibleViewController] withObject:nil];
 }
 
 - (void)dealloc {

@@ -16,14 +16,10 @@
   NSString *json = [OAuthGateway httpGet:@"/api/v1/users/current.json" style:style];
   
   if (json) {
-    [LocalStorage saveFile:USERS_CURRENT data:json];
-    NSMutableDictionary* current = (NSMutableDictionary*)[json JSONValue];
-    
-    long nid = [[current objectForKey:@"network_id"] longValue];
-    yammer.network_id = [[NSNumber alloc] initWithLong:nid];
-    
+    NSMutableDictionary* current = (NSMutableDictionary*)[json JSONValue];    
+    yammer.network_id = [current objectForKey:@"network_id"];
+    [LocalStorage saveFile:[APIGateway user_file] data:json];
     [LocalStorage removeFile:[APIGateway push_file]];
-
     return current;
   }
   
@@ -32,13 +28,17 @@
 
 + (NSMutableArray *)homeTabs {
   
-  NSString *cached = [LocalStorage getFile:USERS_CURRENT];
+  NSString *cached = [LocalStorage getFile:[APIGateway user_file]];
   if (cached) {
     NSMutableDictionary *dict = [(NSMutableDictionary *)[cached JSONValue] objectForKey:@"web_preferences"];
     return (NSMutableArray*)[dict objectForKey:@"home_tabs"];
   }
   
   return nil;
+}
+
++ (NSString*)user_file_with_id:(long)theid {
+  return [NSString stringWithFormat:@"account/users_current_%d.json", theid];
 }
 
 + (NSString*)push_file_with_id:(long)theid {
@@ -48,6 +48,11 @@
 + (NSString*)push_file {
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   return [APIGateway push_file_with_id:[yammer.network_id longValue]];
+}
+
++ (NSString*)user_file {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  return [APIGateway user_file_with_id:[yammer.network_id longValue]];
 }
 
 + (NSMutableDictionary *)pushSettings:(NSString*)style {

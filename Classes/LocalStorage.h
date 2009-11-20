@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "FeedDictionary.h"
 
-#define USERS_CURRENT    @"/account/user_current.json"
 #define DIRECTORY_CACHE  @"/account/directory_cache.json"
 #define SETTINGS         @"/account/settngs.json"
 #define MESSAGE_CACHE    @"message_cache_v3.sqlite"

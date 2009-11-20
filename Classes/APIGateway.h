@@ -9,6 +9,9 @@
 + (NSString*)push_file;
 + (NSString*)push_file_with_id:(long)theid;
 
++ (NSString*)user_file;
++ (NSString*)user_file_with_id:(long)theid;
+
 + (NSMutableDictionary*)usersCurrent:(NSString*)style;
 + (NSMutableArray*)homeTabs;
 + (NSMutableDictionary *)pushSettings:(NSString*)style;

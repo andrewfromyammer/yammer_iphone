@@ -61,23 +61,11 @@
   [window addSubview:image];
   [image release];
   [window makeKeyAndVisible];
-    
-  NSString *users_current = [LocalStorage getFile:USERS_CURRENT];
-  NSString *networks_current = [LocalStorage getFile:NETWORKS_CURRENT];
 
-  if ([LocalStorage getAccessToken] && users_current != nil && networks_current != nil) {
+  if ([LocalStorage getAccessToken]) {
     [APIGateway networksCurrent:@"silent"];
     [self setupNavigator];
   }
-  else if ([LocalStorage getAccessToken] && users_current == nil && networks_current != nil && [APIGateway usersCurrent:@"silent"]) {
-    [APIGateway networksCurrent:@"silent"];
-    [self setupNavigator];
-  }
-  else if ([LocalStorage getAccessToken] && users_current != nil && networks_current == nil && [APIGateway networksCurrent:@"silent"])
-    [self setupNavigator];
-  else if ([LocalStorage getAccessToken] && users_current == nil && networks_current == nil && 
-           [APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"])
-    [self setupNavigator];
   else 
     [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
 }
@@ -93,18 +81,12 @@
 }
 
 - (void)setupNavigator {  
+  [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+
   UIWindow* window = [[UIApplication sharedApplication] keyWindow];
   [[[window subviews] objectAtIndex:0] removeFromSuperview];
 
-  NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
-  
-  long nid = [[[[LocalStorage getFile:USERS_CURRENT] JSONValue] objectForKey:@"network_id"] longValue];
-  self.network_id = [[NSNumber alloc] initWithLong:nid];
-  self.threading = [LocalStorage threadingFromDisk];
-
-  //[TTURLRequestQueue mainQueue].userAgent = @"Mobile Yammer iPhone/iPod Touch";
-  if (true)
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+  NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
 
   TTNavigator* navigator = [TTNavigator navigator];
   navigator.supportsShakeToReload = YES;
@@ -120,8 +102,10 @@
 
   if ([networks count] > 1)
     [navigator openURL:@"yammer://networks" animated:NO];
-  else
+  else {
+    self.network_id = [[networks objectAtIndex:0] objectForKey:@"id"];
     [navigator openURL:@"yammer://tabs" animated:NO];
+  }
 }
 
 - (void)postFinishLaunch {

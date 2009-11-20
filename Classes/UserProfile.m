@@ -104,7 +104,7 @@
   [source.items addObject:item];
   
   
-  NSString *cached = [LocalStorage getFile:USERS_CURRENT];
+  NSString *cached = [LocalStorage getFile:[APIGateway user_file]];
   if (cached) {
     NSMutableDictionary* dict = (NSMutableDictionary *)[cached JSONValue];
     NSString *loggedInId = [[dict objectForKey:@"id"] description];  
