@@ -57,6 +57,7 @@
 + (NSString *)getNameField;
 + (NSString*)fontSize;
 + (NSString*)fontSizeFromDisk;
-+ (void)saveSetting:(NSString*)key value:(NSString*)value;
++ (void)saveSetting:(NSString*)key value:(NSObject*)value;
++ (NSObject*)getSetting:(NSString*)key;
 
 @end

@@ -166,6 +166,17 @@
 }
 
 - (void)madeSelection:(NSMutableDictionary*)network {
+  
+  long network_id = [[network objectForKey:@"id"] longValue];
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+  if ([yammer.network_id longValue] == network_id) {
+    TTNavigator* navigator = [TTNavigator navigator];
+    [navigator removeAllViewControllers];
+    [navigator openURL:@"yammer://tabs" animated:YES];
+    return;
+  }
+  
   self.dataSource = nil;
   [self showModel:YES];
   [NSThread detachNewThreadSelector:@selector(doTheSwitch:) toTarget:self withObject:network];
@@ -190,7 +201,6 @@
   
   long network_id = [[network objectForKey:@"id"] longValue];
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  yammer.network_id = [network objectForKey:@"id"]; 
   
   NSString* errorCode = nil;
   
@@ -211,15 +221,15 @@
 
   if (errorCode == nil) {
    
-  //  if ([LocalStorage getFile:[APIGateway push_file]] == nil)
-  //    [APIGateway pushSettings:@"silent"];
+    if ([LocalStorage getFile:[APIGateway push_file]] == nil)
+      [APIGateway pushSettings:@"silent"];
     
     NSString* previous = [LocalStorage getAccessToken];
     
     [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
     
-    NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file]];
-    
+    NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file_with_id:network_id]];
+
     if ([LocalStorage getFile:[APIGateway user_file]] == nil)
       [APIGateway usersCurrent:@"silent"];
 
@@ -227,16 +237,19 @@
       errorCode = @"NO_USERS_CURRENT";
       [LocalStorage saveAccessToken:previous];
     } else {    
+      yammer.network_id = [network objectForKey:@"id"];
+      [LocalStorage saveSetting:@"current_network_id" value:yammer.network_id];
+      [LocalStorage removeFile:[APIGateway push_file]];
+      
       [LocalStorage removeFile:DIRECTORY_CACHE];
       
-      /*
       if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
         // send existing push settings (if any) to server
         NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
         NSMutableDictionary* existingPushSettings = [APIGateway pushSettings:@"silent"];
         [APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
         [LocalStorage removeFile:[APIGateway push_file]];
-      }  */     
+      }
     }
   }
   

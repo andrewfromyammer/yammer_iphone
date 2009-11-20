@@ -18,6 +18,7 @@
   if (json) {
     NSMutableDictionary* current = (NSMutableDictionary*)[json JSONValue];    
     yammer.network_id = [current objectForKey:@"network_id"];
+    [LocalStorage saveSetting:@"current_network_id" value:yammer.network_id];
     [LocalStorage saveFile:[APIGateway user_file] data:json];
     [LocalStorage removeFile:[APIGateway push_file]];
     return current;

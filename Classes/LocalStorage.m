@@ -188,17 +188,13 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
 }
 
 + (BOOL)threading {
-  //YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  //YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   return false;
   //return yam.threading;
 }
 
 + (BOOL)threadingFromDisk {
-  if ([LocalStorage getFile:SETTINGS]) {
-    NSMutableDictionary *dict = [[LocalStorage getFile:SETTINGS] JSONValue];
-    return [[dict objectForKey:@"threaded_mode"] isEqualToString:@"on"];
-  }
-  return YES;
+  return NO;
 }
 
 + (NSString*)fontSize {
@@ -207,14 +203,18 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
 }
 
 + (NSString*)fontSizeFromDisk {
-  if ([LocalStorage getFile:SETTINGS]) {
-    NSMutableDictionary *dict = [[LocalStorage getFile:SETTINGS] JSONValue];
-    return [dict objectForKey:@"font_size"];
-  }
-  return @"Small";
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  if ([LocalStorage getFile:SETTINGS])
+    dict = [[LocalStorage getFile:SETTINGS] JSONValue];
+  
+  NSString* size = [dict objectForKey:@"font_size"];
+  
+  if (size == nil)
+    return @"Small";
+  return size;
 }
 
-+ (void)saveSetting:(NSString*)key value:(NSString*)value {
++ (void)saveSetting:(NSString*)key value:(NSObject*)value {
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   if ([LocalStorage getFile:SETTINGS])
     dict = [[LocalStorage getFile:SETTINGS] JSONValue];
@@ -223,6 +223,13 @@ static NSString *BASE_URL      = @"/account/base_url.txt";
   [LocalStorage saveFile:SETTINGS data:[dict JSONRepresentation]];
 }
 
++ (NSObject*)getSetting:(NSString*)key {
+  if ([LocalStorage getFile:SETTINGS]) {
+    NSMutableDictionary *dict = [[LocalStorage getFile:SETTINGS] JSONValue];
+    return [dict objectForKey:key];
+  }
+  return nil;
+}
 
 + (NSString *)getNameField {
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];

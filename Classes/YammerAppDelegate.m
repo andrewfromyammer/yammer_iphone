@@ -86,6 +86,7 @@
   UIWindow* window = [[UIApplication sharedApplication] keyWindow];
   [[[window subviews] objectAtIndex:0] removeFromSuperview];
 
+  self.network_id = [LocalStorage getSetting:@"current_network_id"];
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
 
   TTNavigator* navigator = [TTNavigator navigator];
@@ -102,10 +103,8 @@
 
   if ([networks count] > 1)
     [navigator openURL:@"yammer://networks" animated:NO];
-  else {
-    self.network_id = [[networks objectAtIndex:0] objectForKey:@"id"];
+  else
     [navigator openURL:@"yammer://tabs" animated:NO];
-  }
 }
 
 - (void)postFinishLaunch {
@@ -133,6 +132,11 @@
   
   if (buttonIndex == 0)
     self.createNewAccount = NO;
+  
+  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+  UIImageView* image = (UIImageView*)[[window subviews] objectAtIndex:0];
+  image.image = [UIImage imageNamed:@"no_text_splash.png"];
+  
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Yammer" message:@"This app will temporarily exit and the browser will open so you can authorize it.  The app will re-open when you are done."
                                                  delegate:self cancelButtonTitle:nil otherButtonTitles:@"Open Browser", nil];
   [alert show];
