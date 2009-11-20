@@ -128,13 +128,13 @@
   
   long nid = [[token objectForKey:@"network_id"] longValue];
   
-  if (nid != [yammer.network_id longValue]) {  
+  if (nid != [yammer.network_id longValue]) {
     [self performSelectorOnMainThread:@selector(setDataSource:)
                            withObject:nil
                         waitUntilDone:YES];
 
     if ([LocalStorage getFile:[APIGateway push_file]] == nil)
-      [APIGateway pushSettings];
+      [APIGateway pushSettings:nil];
     
     NSString* previous = [LocalStorage getAccessToken];
     
@@ -151,7 +151,7 @@
       if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
         // send existing push settings (if any) to server
         NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
-        NSMutableDictionary* existingPushSettings = [APIGateway pushSettings];
+        NSMutableDictionary* existingPushSettings = [APIGateway pushSettings:nil];
         [APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
         [LocalStorage removeFile:[APIGateway push_file]];
       }

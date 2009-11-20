@@ -11,7 +11,7 @@
 
 + (NSMutableDictionary*)usersCurrent:(NSString*)style;
 + (NSMutableArray*)homeTabs;
-+ (NSMutableDictionary*)pushSettings;
++ (NSMutableDictionary *)pushSettings:(NSString*)style;
 + (NSMutableArray*)users:(int)page style:(NSString*)style;
 + (NSMutableDictionary*)userById:(NSString*)theUserId;
 

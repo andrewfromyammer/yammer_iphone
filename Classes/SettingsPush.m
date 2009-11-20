@@ -58,7 +58,7 @@
   if (json)
     pushSettings = [json JSONValue];
   else
-    pushSettings = [APIGateway pushSettings];
+    pushSettings = [APIGateway pushSettings:nil];
       
   NSMutableArray *notifications = [pushSettings objectForKey:@"notifications"];
   NSMutableDictionary *notificationDict = [NSMutableDictionary dictionary];

@@ -284,6 +284,7 @@
 }
 
 - (void)showListOfNetworks {
+  
   TTNavigator* navigator = [TTNavigator navigator];
   [navigator removeAllViewControllers];
   [navigator openURL:@"yammer://networks" animated:YES];  

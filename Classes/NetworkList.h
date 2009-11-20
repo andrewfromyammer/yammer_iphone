@@ -7,5 +7,6 @@
 + (NSString*)badgeFromIntToString:(int)count;
 - (void)madeSelection:(NSMutableDictionary*)network;
 - (void)createNetworkListDataSource;
+- (NSMutableDictionary*)findTokenByNetworkId:(long)network_id;
 
 @end

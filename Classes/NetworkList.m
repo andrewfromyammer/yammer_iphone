@@ -3,6 +3,8 @@
 #import "LocalStorage.h"
 #import "NSString+SBJSON.h"
 #import "YammerAppDelegate.h"
+#import "LocalStorage.h"
+#import "APIGateway.h"
 
 @interface NetworkListItem : TTTableTextItem {
   NSMutableDictionary* _network;
@@ -171,23 +173,73 @@
   [self showModel:YES];
 }
 
+- (NSMutableDictionary*)findTokenByNetworkId:(long)network_id {
+  NSMutableArray* tokens = (NSMutableArray *)[[LocalStorage getFile:TOKENS] JSONValue];
+  for (NSMutableDictionary* token in tokens) {
+    long iteration_network_id = [[token objectForKey:@"network_id"] longValue];
+    if (network_id == iteration_network_id)
+      return token;
+  }
+  return nil;
+}
+
 - (void)doTheSwitch:(NSMutableDictionary*)network {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   
   long network_id = [[network objectForKey:@"id"] longValue];
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
-  if ([yammer.network_id longValue] != network_id) {
-    if ([LocalStorage getFile:TOKENS] == nil) {
-      
+  NSString* errorCode = nil;
+  
+  if ([LocalStorage getFile:TOKENS] == nil) {
+    if ([APIGateway getTokens] == nil)
+      errorCode = @"NO_TOKENS";
+  }
+  
+  NSMutableDictionary* token;
+  if (errorCode == nil) {
+    token = [self findTokenByNetworkId:network_id];
+    if (token == nil)
+      [APIGateway getTokens];
+    token = [self findTokenByNetworkId:network_id];
+    if (token == nil)
+      errorCode = @"CURRENT_LIST_AND_MISSING";
+  }
+
+  if (errorCode == nil) {
+   
+    if ([LocalStorage getFile:[APIGateway push_file]] == nil)
+      [APIGateway pushSettings:@"silent"];
+    
+    NSString* previous = [LocalStorage getAccessToken];
+    
+    [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
+    
+    // important to get first because usersCurrent call has to delete this file
+    NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file_with_id:network_id]];
+    
+    NSMutableDictionary* usersCurrent = [APIGateway usersCurrent:nil];
+    
+    if (usersCurrent) {
+      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
+        // send existing push settings (if any) to server
+        NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
+        NSMutableDictionary* existingPushSettings = [APIGateway pushSettings:@"silent"];
+        [APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
+        [LocalStorage removeFile:[APIGateway push_file]];
+      }      
+    } else {
+      [LocalStorage saveAccessToken:previous];
+      errorCode = @"USERS_CURRENT_FAILED";
     }
   }
   
-  sleep(1);
+  usleep(500000);
   
-  if (true) {
-    [self createNetworkListDataSource];
-    [self performSelectorOnMainThread:@selector(doShowModel) withObject:nil waitUntilDone:NO];
+  if (errorCode != nil) {
+    [self createNetworkListDataSource];    
+    [self performSelectorOnMainThread:@selector(doShowModel) withObject:nil waitUntilDone:YES];
+    [NSThread detachNewThreadSelector:@selector(errorThread:) toTarget:self withObject:errorCode];
   } else {  
     TTNavigator* navigator = [TTNavigator navigator];
     [navigator removeAllViewControllers];
@@ -195,6 +247,13 @@
   }
   [autoreleasepool release];
 }  
+
+- (void)errorThread:(NSString*)errorCode {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  usleep(500000);
+  [YammerAppDelegate showError:[NSString stringWithFormat:@"There was a network error, please try again in a few minutes. Error Code: %@", errorCode] style:nil];
+  [autoreleasepool release];
+}
 
 + (NSString*)badgeFromIntToString:(int)count {
   if (count > 0) {

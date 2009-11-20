@@ -50,15 +50,15 @@
   return [APIGateway push_file_with_id:[yammer.network_id longValue]];
 }
 
-+ (NSMutableDictionary *)pushSettings {
-  NSString *json = [OAuthGateway httpGet:@"/api/v1/feed_clients.json" style:nil];
++ (NSMutableDictionary *)pushSettings:(NSString*)style {
+  NSString *json = [OAuthGateway httpGet:@"/api/v1/feed_clients.json" style:style];
   if (json) {
     NSMutableArray *clients = (NSMutableArray *)[json JSONValue];
     int i=0; 
     for (; i<[clients count]; i++) {
       NSMutableDictionary *client = [clients objectAtIndex:i];
       if ([[client objectForKey:@"type"] isEqualToString:@"ApplePushDevice"]) {        
-        json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/feed_clients/%@.json", [[client objectForKey:@"id"] description]] style:nil];
+        json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/feed_clients/%@.json", [[client objectForKey:@"id"] description]] style:style];
         if (json) {
           [LocalStorage saveFile:[APIGateway push_file] data:json];
           return (NSMutableDictionary *)[json JSONValue];
@@ -159,10 +159,8 @@
 + (NSMutableArray*)getTokens {
   NSString *json = [OAuthGateway httpGet:@"/api/v1/oauth/tokens.json" style:nil];
   if (json) {
-    NSMutableArray* tokens = (NSMutableArray *)[json JSONValue];
-    if ([tokens count] > 1)
-      [LocalStorage saveFile:TOKENS data:json];
-    return tokens;
+    [LocalStorage saveFile:TOKENS data:json];
+    return (NSMutableArray *)[json JSONValue];
   }
   
   return nil;
@@ -265,7 +263,7 @@
   }
   
   [params setObject:@"PUT" forKey:@"_method"];
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil];
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:@"silent"];
 }
 
 + (BOOL)likeMessage:(NSNumber *)message_id {
