@@ -18,6 +18,12 @@
   
   NSObject* object = [_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
   
+  if ([object isKindOfClass:[SpinnerWithTextItem class]]) {
+    FeedList* fl = (FeedList*)_controller;
+    [fl refreshFeeds];
+    return;
+  }
+
   if ([object isKindOfClass:[TTTableImageItem class]]) {
     
     TTTableImageItem* item = (TTTableImageItem*)object;
@@ -43,11 +49,6 @@
   if (self = [super init]) {
     self.navigationBarTintColor = [MainTabBar yammerGray];
     self.variableHeightRows = YES;
-
-    UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                             target:self
-                                                                             action:@selector(refreshFeeds)];  
-    self.navigationItem.leftBarButtonItem = refresh;
 
     SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
     [list.items addObject:[SpinnerWithTextItem item]];

@@ -8,5 +8,6 @@
 
 - (void)handleUsers:(NSArray*)list source:(TTListDataSource*)source;
 - (void)resetForNetworkSwitch;
+- (void)refreshDirectory;
 
 @end

@@ -17,10 +17,12 @@
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
   
   NSObject* object = [_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
-  
-  
-  if ([object isKindOfClass:[SpinnerWithTextItem class]])
+    
+  if ([object isKindOfClass:[SpinnerWithTextItem class]]) {
+    DirectoryList* dl = (DirectoryList*)_controller;
+    [dl refreshDirectory];
     return;
+  }
   
   if ([object isKindOfClass:[TTTableMoreButton class]]) {
     TTTableMoreButton *more = (TTTableMoreButton *)object;
@@ -45,10 +47,6 @@
     self.variableHeightRows = YES;
 
     self.page = 1;
-    UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                             target:self
-                                                                             action:@selector(refreshDirectory)];  
-    self.navigationItem.leftBarButtonItem = refresh;
     self.navigationBarTintColor = [MainTabBar yammerGray];
 
     SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];

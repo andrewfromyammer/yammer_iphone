@@ -3,6 +3,7 @@
 @interface FeedList : TTTableViewController { }
 
 - (void)resetForNetworkSwitch;
+- (void)refreshFeeds;
 
 @end
 
