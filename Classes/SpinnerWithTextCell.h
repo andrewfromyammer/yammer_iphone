@@ -1,11 +1,9 @@
 #import <Three20/Three20.h>
 
 @interface SpinnerWithTextItem : TTTableTextItem {
-  NSString* _display;
   BOOL isSpinning;
 }
 
-@property(nonatomic,retain) NSString* display;
 @property BOOL isSpinning;
 
 + (id)item;
@@ -16,13 +14,24 @@
 
 @interface SpinnerWithTextCell : TTTableTextItemCell {
   UILabel* _display;
+}
+@property (nonatomic, retain) UILabel *display;
+
+@end
+
+/*
+@interface SpinnerWithTextCell : TTTableTextItemCell {
+  UILabel* _display;
   UIActivityIndicatorView* _spinner;
+  UIImageView* _refreshImage;
 }
 
 @property(nonatomic,retain) UILabel* display;
 @property(nonatomic,retain) UIActivityIndicatorView* spinner;
+@property(nonatomic,retain) UIImageView* refreshImage;
 
-@end
+@end 
+ */
 
 @interface SpinnerListDataSource : TTListDataSource {}
 @end

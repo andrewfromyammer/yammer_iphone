@@ -13,8 +13,11 @@
   
   NSObject* object = [_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
 
-  if ([object isKindOfClass:[SpinnerWithTextItem class]])
+  if ([object isKindOfClass:[SpinnerWithTextItem class]]) {
+    FeedMessageList* fml = (FeedMessageList*)_controller;
+    [fml refreshFeedClick];
     return;
+  }
 
   if (indexPath.section == 0) {
     

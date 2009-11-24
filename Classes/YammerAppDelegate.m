@@ -86,7 +86,7 @@
   UIWindow* window = [[UIApplication sharedApplication] keyWindow];
   [[[window subviews] objectAtIndex:0] removeFromSuperview];
 
-  self.network_id = [LocalStorage getSetting:@"current_network_id"];
+  self.network_id = (NSNumber*)[LocalStorage getSetting:@"current_network_id"];
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
 
   TTNavigator* navigator = [TTNavigator navigator];

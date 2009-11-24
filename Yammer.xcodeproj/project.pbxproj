@@ -101,6 +101,7 @@
 		00E6CDBD1046F7FC0042BD9E /* ComposeMessage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00E6CDBC1046F7FC0042BD9E /* ComposeMessage.xib */; };
 		00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EDAF001099F56F00D3F5E9 /* Settings.m */; };
 		00EF42601049D40C00CF3CB5 /* thumbnail_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */; };
+		00F2B84710B75C640035B139 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F2B84610B75C640035B139 /* refresh.png */; };
 		00FA2D0C10979AB000C6F2DF /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FA2D0B10979AB000C6F2DF /* network.png */; };
 		00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */; };
 		1D3623260D0F684500981E51 /* YammerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* YammerAppDelegate.m */; };
@@ -282,6 +283,7 @@
 		00EDAEFF1099F56F00D3F5E9 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		00EDAF001099F56F00D3F5E9 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = thumbnail_loading.png; path = Images/thumbnail_loading.png; sourceTree = "<group>"; };
+		00F2B84610B75C640035B139 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = Images/refresh.png; sourceTree = "<group>"; };
 		00FA2D0B10979AB000C6F2DF /* network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = network.png; path = Images/network.png; sourceTree = "<group>"; };
 		00FA2D141097A51300C6F2DF /* SettingsSwitchNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSwitchNetwork.h; sourceTree = "<group>"; };
 		00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsSwitchNetwork.m; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 		006ACB9F10457B840078A4BB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00F2B84610B75C640035B139 /* refresh.png */,
 				00CD58ED10B71FA300CEAD87 /* no_text_splash.png */,
 				00C6CC3010AE17FF00C96249 /* font.png */,
 				0059CA2210ADEC15000D4135 /* smile_check.png */,
@@ -715,6 +718,7 @@
 				0059CA2310ADEC15000D4135 /* smile_check.png in Resources */,
 				00C6CC3110AE17FF00C96249 /* font.png in Resources */,
 				00CD58EE10B71FA300CEAD87 /* no_text_splash.png in Resources */,
+				00F2B84710B75C640035B139 /* refresh.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,8 +862,8 @@
 					"-ObjC",
 				);
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "1297F15A-2F01-4437-912F-C5EEF23CA5AF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1297F15A-2F01-4437-912F-C5EEF23CA5AF";
+				PROVISIONING_PROFILE = "B3595FFE-0C44-4B8C-8BF5-A154CE276DF6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B3595FFE-0C44-4B8C-8BF5-A154CE276DF6";
 				SDKROOT = iphoneos3.1;
 			};
 			name = AdHoc;
@@ -877,7 +881,7 @@
 				INFOPLIST_FILE = "Yammer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				PRODUCT_NAME = Yammer;
-				PROVISIONING_PROFILE = "1297F15A-2F01-4437-912F-C5EEF23CA5AF";
+				PROVISIONING_PROFILE = "B3595FFE-0C44-4B8C-8BF5-A154CE276DF6";
 				SDKROOT = iphoneos3.1;
 			};
 			name = AdHoc;

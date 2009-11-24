@@ -4,7 +4,60 @@
 #import "TTTableYammerItem.h"
 #import "TTTableYammerItemCell.h"
 
+@implementation SpinnerWithTextItem
 
+@synthesize isSpinning;
+
++ (id)item {
+  SpinnerWithTextItem* swti = [SpinnerWithTextItem itemWithText:@"Loading"];
+  swti.isSpinning = YES;
+  return swti;
+}
+
++ (id)itemWithYammer {
+  SpinnerWithTextItem* swti = [SpinnerWithTextItem itemWithText:@"Contacting yammer.com"];
+  swti.isSpinning = YES;
+  return swti;
+}
+
+@end
+
+@implementation SpinnerWithTextCell
+
+@synthesize display = _display;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {    
+    _display = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
+    _display.text = @"Testing";
+    _display.textAlignment = UITextAlignmentCenter;
+    _display.textColor = [UIColor darkGrayColor];
+    _display.font = [UIFont systemFontOfSize:12];
+    
+    [self.contentView addSubview:_display];
+  }
+  return self;
+}
+
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_display);
+  [super dealloc];
+}
+
+- (void)setObject:(id)object {
+  if (_item != object) {
+    SpinnerWithTextItem* swti = (SpinnerWithTextItem*)object;
+    _display.text = swti.text;
+  }
+}
+
++ (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
+  return 40.0;
+}
+
+@end
+
+/*
 @implementation SpinnerWithTextItem
 
 @synthesize display = _display;
@@ -48,16 +101,22 @@
 
 @implementation SpinnerWithTextCell
 
-@synthesize display = _display, spinner = _spinner;
+@synthesize display = _display, spinner = _spinner, refreshImage = _refreshImage;
 
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
-  return 30.0;
+  return 40.0;
 }
 
 - (void)layoutSubviews {
   [super layoutSubviews];
   
-  self.display.frame = CGRectMake(0, 0, 320, 30);
+  self.display.frame = CGRectMake(0, 5, 320, 30);
+  _refreshImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 13, 10, 12)];
+  _refreshImage.image = [UIImage imageNamed:@"refresh.png"];
+  
+  _refreshImage.hidden = YES;
+  [self.contentView addSubview:_refreshImage];
+
 }
 
 - (void)setObject:(id)object {
@@ -67,10 +126,15 @@
     SpinnerWithTextItem* item = object;
     
     self.display.text = item.display;
-    if (item.isSpinning)
+    if (item.isSpinning) {
+      _refreshImage.hidden = YES;
       [self.spinner startAnimating];
-    else
+    }
+    else {
+      _refreshImage.hidden = NO;
       [self.spinner stopAnimating];
+      
+    }
   }
 }
 
@@ -88,7 +152,7 @@
 
 - (UIActivityIndicatorView*)spinner {
   if (!_spinner) {
-    _spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(10, 4, 20, 20)];
+    _spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(10, 9, 20, 20)];
     _spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     [_spinner startAnimating];
     [self.contentView addSubview:_spinner];
@@ -98,11 +162,13 @@
 
 - (void)dealloc {
   TT_RELEASE_SAFELY(_display);
+  TT_RELEASE_SAFELY(_spinner);
+  TT_RELEASE_SAFELY(_refreshImage);
   [super dealloc];
 }
 
 @end
-
+*/
 
 @implementation SpinnerListDataSource
 

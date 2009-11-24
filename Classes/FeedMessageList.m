@@ -161,9 +161,9 @@
     NSDate *date = [FeedCache loadFeedDate:feed];
     
     if (date)
-      data.spinnerItem.display = [FeedCache niceDate:date];
+      data.spinnerItem.text = [FeedCache niceDate:date];
     else
-      data.spinnerItem.display = @"No updates yet.";
+      data.spinnerItem.text = @"No updates yet.";
     
     if ([self.title isEqualToString:@"My Feed"])
       [yammer performSelectorOnMainThread:@selector(setBadges:) withObject:style waitUntilDone:NO];
@@ -252,7 +252,7 @@
     
     FeedMessageData* data = (FeedMessageData*)self.dataSource;
     data.spinnerItem.isSpinning = YES;
-    data.spinnerItem.display = @"Checking for new messages...";
+    data.spinnerItem.text = @"Checking for new messages...";
     [self showModel:YES];
     
     [yammer refreshMyFeed];
@@ -269,7 +269,7 @@
   
   FeedMessageData* data = (FeedMessageData*)self.dataSource;
   data.spinnerItem.isSpinning = YES;
-  data.spinnerItem.display = @"Checking for new messages...";
+  data.spinnerItem.text = @"Checking for new messages...";
   [self showModel:YES];
 
   [NSThread detachNewThreadSelector:@selector(checkForNewMessages:) toTarget:self withObject:silent];
