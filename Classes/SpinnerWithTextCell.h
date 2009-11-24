@@ -14,8 +14,10 @@
 
 @interface SpinnerWithTextCell : TTTableTextItemCell {
   UILabel* _display;
+  UIActivityIndicatorView* _spinner;
 }
 @property (nonatomic, retain) UILabel *display;
+@property(nonatomic,retain) UIActivityIndicatorView* spinner;
 
 @end
 

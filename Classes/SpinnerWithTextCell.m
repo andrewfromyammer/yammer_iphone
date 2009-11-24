@@ -24,23 +24,29 @@
 
 @implementation SpinnerWithTextCell
 
-@synthesize display = _display;
+@synthesize display = _display, spinner = _spinner;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
   if (self = [super initWithStyle:style reuseIdentifier:identifier]) {    
-    _display = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
+    _display = [[UILabel alloc] initWithFrame:CGRectMake(90, 5, 210, 30)];
     _display.text = @"Testing";
-    _display.textAlignment = UITextAlignmentCenter;
+    _display.textAlignment = UITextAlignmentLeft;
     _display.textColor = [UIColor darkGrayColor];
     _display.font = [UIFont systemFontOfSize:12];
     
+    _spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(10, 9, 20, 20)];
+    _spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [_spinner startAnimating];
+
     [self.contentView addSubview:_display];
+    [self.contentView addSubview:_spinner];
   }
   return self;
 }
 
 - (void)dealloc {
   TT_RELEASE_SAFELY(_display);
+  TT_RELEASE_SAFELY(_spinner);
   [super dealloc];
 }
 
@@ -48,6 +54,14 @@
   if (_item != object) {
     SpinnerWithTextItem* swti = (SpinnerWithTextItem*)object;
     _display.text = swti.text;
+    
+    if (swti.isSpinning) {
+      [self.spinner startAnimating];
+    }
+    else {
+      [self.spinner stopAnimating];      
+    }
+    
   }
 }
 
