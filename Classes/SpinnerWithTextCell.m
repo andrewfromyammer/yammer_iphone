@@ -43,6 +43,8 @@
     
     _refreshImage.hidden = YES;
 
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     [self.contentView addSubview:_refreshImage];
     [self.contentView addSubview:_display];
     [self.contentView addSubview:_spinner];

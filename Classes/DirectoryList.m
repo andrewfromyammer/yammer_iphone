@@ -64,7 +64,7 @@
   [list.items addObject:[SpinnerWithTextItem item]];
   self.dataSource = list;
   
-  [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];  
+  [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];
 }
 
 - (void)loadView {

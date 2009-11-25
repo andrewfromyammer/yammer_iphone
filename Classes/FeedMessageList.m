@@ -26,7 +26,7 @@
     self.feed = theFeed;
     self.title = (NSString*)[theFeed objectForKey:@"name"];
     self.isThread = thread;
-
+    
     if (refresh) {
       //UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
         //                                                                       target:self
