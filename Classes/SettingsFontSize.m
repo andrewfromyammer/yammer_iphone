@@ -68,23 +68,5 @@
 - (id<UITableViewDelegate>)createDelegate {
   return [[FontSizeDelegate alloc] initWithController:self];
 }
-  
-- (void)madeSelection:(int)row {
-  //[NSThread detachNewThreadSelector:@selector(setTheSize:) toTarget:self withObject:[NSNumber numberWithInt:row]];  
-}
-
-- (void)setTheSize:(NSNumber*)index {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  
-  usleep(500000);
-  
-  [yammer settingsToRootView];
-  
-  
-  [autoreleasepool release];
-}
-
 
 @end

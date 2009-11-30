@@ -96,15 +96,17 @@
   TTURLMap* map = navigator.URLMap;
  
   [map from:@"*" toViewController:[TTWebController class]];
-  [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
   [map from:@"yammer://user" toViewController:[UserProfile class]];
   [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
   [map from:@"yammer://networks" toViewController:[NetworkList class]];
 
   if ([networks count] > 1)
     [navigator openURL:@"yammer://networks" animated:NO];
-  else
-    [navigator openURL:@"yammer://tabs" animated:NO];
+  else {    
+    [navigator openURL:@"yammer://networks" animated:NO];
+    MainTabBar* tabs = [[MainTabBar alloc] init];
+    [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
+  }
 }
 
 - (void)postFinishLaunch {
@@ -157,6 +159,8 @@
 }
 
 - (void)setBadges:(NSString*)style {
+  if (true)
+    return;
   TTNavigator* navigator = [TTNavigator navigator];
   MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
   UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:0];
@@ -171,6 +175,9 @@
 }
 
 - (void)refreshMyFeed {
+  if (true)
+    return;
+
   TTNavigator* navigator = [TTNavigator navigator];
   MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
   UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:0];
@@ -196,31 +203,16 @@
   }  
 }
 
-- (void)settingsToRootView {
-  TTNavigator* navigator = [TTNavigator navigator];
-  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
-
-  UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:4];
-  [nav popToRootViewControllerAnimated:NO];
-}
-
 - (void)reloadForFontSizeChange {
   TTNavigator* navigator = [TTNavigator navigator];
-  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
-  
+  UINavigationController* controller = [[navigator visibleViewController] navigationController];
+  MainTabBar* mainView = (MainTabBar*)[[controller viewControllers] objectAtIndex:1];
+    
   int i=0;
-  for (i=0; i<2; i++) {
-    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
-    [nav popToRootViewControllerAnimated:NO];
-    FeedMessageList *fml = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
+  for (i=0; i<2; i++) {    
+    FeedMessageList *fml = (FeedMessageList *)[mainView.viewControllers objectAtIndex:i];
     [fml showModel:YES];
-  }
-  
-  UINavigationController *feeds = (UINavigationController *)[mainView.viewControllers objectAtIndex:2];
-  [feeds popToRootViewControllerAnimated:NO];
-  
-  UINavigationController *directory = (UINavigationController *)[mainView.viewControllers objectAtIndex:3];
-  [directory popToRootViewControllerAnimated:NO];  
+  }  
 }
 
 - (void)resetForNewNetwork {

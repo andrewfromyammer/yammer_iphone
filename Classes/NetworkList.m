@@ -113,8 +113,12 @@
 
   NetworkList* networkList = (NetworkList*)_controller;
   NetworkListItem* nli = (NetworkListItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
-  
-  [networkList madeSelection:nli.network];
+  [nli.network setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];
+  [networkList showModel:YES];
+  //[networkList madeSelection:nli.network];
+  MainTabBar* tabs = [[MainTabBar alloc] init];
+  [_controller.navigationController pushViewController:tabs animated:YES];
+
 }
 
 @end
@@ -125,6 +129,7 @@
   if (self = [super init]) {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
     self.navigationBarTintColor = [MainTabBar yammerGray];
+    self.title = @"Networks";
     self.variableHeightRows = YES;
     
     _tableViewStyle = UITableViewStyleGrouped;    
@@ -132,20 +137,6 @@
   }  
   return self;
 }
-
-- (void)refreshList {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  
-  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-  [APIGateway networksCurrent:@"silent"];
-  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-  
-  [self createNetworkListDataSource];
-  usleep(500000);
-  [self performSelectorOnMainThread:@selector(doShowModel) withObject:nil waitUntilDone:NO];
-
-  [autoreleasepool release];
-}  
 
 - (void)createNetworkListDataSource {
   NSMutableArray* sections = [NSMutableArray array];

@@ -161,7 +161,7 @@
       [LocalStorage saveAccessToken:previous];
   }
   
-  [yammer settingsToRootView];
+  //[yammer settingsToRootView];
   [autoreleasepool release];
 }
 
