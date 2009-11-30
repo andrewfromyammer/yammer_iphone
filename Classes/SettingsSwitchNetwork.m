@@ -156,7 +156,7 @@
         [LocalStorage removeFile:[APIGateway push_file]];
       }
             
-      [yammer resetForNewNetwork];
+//      [yammer resetForNewNetwork];
     } else
       [LocalStorage saveAccessToken:previous];
   }

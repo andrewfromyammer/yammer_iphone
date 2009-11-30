@@ -159,14 +159,12 @@
 }
 
 - (void)setBadges:(NSString*)style {
-  if (true)
-    return;
   TTNavigator* navigator = [TTNavigator navigator];
-  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
-  UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:0];
-  FeedMessageList *myfeed = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
-  nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:1];
-  FeedMessageList *received = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
+  UINavigationController* controller = [[navigator visibleViewController] navigationController];
+  MainTabBar* mainView = (MainTabBar*)[[controller viewControllers] objectAtIndex:1];
+
+  FeedMessageList *myfeed = (FeedMessageList *)[mainView.viewControllers objectAtIndex:0];
+  FeedMessageList *received = (FeedMessageList *)[mainView.viewControllers objectAtIndex:1];
 
   [self setBadge:myfeed   count:self.unseen_message_count_following];
   [self setBadge:received count:self.unseen_message_count_received];
@@ -175,32 +173,12 @@
 }
 
 - (void)refreshMyFeed {
-  if (true)
-    return;
-
   TTNavigator* navigator = [TTNavigator navigator];
-  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
-  UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:0];
-  FeedMessageList *myfeed = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
+  UINavigationController* controller = [[navigator visibleViewController] navigationController];
+  MainTabBar* mainView = (MainTabBar*)[[controller viewControllers] objectAtIndex:1];
+
+  FeedMessageList *myfeed = (FeedMessageList *)[mainView.viewControllers objectAtIndex:0];
   [myfeed refreshFeed:nil];
-}
-
-- (void)resetForNewThreadingValue {
-  TTNavigator* navigator = [TTNavigator navigator];
-  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
-  
-  int i=0;
-  for (i=0; i<2; i++) {
-    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
-    [nav popToRootViewControllerAnimated:NO];
-    FeedMessageList *fml = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
-    [fml replaceFeed];
-  }
-  
-  for (i=2; i<5; i++) {
-    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
-    [nav popToRootViewControllerAnimated:NO];
-  }  
 }
 
 - (void)reloadForFontSizeChange {
@@ -209,38 +187,11 @@
   MainTabBar* mainView = (MainTabBar*)[[controller viewControllers] objectAtIndex:1];
     
   int i=0;
-  for (i=0; i<2; i++) {    
+  for (i=0; i<2; i++) {
     FeedMessageList *fml = (FeedMessageList *)[mainView.viewControllers objectAtIndex:i];
     [fml showModel:YES];
-  }  
-}
-
-- (void)resetForNewNetwork {
-  TTNavigator* navigator = [TTNavigator navigator];
-  MainTabBar* mainView = (MainTabBar*)[navigator rootViewController];
-  
-  int i=0;
-  for (i=0; i<2; i++) {
-    UINavigationController *nav = (UINavigationController *)[mainView.viewControllers objectAtIndex:i];
-    [nav popToRootViewControllerAnimated:NO];
-    FeedMessageList *fml = (FeedMessageList *)[nav.viewControllers objectAtIndex:0];
-    [fml replaceFeed];    
   }
-  
-  [self refreshMyFeed];
-
-  UINavigationController *feeds = (UINavigationController *)[mainView.viewControllers objectAtIndex:2];
-  [feeds popToRootViewControllerAnimated:NO];
-  FeedList* feedList = [[feeds viewControllers] objectAtIndex:0];
-  [feedList resetForNetworkSwitch];
-  
-  UINavigationController *directory = (UINavigationController *)[mainView.viewControllers objectAtIndex:3];
-  [directory popToRootViewControllerAnimated:NO];
-  DirectoryList* directoryList = [[directory viewControllers] objectAtIndex:0];
-  [directoryList resetForNetworkSwitch];
-  
 }
-
 
 - (NSManagedObjectContext *) managedObjectContext {
 	

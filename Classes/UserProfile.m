@@ -162,14 +162,14 @@
 
 - (void)showFeedByTeleport {
   TTNavigator* navigator = [TTNavigator navigator];
-  MainTabBar* mainTabs = (MainTabBar*)[navigator rootViewController];
+  UINavigationController* controller = [[navigator visibleViewController] navigationController];
+
+  while ([[controller viewControllers] count] != 2)
+    [controller popViewControllerAnimated:NO];
   
-  UINavigationController *nav = (UINavigationController *)[mainTabs selectedViewController];
-  [nav popToRootViewControllerAnimated:NO];
+  MainTabBar* mainTabs = (MainTabBar*)[[controller viewControllers] objectAtIndex:1];
   mainTabs.selectedIndex = 2;
-  nav = (UINavigationController *)[mainTabs selectedViewController];
-  [nav popToRootViewControllerAnimated:NO];
-  [nav pushViewController:[self getUserFeed] animated:NO];
+  [controller pushViewController:[self getUserFeed] animated:NO];
 }
 
 - (void)dealloc {

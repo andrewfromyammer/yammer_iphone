@@ -119,7 +119,7 @@
   YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   yam.threading = switchView.on;
   
-  [yam resetForNewThreadingValue];
+//  [yam resetForNewThreadingValue];
 }
 
 - (void)dealloc {
