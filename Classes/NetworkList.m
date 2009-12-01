@@ -113,6 +113,11 @@
 
   NetworkList* networkList = (NetworkList*)_controller;
   NetworkListItem* nli = (NetworkListItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
+  int unseen_message_count = [[nli.network objectForKey:@"unseen_message_count"] intValue];
+  int current_badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+  
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:current_badge - unseen_message_count];  
+  
   [nli.network setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];
   [networkList showModel:YES];
   [networkList madeSelection:nli.network];

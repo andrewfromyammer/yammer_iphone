@@ -46,8 +46,6 @@
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication*)application {
-  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  
-
   self.unseen_message_count_following = -1;
   self.unseen_message_count_received = -1;
   self.last_seen_message_id = -1;
