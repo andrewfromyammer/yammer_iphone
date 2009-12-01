@@ -7,6 +7,26 @@
 #import "LocalStorage.h"
 #import "APIGateway.h"
 
+
+@interface NetworkListStyleSheet : TTStyleSheet {
+}
+@end
+
+@implementation NetworkListStyleSheet
+- (TTStyle*)badge {
+  return
+  [TTShapeStyle styleWithShape:[TTRoundedRectangleShape shapeWithRadius:TT_ROUNDED] next:
+     [TTSolidFillStyle styleWithColor:RGBCOLOR(140, 153, 180) next:
+      [TTInsetStyle styleWithInset:UIEdgeInsetsMake(-1, -1, -1, -1) next:
+       [TTSolidBorderStyle styleWithColor:[UIColor whiteColor] width:2 next:
+        [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(1, 12, 2, 12) next:
+         [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:17.0]
+                              color:[UIColor whiteColor] next:nil]]]]]];
+}
+
+@end
+
+
 @interface NetworkListItem : TTTableTextItem {
   NSMutableDictionary* _network;
 }
@@ -49,8 +69,8 @@
     _leftSide.text = @"Testing";
     _leftSide.font = [UIFont boldSystemFontOfSize:18];
     
-    _badge = [[TTLabel alloc] initWithFrame:CGRectMake(225, 8, 25, 25)];
-    _badge.style = TTSTYLE(largeBadge);
+    _badge = [[TTLabel alloc] initWithFrame:CGRectMake(245, 10, 25, 25)];
+    _badge.style = [[NetworkListStyleSheet alloc] badge];
     _badge.backgroundColor = [UIColor clearColor];
     _badge.userInteractionEnabled = NO;
     _badge.text = @"60+";
@@ -75,11 +95,18 @@
     _leftSide.text = [nli.network objectForKey:@"name"];
     
     int count = [[nli.network objectForKey:@"unseen_message_count"] intValue];
-        
+
     if (count == 0)
       _badge.hidden = YES;
     else {
       _badge.text = [NetworkList badgeFromIntToString:count];
+
+      int x = 255;
+      if ([_badge.text length] == 3)
+        x = 236;
+      else if ([_badge.text length] == 2)
+        x = 246;
+      _badge.frame = CGRectMake(x, 10, 25, 25);
       [_badge sizeToFit];
       _badge.hidden = NO;
     }
@@ -134,7 +161,8 @@
     self.title = @"Networks";
     self.variableHeightRows = YES;
     
-    _tableViewStyle = UITableViewStyleGrouped;    
+    // ilya likes this but adam doesn't
+    //_tableViewStyle = UITableViewStyleGrouped;    
     [self createNetworkListDataSource];
   }  
   return self;
@@ -150,7 +178,7 @@
   for (NSMutableDictionary *network in networks) 
     [section addObject:[NetworkListItem itemWithNetwork:network]];
   
-  [sections addObject:@"Select a network:"];
+  [sections addObject:@""];
   [items addObject:section];
   self.dataSource = [[NetworkListDataSource alloc] initWithItems:items sections:sections]; 
 }
