@@ -8,6 +8,5 @@
 @property (nonatomic,retain) Settings* settingsReference;
 
 - (id)initWithControllerReference:(Settings*)settings;
-- (void)madeSelection:(int)row;
 
 @end

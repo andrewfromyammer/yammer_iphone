@@ -115,10 +115,7 @@
   NetworkListItem* nli = (NetworkListItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
   [nli.network setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];
   [networkList showModel:YES];
-  //[networkList madeSelection:nli.network];
-  MainTabBar* tabs = [[MainTabBar alloc] init];
-  [_controller.navigationController pushViewController:tabs animated:YES];
-
+  [networkList madeSelection:nli.network];
 }
 
 @end
@@ -157,40 +154,24 @@
   return [[NetworkListDelegate alloc] initWithController:self];
 }
 
-- (void)madeSelection:(NSMutableDictionary*)network {
-  self.dataSource = nil;
-  [self showModel:YES];
+- (void)oldMadeSelection:(NSMutableDictionary*)network {
+  //self.dataSource = nil;
+  //[self showModel:YES];
   [NSThread detachNewThreadSelector:@selector(doTheSwitch:) toTarget:self withObject:network];
 }
 
-- (void)doShowModel {
-  [self showModel:YES];
-}
 
-- (NSMutableDictionary*)findTokenByNetworkId:(long)network_id {
-  NSMutableArray* tokens = (NSMutableArray *)[[LocalStorage getFile:TOKENS] JSONValue];
-  for (NSMutableDictionary* token in tokens) {
-    long iteration_network_id = [[token objectForKey:@"network_id"] longValue];
-    if (network_id == iteration_network_id)
-      return token;
-  }
-  return nil;
-}
+- (void)madeSelection:(NSMutableDictionary*)network {
 
-- (void)doTheSwitch:(NSMutableDictionary*)network {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  
   long network_id = [[network objectForKey:@"id"] longValue];
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
   if ([yammer.network_id longValue] == network_id) {
-    TTNavigator* navigator = [TTNavigator navigator];
-    [navigator removeAllViewControllers];
-    [navigator openURL:@"yammer://tabs" animated:YES];
-    [autoreleasepool release];
+    MainTabBar* tabs = [[MainTabBar alloc] init];
+    [self.navigationController pushViewController:tabs animated:YES];
     return;
   }
-  
+ 
   NSString* errorCode = nil;
   
   if ([LocalStorage getFile:TOKENS] == nil) {
@@ -207,55 +188,66 @@
     if (token == nil)
       errorCode = @"TOKEN_MISSING";
   }
-
+  
   if (errorCode == nil) {
-   
-    if ([LocalStorage getFile:[APIGateway push_file]] == nil)
-      [APIGateway pushSettings:@"silent"];
+    
+    //if ([LocalStorage getFile:[APIGateway push_file]] == nil)
+    //  [APIGateway pushSettings:@"silent"];
     
     NSString* previous = [LocalStorage getAccessToken];
     
     [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
     
-    NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file_with_id:network_id]];
-
+    //NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file_with_id:network_id]];
+    
     if ([LocalStorage getFile:[APIGateway user_file_with_id:network_id]] == nil)
       [APIGateway usersCurrent:@"silent"];
-
+    
     if ([LocalStorage getFile:[APIGateway user_file_with_id:network_id]] == nil) {
       errorCode = @"NO_USERS_CURRENT";
       [LocalStorage saveAccessToken:previous];
     } else {    
       yammer.network_id = [network objectForKey:@"id"];
       [LocalStorage saveSetting:@"current_network_id" value:yammer.network_id];
-      [LocalStorage removeFile:[APIGateway push_file]];
+      //[LocalStorage removeFile:[APIGateway push_file]];
       
       [LocalStorage removeFile:DIRECTORY_CACHE];
       
-      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
+//      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
+      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken]) {
         // send existing push settings (if any) to server
-        NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
-        NSMutableDictionary* existingPushSettings = [APIGateway pushSettings:@"silent"];
-        if (existingPushSettings)
-          [APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
-        [LocalStorage removeFile:[APIGateway push_file]];
+        //NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
+        //NSMutableDictionary* existingPushSettings = [APIGateway pushSettings:@"silent"];
+        //if (existingPushSettings)
+          //[APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
+        //[LocalStorage removeFile:[APIGateway push_file]];
       }
     }
   }
   
-  //usleep(500000);
-  
   if (errorCode != nil) {
-    [self createNetworkListDataSource];    
-    [self performSelectorOnMainThread:@selector(doShowModel) withObject:nil waitUntilDone:YES];
     [NSThread detachNewThreadSelector:@selector(errorThread:) toTarget:self withObject:errorCode];
   } else {  
-    TTNavigator* navigator = [TTNavigator navigator];
-    [navigator removeAllViewControllers];
-    [navigator openURL:@"yammer://tabs" animated:YES];
+    MainTabBar* tabs = [[MainTabBar alloc] init];
+    [self.navigationController pushViewController:tabs animated:YES];
   }
-  [autoreleasepool release];
-}  
+  
+}
+
+
+- (void)doShowModel {
+  [self showModel:YES];
+}
+
+- (NSMutableDictionary*)findTokenByNetworkId:(long)network_id {
+  NSMutableArray* tokens = (NSMutableArray *)[[LocalStorage getFile:TOKENS] JSONValue];
+  for (NSMutableDictionary* token in tokens) {
+    long iteration_network_id = [[token objectForKey:@"network_id"] longValue];
+    if (network_id == iteration_network_id)
+      return token;
+  }
+  return nil;
+}
 
 - (void)errorThread:(NSString*)errorCode {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];

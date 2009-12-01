@@ -41,15 +41,12 @@
 
 + (void)showError:(NSString *)error style:(NSString *)style;
 - (void)setupNavigator;
-- (void)resetForNewThreadingValue;
-- (void)resetForNewNetwork;
 - (void)setBadges:(NSString*)style;
 - (void)setBadge:(FeedMessageList*)fml count:(int)count;
 - (void)refreshMyFeed;
 - (NSString*)version;
 - (void)showEnterCallbackTokenScreen;
 - (void)setupNavigator;
-- (void)settingsToRootView;
 - (void)reloadForFontSizeChange;
 
 @end
