@@ -30,7 +30,7 @@
     if (compose) {
       UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
                                                                                target:self
-                                                                               action:@selector(compose)];  
+                                                                               action:@selector(compose)];
       self.navigationItem.rightBarButtonItem = compose;
     }
         
@@ -54,7 +54,7 @@
 }
 
 - (void)loadView {
-  [super loadView];    
+  [super loadView];  
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

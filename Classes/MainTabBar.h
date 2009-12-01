@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface MainTabBar : UITabBarController {
+@interface MainTabBar : UITabBarController <UITabBarControllerDelegate> {
 
 }
 

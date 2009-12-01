@@ -4,14 +4,38 @@
 #import "FeedList.h"
 #import "DirectoryList.h"
 #import "Settings.h"
+#import "ComposeMessage.h"
 
 @implementation MainTabBar
 
 - (id)init {
   if (self = [super init]) {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
+    
+    UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                             target:self
+                                                                             action:@selector(compose)];
+    self.navigationItem.rightBarButtonItem = compose;
+    self.delegate = self;
   }  
   return self;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+  if ([tabBarController selectedIndex] == 0) {
+    UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                             target:self
+                                                                             action:@selector(compose)];
+    self.navigationItem.rightBarButtonItem = compose;    
+  } else {
+    self.navigationItem.rightBarButtonItem = nil;
+  }
+}
+
+- (void)compose {
+  NSMutableDictionary *meta = [NSMutableDictionary dictionary];
+  [meta setObject:@"To: My Colleagues" forKey:@"display"];
+  [self presentModalViewController:[ComposeMessage getNav:meta] animated:YES];
 }
 
 
