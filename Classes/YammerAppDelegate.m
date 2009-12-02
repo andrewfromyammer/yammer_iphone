@@ -86,8 +86,15 @@
 
   self.network_id = (NSNumber*)[LocalStorage getSetting:@"current_network_id"];
   
-  //NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
-
+  NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
+  
+  for (NSMutableDictionary *network in networks) {
+    if ([[network objectForKey:@"id"] longValue] == [self.network_id longValue]) {      
+      [NetworkList subtractFromBadgeCount:network];
+      break;
+    }
+  }
+  
   TTNavigator* navigator = [TTNavigator navigator];
   navigator.supportsShakeToReload = YES;
   navigator.persistenceMode = TTNavigatorPersistenceModeNone;

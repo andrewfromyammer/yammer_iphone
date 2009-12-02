@@ -6,5 +6,6 @@
 
 - (void)setupView:(UIViewController *)view title:(NSString *)title image:(NSString *)image;
 + (UIColor *)yammerGray;
+- (void)addCompose;
 
 @end

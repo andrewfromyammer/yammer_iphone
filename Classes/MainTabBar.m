@@ -10,23 +10,29 @@
 
 - (id)init {
   if (self = [super init]) {
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
-    
-    UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-                                                                             target:self
-                                                                             action:@selector(compose)];
-    self.navigationItem.rightBarButtonItem = compose;
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];    
     self.delegate = self;
+    [NSThread detachNewThreadSelector:@selector(addComposeThread) toTarget:self withObject:nil];
   }  
   return self;
 }
 
+- (void)addComposeThread {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  [self performSelectorOnMainThread:@selector(addCompose) withObject:nil waitUntilDone:NO];  
+  [autoreleasepool release];
+}
+
+- (void)addCompose {
+  UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                           target:self
+                                                                           action:@selector(compose)];
+  self.navigationItem.rightBarButtonItem = compose;    
+}
+
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
   if ([tabBarController selectedIndex] == 0) {
-    UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-                                                                             target:self
-                                                                             action:@selector(compose)];
-    self.navigationItem.rightBarButtonItem = compose;    
+    [self addCompose];
   } else {
     self.navigationItem.rightBarButtonItem = nil;
   }
@@ -79,6 +85,7 @@
   
   self.viewControllers = localViewControllersArray;
 	[localViewControllersArray release];
+  
 }
 
 @end

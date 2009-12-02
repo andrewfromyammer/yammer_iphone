@@ -29,18 +29,21 @@
 
 @interface NetworkListItem : TTTableTextItem {
   NSMutableDictionary* _network;
+  BOOL showSpinner;
 }
 @property (nonatomic, retain) NSMutableDictionary* network;
+@property BOOL showSpinner;
 
 + (NetworkListItem*)itemWithNetwork:(NSMutableDictionary*)network;
 @end
 
 @implementation NetworkListItem
 
-@synthesize network = _network;
+@synthesize network = _network, showSpinner;
 + (NetworkListItem*)itemWithNetwork:(NSMutableDictionary*)network {
   NetworkListItem* nli = [NetworkListItem itemWithText:@""];
   nli.network = network;
+  nli.showSpinner = NO;
   return nli;
 }
 - (void)dealloc {
@@ -53,15 +56,17 @@
 @interface NetworkListCell : TTTableTextItemCell {
   UILabel* _leftSide;
   TTLabel* _badge;
+  UIActivityIndicatorView* _spinner;
 }
 @property (nonatomic, retain) UILabel *leftSide;
 @property (nonatomic, retain) TTLabel *badge;
+@property (nonatomic, retain) UIActivityIndicatorView *spinner;
 
 @end
 
 @implementation NetworkListCell
 
-@synthesize leftSide = _leftSide, badge = _badge;
+@synthesize leftSide = _leftSide, badge = _badge, spinner = _spinner;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
   if (self = [super initWithStyle:style reuseIdentifier:identifier]) {    
@@ -75,8 +80,12 @@
     _badge.userInteractionEnabled = NO;
     _badge.text = @"60+";
     
+    _spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(260, 10, 20, 20)];
+    _spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    
     [self.contentView addSubview:_leftSide];
     [self.contentView addSubview:_badge];
+    [self.contentView addSubview:_spinner];
   }
   return self;
 }
@@ -84,6 +93,7 @@
 - (void)dealloc {
   TT_RELEASE_SAFELY(_leftSide);
   TT_RELEASE_SAFELY(_badge);
+  TT_RELEASE_SAFELY(_spinner);
   [super dealloc];
 }
 
@@ -93,6 +103,16 @@
     
     NetworkListItem* nli = (NetworkListItem*)object;
     _leftSide.text = [nli.network objectForKey:@"name"];
+    
+    if (nli.showSpinner) {
+      _badge.hidden = YES;
+      _spinner.hidden = NO;
+      [_spinner startAnimating];
+    } else {
+      _badge.hidden = NO;
+      _spinner.hidden = YES;
+      [_spinner stopAnimating];
+    }
     
     int count = [[nli.network objectForKey:@"unseen_message_count"] intValue];
 
@@ -137,15 +157,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-  NetworkList* networkList = (NetworkList*)_controller;
-  NetworkListItem* nli = (NetworkListItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
-  int unseen_message_count = [[nli.network objectForKey:@"unseen_message_count"] intValue];
-  int current_badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
   
-  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:current_badge - unseen_message_count];  
+  NetworkList* networkList = (NetworkList*)_controller;
+  if (networkList.alreadySelected)
+    return;
+  networkList.alreadySelected = YES;
+
+  NetworkListItem* nli = (NetworkListItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
+  [NetworkList subtractFromBadgeCount:nli.network];
   
   [nli.network setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];
+  nli.showSpinner = YES;
   [networkList showModel:YES];
   [networkList madeSelection:nli.network];
 }
@@ -154,18 +176,29 @@
 
 @implementation NetworkList
 
+@synthesize alreadySelected;
+
 - (id)init {
   if (self = [super init]) {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
     self.navigationBarTintColor = [MainTabBar yammerGray];
     self.title = @"Networks";
     self.variableHeightRows = YES;
+    self.alreadySelected = false;
     
     // ilya likes this but adam doesn't
     //_tableViewStyle = UITableViewStyleGrouped;    
     [self createNetworkListDataSource];
   }  
   return self;
+}
+
++ (void)subtractFromBadgeCount:(NSMutableDictionary*)network {
+  int unseen_message_count = [[network objectForKey:@"unseen_message_count"] intValue];
+  int current_badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+  
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:current_badge - unseen_message_count];  
+  
 }
 
 - (void)createNetworkListDataSource {
@@ -192,14 +225,27 @@
   return [[NetworkListDelegate alloc] initWithController:self];
 }
 
-- (void)oldMadeSelection:(NSMutableDictionary*)network {
-  //self.dataSource = nil;
-  //[self showModel:YES];
-  [NSThread detachNewThreadSelector:@selector(doTheSwitch:) toTarget:self withObject:network];
+- (void)madeSelection:(NSMutableDictionary*)network {
+  [NSThread detachNewThreadSelector:@selector(doTheSwitch) toTarget:self withObject:network];
 }
 
+- (void)doTheSwitch {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  sleep(2);
+  
+  NetworkListDataSource* source = (NetworkListDataSource*)self.dataSource;
+  for (NetworkListItem* item in [source.items objectAtIndex:0]) {
+    item.showSpinner = NO;
+  }
+  self.alreadySelected = NO;
+  [self performSelectorOnMainThread:@selector(doShowModel) withObject:nil waitUntilDone:NO];
+  
+  MainTabBar* tabs = [[MainTabBar alloc] init];
+  [self.navigationController pushViewController:tabs animated:YES];
+  [autoreleasepool release];
+}
 
-- (void)madeSelection:(NSMutableDictionary*)network {
+- (void)xmadeSelection:(NSMutableDictionary*)network {
 
   long network_id = [[network objectForKey:@"id"] longValue];
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
