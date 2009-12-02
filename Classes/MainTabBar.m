@@ -19,6 +19,7 @@
 
 - (void)addComposeThread {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  sleep(2);
   [self performSelectorOnMainThread:@selector(addCompose) withObject:nil waitUntilDone:NO];  
   [autoreleasepool release];
 }

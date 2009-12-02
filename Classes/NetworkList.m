@@ -82,6 +82,7 @@
     
     _spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(260, 10, 20, 20)];
     _spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [_spinner startAnimating];
     
     [self.contentView addSubview:_leftSide];
     [self.contentView addSubview:_badge];
@@ -106,11 +107,9 @@
     
     if (nli.showSpinner) {
       _badge.hidden = YES;
-      _spinner.hidden = NO;
       [_spinner startAnimating];
     } else {
       _badge.hidden = NO;
-      _spinner.hidden = YES;
       [_spinner stopAnimating];
     }
     
@@ -226,35 +225,31 @@
 }
 
 - (void)madeSelection:(NSMutableDictionary*)network {
-  [NSThread detachNewThreadSelector:@selector(doTheSwitch) toTarget:self withObject:network];
+  [NSThread detachNewThreadSelector:@selector(doTheSwitch:) toTarget:self withObject:network];
 }
 
-- (void)doTheSwitch {
+- (void)doTheSwitch:(NSMutableDictionary*)network {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  sleep(2);
   
   NetworkListDataSource* source = (NetworkListDataSource*)self.dataSource;
   for (NetworkListItem* item in [source.items objectAtIndex:0]) {
     item.showSpinner = NO;
   }
-  self.alreadySelected = NO;
-  [self performSelectorOnMainThread:@selector(doShowModel) withObject:nil waitUntilDone:NO];
-  
-  MainTabBar* tabs = [[MainTabBar alloc] init];
-  [self.navigationController pushViewController:tabs animated:YES];
-  [autoreleasepool release];
-}
-
-- (void)xmadeSelection:(NSMutableDictionary*)network {
 
   long network_id = [[network objectForKey:@"id"] longValue];
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
-  if ([yammer.network_id longValue] == network_id) {
-    MainTabBar* tabs = [[MainTabBar alloc] init];
-    [self.navigationController pushViewController:tabs animated:YES];
-    return;
+  if ([yammer.network_id longValue] == network_id)
+    [self performSelectorOnMainThread:@selector(doShowModelAndPushTabs) withObject:nil waitUntilDone:NO];  
+  else {
+    [self handleReplaceToken:network];
   }
+  [autoreleasepool release];
+}
+
+- (void)handleReplaceToken:(NSMutableDictionary*)network {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  long network_id = [[network objectForKey:@"id"] longValue];
  
   NSString* errorCode = nil;
   
@@ -312,15 +307,17 @@
   if (errorCode != nil) {
     [NSThread detachNewThreadSelector:@selector(errorThread:) toTarget:self withObject:errorCode];
   } else {  
-    MainTabBar* tabs = [[MainTabBar alloc] init];
-    [self.navigationController pushViewController:tabs animated:YES];
+    [self performSelectorOnMainThread:@selector(doShowModelAndPushTabs) withObject:nil waitUntilDone:NO];  
   }
   
 }
 
 
-- (void)doShowModel {
+- (void)doShowModelAndPushTabs {
   [self showModel:YES];
+  MainTabBar* tabs = [[MainTabBar alloc] init];
+  [self.navigationController pushViewController:tabs animated:YES];
+  self.alreadySelected = NO;
 }
 
 - (NSMutableDictionary*)findTokenByNetworkId:(long)network_id {
@@ -337,6 +334,7 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   usleep(500000);
   [YammerAppDelegate showError:[NSString stringWithFormat:@"There was a network error, please try again in a few minutes. Error Code: %@", errorCode] style:nil];
+  self.alreadySelected = NO;
   [autoreleasepool release];
 }
 
