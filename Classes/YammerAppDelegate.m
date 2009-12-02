@@ -85,7 +85,8 @@
   [[[window subviews] objectAtIndex:0] removeFromSuperview];
 
   self.network_id = (NSNumber*)[LocalStorage getSetting:@"current_network_id"];
-  NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
+  
+  //NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
 
   TTNavigator* navigator = [TTNavigator navigator];
   navigator.supportsShakeToReload = YES;
@@ -98,13 +99,9 @@
   [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
   [map from:@"yammer://networks" toViewController:[NetworkList class]];
 
-  if ([networks count] > 1)
-    [navigator openURL:@"yammer://networks" animated:NO];
-  else {    
-    [navigator openURL:@"yammer://networks" animated:NO];
-    MainTabBar* tabs = [[MainTabBar alloc] init];
-    [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
-  }
+  [navigator openURL:@"yammer://networks" animated:NO];
+  MainTabBar* tabs = [[MainTabBar alloc] init];
+  [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
 }
 
 - (void)postFinishLaunch {

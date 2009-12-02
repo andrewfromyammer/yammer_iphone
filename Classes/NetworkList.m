@@ -174,9 +174,14 @@
   NSMutableArray* section = [NSMutableArray array];
   
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  long network_id = [yammer.network_id longValue];
   
-  for (NSMutableDictionary *network in networks) 
+  for (NSMutableDictionary *network in networks) {
+    if ([[network objectForKey:@"id"] longValue] == network_id)
+      [network setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];
     [section addObject:[NetworkListItem itemWithNetwork:network]];
+  }
   
   [sections addObject:@""];
   [items addObject:section];
