@@ -195,9 +195,10 @@
 + (void)subtractFromBadgeCount:(NSMutableDictionary*)network {
   int unseen_message_count = [[network objectForKey:@"unseen_message_count"] intValue];
   int current_badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-  
-  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:current_badge - unseen_message_count];  
-  
+  int result = current_badge - unseen_message_count;
+  if (result < 0)
+    result = 0;
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:result];  
 }
 
 - (void)createNetworkListDataSource {
@@ -206,14 +207,9 @@
   NSMutableArray* section = [NSMutableArray array];
   
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  long network_id = [yammer.network_id longValue];
   
-  for (NSMutableDictionary *network in networks) {
-    if ([[network objectForKey:@"id"] longValue] == network_id)
-      [network setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];
+  for (NSMutableDictionary *network in networks)
     [section addObject:[NetworkListItem itemWithNetwork:network]];
-  }
   
   [sections addObject:@""];
   [items addObject:section];
@@ -270,14 +266,14 @@
   
   if (errorCode == nil) {
     
-    //if ([LocalStorage getFile:[APIGateway push_file]] == nil)
-    //  [APIGateway pushSettings:@"silent"];
+    if ([LocalStorage getFile:[APIGateway push_file]] == nil)
+      [APIGateway pushSettings:@"silent"];
     
     NSString* previous = [LocalStorage getAccessToken];
     
     [LocalStorage saveAccessToken:[NSString stringWithFormat:@"oauth_token=%@&oauth_token_secret=%@", [token objectForKey:@"token"], [token objectForKey:@"secret"]]];
     
-    //NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file_with_id:network_id]];
+    NSString* pushSettingsJSON = [LocalStorage getFile:[APIGateway push_file_with_id:network_id]];
     
     if ([LocalStorage getFile:[APIGateway user_file_with_id:network_id]] == nil)
       [APIGateway usersCurrent:@"silent"];
@@ -285,21 +281,20 @@
     if ([LocalStorage getFile:[APIGateway user_file_with_id:network_id]] == nil) {
       errorCode = @"NO_USERS_CURRENT";
       [LocalStorage saveAccessToken:previous];
-    } else {    
+    } else {
       yammer.network_id = [network objectForKey:@"id"];
       [LocalStorage saveSetting:@"current_network_id" value:yammer.network_id];
-      //[LocalStorage removeFile:[APIGateway push_file]];
+      [LocalStorage removeFile:[APIGateway push_file]];
       
       [LocalStorage removeFile:DIRECTORY_CACHE];
       
-//      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
-      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken]) {
+      if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
         // send existing push settings (if any) to server
-        //NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
-        //NSMutableDictionary* existingPushSettings = [APIGateway pushSettings:@"silent"];
-        //if (existingPushSettings)
-          //[APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
-        //[LocalStorage removeFile:[APIGateway push_file]];
+        NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];
+        NSMutableDictionary* existingPushSettings = [APIGateway pushSettings:@"silent"];
+        if (existingPushSettings)
+          [APIGateway updatePushSettingsInBulk:[existingPushSettings objectForKey:@"id"] pushSettings:pushSettings];
+        [LocalStorage removeFile:[APIGateway push_file]];
       }
     }
   }

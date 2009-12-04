@@ -42,7 +42,17 @@
 }
 
 - (NSString*)version {
-  return @"2.0.2.31";
+  return @"2.0.2.33";
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+  TTNavigator* navigator = [TTNavigator navigator];
+  UINavigationController* controller = [[navigator visibleViewController] navigationController];
+  int count = [[controller viewControllers] count];
+  if (count == 1)
+    [LocalStorage saveSetting:@"last_in" value:@"list"];
+  else
+    [LocalStorage saveSetting:@"last_in" value:@"network"];
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication*)application {
@@ -107,8 +117,14 @@
   [map from:@"yammer://networks" toViewController:[NetworkList class]];
 
   [navigator openURL:@"yammer://networks" animated:NO];
-  MainTabBar* tabs = [[MainTabBar alloc] init];
-  [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
+
+  NSString* last_in = (NSString*)[LocalStorage getSetting:@"last_in"];
+  if (last_in == nil)
+    last_in = @"network";
+  if ([last_in isEqualToString:@"network"]) {
+    MainTabBar* tabs = [[MainTabBar alloc] init];
+    [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
+  }
 }
 
 - (void)postFinishLaunch {
