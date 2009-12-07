@@ -333,6 +333,16 @@
   [autoreleasepool release];
 }
 
+- (void)clearBadgeForNetwork:(NSNumber*)network_id {
+  NetworkListDataSource* source = (NetworkListDataSource*)self.dataSource;
+  for (NetworkListItem* item in [source.items objectAtIndex:0]) {
+    if ([[item.network objectForKey:@"id"] longValue] == [network_id longValue]) {
+      [item.network setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];  
+      break;
+    }
+  }
+}
+
 + (NSString*)badgeFromIntToString:(int)count {
   if (count > 0) {
     if (count > 60)

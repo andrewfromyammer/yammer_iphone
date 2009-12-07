@@ -13,5 +13,6 @@
 - (void)createNetworkListDataSource;
 - (NSMutableDictionary*)findTokenByNetworkId:(long)network_id;
 - (void)handleReplaceToken:(NSMutableDictionary*)network;
+- (void)clearBadgeForNetwork:(NSNumber*)network_id;
 
 @end

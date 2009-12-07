@@ -42,7 +42,7 @@
 }
 
 - (NSString*)version {
-  return @"2.0.2.33";
+  return @"2.0.2.34";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -122,6 +122,11 @@
   if (last_in == nil)
     last_in = @"network";
   if ([last_in isEqualToString:@"network"]) {
+    
+    UINavigationController* controller = [[navigator visibleViewController] navigationController];
+    NetworkList* networkList = (NetworkList*)[[controller viewControllers] objectAtIndex:0];
+    [networkList clearBadgeForNetwork:self.network_id];
+    
     MainTabBar* tabs = [[MainTabBar alloc] init];
     [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
   }
