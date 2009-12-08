@@ -97,10 +97,12 @@
   self.network_id = (NSNumber*)[LocalStorage getSetting:@"current_network_id"];
   
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
+  NSString* network_name;
   
   for (NSMutableDictionary *network in networks) {
     if ([[network objectForKey:@"id"] longValue] == [self.network_id longValue]) {      
       [NetworkList subtractFromBadgeCount:network];
+      network_name = [network objectForKey:@"name"];
       break;
     }
   }
@@ -127,7 +129,7 @@
     NetworkList* networkList = (NetworkList*)[[controller viewControllers] objectAtIndex:0];
     [networkList clearBadgeForNetwork:self.network_id];
     
-    MainTabBar* tabs = [[MainTabBar alloc] init];
+    MainTabBar* tabs = [[MainTabBar alloc] initWithName:network_name];
     [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
   }
 }
@@ -202,6 +204,13 @@
 
   FeedMessageList *myfeed = (FeedMessageList *)[mainView.viewControllers objectAtIndex:0];
   [myfeed refreshFeed:nil];
+}
+
+- (int)countViewControllers {
+  TTNavigator* navigator = [TTNavigator navigator];
+  UINavigationController* controller = [[navigator visibleViewController] navigationController];
+  
+  return [[controller viewControllers] count];
 }
 
 - (void)reloadForFontSizeChange {

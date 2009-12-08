@@ -179,7 +179,7 @@
 
 - (id)init {
   if (self = [super init]) {
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
+    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
     self.navigationBarTintColor = [MainTabBar yammerGray];
     self.title = @"Networks";
     self.variableHeightRows = YES;
@@ -236,7 +236,7 @@
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
   if ([yammer.network_id longValue] == network_id)
-    [self performSelectorOnMainThread:@selector(doShowModelAndPushTabs) withObject:nil waitUntilDone:NO];  
+    [self performSelectorOnMainThread:@selector(doShowModelAndPushTabs:) withObject:network waitUntilDone:NO];  
   else {
     [self handleReplaceToken:network];
   }
@@ -302,15 +302,16 @@
   if (errorCode != nil) {
     [NSThread detachNewThreadSelector:@selector(errorThread:) toTarget:self withObject:errorCode];
   } else {  
-    [self performSelectorOnMainThread:@selector(doShowModelAndPushTabs) withObject:nil waitUntilDone:NO];  
+    [self performSelectorOnMainThread:@selector(doShowModelAndPushTabs:) withObject:network waitUntilDone:NO];  
   }
   
 }
 
 
-- (void)doShowModelAndPushTabs {
+- (void)doShowModelAndPushTabs:(NSMutableDictionary*)network {
+  NSLog([network description]);
   [self showModel:YES];
-  MainTabBar* tabs = [[MainTabBar alloc] init];
+  MainTabBar* tabs = [[MainTabBar alloc] initWithName:[network objectForKey:@"name"]];
   [self.navigationController pushViewController:tabs animated:YES];
   self.alreadySelected = NO;
 }

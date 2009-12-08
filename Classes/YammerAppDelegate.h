@@ -48,6 +48,7 @@
 - (void)showEnterCallbackTokenScreen;
 - (void)setupNavigator;
 - (void)reloadForFontSizeChange;
+- (int)countViewControllers;
 
 @end
 

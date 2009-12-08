@@ -89,6 +89,12 @@
   } @catch (NSException *theErr) { }
 
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
+  if ([yammer countViewControllers] == 1) {
+    self.isChecking = false;
+    [autoreleasepool release];
+    return;
+  }
+  
   if (dict) {
     FeedMessageData* feedDataSource = [FeedMessageData feed:self.feed];
 

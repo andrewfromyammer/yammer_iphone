@@ -8,9 +8,10 @@
 
 @implementation MainTabBar
 
-- (id)init {
+- (id)initWithName:(NSString*)name {
   if (self = [super init]) {
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];    
+    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];    
+    self.navigationItem.title = name;
     self.delegate = self;
     [NSThread detachNewThreadSelector:@selector(addComposeThread) toTarget:self withObject:nil];
   }  
@@ -80,7 +81,7 @@
   [self setupView:directory title:@"Directory" image:@"directory.png"];
   [localViewControllersArray addObject:directory];
   
-  Settings *settingsViewController = [[Settings alloc] init];
+  Settings *settingsViewController = [[[Settings alloc] init] autorelease];
   [self setupView:settingsViewController title:@"Settings" image:@"settings.png"];
   [localViewControllersArray addObject:settingsViewController];
   
