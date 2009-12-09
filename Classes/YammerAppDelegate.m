@@ -42,7 +42,7 @@
 }
 
 - (NSString*)version {
-  return @"2.0.2.34";
+  return @"2.0.2.35";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -121,7 +121,7 @@
   [navigator openURL:@"yammer://networks" animated:NO];
 
   NSString* last_in = (NSString*)[LocalStorage getSetting:@"last_in"];
-  if (last_in == nil)
+  if (last_in == nil || [networks count] == 1)
     last_in = @"network";
   if ([last_in isEqualToString:@"network"]) {
     
