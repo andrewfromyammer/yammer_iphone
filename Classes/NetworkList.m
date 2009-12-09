@@ -309,10 +309,10 @@
 
 
 - (void)doShowModelAndPushTabs:(NSMutableDictionary*)network {
-  NSLog([network description]);
   [self showModel:YES];
-  MainTabBar* tabs = [[MainTabBar alloc] initWithName:[network objectForKey:@"name"]];
-  [self.navigationController pushViewController:tabs animated:YES];
+  
+  TTNavigator* navigator = [TTNavigator navigator];
+  [navigator openURL:[NSString stringWithFormat:@"yammer://tabs?name=%@", [network objectForKey:@"name"]] animated:YES];
   self.alreadySelected = NO;
 }
 

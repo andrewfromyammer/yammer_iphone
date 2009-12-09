@@ -7,6 +7,6 @@
 - (void)setupView:(UIViewController *)view title:(NSString *)title image:(NSString *)image;
 + (UIColor *)yammerGray;
 - (void)addCompose;
-- (id)initWithName:(NSString*)name;
+- (id)initWithNavigatorURL:(NSURL*)URL query:(NSDictionary*)query;
 
 @end

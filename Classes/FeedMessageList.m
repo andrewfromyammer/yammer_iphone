@@ -262,7 +262,7 @@
 }
 
 - (void)dealloc {
-  [feed release];
+  TT_RELEASE_SAFELY(feed)
 	[super dealloc];
 }
 

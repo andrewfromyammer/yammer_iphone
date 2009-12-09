@@ -42,7 +42,7 @@
 }
 
 - (NSString*)version {
-  return @"2.0.2.35";
+  return @"2.0.2.36";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -117,6 +117,7 @@
   [map from:@"yammer://user" toViewController:[UserProfile class]];
   [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
   [map from:@"yammer://networks" toViewController:[NetworkList class]];
+  [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
 
   [navigator openURL:@"yammer://networks" animated:NO];
 
@@ -128,9 +129,8 @@
     UINavigationController* controller = [[navigator visibleViewController] navigationController];
     NetworkList* networkList = (NetworkList*)[[controller viewControllers] objectAtIndex:0];
     [networkList clearBadgeForNetwork:self.network_id];
-    
-    MainTabBar* tabs = [[MainTabBar alloc] initWithName:network_name];
-    [[[navigator visibleViewController] navigationController] pushViewController:tabs animated:NO];
+
+    [navigator openURL:[NSString stringWithFormat:@"yammer://tabs?name=%@", network_name] animated:NO];
   }
 }
 

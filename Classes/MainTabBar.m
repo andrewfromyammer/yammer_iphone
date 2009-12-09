@@ -8,13 +8,12 @@
 
 @implementation MainTabBar
 
-- (id)initWithName:(NSString*)name {
-  if (self = [super init]) {
-    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];    
-    self.navigationItem.title = name;
+- (id)initWithNavigatorURL:(NSURL*)URL query:(NSDictionary*)query {
+  if (self = [super initWithNavigatorURL:URL query:query]) {
+    self.navigationItem.title = [query objectForKey:@"name"];
     self.delegate = self;
-    [NSThread detachNewThreadSelector:@selector(addComposeThread) toTarget:self withObject:nil];
-  }  
+    [NSThread detachNewThreadSelector:@selector(addComposeThread) toTarget:self withObject:nil];    
+  }
   return self;
 }
 
@@ -88,6 +87,11 @@
   self.viewControllers = localViewControllersArray;
 	[localViewControllersArray release];
   
+}
+
+- (void)dealloc {
+  self.viewControllers = nil;
+  [super dealloc];
 }
 
 @end
