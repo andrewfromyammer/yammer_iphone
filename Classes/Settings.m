@@ -120,31 +120,10 @@
 - (id)init {
   if (self = [super init]) {
     self.navigationBarTintColor = [MainTabBar yammerGray];
-    
-    UIBarButtonItem *logout=[[UIBarButtonItem alloc] init];
-    logout.title=@"Log Out";
-    logout.target = self;
-    logout.action = @selector(logout);
-    self.navigationItem.rightBarButtonItem = logout;
-    [logout release];
-
     _tableViewStyle = UITableViewStyleGrouped;
     [self gatherData];
   }  
   return self;
-}
-
-- (void)logout {
-  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log Out"
-                                                  message:@"Click the confirm button below to log out from this account and exit the Yammer Application." delegate:self 
-                                        cancelButtonTitle:nil otherButtonTitles: @"Cancel", @"Confirm", nil];
-  [alert show];
-  [alert release];  
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-  if (buttonIndex == 1)
-    [OAuthGateway logout];
 }
 
 - (id<UITableViewDelegate>)createDelegate {
@@ -163,11 +142,9 @@
 
   NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:[APIGateway user_file]] JSONValue];
   NSString* email = [self findEmailFromDict:dict];
-  NSString* name  = [dict objectForKey:@"network_name"];
 
   NSMutableArray* section1 = [NSMutableArray array];
   [section1 addObject:[TTTableTextItem itemWithText:email URL:nil]];
-  [section1 addObject:[TTTableTextItem itemWithText:[NSString stringWithFormat:@"Network: %@", name] URL:nil]];
   [items addObject:section1];
   
   NSMutableArray* section2 = [NSMutableArray array];

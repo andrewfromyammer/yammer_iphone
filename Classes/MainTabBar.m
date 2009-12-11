@@ -5,6 +5,7 @@
 #import "DirectoryList.h"
 #import "Settings.h"
 #import "ComposeMessage.h"
+#import "OAuthGateway.h"
 
 @implementation MainTabBar
 
@@ -20,7 +21,8 @@
 - (void)addComposeThread {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   sleep(2);
-  [self performSelectorOnMainThread:@selector(addCompose) withObject:nil waitUntilDone:NO];  
+  if ([self selectedIndex] == 0)
+    [self performSelectorOnMainThread:@selector(addCompose) withObject:nil waitUntilDone:NO];  
   [autoreleasepool release];
 }
 
@@ -31,13 +33,34 @@
   self.navigationItem.rightBarButtonItem = compose;    
 }
 
+- (void)addLogout {
+  UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
+  self.navigationItem.rightBarButtonItem = logout;    
+}
+
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
   if ([tabBarController selectedIndex] == 0) {
     [self addCompose];
+  } else if ([tabBarController selectedIndex] == 4) {
+    [self addLogout];
   } else {
     self.navigationItem.rightBarButtonItem = nil;
   }
 }
+
+- (void)logout {
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log Out"
+                                                  message:@"Click the confirm button below to log out from this account and exit the Yammer Application." delegate:self 
+                                        cancelButtonTitle:nil otherButtonTitles: @"Cancel", @"Confirm", nil];
+  [alert show];
+  [alert release];  
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+  if (buttonIndex == 1)
+    [OAuthGateway logout];
+}
+
 
 - (void)compose {
   NSMutableDictionary *meta = [NSMutableDictionary dictionary];

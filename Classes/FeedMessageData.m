@@ -169,7 +169,7 @@
   
   int n = count - (_items.count - 1);
   if (n > 0)
-    return [TTTableMoreButton itemWithText:[NSString stringWithFormat:@"    Show %d more new messages", n]];
+    return [TTTableMoreButton itemWithText:[NSString stringWithFormat:@"              More (%d unread)", n]];
   return [TTTableMoreButton itemWithText:@"                       More"];
 }
 

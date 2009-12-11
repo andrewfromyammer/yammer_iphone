@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface MainTabBar : UITabBarController <UITabBarControllerDelegate> {
+@interface MainTabBar : UITabBarController <UITabBarControllerDelegate,UIAlertViewDelegate> {
 
 }
 
@@ -8,5 +8,6 @@
 + (UIColor *)yammerGray;
 - (void)addCompose;
 - (id)initWithNavigatorURL:(NSURL*)URL query:(NSDictionary*)query;
+- (void)addLogout;
 
 @end
