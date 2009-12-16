@@ -193,12 +193,16 @@
 }
 
 + (void)subtractFromBadgeCount:(NSMutableDictionary*)network {
-  int unseen_message_count = [[network objectForKey:@"unseen_message_count"] intValue];
-  int current_badge = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-  int result = current_badge - unseen_message_count;
-  if (result < 0)
-    result = 0;
-  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:result];  
+  NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
+  int sum = 0;
+  for (NSMutableDictionary* n in networks)
+    sum += [[n objectForKey:@"unseen_message_count"] intValue];
+
+  sum -= [[network objectForKey:@"unseen_message_count"] intValue];
+  
+  if (sum > 99)
+    sum = 99;
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:sum];
 }
 
 - (void)createNetworkListDataSource {

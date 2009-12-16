@@ -153,6 +153,7 @@
   [section2 addObject:[TitleWithValueItem itemWithText:@"Font Size" imageURL:@"bundle://font.png" URL:@"1"]];
   if ([self emailQualifiesForAdvanced:email])
     [section2 addObject:[TTTableImageItem itemWithText:@"Advanced Settings" imageURL:@"bundle://advanced.png" URL:@"1"]];
+  [section2 addObject:[TTTableImageItem itemWithText:@"Type Ahead Demo" imageURL:@"bundle://advanced.png" URL:@"1"]];
   [items addObject:section2];
 
   NSMutableArray* section3 = [NSMutableArray array];

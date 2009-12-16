@@ -42,7 +42,7 @@
 }
 
 - (NSString*)version {
-  return @"2.0.2.36";
+  return @"2.1";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
