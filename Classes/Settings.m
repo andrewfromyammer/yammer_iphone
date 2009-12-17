@@ -103,7 +103,9 @@
   } else if ([item.text isEqualToString:@"Font Size"]) {
     SettingsFontSize *fontSize = [[SettingsFontSize alloc] initWithControllerReference:(Settings*)_controller];
     [_controller.navigationController pushViewController:fontSize animated:YES];
-    [fontSize release];    
+    [fontSize release];
+  } else if ([item.text isEqualToString:@"Type Ahead Demo"]) {
+    [[TTNavigator navigator] openURL:@"yammer://type" animated:YES];
   } else if ([item.text isEqualToString:@"Advanced Settings"]) {
     SettingsAdvancedOptions *localSettingsAdvancedOptions = [[SettingsAdvancedOptions alloc] init];
     [_controller.navigationController pushViewController:localSettingsAdvancedOptions animated:YES];

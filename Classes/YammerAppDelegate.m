@@ -14,6 +14,7 @@
 #import "FeedList.h"
 #import "SettingsTimeChooser.h"
 #import "NetworkList.h"
+#import "TypeAheadDemo.h"
 
 @implementation YammerAppDelegate
 
@@ -118,6 +119,7 @@
   [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
   [map from:@"yammer://networks" toViewController:[NetworkList class]];
   [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
+  [map from:@"yammer://type" toViewController:[TypeAheadDemo class]];
 
   [navigator openURL:@"yammer://networks" animated:NO];
 

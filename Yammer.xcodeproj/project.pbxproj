@@ -99,6 +99,7 @@
 		00E6CDB81046F7E00042BD9E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E6CDB71046F7E00042BD9E /* Icon.png */; };
 		00E6CDBB1046F7F20042BD9E /* ComposeMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E6CDBA1046F7F20042BD9E /* ComposeMessage.m */; };
 		00E6CDBD1046F7FC0042BD9E /* ComposeMessage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00E6CDBC1046F7FC0042BD9E /* ComposeMessage.xib */; };
+		00EB608D10D961AD00318936 /* TypeAheadDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EB608C10D961AD00318936 /* TypeAheadDemo.m */; };
 		00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EDAF001099F56F00D3F5E9 /* Settings.m */; };
 		00EF42601049D40C00CF3CB5 /* thumbnail_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */; };
 		00F2B84710B75C640035B139 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F2B84610B75C640035B139 /* refresh.png */; };
@@ -280,6 +281,8 @@
 		00E6CDB91046F7F20042BD9E /* ComposeMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeMessage.h; sourceTree = "<group>"; };
 		00E6CDBA1046F7F20042BD9E /* ComposeMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeMessage.m; sourceTree = "<group>"; };
 		00E6CDBC1046F7FC0042BD9E /* ComposeMessage.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ComposeMessage.xib; sourceTree = "<group>"; };
+		00EB608B10D961AD00318936 /* TypeAheadDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeAheadDemo.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		00EB608C10D961AD00318936 /* TypeAheadDemo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TypeAheadDemo.m; sourceTree = "<group>"; };
 		00EDAEFF1099F56F00D3F5E9 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		00EDAF001099F56F00D3F5E9 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = thumbnail_loading.png; path = Images/thumbnail_loading.png; sourceTree = "<group>"; };
@@ -335,6 +338,8 @@
 				003B44BD10457ED800310B73 /* MessageView.m */,
 				007039FB104AE26100561215 /* FullSizePhoto.h */,
 				007039FC104AE26100561215 /* FullSizePhoto.m */,
+				00EB608B10D961AD00318936 /* TypeAheadDemo.h */,
+				00EB608C10D961AD00318936 /* TypeAheadDemo.m */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -790,6 +795,7 @@
 				00C6CC3610AE2B5400C96249 /* CheckMarkCell.m in Sources */,
 				00C6CC3B10AE2C2E00C96249 /* SettingsFontSize.m in Sources */,
 				00855FFA10B4B04B00E6AA8A /* NetworkList.m in Sources */,
+				00EB608D10D961AD00318936 /* TypeAheadDemo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

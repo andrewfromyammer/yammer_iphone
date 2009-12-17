@@ -100,8 +100,10 @@
 }
 
 + (NSMutableDictionary*)autocomplete:(NSString*)prefix {
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
   NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/autocomplete.json?prefix=%@", prefix] style:nil];
-  
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
   if (json)
     return (NSMutableDictionary *)[json JSONValue];
   
