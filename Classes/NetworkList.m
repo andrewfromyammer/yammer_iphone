@@ -195,10 +195,13 @@
 + (void)subtractFromBadgeCount:(NSMutableDictionary*)network {
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];
   int sum = 0;
-  for (NSMutableDictionary* n in networks)
+  for (NSMutableDictionary* n in networks) {
+    if ([[n objectForKey:@"id"] longValue] == [[network objectForKey:@"id"] longValue])
+      [n setObject:[NSNumber numberWithInt:0] forKey:@"unseen_message_count"];
     sum += [[n objectForKey:@"unseen_message_count"] intValue];
-
-  sum -= [[network objectForKey:@"unseen_message_count"] intValue];
+  }
+  
+  [LocalStorage saveFile:NETWORKS_CURRENT data:[networks JSONRepresentation]];
   
   if (sum > 99)
     sum = 99;

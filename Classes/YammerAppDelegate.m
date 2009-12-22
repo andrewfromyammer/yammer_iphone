@@ -43,7 +43,7 @@
 }
 
 - (NSString*)version {
-  return @"2.1";
+  return @"2.1.4";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -99,15 +99,16 @@
   
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
   NSString* network_name;
+  NSMutableDictionary* network_dict;
   
   for (NSMutableDictionary *network in networks) {
     if ([[network objectForKey:@"id"] longValue] == [self.network_id longValue]) {      
-      [NetworkList subtractFromBadgeCount:network];
       network_name = [network objectForKey:@"name"];
+      network_dict = network;
       break;
     }
   }
-  
+    
   TTNavigator* navigator = [TTNavigator navigator];
   navigator.supportsShakeToReload = YES;
   navigator.persistenceMode = TTNavigatorPersistenceModeNone;
@@ -131,6 +132,7 @@
     UINavigationController* controller = [[navigator visibleViewController] navigationController];
     NetworkList* networkList = (NetworkList*)[[controller viewControllers] objectAtIndex:0];
     [networkList clearBadgeForNetwork:self.network_id];
+    [NetworkList subtractFromBadgeCount:network_dict];
 
     [navigator openURL:[NSString stringWithFormat:@"yammer://tabs?name=%@", network_name] animated:NO];
   }
