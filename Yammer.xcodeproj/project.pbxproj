@@ -113,6 +113,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0044F10610E2A82C008C9AFE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00901E1A10445E72008E7C7D /* Three20.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EB9E6C6210B6A8F800DE563C;
+			remoteInfo = UnitTests;
+		};
 		00901E1E10445E72008E7C7D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00901E1A10445E72008E7C7D /* Three20.xcodeproj */;
@@ -496,6 +503,7 @@
 			isa = PBXGroup;
 			children = (
 				00901E1F10445E72008E7C7D /* libThree20.a */,
+				0044F10710E2A82C008C9AFE /* UnitTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -675,6 +683,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		0044F10710E2A82C008C9AFE /* UnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = UnitTests.octest;
+			remoteRef = 0044F10610E2A82C008C9AFE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		00901E1F10445E72008E7C7D /* libThree20.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;

@@ -107,6 +107,7 @@
     
     if (nli.showSpinner) {
       _badge.hidden = YES;
+      [_badge removeFromSuperview];
       [_spinner startAnimating];
     } else {
       _badge.hidden = NO;
@@ -233,7 +234,7 @@
 
 - (void)doTheSwitch:(NSMutableDictionary*)network {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  
+    
   NetworkListDataSource* source = (NetworkListDataSource*)self.dataSource;
   for (NetworkListItem* item in [source.items objectAtIndex:0]) {
     item.showSpinner = NO;
