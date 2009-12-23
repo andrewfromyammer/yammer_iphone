@@ -20,7 +20,7 @@
 
 @synthesize showFullNames;
 @synthesize launchURL;
-@synthesize network_id, pushToken, fontSize;
+@synthesize network_id, network_name, pushToken, fontSize;
 @synthesize threading, createNewAccount;
 @synthesize unseen_message_count_following, unseen_message_count_received, last_seen_message_id;
 @synthesize lastAutocomplete;
@@ -43,7 +43,7 @@
 }
 
 - (NSString*)version {
-  return @"2.1.5";
+  return @"2.1.6";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -96,14 +96,14 @@
   [[[window subviews] objectAtIndex:0] removeFromSuperview];
 
   self.network_id = (NSNumber*)[LocalStorage getSetting:@"current_network_id"];
+  self.network_name = @"Yammer";
   
   NSMutableArray* networks = [[LocalStorage getFile:NETWORKS_CURRENT] JSONValue];  
-  NSString* network_name;
   NSMutableDictionary* network_dict;
   
   for (NSMutableDictionary *network in networks) {
     if ([[network objectForKey:@"id"] longValue] == [self.network_id longValue]) {      
-      network_name = [network objectForKey:@"name"];
+      self.network_name = [network objectForKey:@"name"];
       network_dict = network;
       break;
     }
@@ -134,7 +134,7 @@
     [networkList clearBadgeForNetwork:self.network_id];
     [NetworkList subtractFromBadgeCount:network_dict];
 
-    [navigator openURL:[NSString stringWithFormat:@"yammer://tabs?name=%@", network_name] animated:NO];
+    [navigator openURL:@"yammer://tabs" animated:NO];
   }
 }
 
@@ -290,6 +290,7 @@
   [persistentStoreCoordinator release];
 
   [network_id release];
+  [network_name release];
   [showFullNames release];
   [launchURL release];
   [lastAutocomplete release];

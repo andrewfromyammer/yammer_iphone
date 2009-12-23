@@ -10,6 +10,7 @@
   NSNumber* showFullNames;
   NSString* launchURL;
   NSNumber* network_id;
+  NSString* network_name;
   NSString* pushToken;
   NSString* fontSize;
   BOOL threading;
@@ -27,6 +28,7 @@
 @property (nonatomic, readonly) NSString *applicationDocumentsDirectory;
 @property (nonatomic, retain) NSNumber* showFullNames;
 @property (nonatomic, retain) NSNumber* network_id;
+@property (nonatomic, retain) NSString* network_name;
 @property (nonatomic, retain) NSString* launchURL;
 @property (nonatomic, retain) NSString* pushToken;
 @property (nonatomic, retain) NSString* fontSize;

@@ -6,12 +6,14 @@
 #import "Settings.h"
 #import "ComposeMessage.h"
 #import "OAuthGateway.h"
+#import "YammerAppDelegate.h"
 
 @implementation MainTabBar
 
-- (id)initWithNavigatorURL:(NSURL*)URL query:(NSDictionary*)query {
-  if (self = [super initWithNavigatorURL:URL query:query]) {
-    self.navigationItem.title = [query objectForKey:@"name"];
+- (id)init {
+  if (self = [super init]) {
+    YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.navigationItem.title = yammer.network_name;
     self.delegate = self;
     [NSThread detachNewThreadSelector:@selector(addComposeThread) toTarget:self withObject:nil];    
   }

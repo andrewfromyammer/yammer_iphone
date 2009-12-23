@@ -319,8 +319,11 @@
 - (void)doShowModelAndPushTabs:(NSMutableDictionary*)network {
   [self showModel:YES];
   
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  yammer.network_name = [network objectForKey:@"name"];
+
   TTNavigator* navigator = [TTNavigator navigator];
-  [navigator openURL:[NSString stringWithFormat:@"yammer://tabs?name=%@", [network objectForKey:@"name"]] animated:YES];
+  [navigator openURL:@"yammer://tabs" animated:YES];
   self.alreadySelected = NO;
 }
 
