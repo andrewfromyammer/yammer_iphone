@@ -24,6 +24,7 @@
 @synthesize threading, createNewAccount;
 @synthesize unseen_message_count_following, unseen_message_count_received, last_seen_message_id;
 @synthesize lastAutocomplete;
+@synthesize dateOfSelection;
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   self.pushToken = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
@@ -43,7 +44,7 @@
 }
 
 - (NSString*)version {
-  return @"2.1.6";
+  return @"2.1.8";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -72,11 +73,17 @@
   [window makeKeyAndVisible];
 
   if ([LocalStorage getAccessToken]) {
-    [APIGateway networksCurrent:@"silent"];
-    [self setupNavigator];
+    [NSThread detachNewThreadSelector:@selector(getNetworksThread) toTarget:self withObject:nil];  
   }
   else 
-    [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
+    [NSThread detachNewThreadSelector:@selector(postFinishLaunch) toTarget:self withObject:nil];
+}
+
+- (void)getNetworksThread {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  [APIGateway networksCurrent:@"silent"];
+  [self performSelectorOnMainThread:@selector(setupNavigator) withObject:nil waitUntilDone:NO];  
+  [autoreleasepool release];
 }
 
 - (void)showEnterCallbackTokenScreen {
@@ -134,14 +141,18 @@
     [networkList clearBadgeForNetwork:self.network_id];
     [NetworkList subtractFromBadgeCount:network_dict];
 
+    self.dateOfSelection = [[NSDate date] description];
     [navigator openURL:@"yammer://tabs" animated:NO];
   }
 }
 
 - (void)postFinishLaunch {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  usleep(500000);
+  
   if ([LocalStorage getRequestToken] && [OAuthCustom callbackTokenInURL] && 
       [OAuthGateway getAccessToken:self.launchURL callbackToken:nil] && [APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"])    
-    [self setupNavigator];
+    [self performSelectorOnMainThread:@selector(setupNavigator) withObject:nil waitUntilDone:NO];  
   else if ([LocalStorage getRequestToken] && ![OAuthCustom callbackTokenInURL])
     [self showEnterCallbackTokenScreen];
   else {
@@ -156,6 +167,7 @@
     [actionSheet showInView:[[TTNavigator navigator] window]];
     [actionSheet release];    
   }
+  [autoreleasepool release];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -294,6 +306,7 @@
   [showFullNames release];
   [launchURL release];
   [lastAutocomplete release];
+  [dateOfSelection release];
   [super dealloc];
 }
 

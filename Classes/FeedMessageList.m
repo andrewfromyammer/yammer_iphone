@@ -26,14 +26,7 @@
     self.feed = theFeed;
     self.title = (NSString*)[theFeed objectForKey:@"name"];
     self.isThread = thread;
-        
-    if (compose) {
-      UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-                                                                               target:self
-                                                                               action:@selector(compose)];
-      self.navigationItem.rightBarButtonItem = compose;
-    }
-        
+    
     self.navigationBarTintColor = [MainTabBar yammerGray];
 
     self.curOffset = 0;    
@@ -78,6 +71,8 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
+  NSString* currentDateOfSelection = [NSString stringWithString:yammer.dateOfSelection];
+  
   self.isChecking = true;
   NSNumber *newerThan=nil;
   @try {
@@ -89,7 +84,7 @@
   } @catch (NSException *theErr) { }
 
   NSMutableDictionary *dict = [APIGateway messages:feed newerThan:newerThan style:style];
-  if ([yammer countViewControllers] == 1) {
+  if (![currentDateOfSelection isEqualToString:yammer.dateOfSelection]) {
     self.isChecking = false;
     [autoreleasepool release];
     return;
@@ -110,9 +105,8 @@
     if (date)
       [feedDataSource.items addObject:[SpinnerWithTextItem itemWithText:[FeedCache niceDate:date]]];
     else
-      [feedDataSource.items addObject:[SpinnerWithTextItem itemWithText:@"No updates yet."]];
-    
-    
+      [feedDataSource.items addObject:[SpinnerWithTextItem itemWithText:@"No updates yet."]];    
+
     self.curOffset = 0;
     @synchronized ([UIApplication sharedApplication]) {
       [feedDataSource fetch:nil];

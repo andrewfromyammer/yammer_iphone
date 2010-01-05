@@ -13,6 +13,7 @@
   NSString* network_name;
   NSString* pushToken;
   NSString* fontSize;
+  NSString* dateOfSelection;
   BOOL threading;
   BOOL createNewAccount;
   int unseen_message_count_following;
@@ -32,6 +33,7 @@
 @property (nonatomic, retain) NSString* launchURL;
 @property (nonatomic, retain) NSString* pushToken;
 @property (nonatomic, retain) NSString* fontSize;
+@property (nonatomic, retain) NSString* dateOfSelection;
 @property (nonatomic, retain) NSDate* lastAutocomplete;
 @property BOOL threading;
 @property BOOL createNewAccount;

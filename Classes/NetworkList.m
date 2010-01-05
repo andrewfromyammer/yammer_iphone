@@ -322,6 +322,7 @@
   YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   yammer.network_name = [network objectForKey:@"name"];
 
+  yammer.dateOfSelection = [[NSDate date] description];
   TTNavigator* navigator = [TTNavigator navigator];
   [navigator openURL:@"yammer://tabs" animated:YES];
   self.alreadySelected = NO;
