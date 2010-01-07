@@ -24,7 +24,7 @@ static NSString *PASSFILE      = @"/account/pass.txt";
 static NSString *FEEDFILE_OLD  = @"/account/feed.txt";
 static NSString *FEEDFILE      = @"/account/feed2.txt";
 static NSString *CURRENTFILE   = @"/account/current.txt";
-static NSString *BASE_URL      = @"/account/base_url.txt";
+static NSString *BASE_URL      = @"/base_url.txt";
 
 @implementation LocalStorage
 

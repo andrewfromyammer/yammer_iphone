@@ -35,6 +35,13 @@
   self.navigationItem.rightBarButtonItem = compose;    
 }
 
+- (void)addRefresh {
+  UIBarButtonItem *refresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                           target:self
+                                                                           action:@selector(refreshDirectoryTab)];
+  self.navigationItem.rightBarButtonItem = refresh;
+}
+
 - (void)addLogout {
   UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
   self.navigationItem.rightBarButtonItem = logout;    
@@ -70,6 +77,11 @@
   [self presentModalViewController:[ComposeMessage getNav:meta] animated:YES];
 }
 
+- (void)refreshDirectoryTab {
+  TTNavigator* navigator = [TTNavigator navigator];
+  DirectoryList* list = (DirectoryList*)[navigator visibleViewController];
+  [list refreshDirectory];
+}
 
 + (UIColor *)yammerGray {
   return [UIColor colorWithRed:0.27 green:0.34 blue:0.39 alpha:1.0];

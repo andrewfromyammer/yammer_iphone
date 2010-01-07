@@ -844,7 +844,7 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "10DA6E2E-2B0C-4EDD-8BC0-265584AAA3F4";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "10DA6E2E-2B0C-4EDD-8BC0-265584AAA3F4";
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos3.0;
 			};
 			name = Store;
 		};
@@ -862,7 +862,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				PRODUCT_NAME = Yammer;
 				PROVISIONING_PROFILE = "10DA6E2E-2B0C-4EDD-8BC0-265584AAA3F4";
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos3.0;
 			};
 			name = Store;
 		};

@@ -8,5 +8,6 @@
 + (UIColor *)yammerGray;
 - (void)addCompose;
 - (void)addLogout;
+- (void)addRefresh;
 
 @end
