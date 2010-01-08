@@ -3,7 +3,6 @@
 #import "MainTabBar.h"
 #import "NSString+SBJSON.h"
 #import "ComposeMessage.h"
-#import "Message.h"
 #import "FeedMessageList.h"
 #import "TTTableYammerItem.h"
 #import "SpinnerWithTextCell.h"

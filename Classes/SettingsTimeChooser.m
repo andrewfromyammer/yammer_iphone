@@ -68,9 +68,8 @@
 - (void)showPicker:(UIView *)picker {
 }
 
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-  UINavigationController* nav = (UINavigationController*)[self parentViewController];
-  SettingsPush* sp = (SettingsPush*)[[nav viewControllers] objectAtIndex:1];
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {  
+  SettingsPush* sp = (SettingsPush*)[[self.navigationController viewControllers] objectAtIndex:2];
   [sp updateTime:[pickerView selectedRowInComponent:0] ampm:[pickerView selectedRowInComponent:1] key:self.key];
 }
 

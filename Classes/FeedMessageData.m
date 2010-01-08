@@ -1,7 +1,7 @@
 #import "FeedMessageData.h"
 #import "TTTableYammerItemCell.h"
 #import "TTTableYammerItem.h"
-#import "Message.h"
+#import "YammerMessage.h"
 #import "YammerAppDelegate.h"
 #import "FeedCache.h"
 #import "LocalStorage.h"
@@ -81,7 +81,7 @@
   
   int i=0;
   for (; i<[fetcher.fetchedObjects count]; i++) {
-    Message* m = [fetcher.fetchedObjects objectAtIndex:i];
+    YammerMessage* m = [fetcher.fetchedObjects objectAtIndex:i];
     NSMutableDictionary* safeMessage = [m safeMessage];
     
     long compareId = [m.message_id longValue];

@@ -1,7 +1,6 @@
 #import "FeedMessageList.h"
 #import "FeedMessageData.h"
 #import "MainTabBar.h"
-#import "Message.h"
 #import "LocalStorage.h"
 #import "APIGateway.h"
 #import "MessageDetail.h"

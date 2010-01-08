@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0004D3CA10449C6A005F49DF /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 0004D3C910449C6A005F49DF /* Message.m */; };
+		0004D3CA10449C6A005F49DF /* YammerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0004D3C910449C6A005F49DF /* YammerMessage.m */; };
 		0004D3EF10449CB3005F49DF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0004D3EE10449CB3005F49DF /* CoreData.framework */; };
 		0004D45310449F9A005F49DF /* Yammer.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0004D45210449F9A005F49DF /* Yammer.xcdatamodel */; };
 		0014B3E7104624FC003A7761 /* TTTableYammerViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014B3E6104624FC003A7761 /* TTTableYammerViewDelegate.m */; };
+		002A9CF410F6630300BFD48C /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A9CF310F6630300BFD48C /* MessageUI.framework */; };
+		002A9CF910F6664B00BFD48C /* SendMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 002A9CF810F6664B00BFD48C /* SendMail.m */; };
 		0032F0E71062AC4D00929C5E /* photos15x14.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032F0E51062AC4D00929C5E /* photos15x14.png */; };
 		003B44BE10457ED800310B73 /* MessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 003B44BD10457ED800310B73 /* MessageView.m */; };
 		003B4504104582C600310B73 /* APIGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = 003B44FF104582C600310B73 /* APIGateway.m */; };
@@ -137,12 +139,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0004D3C810449C6A005F49DF /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		0004D3C910449C6A005F49DF /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		0004D3C810449C6A005F49DF /* YammerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YammerMessage.h; sourceTree = "<group>"; };
+		0004D3C910449C6A005F49DF /* YammerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YammerMessage.m; sourceTree = "<group>"; };
 		0004D3EE10449CB3005F49DF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		0004D45210449F9A005F49DF /* Yammer.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Yammer.xcdatamodel; sourceTree = "<group>"; };
 		0014B3E5104624FC003A7761 /* TTTableYammerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTableYammerViewDelegate.h; sourceTree = "<group>"; };
 		0014B3E6104624FC003A7761 /* TTTableYammerViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTableYammerViewDelegate.m; sourceTree = "<group>"; };
+		002A9CF310F6630300BFD48C /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		002A9CF710F6664B00BFD48C /* SendMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMail.h; sourceTree = "<group>"; };
+		002A9CF810F6664B00BFD48C /* SendMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMail.m; sourceTree = "<group>"; };
 		0032F0E51062AC4D00929C5E /* photos15x14.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = photos15x14.png; path = Images/photos15x14.png; sourceTree = "<group>"; };
 		003B44BC10457ED800310B73 /* MessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageView.h; sourceTree = "<group>"; };
 		003B44BD10457ED800310B73 /* MessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageView.m; sourceTree = "<group>"; };
@@ -319,6 +324,7 @@
 				00901E1710445C8A008E7C7D /* QuartzCore.framework in Frameworks */,
 				00901E2010445E82008E7C7D /* libThree20.a in Frameworks */,
 				0004D3EF10449CB3005F49DF /* CoreData.framework in Frameworks */,
+				002A9CF410F6630300BFD48C /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,8 +336,8 @@
 			children = (
 				0095A60C1045A6AB000C3083 /* FeedMetaData.h */,
 				0095A60D1045A6AB000C3083 /* FeedMetaData.m */,
-				0004D3C810449C6A005F49DF /* Message.h */,
-				0004D3C910449C6A005F49DF /* Message.m */,
+				0004D3C810449C6A005F49DF /* YammerMessage.h */,
+				0004D3C910449C6A005F49DF /* YammerMessage.m */,
 				003B8A5C10505D6A002BA526 /* FeedDictionary.h */,
 				003B8A5D10505D6A002BA526 /* FeedDictionary.m */,
 			);
@@ -354,6 +360,8 @@
 		003B44F81045822300310B73 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				002A9CF710F6664B00BFD48C /* SendMail.h */,
+				002A9CF810F6664B00BFD48C /* SendMail.m */,
 				00DBFC72104B1F09005DB685 /* ImageCache.h */,
 				00DBFC73104B1F09005DB685 /* ImageCache.m */,
 				0095A6091045A681000C3083 /* FeedCache.h */,
@@ -629,6 +637,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				002A9CF310F6630300BFD48C /* MessageUI.framework */,
 				0004D3EE10449CB3005F49DF /* CoreData.framework */,
 				00901E1610445C8A008E7C7D /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
@@ -755,7 +764,7 @@
 				00901EB910447A3F008E7C7D /* TTTableYammerItem.m in Sources */,
 				00901EBD10447C43008E7C7D /* TTTableYammerItemCell.m in Sources */,
 				00901EE4104481F8008E7C7D /* FeedMessageData.m in Sources */,
-				0004D3CA10449C6A005F49DF /* Message.m in Sources */,
+				0004D3CA10449C6A005F49DF /* YammerMessage.m in Sources */,
 				0004D45310449F9A005F49DF /* Yammer.xcdatamodel in Sources */,
 				006ACA6010456A220078A4BB /* MainTabBar.m in Sources */,
 				003B44BE10457ED800310B73 /* MessageView.m in Sources */,
@@ -811,6 +820,7 @@
 				00C6CC3B10AE2C2E00C96249 /* SettingsFontSize.m in Sources */,
 				00855FFA10B4B04B00E6AA8A /* NetworkList.m in Sources */,
 				00EB608D10D961AD00318936 /* TypeAheadDemo.m in Sources */,
+				002A9CF910F6664B00BFD48C /* SendMail.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

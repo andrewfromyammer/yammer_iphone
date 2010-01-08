@@ -97,15 +97,15 @@
     [_controller.navigationController pushViewController:switchNetwork animated:YES];
     [switchNetwork release];    
   } else if ([item.text isEqualToString:@"Push Settings"]) {
-    SettingsPush *localSettingPush = [[SettingsPush alloc] init];
-    [_controller.navigationController pushViewController:localSettingPush animated:YES];
-    [localSettingPush release];
+    [[TTNavigator navigator] openURL:@"yammer://push" animated:YES];
   } else if ([item.text isEqualToString:@"Font Size"]) {
     SettingsFontSize *fontSize = [[SettingsFontSize alloc] initWithControllerReference:(Settings*)_controller];
     [_controller.navigationController pushViewController:fontSize animated:YES];
     [fontSize release];
   } else if ([item.text isEqualToString:@"Type Ahead Demo"]) {
     [[TTNavigator navigator] openURL:@"yammer://type" animated:YES];
+  } else if ([item.text isEqualToString:@"Send Feedback"]) {
+    [(Settings*)_controller email];
   } else if ([item.text isEqualToString:@"Advanced Settings"]) {
     SettingsAdvancedOptions *localSettingsAdvancedOptions = [[SettingsAdvancedOptions alloc] init];
     [_controller.navigationController pushViewController:localSettingsAdvancedOptions animated:YES];
@@ -141,6 +141,7 @@
   [sections addObject:@"You are logged in as:"];
   [sections addObject:@""];
   [sections addObject:@""];
+  [sections addObject:@""];
 
   NSMutableDictionary *dict = (NSMutableDictionary*)[[LocalStorage getFile:[APIGateway user_file]] JSONValue];
   NSString* email = [self findEmailFromDict:dict];
@@ -159,8 +160,12 @@
   [items addObject:section2];
 
   NSMutableArray* section3 = [NSMutableArray array];
-  [section3 addObject:[TTTableTextItem itemWithText:[NSString stringWithFormat:@"Version: %@", [yammer version]] URL:nil]];
+  [section3 addObject:[TTTableTextItem itemWithText:@"Send Feedback" URL:@"1"]];
   [items addObject:section3];
+
+  NSMutableArray* section4 = [NSMutableArray array];
+  [section4 addObject:[TTTableTextItem itemWithText:[NSString stringWithFormat:@"Version: %@", [yammer version]] URL:nil]];
+  [items addObject:section4];
   
   self.dataSource = [[SettingDataSource alloc] initWithItems:items sections:sections];
 }

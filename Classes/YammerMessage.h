@@ -1,7 +1,7 @@
 #import <CoreData/CoreData.h>
 #import "TTTableYammerItem.h"
 
-@interface Message: NSManagedObject {
+@interface YammerMessage: NSManagedObject {
 }
 
 @property (nonatomic, retain) NSNumber *message_id;

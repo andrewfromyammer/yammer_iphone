@@ -1,6 +1,6 @@
 #import "TTTableYammerItemCell.h"
 #import "TTTableYammerItem.h"
-#import "Message.h"
+#import "YammerMessage.h"
 #import "MessageView.h"
 #import "ColorBackground.h"
 
@@ -44,7 +44,7 @@
     TTTableYammerItem* item = object;
 
     _messageView.fromLine.text = [item.message objectForKey:@"from"];
-    _messageView.timeLine.text = [Message timeString:item];
+    _messageView.timeLine.text = [YammerMessage timeString:item];
     _messageView.mugshot.URL   = [item.message objectForKey:@"actor_mugshot_url"];
     
     if (item.isDetail == YES) {

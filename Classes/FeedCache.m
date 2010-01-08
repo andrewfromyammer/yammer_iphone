@@ -3,7 +3,7 @@
 #import "OAuthGateway.h"
 #import "NSObject+SBJSON.h"
 #import "NSString+SBJSON.h"
-#import "Message.h"
+#import "YammerMessage.h"
 #import "FeedMetaData.h"
 #import "YammerAppDelegate.h"
 
@@ -134,7 +134,7 @@
   
   NSMutableDictionary *id_lookup = [NSMutableDictionary dictionary];
   for (i=0; i<[fetcher.fetchedObjects count]; i++) {
-    Message *m = [fetcher.fetchedObjects objectAtIndex:i];
+    YammerMessage *m = [fetcher.fetchedObjects objectAtIndex:i];
     NSMutableDictionary *dict = [counts objectForKey:[m.message_id description]];
     m.latest_reply_id = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_latest_reply_id"] longValue]];
     m.thread_updates = [[NSNumber alloc] initWithLong:[[dict objectForKey:@"thread_updates"] intValue]];
@@ -285,7 +285,7 @@
     if ([lookup objectForKey:[[dict objectForKey:@"id"] description]])
       continue;
     
-  	Message *m = (Message *)[NSEntityDescription insertNewObjectForEntityForName:@"Message" 
+  	YammerMessage *m = (YammerMessage *)[NSEntityDescription insertNewObjectForEntityForName:@"Message" 
                                                  inManagedObjectContext:context];
     m.from = [dict objectForKey:@"fromLine"];
     
@@ -353,7 +353,7 @@
     NSLog(@"error %@", [error description]);
   }
   
-  Message* m = [fetcher.fetchedObjects objectAtIndex:0];
+  YammerMessage* m = [fetcher.fetchedObjects objectAtIndex:0];
   m.likes = (NSNumber*)[safe_message objectForKey:@"likes"];
   m.liked_by_me = (NSNumber*)[safe_message objectForKey:@"liked_by_me"];
   

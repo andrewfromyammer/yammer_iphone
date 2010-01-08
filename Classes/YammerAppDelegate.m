@@ -15,6 +15,7 @@
 #import "SettingsTimeChooser.h"
 #import "NetworkList.h"
 #import "TypeAheadDemo.h"
+#import "SettingsPush.h"
 
 @implementation YammerAppDelegate
 
@@ -125,6 +126,7 @@
   [map from:@"*" toViewController:[TTWebController class]];
   [map from:@"yammer://user" toViewController:[UserProfile class]];
   [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
+  [map from:@"yammer://push" toViewController:[SettingsPush class]];
   [map from:@"yammer://networks" toViewController:[NetworkList class]];
   [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
   [map from:@"yammer://type" toViewController:[TypeAheadDemo class]];

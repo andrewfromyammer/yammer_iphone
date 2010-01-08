@@ -1,7 +1,7 @@
-#import "Message.h"
+#import "YammerMessage.h"
 #import "NSDate-Ago.h"
 
-@implementation Message 
+@implementation YammerMessage 
 
 @dynamic message_id;
 @dynamic latest_reply_id;
