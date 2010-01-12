@@ -28,7 +28,7 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   NSData* data;
   @synchronized ([UIApplication sharedApplication]) {
-    data = [ImageCache getOrLoadImage:attachment key:@"url" path:ATTACHMENTS];
+    data = [ImageCache getOrLoadImage:attachment atype:@"image" key:@"url" path:ATTACHMENTS];
   }
   if (data) {
     UIImage* image = [UIImage imageWithData:data];

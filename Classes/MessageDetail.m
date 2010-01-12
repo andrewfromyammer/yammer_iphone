@@ -11,6 +11,7 @@
 #import "LocalStorage.h"
 #import "APIGateway.h"
 #import "FeedCache.h"
+#import "FullSizePdf.h"
 
 @interface MessageDetailStyleSheet : TTDefaultStyleSheet
 @end
@@ -38,8 +39,14 @@
   
   if ([object isKindOfClass:[TTTableImageItem class]]) {
     TTTableImageItem* item = (TTTableImageItem*)object;
-    FullSizePhoto* view = [[[FullSizePhoto alloc] initWithAttachment:item.userInfo] autorelease];
-    [_controller.navigationController pushViewController:view animated:YES];
+    
+    if ([item.URL isEqualToString:@"image"]) {
+      FullSizePhoto* view = [[[FullSizePhoto alloc] initWithAttachment:item.userInfo] autorelease];
+      [_controller.navigationController pushViewController:view animated:YES];
+    } else if ([item.URL isEqualToString:@"pdf"]) {
+      FullSizePdf* view = [[[FullSizePdf alloc] initWithAttachment:item.userInfo] autorelease];
+      [_controller.navigationController pushViewController:view animated:YES];
+    }
   } else if ([object isKindOfClass:[TTTableTextItem class]]) {
     TTTableTextItem* item = (TTTableTextItem*)object;
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:item.URL]];  
@@ -119,15 +126,19 @@
 
   for (i=0; i<[attachments count]; i++) {
     NSMutableDictionary *attachment = [attachments objectAtIndex:i];
-    
+  
     if ([[attachment objectForKey:@"type"] isEqualToString:@"image"]) {
-      TTTableImageItem* image = [TTTableImageItem itemWithText:[attachment objectForKey:@"name"] imageURL:@"bundle://thumbnail_loading.png" URL:@"1"];
+      TTTableImageItem* image = [TTTableImageItem itemWithText:[attachment objectForKey:@"name"] imageURL:@"bundle://thumbnail_loading.png" URL:@"image"];
       image.userInfo = attachment;
       [NSThread detachNewThreadSelector:@selector(loadImage:) toTarget:self withObject:attachment];  
 
       [list.items addObject:image];
+    } else if ([[attachment objectForKey:@"name"] hasSuffix:@".pdf"]) {
+      TTTableImageItem* image = [TTTableImageItem itemWithText:[attachment objectForKey:@"name"] imageURL:@"bundle://pdf.png" URL:@"pdf"];
+      image.userInfo = attachment;
+      [list.items addObject:image];
     } else {
-      
+      NSLog([attachment description]);
       TTTableTextItem* file = [TTTableTextItem itemWithText:[attachment objectForKey:@"name"] URL:[attachment objectForKey:@"web_url"]];
       [list.items addObject:file];
     }
@@ -165,7 +176,7 @@
   NSData* data;
   @synchronized ([UIApplication sharedApplication]) {
     sleep(1);
-    data = [ImageCache getOrLoadImage:attachment key:@"thumbnail_url" path:ATTACHMENT_THUMBNAILS];
+    data = [ImageCache getOrLoadImage:attachment atype:@"image" key:@"thumbnail_url" path:ATTACHMENT_THUMBNAILS];
   }
   if (data) {
     UIImage* image = [UIImage imageWithData:data];

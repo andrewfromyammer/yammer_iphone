@@ -4,14 +4,18 @@
 
 @implementation ImageCache
 
-+ (NSData*)getOrLoadImage:(NSDictionary*)attachment key:(NSString*)key path:(NSString*)path {
-  NSString* filename = [NSString stringWithFormat:@"%@%@/%@", [LocalStorage localPath], path, [attachment objectForKey:@"id"]];
-  
++ (NSString*)getOrLoadImagePath:(NSDictionary*)attachment path:(NSString*)path {
+  return [NSString stringWithFormat:@"%@%@/%@", [LocalStorage localPath], path, [attachment objectForKey:@"id"]];
+}
+
++ (NSData*)getOrLoadImage:(NSDictionary*)attachment atype:(NSString*)atype key:(NSString*)key path:(NSString*)path {
+  NSString* filename = [ImageCache getOrLoadImagePath:attachment path:path];
+
   if ([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
     return [[NSFileManager defaultManager] contentsAtPath:filename];    
   }
   
-  NSData* data = [OAuthGateway httpDataGet:[[attachment objectForKey:@"image"] objectForKey:key]];
+  NSData* data = [OAuthGateway httpDataGet:[[attachment objectForKey:atype] objectForKey:key]];
   
   if (data == nil)
     return nil;

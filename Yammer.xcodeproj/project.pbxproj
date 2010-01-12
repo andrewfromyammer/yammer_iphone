@@ -11,6 +11,8 @@
 		0004D3EF10449CB3005F49DF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0004D3EE10449CB3005F49DF /* CoreData.framework */; };
 		0004D45310449F9A005F49DF /* Yammer.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0004D45210449F9A005F49DF /* Yammer.xcdatamodel */; };
 		0014B3E7104624FC003A7761 /* TTTableYammerViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014B3E6104624FC003A7761 /* TTTableYammerViewDelegate.m */; };
+		00236A4310FCF445008B007E /* pdf.png in Resources */ = {isa = PBXBuildFile; fileRef = 00236A4210FCF445008B007E /* pdf.png */; };
+		00236A5710FCF889008B007E /* FullSizePdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 00236A5610FCF889008B007E /* FullSizePdf.m */; };
 		002A9CF410F6630300BFD48C /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A9CF310F6630300BFD48C /* MessageUI.framework */; };
 		002A9CF910F6664B00BFD48C /* SendMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 002A9CF810F6664B00BFD48C /* SendMail.m */; };
 		0032F0E71062AC4D00929C5E /* photos15x14.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032F0E51062AC4D00929C5E /* photos15x14.png */; };
@@ -145,6 +147,9 @@
 		0004D45210449F9A005F49DF /* Yammer.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Yammer.xcdatamodel; sourceTree = "<group>"; };
 		0014B3E5104624FC003A7761 /* TTTableYammerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTableYammerViewDelegate.h; sourceTree = "<group>"; };
 		0014B3E6104624FC003A7761 /* TTTableYammerViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTableYammerViewDelegate.m; sourceTree = "<group>"; };
+		00236A4210FCF445008B007E /* pdf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pdf.png; path = Images/pdf.png; sourceTree = "<group>"; };
+		00236A5510FCF889008B007E /* FullSizePdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullSizePdf.h; sourceTree = "<group>"; };
+		00236A5610FCF889008B007E /* FullSizePdf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullSizePdf.m; sourceTree = "<group>"; };
 		002A9CF310F6630300BFD48C /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		002A9CF710F6664B00BFD48C /* SendMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMail.h; sourceTree = "<group>"; };
 		002A9CF810F6664B00BFD48C /* SendMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMail.m; sourceTree = "<group>"; };
@@ -353,6 +358,8 @@
 				007039FC104AE26100561215 /* FullSizePhoto.m */,
 				00EB608B10D961AD00318936 /* TypeAheadDemo.h */,
 				00EB608C10D961AD00318936 /* TypeAheadDemo.m */,
+				00236A5510FCF889008B007E /* FullSizePdf.h */,
+				00236A5610FCF889008B007E /* FullSizePdf.m */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -360,10 +367,10 @@
 		003B44F81045822300310B73 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				00DBFC73104B1F09005DB685 /* ImageCache.m */,
 				002A9CF710F6664B00BFD48C /* SendMail.h */,
 				002A9CF810F6664B00BFD48C /* SendMail.m */,
 				00DBFC72104B1F09005DB685 /* ImageCache.h */,
+				00DBFC73104B1F09005DB685 /* ImageCache.m */,
 				0095A6091045A681000C3083 /* FeedCache.h */,
 				0095A60A1045A681000C3083 /* FeedCache.m */,
 				003B44FE104582C600310B73 /* APIGateway.h */,
@@ -447,6 +454,7 @@
 		006ACB9F10457B840078A4BB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00236A4210FCF445008B007E /* pdf.png */,
 				00F2B84610B75C640035B139 /* refresh.png */,
 				00CD58ED10B71FA300CEAD87 /* no_text_splash.png */,
 				00C6CC3010AE17FF00C96249 /* font.png */,
@@ -748,6 +756,7 @@
 				00C6CC3110AE17FF00C96249 /* font.png in Resources */,
 				00CD58EE10B71FA300CEAD87 /* no_text_splash.png in Resources */,
 				00F2B84710B75C640035B139 /* refresh.png in Resources */,
+				00236A4310FCF445008B007E /* pdf.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,6 +830,7 @@
 				00855FFA10B4B04B00E6AA8A /* NetworkList.m in Sources */,
 				00EB608D10D961AD00318936 /* TypeAheadDemo.m in Sources */,
 				002A9CF910F6664B00BFD48C /* SendMail.m in Sources */,
+				00236A5710FCF889008B007E /* FullSizePdf.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
