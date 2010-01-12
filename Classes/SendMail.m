@@ -16,8 +16,7 @@
 }
 
 - (NSString*)emailText {
-  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-  return [NSString stringWithFormat:@"Hi, I'm using the Yammer App version %@ and wanted to tell you that...\n\n", [yammer version]];
+  return @"";
 }
 
 - (void)displayComposerSheet  {
@@ -27,12 +26,28 @@
 	picker.mailComposeDelegate = self;
 	
   [picker setToRecipients:[NSArray arrayWithObject:@"iphone@yammer-inc.com"]];
-	[picker setSubject:[NSString stringWithFormat:@"Yammer: Feedback on version %@", [yammer version]]];
+	[picker setSubject:[NSString stringWithFormat:@"Version %@", [yammer version]]];
   
 	[picker setMessageBody:[self emailText] isHTML:NO];
 	
 	[self presentModalViewController:picker animated:YES];
+  [picker becomeFirstResponder];
+
   [picker release];
+  
+}
+
+- (void) logSubviewsOfUIView:(UIView*)view depth:(NSInteger)depth {
+  for (UIView *item in view.subviews) {
+    NSString *tabs = @"";
+    for (int i=0;i<depth;i++) {
+      tabs = [tabs stringByAppendingString:@"\t"];
+    }
+    NSLog(@"%@%@ canBecomeFirstResponder %i", tabs, [item class], ([item respondsToSelector:@selector(canBecomeFirstResponder)] ? YES : NO));
+    if ([item.subviews count] > 0) {
+      [self logSubviewsOfUIView:item depth:depth+1];
+    }
+  }
 }
 
 - (void)launchMailAppOnDevice {

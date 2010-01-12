@@ -18,7 +18,7 @@
 @implementation MessageDetailStyleSheet
 
 - (TTStyle*)large {
-  return [TTTextStyle styleWithFont:[UIFont systemFontOfSize:18] next:nil];
+  return [TTTextStyle styleWithFont:[UIFont systemFontOfSize:24] next:nil];
 }
 
 @end
