@@ -26,7 +26,7 @@
 	picker.mailComposeDelegate = self;
 	
   [picker setToRecipients:[NSArray arrayWithObject:@"iphone@yammer-inc.com"]];
-	[picker setSubject:[NSString stringWithFormat:@"Version %@", [yammer version]]];
+	[picker setSubject:[NSString stringWithFormat:@"Feedback on Yammer v%@", [yammer version]]];
   
 	[picker setMessageBody:[self emailText] isHTML:NO];
 	
@@ -35,19 +35,6 @@
 
   [picker release];
   
-}
-
-- (void) logSubviewsOfUIView:(UIView*)view depth:(NSInteger)depth {
-  for (UIView *item in view.subviews) {
-    NSString *tabs = @"";
-    for (int i=0;i<depth;i++) {
-      tabs = [tabs stringByAppendingString:@"\t"];
-    }
-    NSLog(@"%@%@ canBecomeFirstResponder %i", tabs, [item class], ([item respondsToSelector:@selector(canBecomeFirstResponder)] ? YES : NO));
-    if ([item.subviews count] > 0) {
-      [self logSubviewsOfUIView:item depth:depth+1];
-    }
-  }
 }
 
 - (void)launchMailAppOnDevice {

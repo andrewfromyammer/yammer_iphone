@@ -101,11 +101,11 @@
   
   NSMutableArray *localViewControllersArray = [[NSMutableArray alloc] initWithCapacity:5];
   
-  FeedMessageList *theView = [[[FeedMessageList alloc] initWithFeed:[LocalStorage getFeedInfo] refresh:YES compose:YES thread:NO] autorelease];
+  FeedMessageList *theView = [[[FeedMessageList alloc] initWithFeed:[LocalStorage getFeedInfo] refresh:YES compose:NO thread:NO] autorelease];
   [self setupView:theView title:@"My Feed" image:@"home.png"];
   [localViewControllersArray addObject:theView];
   
-  FeedMessageList *received = [[[FeedMessageList alloc] initWithFeed:[LocalStorage getReceivedInfo] refresh:YES compose:YES thread:NO] autorelease];
+  FeedMessageList *received = [[[FeedMessageList alloc] initWithFeed:[LocalStorage getReceivedInfo] refresh:YES compose:NO thread:NO] autorelease];
   [self setupView:received title:@"Received" image:@"received.png"];
   [localViewControllersArray addObject:received];
   

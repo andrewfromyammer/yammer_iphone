@@ -279,14 +279,14 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>37</integer>
-									<integer>29</integer>
+									<integer>54</integer>
+									<integer>42</integer>
 									<integer>4</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 301}, {264, 992}}</string>
+							<string>{{0, 229}, {264, 992}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -323,7 +323,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>FullSizePdf.m</string>
+								<string>MainTabBar.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -331,76 +331,37 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>FullSizePdf.m</string>
+										<string>MainTabBar.m</string>
 										<key>_historyCapacity</key>
 										<integer>10</integer>
 										<key>bookmark</key>
-										<string>00236AC310FD02C3008B007E</string>
+										<string>00971AA110FD2FB400131D22</string>
 										<key>history</key>
 										<array>
-											<string>00236A5D10FCFAB3008B007E</string>
-											<string>00236A7310FCFDA8008B007E</string>
-											<string>00236A7E10FCFE45008B007E</string>
-											<string>00236A8B10FCFF22008B007E</string>
-											<string>00236A8D10FCFF22008B007E</string>
-											<string>00236A9B10FD008B008B007E</string>
-											<string>00236A9C10FD008B008B007E</string>
 											<string>00236A9D10FD008B008B007E</string>
 											<string>00236AB610FD01BA008B007E</string>
-											<string>00236AB710FD01BA008B007E</string>
+											<string>00F4BCA210FD2D2100F84A4E</string>
+											<string>00F4BCA310FD2D2100F84A4E</string>
+											<string>00F4BCA410FD2D2100F84A4E</string>
+											<string>00971A8810FD2DF900131D22</string>
+											<string>00971A9610FD2EEF00131D22</string>
+											<string>00971A9710FD2EEF00131D22</string>
+											<string>00971A9810FD2EEF00131D22</string>
+											<string>00971A9910FD2EEF00131D22</string>
 										</array>
 										<key>prevStack</key>
 										<array>
-											<string>006421F510FBD6C7007D8E58</string>
-											<string>00236A2910FCF1BE008B007E</string>
-											<string>00236A2A10FCF1BE008B007E</string>
-											<string>00236A2C10FCF1BE008B007E</string>
-											<string>00236A3E10FCF370008B007E</string>
-											<string>00236A4810FCF452008B007E</string>
-											<string>00236A6110FCFAB3008B007E</string>
-											<string>00236A6210FCFAB3008B007E</string>
 											<string>00236A6310FCFAB3008B007E</string>
-											<string>00236A6410FCFAB3008B007E</string>
 											<string>00236A6710FCFAB3008B007E</string>
-											<string>00236A6910FCFAB3008B007E</string>
-											<string>00236A6A10FCFAB3008B007E</string>
-											<string>00236A6B10FCFAB3008B007E</string>
 											<string>00236A6C10FCFAB3008B007E</string>
-											<string>00236A6D10FCFAB3008B007E</string>
-											<string>00236A6E10FCFAB3008B007E</string>
-											<string>00236A7610FCFDA8008B007E</string>
-											<string>00236A7710FCFDA8008B007E</string>
-											<string>00236A7810FCFDA8008B007E</string>
-											<string>00236A7910FCFDA8008B007E</string>
-											<string>00236A7A10FCFDA8008B007E</string>
-											<string>00236A8010FCFE45008B007E</string>
-											<string>00236A8110FCFE45008B007E</string>
 											<string>00236A8210FCFE45008B007E</string>
-											<string>00236A8310FCFE45008B007E</string>
-											<string>00236A8810FCFE5B008B007E</string>
-											<string>00236A8910FCFE5B008B007E</string>
-											<string>00236A8F10FCFF22008B007E</string>
 											<string>00236A9010FCFF22008B007E</string>
-											<string>00236A9110FCFF22008B007E</string>
-											<string>00236A9210FCFF22008B007E</string>
-											<string>00236A9310FCFF22008B007E</string>
-											<string>00236A9410FCFF22008B007E</string>
-											<string>00236A9510FCFF22008B007E</string>
-											<string>00236A9610FCFF22008B007E</string>
-											<string>00236A9710FCFF22008B007E</string>
-											<string>00236A9810FCFF22008B007E</string>
-											<string>00236A9F10FD008B008B007E</string>
-											<string>00236AA010FD008B008B007E</string>
-											<string>00236AA110FD008B008B007E</string>
-											<string>00236AA210FD008B008B007E</string>
-											<string>00236AA310FD008B008B007E</string>
-											<string>00236AA410FD008B008B007E</string>
-											<string>00236AA510FD008B008B007E</string>
-											<string>00236AA610FD008B008B007E</string>
-											<string>00236AA710FD008B008B007E</string>
-											<string>00236AA810FD008B008B007E</string>
-											<string>00236AB810FD01BA008B007E</string>
 											<string>00236AB910FD01BA008B007E</string>
+											<string>00F4BCA610FD2D2100F84A4E</string>
+											<string>00971A8A10FD2DF900131D22</string>
+											<string>00971A9A10FD2EEF00131D22</string>
+											<string>00971A9B10FD2EEF00131D22</string>
+											<string>00971A9C10FD2EEF00131D22</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -458,9 +419,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>00236A2F10FCF1BE008B007E</string>
+				<string>00971A8C10FD2DF900131D22</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>00236A3010FCF1BE008B007E</string>
+				<string>00971A8D10FD2DF900131D22</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -594,11 +555,9 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>00236AAF10FD00F2008B007E</string>
-		<string>00236AB010FD00F2008B007E</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>00901E4B10445F0F008E7C7D</string>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/aa/ginc/yammer_iphone/Yammer.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -679,7 +638,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>00901E4B10445F0F008E7C7D</string>
-				<string>00236A3110FCF1BE008B007E</string>
+				<string>00971A9E10FD2EEF00131D22</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -799,13 +758,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>00236A3210FCF1BE008B007E</string>
+				<string>00971A8E10FD2DF900131D22</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>00236A3310FCF1BE008B007E</string>
-				<string>00236A3410FCF1BE008B007E</string>
-				<string>00236A3510FCF1BE008B007E</string>
-				<string>00236A3610FCF1BE008B007E</string>
-				<string>00236A3710FCF1BE008B007E</string>
+				<string>00971A8F10FD2DF900131D22</string>
+				<string>00971A9010FD2DF900131D22</string>
+				<string>00971A9110FD2DF900131D22</string>
+				<string>00971A9210FD2DF900131D22</string>
+				<string>00971A9310FD2DF900131D22</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -932,8 +891,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -969,7 +926,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>00236A3810FCF1BE008B007E</string>
+				<string>00971A9F10FD2EEF00131D22</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
@@ -979,7 +936,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Identifier</key>

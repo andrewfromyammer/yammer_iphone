@@ -25,6 +25,13 @@
     self.feed = theFeed;
     self.title = (NSString*)[theFeed objectForKey:@"name"];
     self.isThread = thread;
+
+    if (compose) {
+      UIBarButtonItem *compose = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                      target:self
+                                                      action:@selector(compose)];
+      self.navigationItem.rightBarButtonItem = compose;
+    }
     
     self.navigationBarTintColor = [MainTabBar yammerGray];
 
