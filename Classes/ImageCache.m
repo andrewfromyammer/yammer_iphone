@@ -5,7 +5,12 @@
 @implementation ImageCache
 
 + (NSString*)getOrLoadImagePath:(NSDictionary*)attachment path:(NSString*)path {
-  return [NSString stringWithFormat:@"%@%@/%@", [LocalStorage localPath], path, [attachment objectForKey:@"id"]];
+  NSString* suffix = @"bin";
+  NSArray* tokens = [[attachment objectForKey:@"name"] componentsSeparatedByString: @"."];
+  if ([tokens count] > 1)
+    suffix = [tokens lastObject];  
+  
+  return [NSString stringWithFormat:@"%@%@/%@.%@", [LocalStorage localPath], path, [attachment objectForKey:@"id"], suffix];
 }
 
 + (NSData*)getOrLoadImage:(NSDictionary*)attachment atype:(NSString*)atype key:(NSString*)key path:(NSString*)path {
