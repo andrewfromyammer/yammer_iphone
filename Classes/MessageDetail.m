@@ -11,7 +11,7 @@
 #import "LocalStorage.h"
 #import "APIGateway.h"
 #import "FeedCache.h"
-#import "FullSizePdf.h"
+#import "FullSizeDoc.h"
 
 @interface MessageDetailStyleSheet : TTDefaultStyleSheet
 @end
@@ -44,12 +44,13 @@
       FullSizePhoto* view = [[[FullSizePhoto alloc] initWithAttachment:item.userInfo] autorelease];
       [_controller.navigationController pushViewController:view animated:YES];
     } else if ([item.URL isEqualToString:@"pdf"]) {
-      FullSizePdf* view = [[[FullSizePdf alloc] initWithAttachment:item.userInfo] autorelease];
+      FullSizeDoc* view = [[[FullSizeDoc alloc] initWithAttachment:item.userInfo] autorelease];
       [_controller.navigationController pushViewController:view animated:YES];
     }
   } else if ([object isKindOfClass:[TTTableTextItem class]]) {
     TTTableTextItem* item = (TTTableTextItem*)object;
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:item.URL]];  
+    FullSizeDoc* view = [[[FullSizeDoc alloc] initWithAttachment:item.userInfo] autorelease];
+    [_controller.navigationController pushViewController:view animated:YES];
   }   
 }
 
@@ -138,8 +139,8 @@
       image.userInfo = attachment;
       [list.items addObject:image];
     } else {
-      NSLog([attachment description]);
-      TTTableTextItem* file = [TTTableTextItem itemWithText:[attachment objectForKey:@"name"] URL:[attachment objectForKey:@"web_url"]];
+      TTTableTextItem* file = [TTTableTextItem itemWithText:[attachment objectForKey:@"name"] URL:@"file"];
+      file.userInfo = attachment;
       [list.items addObject:file];
     }
     
