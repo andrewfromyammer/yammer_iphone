@@ -41,6 +41,10 @@
   return YES;
 }
 
+- (void)handleClose {
+  [self dismissModalViewControllerAnimated:YES];
+}
+
 - (void)viewDidLoad {
   //[self.topLabel setText:[meta objectForKey:@"display"]];
   //self.navigationItem.titleView = self.topLabel;
@@ -49,7 +53,7 @@
   UIBarButtonItem *draft=[[UIBarButtonItem alloc] init];
   draft.title=@"Close";
   draft.target = self;
-  draft.action = @selector(dismissModalViewControllerAnimated:);
+  draft.action = @selector(handleClose);
   
   UIBarButtonItem *send=[[UIBarButtonItem alloc] init];
   send.title=@"Send";
@@ -146,7 +150,6 @@
     [self replaceButton:[self trashButton] index:0];
   }
 }
-
 
 - (void)sendMessage {
   self.input.text = [self.input.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

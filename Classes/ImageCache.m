@@ -8,7 +8,7 @@
   NSString* suffix = @"bin";
   NSArray* tokens = [[attachment objectForKey:@"name"] componentsSeparatedByString: @"."];
   if ([tokens count] > 1)
-    suffix = [tokens lastObject];  
+    suffix = [tokens lastObject];
   
   return [NSString stringWithFormat:@"%@%@/%@.%@", [LocalStorage localPath], path, [attachment objectForKey:@"id"], suffix];
 }
