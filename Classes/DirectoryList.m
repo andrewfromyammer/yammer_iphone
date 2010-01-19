@@ -49,9 +49,9 @@
     self.page = 1;
     self.navigationBarTintColor = [MainTabBar yammerGray];
 
-    SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
-    [list.items addObject:[SpinnerWithTextItem item]];
-    self.dataSource = list;
+    //SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
+    //[list.items addObject:[SpinnerWithTextItem item]];
+    //self.dataSource = [[TTListDataSource alloc] init];
       
     [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];  
   }  
@@ -60,9 +60,9 @@
 
 - (void)resetForNetworkSwitch {
   [LocalStorage removeFile:DIRECTORY_CACHE];
-  SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
-  [list.items addObject:[SpinnerWithTextItem item]];
-  self.dataSource = list;
+  //SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
+  //[list.items addObject:[SpinnerWithTextItem item]];
+  self.dataSource = nil;
   
   [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];
 }
@@ -79,10 +79,10 @@
 
 
 - (void)refreshDirectory {
-  SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
-  [list.items addObject:[SpinnerWithTextItem itemWithYammer]];
-  self.dataSource = list;
-
+  //SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
+  //[list.items addObject:[SpinnerWithTextItem itemWithYammer]];
+  self.dataSource = nil;
+  
   [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:nil];  
 }
 
@@ -99,8 +99,10 @@
       list = (NSMutableArray *)[cached JSONValue];
   }
 
-  SpinnerListDataSource* source = [[[SpinnerListDataSource alloc] init] autorelease];
-  [source.items addObject:[SpinnerWithTextItem itemWithText:[FeedCache niceDate:[LocalStorage getFileDate:DIRECTORY_CACHE]]]];
+  TTListDataSource* source = [[TTListDataSource alloc] init];
+
+  //SpinnerListDataSource* source = [[[SpinnerListDataSource alloc] init] autorelease];
+  //[source.items addObject:[SpinnerWithTextItem itemWithText:[FeedCache niceDate:[LocalStorage getFileDate:DIRECTORY_CACHE]]]];
   [self handleUsers:list source:source];
   
   if ([list count] == 50)

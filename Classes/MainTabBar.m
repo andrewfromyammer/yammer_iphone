@@ -50,6 +50,8 @@
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
   if ([tabBarController selectedIndex] == 0) {
     [self addCompose];
+  } else if ([tabBarController selectedIndex] == 3) {
+    [self addRefresh];
   } else if ([tabBarController selectedIndex] == 4) {
     [self addLogout];
   } else {

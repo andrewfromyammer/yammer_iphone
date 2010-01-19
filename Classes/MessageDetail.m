@@ -161,11 +161,17 @@
     [_user setEnabled:YES];
   else
     [_user setEnabled:NO];
+
   if (isThread)
     [_thread setEnabled:NO];
-  else
-    [_thread setEnabled:YES];
-
+  else {
+    if ([[m objectForKey:@"thread_updates"] intValue] > 0)
+      [_thread setEnabled:YES];
+    else
+      [_thread setEnabled:NO];
+  }
+  
+    
   if ([[m objectForKey:@"liked_by_me"] boolValue])
     [self.like setImage:[UIImage imageNamed:@"smile_check.png"]];
   else
