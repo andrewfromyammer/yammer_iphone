@@ -87,6 +87,25 @@
   [autoreleasepool release];
 }
 
+- (void)startTypeAheadThread {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  while (true) {
+    sleep(1);
+    TTNavigator* navigator = [TTNavigator navigator];
+    UINavigationController* controller = [[navigator visibleViewController] navigationController];
+    
+    if ([[controller viewControllers] count] == 2 ) {
+      MainTabBar* mainView = (MainTabBar*)[[controller viewControllers] objectAtIndex:1];
+      if ([mainView selectedIndex] == 3) {
+        DirectoryList* list = (DirectoryList*)[navigator visibleViewController];
+        [list typeAheadThreadUpdate];
+      }
+    }
+    
+  }
+  [autoreleasepool release];
+}
+
 - (void)showEnterCallbackTokenScreen {
   UIWindow* window = [[UIApplication sharedApplication] keyWindow];
   [[[window subviews] objectAtIndex:0] removeFromSuperview];
@@ -132,6 +151,7 @@
   [map from:@"yammer://type" toViewController:[TypeAheadDemo class]];
 
   [navigator openURL:@"yammer://networks" animated:NO];
+  [[[navigator visibleViewController] navigationController] setDelegate:self];
 
   NSString* last_in = (NSString*)[LocalStorage getSetting:@"last_in"];
   if (last_in == nil || [networks count] == 1)
@@ -146,6 +166,12 @@
     self.dateOfSelection = [[NSDate date] description];
     [navigator openURL:@"yammer://tabs" animated:NO];
   }
+  
+  [NSThread detachNewThreadSelector:@selector(startTypeAheadThread) toTarget:self withObject:nil];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+
 }
 
 - (void)postFinishLaunch {

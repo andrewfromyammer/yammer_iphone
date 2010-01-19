@@ -2,7 +2,7 @@
 #import <Three20/Three20.h>
 #import "FeedMessageList.h"
 
-@interface YammerAppDelegate : NSObject <UIApplicationDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
+@interface YammerAppDelegate : NSObject <UIApplicationDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UINavigationControllerDelegate> {
   NSManagedObjectModel* managedObjectModel;
   NSManagedObjectContext* managedObjectContext;	    
   NSPersistentStoreCoordinator* persistentStoreCoordinator;  

@@ -70,11 +70,36 @@
 - (void)loadView {
   [super loadView];
   
-  //TTTableViewController* searchController = [[[TTTableViewController alloc] init] autorelease];
-  //searchController.dataSource = [[[DirectorySearchDataSource alloc] initWithDuration:1.5] autorelease];
-  //self.searchViewController = searchController;
-  //self.tableView.tableHeaderView = _searchController.searchBar;
+  UISearchBar* searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+  searchBar.delegate = self;
+  searchBar.showsCancelButton = YES;
+  self.tableView.tableHeaderView = searchBar;
   
+}
+
+- (void)typeAheadThreadUpdate {
+  NSLog(@"eeee");
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+  self.dataSource = [[TTListDataSource alloc] init];
+  
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+  searchBar.text = @"";
+  [searchBar resignFirstResponder];
+  [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];
+}
+
+- (void)doSearch:(UISearchBar *)searchBar {
+  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+  
+  [autoreleasepool release];
+}
+
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
 }
 
 
