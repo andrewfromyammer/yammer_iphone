@@ -41,6 +41,7 @@
 @implementation DirectoryList
 
 @synthesize page;
+@synthesize lastString = _lastString, currentString = _currentString, searchThread = _searchThread;
 
 - (id)init {
   if (self = [super init]) {
@@ -49,6 +50,10 @@
     self.page = 1;
     self.navigationBarTintColor = [MainTabBar yammerGray];
 
+    _lastString = @"";
+    _currentString = nil;
+    _searchThread = nil;
+    
     //SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
     //[list.items addObject:[SpinnerWithTextItem item]];
     //self.dataSource = [[TTListDataSource alloc] init];
@@ -78,23 +83,49 @@
 }
 
 - (void)typeAheadThreadUpdate {
-  NSLog(@"eeee");
+  NSLog(@"current %@", self.currentString);
+  NSLog(@"last %@", self.lastString);
+  
+  if (self.currentString != nil && ![self.currentString isEqualToString:self.lastString]) {
+    NSLog(@"!!!!!change");
+    if (self.searchThread != nil) {
+      [self.searchThread cancel];
+      TT_RELEASE_SAFELY(_searchThread);
+    }
+    
+    
+    NSString* trimmed = [self.currentString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([trimmed length] > 0) {      
+      self.searchThread = [[NSThread alloc] initWithTarget:self selector:@selector(doSearch) object:trimmed];
+      [self.searchThread start];
+    }
+  }
+  
+  if (self.currentString != nil)
+    self.lastString = [NSString stringWithString:self.currentString];
+  
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-  self.dataSource = [[TTListDataSource alloc] init];
+  if (self.currentString == nil)
+    self.dataSource = [[TTListDataSource alloc] init];
   
+  self.currentString = [NSString stringWithString:searchText];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
   searchBar.text = @"";
   [searchBar resignFirstResponder];
   [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];
+  _lastString = @"";
+  _currentString = nil;
 }
 
-- (void)doSearch:(UISearchBar *)searchBar {
+- (void)doSearch:(NSString*)trimmed {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  
+  NSMutableDictionary* results = [APIGateway autocomplete:trimmed];
+  NSArray* users = [results objectForKey:@"users"];
+  NSLog([users description]);
   [autoreleasepool release];
 }
 
@@ -178,6 +209,9 @@
 
 - (void)dealloc {
   [super dealloc];
+  TT_RELEASE_SAFELY(_lastString);
+  TT_RELEASE_SAFELY(_currentString);
+  TT_RELEASE_SAFELY(_searchThread);
 }
 
 - (void)textField:(TTSearchTextField*)textField didSelectObject:(id)object {
