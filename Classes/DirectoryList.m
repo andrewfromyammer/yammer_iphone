@@ -96,14 +96,20 @@
     
     NSString* trimmed = [self.currentString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([trimmed length] > 0) {      
-      self.searchThread = [[NSThread alloc] initWithTarget:self selector:@selector(doSearch) object:trimmed];
+      self.searchThread = [[NSThread alloc] initWithTarget:self selector:@selector(doSearch:) object:trimmed];
       [self.searchThread start];
+    } else {
+      [self performSelectorOnMainThread:@selector(handleEmpty) withObject:nil waitUntilDone:NO];
     }
   }
   
   if (self.currentString != nil)
     self.lastString = [NSString stringWithString:self.currentString];
   
+}
+
+- (void)handleEmpty {
+  self.dataSource = [[TTListDataSource alloc] init];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -124,9 +130,20 @@
 - (void)doSearch:(NSString*)trimmed {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   NSMutableDictionary* results = [APIGateway autocomplete:trimmed];
-  NSArray* users = [results objectForKey:@"users"];
-  NSLog([users description]);
+  [self performSelectorOnMainThread:@selector(handleResults:) withObject:[results objectForKey:@"users"] waitUntilDone:NO];
   [autoreleasepool release];
+}
+
+- (void)handleResults:(NSArray*)users {
+  TTListDataSource* list = [[TTListDataSource alloc] init];
+  
+  if ([users count] == 0)
+    [list.items addObject:[TTTableTextItem itemWithText:@"-- no results --"]];
+  
+  for (NSMutableDictionary* user in users) {
+    [list.items addObject:[TTTableTextItem itemWithText:[user objectForKey:@"full_name"] URL:[NSString stringWithFormat:@"yammer://user?id=%@", [user objectForKey:@"id"]]]];
+  }
+  self.dataSource = list;
 }
 
 
