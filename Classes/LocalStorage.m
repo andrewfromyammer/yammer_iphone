@@ -102,6 +102,13 @@ static NSString *BASE_URL      = @"/base_url.txt";
 + (NSString *)getAccessToken {
   [LocalStorage createDirectories];
   return [LocalStorage getFile:ACCESS_TOKEN];
+	//token: "BnAVT4Y7Ewbn0wfvK3O8Aw", secret: "oZWvekwFYhB0xxZ68wn7BH0PDlQlkz9FoxHg8v9SU",
+
+	//BnAVT4Y7Ewbn0wfvK3O8Aw
+	//return @"oauth_token=cOLQPagGu0nCpuRdeJKhQ&oauth_token_secret=AePOt9XKXx1rfJfoYVsLVSCg8gCaddIIrh5haWgui0";
+	
+	//Lm3il4pIKiCe5Xe8RsQLYZOHK8QfsKJ8YSTDFEGUQ%26oZWvekwFYhB0xxZ68wn7BH0PDlQlkz9FoxHg8v9SU
+
 }
 
 + (NSString *)getRequestToken {

@@ -15,7 +15,10 @@
 
 + (void)getRequestToken:(BOOL)createNewAccount;
 + (BOOL)getAccessToken:(NSString *)launchURL callbackToken:(NSString *)token;
-+ (void)addAuthHeader:(NSMutableURLRequest*)request;
++ (void)addAccessAuthHeader:(NSMutableURLRequest*)request;
++ (void)addAuthHeader:(NSMutableURLRequest*)request token:(NSString*)token secret:(NSString*)secret verifier:(NSString*)verifier;
++ (NSString*)extractToken:(NSString*)body;
++ (NSString*)extractSecret:(NSString*)body;
 
 + (NSString *)httpGet:(NSString *)path style:(NSString *)style;
 + (NSString *)baseURL;

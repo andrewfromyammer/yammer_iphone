@@ -30,44 +30,57 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   exit(0); 
 }
 
-+ (void)addAuthHeader:(NSMutableURLRequest*)request {
++ (NSString*)extractToken:(NSString*)body {
+	NSArray *pairs = [body componentsSeparatedByString:@"&"];
+	return [[[pairs objectAtIndex:0] componentsSeparatedByString:@"="] objectAtIndex:1];
+}
+
++ (NSString*)extractSecret:(NSString*)body {
+	NSArray *pairs = [body componentsSeparatedByString:@"&"];
+	return [[[pairs objectAtIndex:1] componentsSeparatedByString:@"="] objectAtIndex:1];
+}
+
++ (void)addAccessAuthHeader:(NSMutableURLRequest*)request {
+	NSString* token = [OAuthGateway extractToken:[LocalStorage getAccessToken]];
+	NSString* secret = [OAuthGateway extractSecret:[LocalStorage getAccessToken]];	
+	[OAuthGateway addAuthHeader:request token:token secret:secret verifier:nil];
+}
+
++ (void)addAuthHeader:(NSMutableURLRequest*)request token:(NSString*)token secret:(NSString*)secret verifier:(NSString*)verifier {	
 	NSString* oauthToken = @"";
-	NSArray *pairs = [[LocalStorage getAccessToken] componentsSeparatedByString:@"&"];
+	NSString* oauthVerifier = @"";
   NSString* sig = [NSString stringWithFormat:@"%@%@26", [OAuthCustom secret], CFSTR("%")];
 	
-	if ([LocalStorage getAccessToken]) {
-    NSString* token = [[[pairs objectAtIndex:0] componentsSeparatedByString:@"="] objectAtIndex:1];
-		NSString* secret = [[[pairs objectAtIndex:1] componentsSeparatedByString:@"="] objectAtIndex:1];
-
-		oauthToken = [NSString stringWithFormat:@"oauth_token=\"%@\", ", token];
+	if (token) {
+		oauthToken = [NSString stringWithFormat:@"oauth_token=\"%@\", ", token];		
 		sig = [NSString stringWithFormat:@"%@%@", sig, secret];
 	}
 	
-  NSString *oauthHeader = [NSString stringWithFormat:@"OAuth realm=\"\", oauth_consumer_key=\"%@\", %@oauth_signature_method=\"PLAINTEXT\", oauth_signature=\"%@\", oauth_timestamp=\"%@\", oauth_nonce=\"%@\", oauth_version=\"1.0\"",
+	if (verifier) {
+		oauthVerifier = [NSString stringWithFormat:@"oauth_verifier=\"%@\", ", verifier];
+	}
+	
+  NSString *oauthHeader = [NSString stringWithFormat:@"OAuth realm=\"\", oauth_consumer_key=\"%@\", %@oauth_signature_method=\"PLAINTEXT\", oauth_signature=\"%@\", oauth_timestamp=\"%@\", oauth_nonce=\"%@\", %@oauth_version=\"1.0\"",
                              [OAuthCustom theKey],
                              oauthToken,
                              sig,
                              [[NSDate date] description],
-														 [[NSDate date] description]];
+														 [[NSDate date] description],
+   													 oauthVerifier];
+	
+	NSLog(oauthHeader);
 	
   [request setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
 }
 
 + (void)getRequestToken:(BOOL)createNewAccount {
   
-  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
-                                                  secret:[OAuthCustom secret]];
-  
   NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/oauth/request_token", [OAuthGateway baseURL]]];
-  
-  OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-                                                                 consumer:consumer
-                                                                    token:nil   // we don't have a Token yet
-                                                                    realm:nil   // our service provider doesn't specify a realm
-                                                        signatureProvider:nil]; // use the default method, HMAC-SHA1
-  
+	
+	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+	[OAuthGateway addAuthHeader:request token:nil secret:nil verifier:nil];	
+	  
   [request setHTTPMethod:@"POST"];
-  [request prepare];
   
   NSURLResponse *response;
   NSError *error;
@@ -84,34 +97,29 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
     NSString *responseBody = [[NSString alloc] initWithData:responseData
                                                    encoding:NSUTF8StringEncoding];
 
-    OAToken *requestToken = [[OAToken alloc] initWithHTTPResponseBody:responseBody];
     [LocalStorage saveRequestToken:responseBody];
+
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:
                                                 [NSString stringWithFormat:@"%@/oauth/authorize?oauth_token=%@&login=%@", 
                                                  [OAuthGateway baseURL], 
-                                                 requestToken.key,
+																								 [OAuthGateway extractToken:responseBody],
                                                  login
                                                  ]]];
   }
 }
 
-+ (BOOL)getAccessToken:(NSString *)launchURL callbackToken:(NSString *)callbackToken {
-  OAToken *requestToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getRequestToken]];  
-  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
-                                                  secret:[OAuthCustom secret]];
-  
++ (BOOL)getAccessToken:(NSString *)launchURL callbackToken:(NSString *)callbackToken {  
   NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/oauth/access_token", [OAuthGateway baseURL]]];
   
-  OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-                                                                 consumer:consumer
-                                                                    token:requestToken
-                                                                    realm:nil   
-                                                        signatureProvider:nil];
+	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+
+	NSString* token = [OAuthGateway extractToken:[LocalStorage getRequestToken]];
+	NSString* secret = [OAuthGateway extractSecret:[LocalStorage getRequestToken]];	
   
   [request setHTTPMethod:@"POST"];
   request.HTTPShouldHandleCookies = NO;
   
-  NSMutableArray *oauthParams = [NSMutableArray array];
+  NSString* verifier = @"";
   if (launchURL) {
     // yammer://verify?oauth_token=1111111111111&callback_token=AC45&more=true
 
@@ -127,15 +135,12 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
       }
     }
     
-    [oauthParams addObject:[[OARequestParameter alloc] initWithName:@"callback_token" 
-                                                              value:[dict objectForKey:@"callback_token"]]];
+    verifier = [dict objectForKey:@"callback_token"];
   } else if (callbackToken) {
-    [oauthParams addObject:[[OARequestParameter alloc] initWithName:@"callback_token" 
-                                                              value:callbackToken]];
+    verifier = callbackToken;
   }  
 
-  [request setParameters:oauthParams];  	
-  [request prepare];
+	[OAuthGateway addAuthHeader:request token:token secret:secret verifier:verifier];
 	
   NSURLResponse *response;
   NSError *error;
@@ -193,18 +198,8 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 + (NSString *)httpGet:(NSString *)path style:(NSString *)style {  
   NSURL *url = [OAuthGateway fixRelativeURL:path];
     
-//  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
- //                                                 secret:[OAuthCustom secret]];
-  
-//  OAToken *accessToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getAccessToken]];
-  
- // OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-   //                                                              consumer:consumer
-     //                                                               token:accessToken
-       //                                                             realm:nil   
-         //                                               signatureProvider:nil];
   NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-  [OAuthGateway addAuthHeader:request];
+  [OAuthGateway addAccessAuthHeader:request];
   request.HTTPShouldHandleCookies = NO;
   
   return [OAuthGateway handleConnection:request style:style];  
