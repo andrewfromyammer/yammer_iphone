@@ -66,9 +66,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
                              sig,
                              [[NSDate date] timeIntervalSince1970],
    													 [[NSDate date] timeIntervalSince1970],
-   													 oauthVerifier];
-	
-	NSLog(oauthHeader);
+   													 oauthVerifier];	
 	
   [request setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
 }
@@ -185,13 +183,12 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
       [YammerAppDelegate showError:ERROR_OUT_OF_RANGE style:style];
     return nil;
   } else if ([response statusCode] >= 400) {
-  
 //    NSString *detail = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 //    NSLog(detail);
     [YammerAppDelegate showError:[NSString stringWithFormat:@"We're sorry, something has gone wrong and we've been notified.  Error code: %d", [response statusCode]] style:style];
     return nil;
   }
-  
+
   return [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 }
 
