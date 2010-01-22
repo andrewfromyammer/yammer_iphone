@@ -30,6 +30,28 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   exit(0); 
 }
 
++ (void)addAuthHeader:(NSMutableURLRequest*)request {
+	NSString* oauthToken = @"";
+	NSArray *pairs = [[LocalStorage getAccessToken] componentsSeparatedByString:@"&"];
+  NSString* sig = [NSString stringWithFormat:@"%@%@26", [OAuthCustom secret], CFSTR("%")];
+	
+	if ([LocalStorage getAccessToken]) {
+    NSString* token = [[[pairs objectAtIndex:0] componentsSeparatedByString:@"="] objectAtIndex:1];
+		NSString* secret = [[[pairs objectAtIndex:1] componentsSeparatedByString:@"="] objectAtIndex:1];
+
+		oauthToken = [NSString stringWithFormat:@"oauth_token=\"%@\", ", token];
+		sig = [NSString stringWithFormat:@"%@%@", sig, secret];
+	}
+	
+  NSString *oauthHeader = [NSString stringWithFormat:@"OAuth realm=\"\", oauth_consumer_key=\"%@\", %@oauth_signature_method=\"PLAINTEXT\", oauth_signature=\"%@\", oauth_timestamp=\"%@\", oauth_nonce=\"%@\", oauth_version=\"1.0\"",
+                             [OAuthCustom theKey],
+                             oauthToken,
+                             sig,
+                             [[NSDate date] description],
+														 [[NSDate date] description]];
+	
+  [request setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
+}
 
 + (void)getRequestToken:(BOOL)createNewAccount {
   
@@ -139,7 +161,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   return [NSURL URLWithString:[NSString stringWithFormat:@"%@", path]];
 }
 
-+ (NSString *)handleConnection:(OAMutableURLRequest *)request style:(NSString *)style {  
++ (NSString *)handleConnection:(NSMutableURLRequest*)request style:(NSString*)style {  
   NSHTTPURLResponse *response;
   NSError *error;
   NSData *responseData;
@@ -171,20 +193,20 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 + (NSString *)httpGet:(NSString *)path style:(NSString *)style {  
   NSURL *url = [OAuthGateway fixRelativeURL:path];
     
-  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
-                                                  secret:[OAuthCustom secret]];
+//  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
+ //                                                 secret:[OAuthCustom secret]];
   
-  OAToken *accessToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getAccessToken]];
+//  OAToken *accessToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getAccessToken]];
   
-  OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-                                                                 consumer:consumer
-                                                                    token:accessToken
-                                                                    realm:nil   
-                                                        signatureProvider:nil];
-  
+ // OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
+   //                                                              consumer:consumer
+     //                                                               token:accessToken
+       //                                                             realm:nil   
+         //                                               signatureProvider:nil];
+  NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+  [OAuthGateway addAuthHeader:request];
   request.HTTPShouldHandleCookies = NO;
   
-  [request prepare];
   return [OAuthGateway handleConnection:request style:style];  
 }
 

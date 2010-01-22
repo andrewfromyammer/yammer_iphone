@@ -15,12 +15,13 @@
 
 + (void)getRequestToken:(BOOL)createNewAccount;
 + (BOOL)getAccessToken:(NSString *)launchURL callbackToken:(NSString *)token;
++ (void)addAuthHeader:(NSMutableURLRequest*)request;
 
 + (NSString *)httpGet:(NSString *)path style:(NSString *)style;
 + (NSString *)baseURL;
 + (void)logout;
 + (NSURL *)fixRelativeURL:(NSString *)path;
-+ (NSString *)handleConnection:(OAMutableURLRequest *)request style:(NSString *)style;
++ (NSString *)handleConnection:(NSMutableURLRequest *)request style:(NSString *)style;
 + (BOOL)httpGet200vsError:(NSString *)path;
 + (NSData *)httpDataGet:(NSString *)path;
 
