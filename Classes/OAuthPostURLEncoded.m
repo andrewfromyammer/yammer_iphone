@@ -20,17 +20,8 @@
   
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   
-  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
-                                                  secret:[OAuthCustom secret]];
-  
-  OAToken *accessToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getAccessToken]];
-  
-  OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-                                                                 consumer:consumer
-                                                                    token:accessToken
-                                                                    realm:nil   
-                                                        signatureProvider:[OAPlaintextSignatureProvider alloc]];
-  
+  NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+  [OAuthGateway addAccessAuthHeader:request];
   [request setHTTPMethod:method];
   request.HTTPShouldHandleCookies = NO;
   
@@ -42,7 +33,6 @@
                                                               value:[params objectForKey:[keys objectAtIndex:i]]]];
   
   [request setParameters:oauthParams];
-  [request prepare];
       
   return [OAuthGateway handleConnection:request style:style] != nil;
 }

@@ -60,12 +60,12 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 		oauthVerifier = [NSString stringWithFormat:@"oauth_verifier=\"%@\", ", verifier];
 	}
 	
-  NSString *oauthHeader = [NSString stringWithFormat:@"OAuth realm=\"\", oauth_consumer_key=\"%@\", %@oauth_signature_method=\"PLAINTEXT\", oauth_signature=\"%@\", oauth_timestamp=\"%@\", oauth_nonce=\"%@\", %@oauth_version=\"1.0\"",
+  NSString *oauthHeader = [NSString stringWithFormat:@"OAuth realm=\"\", oauth_consumer_key=\"%@\", %@oauth_signature_method=\"PLAINTEXT\", oauth_signature=\"%@\", oauth_timestamp=\"%f\", oauth_nonce=\"%f\", %@oauth_version=\"1.0\"",
                              [OAuthCustom theKey],
                              oauthToken,
                              sig,
-                             [[NSDate date] description],
-														 [[NSDate date] description],
+                             [[NSDate date] timeIntervalSince1970],
+   													 [[NSDate date] timeIntervalSince1970],
    													 oauthVerifier];
 	
 	NSLog(oauthHeader);
@@ -208,20 +208,9 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 + (BOOL)httpGet200vsError:(NSString *)path {  
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   
-  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
-                                                  secret:[OAuthCustom secret]];
-  
-  OAToken *accessToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getAccessToken]];
-  
-  OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-                                                                 consumer:consumer
-                                                                    token:accessToken
-                                                                    realm:nil   
-                                                        signatureProvider:nil];
-  
+  NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+  [OAuthGateway addAccessAuthHeader:request];
   request.HTTPShouldHandleCookies = NO;
-  
-  [request prepare];
   
   NSHTTPURLResponse *response;
   NSError *error;
@@ -242,20 +231,9 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 + (NSData *)httpDataGet:(NSString *)path {  
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   
-  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
-                                                  secret:[OAuthCustom secret]];
-  
-  OAToken *accessToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getAccessToken]];
-  
-  OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-                                                                 consumer:consumer
-                                                                    token:accessToken
-                                                                    realm:nil   
-                                                        signatureProvider:nil];
-  
+  NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+  [OAuthGateway addAccessAuthHeader:request];
   request.HTTPShouldHandleCookies = NO;
-  
-  [request prepare];
   
   NSHTTPURLResponse *response;
   NSError *error;

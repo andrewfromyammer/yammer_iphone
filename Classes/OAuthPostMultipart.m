@@ -19,16 +19,9 @@
   
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   
-  OAConsumer *consumer = [[OAConsumer alloc] initWithKey:[OAuthCustom theKey]
-                                                  secret:[OAuthCustom secret]];
-  
-  OAToken *accessToken = [[OAToken alloc] initWithHTTPResponseBody:[LocalStorage getAccessToken]];
-  
-  OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-                                                                 consumer:consumer
-                                                                    token:accessToken
-                                                                    realm:nil   
-                                                        signatureProvider:nil];
+  NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+  [OAuthGateway addAccessAuthHeader:request];
+  request.HTTPShouldHandleCookies = NO;
   
   [request setHTTPMethod:@"POST"];
   
@@ -51,9 +44,7 @@
 	[body appendData:[[NSString stringWithString:@"Content-Type: image/jpeg\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
 	[body appendData:[NSData dataWithData:data]];
 	[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];  
-  
-  [request prepare];
-  
+    
 	[request setHTTPBody:body];
   [request setValue:[NSString stringWithFormat:@"%d", [body length]] forHTTPHeaderField:@"Content-Length"];
   [request setValue:contentType forHTTPHeaderField:@"Content-Type"]; 
