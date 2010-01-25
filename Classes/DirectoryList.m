@@ -17,7 +17,8 @@
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
   
   NSObject* object = [_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
-    
+  DirectoryList* dl = (DirectoryList*)_controller;  
+	
   if ([object isKindOfClass:[SpinnerWithTextItem class]]) {
     DirectoryList* dl = (DirectoryList*)_controller;
     [dl refreshDirectory];
@@ -31,9 +32,12 @@
     cell.animating = YES;
     
     [NSThread detachNewThreadSelector:@selector(fetchMore) toTarget:_controller withObject:nil];    
-  } else {
+  } else if (dl.currentString == nil) {
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
-  }
+  } else {
+	  [dl doCancel];
+    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+	}
 }
 
 @end
@@ -41,7 +45,7 @@
 @implementation DirectoryList
 
 @synthesize page;
-@synthesize lastString = _lastString, currentString = _currentString, searchThread = _searchThread;
+@synthesize lastString = _lastString, currentString = _currentString, searchThread = _searchThread, searchBar = _searchBar;
 
 - (id)init {
   if (self = [super init]) {
@@ -75,19 +79,15 @@
 - (void)loadView {
   [super loadView];
   
-  UISearchBar* searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-  searchBar.delegate = self;
-  searchBar.showsCancelButton = YES;
-  self.tableView.tableHeaderView = searchBar;
+  self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+  _searchBar.delegate = self;
+  _searchBar.showsCancelButton = YES;
+  self.tableView.tableHeaderView = _searchBar;
   
 }
 
-- (void)typeAheadThreadUpdate {
-  NSLog(@"current %@", self.currentString);
-  NSLog(@"last %@", self.lastString);
-  
+- (void)typeAheadThreadUpdate {  
   if (self.currentString != nil && ![self.currentString isEqualToString:self.lastString]) {
-    NSLog(@"!!!!!change");
     if (self.searchThread != nil) {
       [self.searchThread cancel];
       TT_RELEASE_SAFELY(_searchThread);
@@ -120,11 +120,15 @@
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-  searchBar.text = @"";
-  [searchBar resignFirstResponder];
-  [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];
+	[self doCancel];
+}
+
+- (void)doCancel {
+  [_searchBar resignFirstResponder];
+  _searchBar.text = @"";
   _lastString = @"";
   _currentString = nil;
+  [NSThread detachNewThreadSelector:@selector(loadUsers:) toTarget:self withObject:@"silent"];	
 }
 
 - (void)doSearch:(NSString*)trimmed {
@@ -229,6 +233,7 @@
   TT_RELEASE_SAFELY(_lastString);
   TT_RELEASE_SAFELY(_currentString);
   TT_RELEASE_SAFELY(_searchThread);
+  TT_RELEASE_SAFELY(_searchBar);
 }
 
 - (void)textField:(TTSearchTextField*)textField didSelectObject:(id)object {

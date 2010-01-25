@@ -80,7 +80,9 @@
     [temporaryBarButtonItem release];
 
     self.userId = [query objectForKey:@"id"];
-    
+
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
     [NSThread detachNewThreadSelector:@selector(loadUser) toTarget:self withObject:nil];
   }
   return self;
