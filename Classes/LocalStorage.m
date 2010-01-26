@@ -50,6 +50,7 @@ static NSString *BASE_URL      = @"/base_url.txt";
   [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:FEED_DIR] attributes:nil];
   [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:ATTACHMENTS] attributes:nil];
   [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:ATTACHMENT_THUMBNAILS] attributes:nil];
+  [fileManager createDirectoryAtPath:[documentsDirectory stringByAppendingPathComponent:AUTOCOMPLTE] attributes:nil];
   
   NSError *error;
   [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:USERFILE] error:&error];  
@@ -154,6 +155,7 @@ static NSString *BASE_URL      = @"/base_url.txt";
   [LocalStorage removeFile:MESSAGE_CACHE];
   [LocalStorage removeFile:ATTACHMENTS];
   [LocalStorage removeFile:ATTACHMENT_THUMBNAILS];
+	[LocalStorage removeFile:AUTOCOMPLTE];
   [LocalStorage removeFile:ACCOUNT_DIR];
 }
 

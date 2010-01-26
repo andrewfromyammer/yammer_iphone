@@ -19,5 +19,6 @@
 - (void)refreshDirectory;
 - (void)typeAheadThreadUpdate;
 - (void)doCancel;
+- (void)handleResults:(NSArray*)users;
 
 @end

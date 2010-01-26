@@ -15,6 +15,7 @@
 
 #define ATTACHMENTS             @"/attachments"
 #define ATTACHMENT_THUMBNAILS   @"/attachment_thumbnails"
+#define AUTOCOMPLTE             @"/autocomplete"
 
 #define TOKENS                  @"/account/tokens.json"
 #define NETWORKS_CURRENT        @"/account/networks_current.json"

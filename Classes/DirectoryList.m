@@ -7,6 +7,7 @@
 #import "UserProfile.h"
 #import "SpinnerWithTextCell.h"
 #import "DirectorySearchDataSource.h"
+#import "AutoCompleteCache.h"
 
 @interface DirectoryListDelegate : TTTableViewVarHeightDelegate;
 @end
@@ -96,6 +97,13 @@
     
     NSString* trimmed = [self.currentString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([trimmed length] > 0) {      
+			NSString* cached = [LocalStorage getFile:[AutoCompleteCache filename:trimmed]];
+			
+			if (cached != nil) {
+				NSMutableDictionary* results = (NSMutableDictionary*)[cached JSONValue];
+				[self performSelectorOnMainThread:@selector(handleResults:) withObject:[results objectForKey:@"users"] waitUntilDone:NO];
+			}
+			
       self.searchThread = [[NSThread alloc] initWithTarget:self selector:@selector(doSearch:) object:trimmed];
       [self.searchThread start];
     } else {
@@ -145,7 +153,7 @@
     [list.items addObject:[TTTableTextItem itemWithText:@"-- no results --"]];
   
   for (NSMutableDictionary* user in users) {
-    [list.items addObject:[TTTableTextItem itemWithText:[user objectForKey:@"full_name"] URL:[NSString stringWithFormat:@"yammer://user?id=%@", [user objectForKey:@"id"]]]];
+    [list.items addObject:[TTTableTextItem itemWithText:[UserProfile safeName:user] URL:[NSString stringWithFormat:@"yammer://user?id=%@", [user objectForKey:@"id"]]]];
   }
   self.dataSource = list;
 }

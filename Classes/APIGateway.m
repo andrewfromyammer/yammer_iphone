@@ -7,6 +7,7 @@
 #import "NSString+SBJSON.h"
 #import "NSObject+SBJSON.h"
 #import "YammerAppDelegate.h"
+#import "AutoCompleteCache.h"
 
 @implementation APIGateway
 
@@ -99,13 +100,15 @@
   return nil;
 }
 
-+ (NSMutableDictionary*)autocomplete:(NSString*)prefix {
++ (NSMutableDictionary*)autocomplete:(NSString*)prefix {	
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
   NSString *json = [OAuthGateway httpGet:[NSString stringWithFormat:@"/api/v1/autocomplete.json?prefix=%@", prefix] style:nil];
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
-  if (json)
+  if (json) {
+		[AutoCompleteCache save:prefix data:json];
     return (NSMutableDictionary *)[json JSONValue];
+	}
   
   return nil;  
 }

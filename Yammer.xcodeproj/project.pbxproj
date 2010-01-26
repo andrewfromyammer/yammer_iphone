@@ -10,6 +10,7 @@
 		0004D3CA10449C6A005F49DF /* YammerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0004D3C910449C6A005F49DF /* YammerMessage.m */; };
 		0004D3EF10449CB3005F49DF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0004D3EE10449CB3005F49DF /* CoreData.framework */; };
 		0004D45310449F9A005F49DF /* Yammer.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0004D45210449F9A005F49DF /* Yammer.xcdatamodel */; };
+		00114725110F6F9A00A6691D /* AutoCompleteCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 00114724110F6F9A00A6691D /* AutoCompleteCache.m */; };
 		0014B3E7104624FC003A7761 /* TTTableYammerViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014B3E6104624FC003A7761 /* TTTableYammerViewDelegate.m */; };
 		00236A4310FCF445008B007E /* pdf.png in Resources */ = {isa = PBXBuildFile; fileRef = 00236A4210FCF445008B007E /* pdf.png */; };
 		00236A5710FCF889008B007E /* FullSizeDoc.m in Sources */ = {isa = PBXBuildFile; fileRef = 00236A5610FCF889008B007E /* FullSizeDoc.m */; };
@@ -145,6 +146,8 @@
 		0004D3C910449C6A005F49DF /* YammerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YammerMessage.m; sourceTree = "<group>"; };
 		0004D3EE10449CB3005F49DF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		0004D45210449F9A005F49DF /* Yammer.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Yammer.xcdatamodel; sourceTree = "<group>"; };
+		00114723110F6F9A00A6691D /* AutoCompleteCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoCompleteCache.h; sourceTree = "<group>"; };
+		00114724110F6F9A00A6691D /* AutoCompleteCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoCompleteCache.m; sourceTree = "<group>"; };
 		0014B3E5104624FC003A7761 /* TTTableYammerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTableYammerViewDelegate.h; sourceTree = "<group>"; };
 		0014B3E6104624FC003A7761 /* TTTableYammerViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTableYammerViewDelegate.m; sourceTree = "<group>"; };
 		00236A4210FCF445008B007E /* pdf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pdf.png; path = Images/pdf.png; sourceTree = "<group>"; };
@@ -379,6 +382,8 @@
 				003B4503104582C600310B73 /* NSDate-Ago.m */,
 				003B4500104582C600310B73 /* LocalStorage.h */,
 				003B4501104582C600310B73 /* LocalStorage.m */,
+				00114723110F6F9A00A6691D /* AutoCompleteCache.h */,
+				00114724110F6F9A00A6691D /* AutoCompleteCache.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -831,6 +836,7 @@
 				00EB608D10D961AD00318936 /* TypeAheadDemo.m in Sources */,
 				002A9CF910F6664B00BFD48C /* SendMail.m in Sources */,
 				00236A5710FCF889008B007E /* FullSizeDoc.m in Sources */,
+				00114725110F6F9A00A6691D /* AutoCompleteCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -949,8 +955,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Andrew Arrow (69L9J483YE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Andrew Arrow (69L9J483YE)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -960,8 +966,8 @@
 					"-ObjC",
 				);
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "BD17438C-3055-412B-A901-26FD60E2F1A1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BD17438C-3055-412B-A901-26FD60E2F1A1";
 				SDKROOT = iphoneos3.1;
 			};
 			name = Debug;
