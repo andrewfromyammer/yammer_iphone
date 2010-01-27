@@ -142,7 +142,8 @@
 - (void)doSearch:(NSString*)trimmed {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   NSMutableDictionary* results = [APIGateway autocomplete:trimmed];
-  [self performSelectorOnMainThread:@selector(handleResults:) withObject:[results objectForKey:@"users"] waitUntilDone:NO];
+	if (results)
+    [self performSelectorOnMainThread:@selector(handleResults:) withObject:[results objectForKey:@"users"] waitUntilDone:NO];
   [autoreleasepool release];
 }
 

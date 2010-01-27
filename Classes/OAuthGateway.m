@@ -170,7 +170,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   NSData *responseData;
 	
 	if (style != nil)
-		[request setTimeoutInterval:3.0];
+		[request setTimeoutInterval:10.0];
   
   responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 
