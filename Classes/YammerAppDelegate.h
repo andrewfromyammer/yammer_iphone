@@ -44,7 +44,6 @@
 
 
 + (void)showError:(NSString *)error style:(NSString *)style;
-- (void)setupNavigator;
 - (void)setBadges:(NSString*)style;
 - (void)setBadge:(FeedMessageList*)fml count:(int)count;
 - (void)refreshMyFeed;
@@ -53,6 +52,7 @@
 - (void)setupNavigator;
 - (void)reloadForFontSizeChange;
 - (int)countViewControllers;
+- (void)enterAppWithAccess;
 
 @end
 

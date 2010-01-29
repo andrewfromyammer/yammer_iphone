@@ -73,8 +73,10 @@
 		00705D1B10485559005D7A3F /* SettingsAdvancedOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1610485559005D7A3F /* SettingsAdvancedOptions.m */; };
 		00705D1C10485559005D7A3F /* SettingsPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D1810485559005D7A3F /* SettingsPush.m */; };
 		00705D21104855BE005D7A3F /* SpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00705D20104855BE005D7A3F /* SpinnerViewController.m */; };
+		0070A272111212DD00A95B4A /* PhotoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0070A271111212DD00A95B4A /* PhotoUtils.m */; };
 		00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 00780FDA108FABEA00F6FA36 /* DirectorySearchDataSource.m */; };
 		00855FFA10B4B04B00E6AA8A /* NetworkList.m in Sources */ = {isa = PBXBuildFile; fileRef = 00855FF910B4B04B00E6AA8A /* NetworkList.m */; };
+		008C30821112599B0020479B /* LoginPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 008C30811112599B0020479B /* LoginPanel.m */; };
 		00901E1710445C8A008E7C7D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00901E1610445C8A008E7C7D /* QuartzCore.framework */; };
 		00901E2010445E82008E7C7D /* libThree20.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00901E1F10445E72008E7C7D /* libThree20.a */; };
 		00901E3910445EB9008E7C7D /* Three20.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00901E3810445EB9008E7C7D /* Three20.bundle */; };
@@ -85,6 +87,7 @@
 		0095A60B1045A681000C3083 /* FeedCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0095A60A1045A681000C3083 /* FeedCache.m */; };
 		0095A60E1045A6AB000C3083 /* FeedMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0095A60D1045A6AB000C3083 /* FeedMetaData.m */; };
 		009C2306104992290056A7F0 /* SpinnerWithTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 009C2305104992290056A7F0 /* SpinnerWithTextCell.m */; };
+		00B7093F11137E8A00ACA083 /* login.png in Resources */ = {isa = PBXBuildFile; fileRef = 00B7093E11137E8A00ACA083 /* login.png */; };
 		00BA7A221045EAD30002AB75 /* FeedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BA7A211045EAD30002AB75 /* FeedList.m */; };
 		00BA7A251045EC1A0002AB75 /* FeedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BA7A241045EC1A0002AB75 /* FeedData.m */; };
 		00BA7A751045F4FA0002AB75 /* MessageDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BA7A741045F4FA0002AB75 /* MessageDetail.m */; };
@@ -107,6 +110,7 @@
 		00EB608D10D961AD00318936 /* TypeAheadDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EB608C10D961AD00318936 /* TypeAheadDemo.m */; };
 		00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EDAF001099F56F00D3F5E9 /* Settings.m */; };
 		00EF42601049D40C00CF3CB5 /* thumbnail_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */; };
+		00F2ABF011123AC800CBE755 /* DirectoryWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F2ABEF11123AC800CBE755 /* DirectoryWidget.m */; };
 		00F2B84710B75C640035B139 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F2B84610B75C640035B139 /* refresh.png */; };
 		00FA2D0C10979AB000C6F2DF /* network.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FA2D0B10979AB000C6F2DF /* network.png */; };
 		00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FA2D151097A51300C6F2DF /* SettingsSwitchNetwork.m */; };
@@ -250,10 +254,14 @@
 		00705D1810485559005D7A3F /* SettingsPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPush.m; sourceTree = "<group>"; };
 		00705D1F104855BE005D7A3F /* SpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpinnerViewController.h; sourceTree = "<group>"; };
 		00705D20104855BE005D7A3F /* SpinnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpinnerViewController.m; sourceTree = "<group>"; };
+		0070A270111212DD00A95B4A /* PhotoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoUtils.h; sourceTree = "<group>"; };
+		0070A271111212DD00A95B4A /* PhotoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoUtils.m; sourceTree = "<group>"; };
 		00780FD9108FABEA00F6FA36 /* DirectorySearchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectorySearchDataSource.h; sourceTree = "<group>"; };
 		00780FDA108FABEA00F6FA36 /* DirectorySearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectorySearchDataSource.m; sourceTree = "<group>"; };
 		00855FF810B4B04B00E6AA8A /* NetworkList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkList.h; sourceTree = "<group>"; };
 		00855FF910B4B04B00E6AA8A /* NetworkList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkList.m; sourceTree = "<group>"; };
+		008C30801112599B0020479B /* LoginPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPanel.h; sourceTree = "<group>"; };
+		008C30811112599B0020479B /* LoginPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginPanel.m; sourceTree = "<group>"; };
 		00901E1610445C8A008E7C7D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		00901E1A10445E72008E7C7D /* Three20.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Three20.xcodeproj; path = ../three20/src/Three20.xcodeproj; sourceTree = SOURCE_ROOT; };
 		00901E3810445EB9008E7C7D /* Three20.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Three20.bundle; path = ../three20/src/Three20.bundle; sourceTree = SOURCE_ROOT; };
@@ -271,6 +279,7 @@
 		0095A60D1045A6AB000C3083 /* FeedMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedMetaData.m; sourceTree = "<group>"; };
 		009C2304104992290056A7F0 /* SpinnerWithTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpinnerWithTextCell.h; sourceTree = "<group>"; };
 		009C2305104992290056A7F0 /* SpinnerWithTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpinnerWithTextCell.m; sourceTree = "<group>"; };
+		00B7093E11137E8A00ACA083 /* login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = login.png; path = Images/login.png; sourceTree = "<group>"; };
 		00BA7A201045EAD30002AB75 /* FeedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedList.h; sourceTree = "<group>"; };
 		00BA7A211045EAD30002AB75 /* FeedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedList.m; sourceTree = "<group>"; };
 		00BA7A231045EC1A0002AB75 /* FeedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedData.h; sourceTree = "<group>"; };
@@ -306,6 +315,8 @@
 		00EDAEFF1099F56F00D3F5E9 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		00EDAF001099F56F00D3F5E9 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		00EF425F1049D40C00CF3CB5 /* thumbnail_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = thumbnail_loading.png; path = Images/thumbnail_loading.png; sourceTree = "<group>"; };
+		00F2ABEE11123AC800CBE755 /* DirectoryWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryWidget.h; sourceTree = "<group>"; };
+		00F2ABEF11123AC800CBE755 /* DirectoryWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryWidget.m; sourceTree = "<group>"; };
 		00F2B84610B75C640035B139 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = Images/refresh.png; sourceTree = "<group>"; };
 		00FA2D0B10979AB000C6F2DF /* network.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = network.png; path = Images/network.png; sourceTree = "<group>"; };
 		00FA2D141097A51300C6F2DF /* SettingsSwitchNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsSwitchNetwork.h; sourceTree = "<group>"; };
@@ -363,6 +374,8 @@
 				00EB608C10D961AD00318936 /* TypeAheadDemo.m */,
 				00236A5510FCF889008B007E /* FullSizeDoc.h */,
 				00236A5610FCF889008B007E /* FullSizeDoc.m */,
+				00F2ABEE11123AC800CBE755 /* DirectoryWidget.h */,
+				00F2ABEF11123AC800CBE755 /* DirectoryWidget.m */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -384,6 +397,8 @@
 				003B4501104582C600310B73 /* LocalStorage.m */,
 				00114723110F6F9A00A6691D /* AutoCompleteCache.h */,
 				00114724110F6F9A00A6691D /* AutoCompleteCache.m */,
+				0070A270111212DD00A95B4A /* PhotoUtils.h */,
+				0070A271111212DD00A95B4A /* PhotoUtils.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -459,6 +474,7 @@
 		006ACB9F10457B840078A4BB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00B7093E11137E8A00ACA083 /* login.png */,
 				00236A4210FCF445008B007E /* pdf.png */,
 				00F2B84610B75C640035B139 /* refresh.png */,
 				00CD58ED10B71FA300CEAD87 /* no_text_splash.png */,
@@ -518,6 +534,15 @@
 				00C6CC3510AE2B5400C96249 /* CheckMarkCell.m */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		008C307E111259730020479B /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				008C30801112599B0020479B /* LoginPanel.h */,
+				008C30811112599B0020479B /* LoginPanel.m */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		00901E1B10445E72008E7C7D /* Products */ = {
@@ -587,6 +612,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				008C307E111259730020479B /* Login */,
 				003B44F91045822B00310B73 /* Networking */,
 				003B44F81045822300310B73 /* Util */,
 				003B44BA10457E9000310B73 /* Widgets */,
@@ -762,6 +788,7 @@
 				00CD58EE10B71FA300CEAD87 /* no_text_splash.png in Resources */,
 				00F2B84710B75C640035B139 /* refresh.png in Resources */,
 				00236A4310FCF445008B007E /* pdf.png in Resources */,
+				00B7093F11137E8A00ACA083 /* login.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,6 +864,9 @@
 				002A9CF910F6664B00BFD48C /* SendMail.m in Sources */,
 				00236A5710FCF889008B007E /* FullSizeDoc.m in Sources */,
 				00114725110F6F9A00A6691D /* AutoCompleteCache.m in Sources */,
+				0070A272111212DD00A95B4A /* PhotoUtils.m in Sources */,
+				00F2ABF011123AC800CBE755 /* DirectoryWidget.m in Sources */,
+				008C30821112599B0020479B /* LoginPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -902,15 +932,15 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /Users/aa/ginc/three20/src;
+				HEADER_SEARCH_PATHS = ../three20/src;
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "6F8D00BF-3148-42A8-B550-A0ED5B733F98";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6F8D00BF-3148-42A8-B550-A0ED5B733F98";
+				PROVISIONING_PROFILE = "AD4A7E00-B650-46B0-9793-0A2051C6BC10";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AD4A7E00-B650-46B0-9793-0A2051C6BC10";
 				SDKROOT = iphoneos3.0;
 			};
 			name = AdHoc;
@@ -928,7 +958,7 @@
 				INFOPLIST_FILE = "Yammer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 2.0;
 				PRODUCT_NAME = Yammer;
-				PROVISIONING_PROFILE = "6F8D00BF-3148-42A8-B550-A0ED5B733F98";
+				PROVISIONING_PROFILE = "AD4A7E00-B650-46B0-9793-0A2051C6BC10";
 				SDKROOT = iphoneos3.0;
 			};
 			name = AdHoc;

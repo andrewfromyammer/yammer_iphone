@@ -1,17 +1,10 @@
-//
-//  SpinnerViewController.m
-//  Yammer
-//
-//  Created by aa on 1/28/09.
-//  Copyright 2009 Yammer, Inc. All rights reserved.
-//
-
 #import "ComposeMessage.h"
 #import "LocalStorage.h"
 #import "APIGateway.h"
 #import "YammerAppDelegate.h"
 #import "MainTabBar.h"
-
+#import "PhotoUtils.h"
+#import "DirectoryWidget.h"
 
 @implementation ComposeMessage
 
@@ -67,6 +60,13 @@
   [self setSendEnabledState];
   [self.input setDelegate:self];
 
+	/*
+	UIBarButtonItem *at = [[UIBarButtonItem alloc] initWithTitle:@"@"
+																												  style:UIBarButtonItemStyleBordered
+																													target:self
+																													action:@selector(typeAhead)];
+  */
+	
   UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                             target:nil
                                                                             action:nil];  
@@ -119,6 +119,14 @@
                                                                          action:@selector(photoSelect)];
   camera.style = UIBarButtonItemStyleBordered;  
   return camera;
+}
+
+- (void)typeAhead {
+	DirectoryWidget *dw = [[DirectoryWidget alloc] init];
+  UINavigationController *modal = [[UINavigationController alloc] initWithRootViewController:dw];
+  [modal.navigationBar setTintColor:[MainTabBar yammerGray]];
+	
+	[self presentModalViewController:modal animated:YES];
 }
 
 - (void)undoIt {
@@ -247,7 +255,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo {
   [picker.view removeFromSuperview];
-  self.imageData = UIImageJPEGRepresentation([self scaleAndRotateImage:image], 90);
+  self.imageData = UIImageJPEGRepresentation([PhotoUtils scaleAndRotateImage:image], 90);
   UIBarButtonItem *removePhoto = [[UIBarButtonItem alloc] initWithTitle:@"Remove Photo" style:UIBarButtonItemStyleBordered
                                                           target:self
                                                           action:@selector(removePhoto)];
@@ -255,161 +263,7 @@
   [input becomeFirstResponder];
 }
 
-- (UIImage *)resizeImage:(UIImage *)image {
-	int w = image.size.width;
-  int h = image.size.height; 
-	
-	CGImageRef imageRef = [image CGImage];
-	
-	int width, height;
-	
-	int destWidth = 640;
-	int destHeight = 480;
-	if(w > h){
-		width = destWidth;
-		height = h*destWidth/w;
-	} else {
-		height = destHeight;
-		width = w*destHeight/h;
-	}
-	
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  
-	CGContextRef bitmap;
-	bitmap = CGBitmapContextCreate(NULL, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedFirst);
-	
-	if (image.imageOrientation == UIImageOrientationLeft) {
-		CGContextRotateCTM (bitmap, M_PI/2);
-		CGContextTranslateCTM (bitmap, 0, -height);
-		
-	} else if (image.imageOrientation == UIImageOrientationRight) {
-		CGContextRotateCTM (bitmap, -M_PI/2);
-		CGContextTranslateCTM (bitmap, -width, 0);
-		
-	} else if (image.imageOrientation == UIImageOrientationUp) {
-		
-	} else if (image.imageOrientation == UIImageOrientationDown) {
-		CGContextTranslateCTM (bitmap, width,height);
-		CGContextRotateCTM (bitmap, -M_PI);
-		
-	}
-	
-	CGContextDrawImage(bitmap, CGRectMake(0, 0, width, height), imageRef);
-	CGImageRef ref = CGBitmapContextCreateImage(bitmap);
-	UIImage *result = [UIImage imageWithCGImage:ref];
-	
-	CGContextRelease(bitmap);
-	CGImageRelease(ref);
-	
-	return result;	
-}
 
-- (UIImage *)scaleAndRotateImage:(UIImage *)image {
-  int kMaxResolution = 640; // Or whatever
-  
-  CGImageRef imgRef = image.CGImage;
-  
-  CGFloat width = CGImageGetWidth(imgRef);
-  CGFloat height = CGImageGetHeight(imgRef);
-  
-  CGAffineTransform transform = CGAffineTransformIdentity;
-  CGRect bounds = CGRectMake(0, 0, width, height);
-  if (width > kMaxResolution || height > kMaxResolution) {
-    CGFloat ratio = width/height;
-    if (ratio > 1) {
-      bounds.size.width = kMaxResolution;
-      bounds.size.height = bounds.size.width / ratio;
-    }
-    else {
-      bounds.size.height = kMaxResolution;
-      bounds.size.width = bounds.size.height * ratio;
-    }
-  }
-  
-  CGFloat scaleRatio = bounds.size.width / width;
-  CGSize imageSize = CGSizeMake(CGImageGetWidth(imgRef), CGImageGetHeight(imgRef));
-  CGFloat boundHeight;
-  UIImageOrientation orient = image.imageOrientation;
-  switch(orient) {
-      
-    case UIImageOrientationUp: //EXIF = 1
-      transform = CGAffineTransformIdentity;
-      break;
-      
-    case UIImageOrientationUpMirrored: //EXIF = 2
-      transform = CGAffineTransformMakeTranslation(imageSize.width, 0.0);
-      transform = CGAffineTransformScale(transform, -1.0, 1.0);
-      break;
-      
-    case UIImageOrientationDown: //EXIF = 3
-      transform = CGAffineTransformMakeTranslation(imageSize.width, imageSize.height);
-      transform = CGAffineTransformRotate(transform, M_PI);
-      break;
-      
-    case UIImageOrientationDownMirrored: //EXIF = 4
-      transform = CGAffineTransformMakeTranslation(0.0, imageSize.height);
-      transform = CGAffineTransformScale(transform, 1.0, -1.0);
-      break;
-      
-    case UIImageOrientationLeftMirrored: //EXIF = 5
-      boundHeight = bounds.size.height;
-      bounds.size.height = bounds.size.width;
-      bounds.size.width = boundHeight;
-      transform = CGAffineTransformMakeTranslation(imageSize.height, imageSize.width);
-      transform = CGAffineTransformScale(transform, -1.0, 1.0);
-      transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
-      break;
-      
-    case UIImageOrientationLeft: //EXIF = 6
-      boundHeight = bounds.size.height;
-      bounds.size.height = bounds.size.width;
-      bounds.size.width = boundHeight;
-      transform = CGAffineTransformMakeTranslation(0.0, imageSize.width);
-      transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
-      break;
-      
-    case UIImageOrientationRightMirrored: //EXIF = 7
-      boundHeight = bounds.size.height;
-      bounds.size.height = bounds.size.width;
-      bounds.size.width = boundHeight;
-      transform = CGAffineTransformMakeScale(-1.0, 1.0);
-      transform = CGAffineTransformRotate(transform, M_PI / 2.0);
-      break;
-      
-    case UIImageOrientationRight: //EXIF = 8
-      boundHeight = bounds.size.height;
-      bounds.size.height = bounds.size.width;
-      bounds.size.width = boundHeight;
-      transform = CGAffineTransformMakeTranslation(imageSize.height, 0.0);
-      transform = CGAffineTransformRotate(transform, M_PI / 2.0);
-      break;
-      
-    default:
-      [NSException raise:NSInternalInconsistencyException format:@"Invalid image orientation"];
-      
-  }
-  
-  UIGraphicsBeginImageContext(bounds.size);
-  
-  CGContextRef context = UIGraphicsGetCurrentContext();
-  
-  if (orient == UIImageOrientationRight || orient == UIImageOrientationLeft) {
-    CGContextScaleCTM(context, -scaleRatio, scaleRatio);
-    CGContextTranslateCTM(context, -height, 0);
-  }
-  else {
-    CGContextScaleCTM(context, scaleRatio, -scaleRatio);
-    CGContextTranslateCTM(context, 0, -height);
-  }
-  
-  CGContextConcatCTM(context, transform);
-  
-  CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, width, height), imgRef);
-  UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();
-  UIGraphicsEndImageContext();
-  
-  return imageCopy;
-}
 
 - (void)removePhoto {
   self.imageData = nil;

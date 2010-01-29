@@ -1,13 +1,4 @@
-//
-//  AutoCompleteCache.h
-//  Yammer
-//
-//  Created by Andrew Arrow on 1/26/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
-
-#import <Foundation/Foundation.h>
-
+#import <Three20/Three20.h>
 
 @interface AutoCompleteCache : NSObject {
 

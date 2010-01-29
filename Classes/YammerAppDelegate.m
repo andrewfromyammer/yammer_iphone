@@ -14,8 +14,8 @@
 #import "FeedList.h"
 #import "SettingsTimeChooser.h"
 #import "NetworkList.h"
-#import "TypeAheadDemo.h"
 #import "SettingsPush.h"
+#import "LoginPanel.h"
 
 @implementation YammerAppDelegate
 
@@ -45,7 +45,7 @@
 }
 
 - (NSString*)version {
-  return @"2.1.3.1";
+  return @"2.1.3.3";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -65,25 +65,45 @@
   self.lastAutocomplete = [NSDate date];
   self.fontSize = [LocalStorage fontSizeFromDisk];
   
-  UIWindow* window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-  window.backgroundColor = [UIColor whiteColor];
-  UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
-  image.frame = CGRectMake(0, 0, 320, 480);
-  [window addSubview:image];
-  [image release];
-  [window makeKeyAndVisible];
-
+  TTNavigator* navigator = [TTNavigator navigator];
+  navigator.supportsShakeToReload = NO;
+  navigator.persistenceMode = TTNavigatorPersistenceModeNone;
+  
+  TTURLMap* map = navigator.URLMap;
+	
+  [map from:@"*" toViewController:[TTWebController class]];
+  [map from:@"yammer://login" toViewController:[LoginPanel class]];
+  [map from:@"yammer://user" toViewController:[UserProfile class]];
+  [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
+  [map from:@"yammer://push" toViewController:[SettingsPush class]];
+  [map from:@"yammer://networks" toViewController:[NetworkList class]];
+  [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
+	
+  [[[navigator visibleViewController] navigationController] setDelegate:self];
+	
   if ([LocalStorage getAccessToken]) {
+		UIWindow* window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+		window.backgroundColor = [UIColor whiteColor];
+		UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+		image.frame = CGRectMake(0, 0, 320, 480);
+		[window addSubview:image];
+		[image release];
+		[window makeKeyAndVisible];
+		
     [NSThread detachNewThreadSelector:@selector(getNetworksThread) toTarget:self withObject:nil];  
   }
-  else 
-    [NSThread detachNewThreadSelector:@selector(postFinishLaunch) toTarget:self withObject:nil];
+  else {
+		[navigator openURL:@"yammer://login" animated:NO];
+    //[NSThread detachNewThreadSelector:@selector(postFinishLaunch) toTarget:self withObject:nil];
+	}
 }
 
 - (void)getNetworksThread {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   [APIGateway networksCurrent:@"silent"];
-  [self performSelectorOnMainThread:@selector(setupNavigator) withObject:nil waitUntilDone:NO];  
+  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+  [[[window subviews] objectAtIndex:0] removeFromSuperview];	
+  [self performSelectorOnMainThread:@selector(enterAppWithAccess) withObject:nil waitUntilDone:NO];  
   [autoreleasepool release];
 }
 
@@ -116,11 +136,11 @@
   [window addSubview:nav.view];
 }
 
-- (void)setupNavigator {  
+- (void)enterAppWithAccess {  
   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 
-  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
-  [[[window subviews] objectAtIndex:0] removeFromSuperview];
+  //UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+  //[[[window subviews] objectAtIndex:0] removeFromSuperview];
 
   self.network_id = (NSNumber*)[LocalStorage getSetting:@"current_network_id"];
   self.network_name = @"Yammer";
@@ -136,22 +156,9 @@
     }
   }
     
-  TTNavigator* navigator = [TTNavigator navigator];
-  navigator.supportsShakeToReload = YES;
-  navigator.persistenceMode = TTNavigatorPersistenceModeNone;
-  
-  TTURLMap* map = navigator.URLMap;
- 
-  [map from:@"*" toViewController:[TTWebController class]];
-  [map from:@"yammer://user" toViewController:[UserProfile class]];
-  [map from:@"yammer://time" toViewController:[SettingsTimeChooser class]];
-  [map from:@"yammer://push" toViewController:[SettingsPush class]];
-  [map from:@"yammer://networks" toViewController:[NetworkList class]];
-  [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
-  [map from:@"yammer://type" toViewController:[TypeAheadDemo class]];
-
-  [navigator openURL:@"yammer://networks" animated:NO];
-  [[[navigator visibleViewController] navigationController] setDelegate:self];
+	TTNavigator* navigator = [TTNavigator navigator];
+	[navigator removeAllViewControllers];
+	[navigator openURL:@"yammer://networks" animated:NO];
 
   NSString* last_in = (NSString*)[LocalStorage getSetting:@"last_in"];
   if (last_in == nil || [networks count] == 1)
@@ -187,13 +194,15 @@
     [LocalStorage removeRequestToken];
     [LocalStorage removeAccessToken];
     
-    
+    /*
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please log in or sign up:"
                                                         delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil
                                                         otherButtonTitles:@"Log In", @"Sign Up", nil];
     actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [actionSheet showInView:[[TTNavigator navigator] window]];
-    [actionSheet release];    
+    [actionSheet release];*/
+		
+		
   }
   [autoreleasepool release];
 }
