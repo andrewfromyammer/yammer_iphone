@@ -49,7 +49,6 @@
 - (void)refreshMyFeed;
 - (NSString*)version;
 - (void)showEnterCallbackTokenScreen;
-- (void)setupNavigator;
 - (void)reloadForFontSizeChange;
 - (int)countViewControllers;
 - (void)enterAppWithAccess;

@@ -54,10 +54,10 @@
 }
 
 - (void)dealloc {
+  [super dealloc];
   TT_RELEASE_SAFELY(_iconImageView);
   TT_RELEASE_SAFELY(_leftSide);
   TT_RELEASE_SAFELY(_rightSide);
-  [super dealloc];
 }
 
 - (void)setObject:(id)object {
