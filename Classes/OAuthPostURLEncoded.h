@@ -13,6 +13,10 @@
 
 }
 
-+ (BOOL)makeHTTPConnection:(NSMutableDictionary *)params path:(NSString *)path method:(NSString *)method style:(NSString*)style;
++ (NSString*)makeHTTPConnection:(NSMutableDictionary *)params 
+													 path:(NSString *)path 
+												 method:(NSString *)method 
+											addHeader:(BOOL)addHeader
+													style:(NSString*)style;
 
 @end

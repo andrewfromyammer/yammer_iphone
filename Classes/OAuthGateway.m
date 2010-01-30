@@ -11,6 +11,7 @@
 #import "LocalStorage.h"
 #import "OAConsumer.h"
 #import "OAMutableURLRequest.h"
+#import "OAuthPostURLEncoded.h"
 #import "YammerAppDelegate.h"
 
 static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
@@ -69,6 +70,26 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
    													 oauthVerifier];	
 	
   [request setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
+}
+
++ (void)getWrapToken:(NSString*)email password:(NSString*)password {
+  
+	NSMutableDictionary* params = [NSMutableDictionary dictionary];
+	[params setObject:email forKey:@"wrap_username"];
+	[params setObject:password forKey:@"wrap_password"];
+	[params setObject:[OAuthCustom theKey] forKey:@"wrap_client_id"];
+	
+
+	NSString* body = [OAuthPostURLEncoded 
+										makeHTTPConnection:params 
+										path:@"/oauth_wrap/access_token" 
+										method:@"POST" 
+										addHeader:NO
+										style:nil];
+  
+	
+	
+	NSLog([body description]);
 }
 
 + (void)getRequestToken:(BOOL)createNewAccount {

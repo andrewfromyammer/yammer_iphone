@@ -2,6 +2,7 @@
 #import "LoginPanel.h"
 #import "MainTabBar.h"
 #import "YammerAppDelegate.h"
+#import "OAuthGateway.h"
 
 @interface LoginCenterButtonItem : TTTableTextItem;
 @end
@@ -97,6 +98,8 @@ static UITextField* thePassword = nil;
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	if ([thePassword isFirstResponder]) {
 		[thePassword resignFirstResponder];
+		
+		[LoginPanel handleLogin:theEmail.text password:thePassword.text];		
 	}
 	else
 	  [thePassword becomeFirstResponder];
@@ -155,11 +158,18 @@ static UITextField* thePassword = nil;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {  
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
   
-  NSObject* object = [_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
+  TTTableTextItem* item = (TTTableTextItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
 	
-  if ([object isKindOfClass:[LoginCenterButtonItem class]]) {
-    YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-	  [yammer enterAppWithAccess];
+  if (![item isKindOfClass:[LoginCenterButtonItem class]])
+		return;
+		
+	if ([item.text isEqualToString:@"Log In"]) {
+		[LoginPanel handleLogin:theEmail.text password:thePassword.text];
+	} else {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:
+																							 [NSString stringWithFormat:@"%@/users/new", 
+																							 [OAuthGateway baseURL]]]];
+		
 	}
 }
 
@@ -209,7 +219,16 @@ static UITextField* thePassword = nil;
   return self;
 }
 
-
++ (void)handleLogin:(NSString*)email password:(NSString*)password {
+	//YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+	//[yammer enterAppWithAccess];
+  TTNavigator* navigator = [TTNavigator navigator];
+	LoginPanel* panel = (LoginPanel*)[navigator visibleViewController];
+	panel.dataSource = nil;
+	[panel showModel:YES];
+	
+	[OAuthGateway getWrapToken:email password:password];
+}
 
 - (void)loadView {
   [super loadView];

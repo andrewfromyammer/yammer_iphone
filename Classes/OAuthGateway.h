@@ -27,5 +27,6 @@
 + (NSString *)handleConnection:(NSMutableURLRequest *)request style:(NSString *)style;
 + (BOOL)httpGet200vsError:(NSString *)path;
 + (NSData *)httpDataGet:(NSString *)path;
++ (void)getWrapToken:(NSString*)email password:(NSString*)password;
 
 @end

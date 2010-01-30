@@ -4,4 +4,6 @@
 
 }
 
++ (void)handleLogin:(NSString*)email password:(NSString*)password;
+
 @end

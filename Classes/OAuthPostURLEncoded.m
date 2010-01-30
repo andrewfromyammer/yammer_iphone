@@ -16,12 +16,17 @@
 
 @implementation OAuthPostURLEncoded
 
-+ (BOOL)makeHTTPConnection:(NSMutableDictionary *)params path:(NSString *)path method:(NSString *)method style:(NSString*)style {  
++ (NSString*)makeHTTPConnection:(NSMutableDictionary *)params 
+													 path:(NSString *)path 
+												 method:(NSString *)method 
+											addHeader:(BOOL)addHeader
+													style:(NSString*)style {  
   
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   
   NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-  [OAuthGateway addAccessAuthHeader:request];
+	if (addHeader)
+    [OAuthGateway addAccessAuthHeader:request];
   [request setHTTPMethod:method];
   request.HTTPShouldHandleCookies = NO;
   
@@ -34,7 +39,7 @@
   
   [request setParameters:oauthParams];
       
-  return [OAuthGateway handleConnection:request style:style] != nil;
+  return [OAuthGateway handleConnection:request style:style];
 }
 
 @end

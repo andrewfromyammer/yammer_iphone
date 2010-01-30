@@ -191,7 +191,7 @@
   if (imageData)
     return [OAuthPostMultipart makeHTTPConnection:params path:@"/api/v1/messages" data:imageData];
   else
-    return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages" method:@"POST" style:nil];
+    return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages" method:@"POST" addHeader:YES style:nil] != nil;
 }
 
 + (BOOL)followingUser:(NSString *)theUserId {
@@ -204,7 +204,7 @@
   [params setObject:theUserId forKey:@"target_id"];
   [params setObject:@"User" forKey:@"target_type"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"DELETE" style:nil];    
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"DELETE" addHeader:YES style:nil] != nil;    
 }
 
 + (BOOL)addFollow:(NSString *)theUserId {
@@ -213,7 +213,7 @@
   [params setObject:theUserId forKey:@"target_id"];
   [params setObject:@"User" forKey:@"target_type"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"POST" style:nil];
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/subscriptions" method:@"POST" addHeader:YES style:nil] != nil;
 }
 
 + (BOOL)sendPushToken:(NSString *)token {
@@ -222,7 +222,7 @@
   [params setObject:token forKey:@"feed_client[client_id]"];
   [params setObject:@"ApplePushDevice" forKey:@"feed_client[type]"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST" style:@"silent"];  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/feed_clients" method:@"POST" addHeader:YES style:@"silent"] != nil;  
 }
 
 + (BOOL)updatePushField:(NSString *)field value:(NSString *)value theId:(NSNumber *)theId pushSettings:(NSMutableDictionary*)pushSettings {
@@ -233,7 +233,7 @@
   
   @synchronized ([UIApplication sharedApplication]) {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
+    if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" addHeader:YES style:nil])
       [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
   }
@@ -249,7 +249,7 @@
   
   @synchronized ([UIApplication sharedApplication]) {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:nil])
+    if ([OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" addHeader:YES style:nil])
       [LocalStorage saveFile:[APIGateway push_file] data:[pushSettings JSONRepresentation]];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
   }
@@ -274,7 +274,7 @@
   }
   
   [params setObject:@"PUT" forKey:@"_method"];
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" style:@"silent"];
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:[NSString stringWithFormat:@"/api/v1/feed_clients/%@", [theId description]] method:@"POST" addHeader:YES style:@"silent"] != nil;
 }
 
 + (BOOL)likeMessage:(NSNumber *)message_id {
@@ -282,8 +282,7 @@
   
   [params setObject:[message_id description] forKey:@"message_id"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages/liked_by" method:@"POST" style:nil];
-  return true;  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages/liked_by" method:@"POST" addHeader:YES style:nil] != nil;
 }
 
 + (BOOL)unlikeMessage:(NSNumber *)message_id {
@@ -292,8 +291,7 @@
   [params setObject:[message_id description] forKey:@"message_id"];
   [params setObject:@"DELETE" forKey:@"_method"];
   
-  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages/liked_by" method:@"POST" style:nil];
-  return true;  
+  return [OAuthPostURLEncoded makeHTTPConnection:params path:@"/api/v1/messages/liked_by" method:@"POST" addHeader:YES style:nil] != nil;
 }
 
 
