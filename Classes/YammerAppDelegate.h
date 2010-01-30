@@ -53,6 +53,7 @@
 - (void)reloadForFontSizeChange;
 - (int)countViewControllers;
 - (void)enterAppWithAccess;
+- (void)setupNavigator;
 
 @end
 

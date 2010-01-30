@@ -45,7 +45,7 @@
 }
 
 - (NSString*)version {
-  return @"2.1.3.3";
+  return @"2.1.3.4";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -64,8 +64,27 @@
   self.last_seen_message_id = -1;
   self.lastAutocomplete = [NSDate date];
   self.fontSize = [LocalStorage fontSizeFromDisk];
-  
-  TTNavigator* navigator = [TTNavigator navigator];
+
+	UIWindow* window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	window.backgroundColor = [UIColor whiteColor];
+	UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
+	image.frame = CGRectMake(0, 0, 320, 480);
+	[window addSubview:image];
+	[image release];
+	[window makeKeyAndVisible];
+	
+  if ([LocalStorage getAccessToken]) {		
+    [NSThread detachNewThreadSelector:@selector(getNetworksThread) toTarget:self withObject:nil];  
+  }
+  else {
+		[self setupNavigator];
+		TTNavigator* navigator = [TTNavigator navigator];
+		[navigator openURL:@"yammer://login" animated:NO];
+	}
+}
+
+- (void)setupNavigator {
+	TTNavigator* navigator = [TTNavigator navigator];
   navigator.supportsShakeToReload = NO;
   navigator.persistenceMode = TTNavigatorPersistenceModeNone;
   
@@ -79,30 +98,15 @@
   [map from:@"yammer://networks" toViewController:[NetworkList class]];
   [map from:@"yammer://tabs" toViewController:[MainTabBar class]];
 	
-  [[[navigator visibleViewController] navigationController] setDelegate:self];
-	
-  if ([LocalStorage getAccessToken]) {
-		UIWindow* window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-		window.backgroundColor = [UIColor whiteColor];
-		UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default.png"]];
-		image.frame = CGRectMake(0, 0, 320, 480);
-		[window addSubview:image];
-		[image release];
-		[window makeKeyAndVisible];
-		
-    [NSThread detachNewThreadSelector:@selector(getNetworksThread) toTarget:self withObject:nil];  
-  }
-  else {
-		[navigator openURL:@"yammer://login" animated:NO];
-    //[NSThread detachNewThreadSelector:@selector(postFinishLaunch) toTarget:self withObject:nil];
-	}
+  [[[navigator visibleViewController] navigationController] setDelegate:self];	
 }
 
 - (void)getNetworksThread {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   [APIGateway networksCurrent:@"silent"];
-  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
-  [[[window subviews] objectAtIndex:0] removeFromSuperview];	
+  //UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+  //[[[window subviews] objectAtIndex:0] removeFromSuperview];	
+	[self setupNavigator];
   [self performSelectorOnMainThread:@selector(enterAppWithAccess) withObject:nil waitUntilDone:NO];  
   [autoreleasepool release];
 }
@@ -128,9 +132,6 @@
 
 - (void)enterAppWithAccess {  
   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-
-  //UIWindow* window = [[UIApplication sharedApplication] keyWindow];
-  //[[[window subviews] objectAtIndex:0] removeFromSuperview];
 
   self.network_id = (NSNumber*)[LocalStorage getSetting:@"current_network_id"];
   self.network_name = @"Yammer";
@@ -170,34 +171,6 @@
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
-
-/*
-- (void)postFinishLaunch {
-  NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  usleep(500000);
-  
-  if ([LocalStorage getRequestToken] && [OAuthCustom callbackTokenInURL] && 
-      [OAuthGateway getAccessToken:self.launchURL callbackToken:nil] && [APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"])    
-    [self performSelectorOnMainThread:@selector(setupNavigator) withObject:nil waitUntilDone:NO];  
-  else if ([LocalStorage getRequestToken] && ![OAuthCustom callbackTokenInURL])
-    [self showEnterCallbackTokenScreen];
-  else {
-    [LocalStorage removeRequestToken];
-    [LocalStorage removeAccessToken];
-    
- 
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please log in or sign up:"
-                                                        delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil
-                                                        otherButtonTitles:@"Log In", @"Sign Up", nil];
-    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
-    [actionSheet showInView:[[TTNavigator navigator] window]];
-    [actionSheet release];
-		
-		
-  }
-  [autoreleasepool release];
-}
-*/
 
 - (void)setBadge:(FeedMessageList*)fml count:(int)count {
   fml.tabBarItem.badgeValue = [NetworkList badgeFromIntToString:count];
