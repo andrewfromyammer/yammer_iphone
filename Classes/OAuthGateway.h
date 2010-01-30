@@ -13,8 +13,6 @@
 
 }
 
-+ (void)getRequestToken:(BOOL)createNewAccount;
-+ (BOOL)getAccessToken:(NSString *)launchURL callbackToken:(NSString *)token;
 + (void)addAccessAuthHeader:(NSMutableURLRequest*)request;
 + (void)addAuthHeader:(NSMutableURLRequest*)request token:(NSString*)token secret:(NSString*)secret verifier:(NSString*)verifier;
 + (NSString*)extractToken:(NSString*)body;
@@ -27,6 +25,6 @@
 + (NSString *)handleConnection:(NSMutableURLRequest *)request style:(NSString *)style;
 + (BOOL)httpGet200vsError:(NSString *)path;
 + (NSData *)httpDataGet:(NSString *)path;
-+ (void)getWrapToken:(NSString*)email password:(NSString*)password;
++ (NSString*)getWrapToken:(NSString*)email password:(NSString*)password;
 
 @end

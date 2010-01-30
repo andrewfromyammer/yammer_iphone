@@ -8,7 +8,6 @@
 #import "MessageDetail.h"
 #import "UserProfile.h"
 #import "NSString+SBJSON.h"
-#import "EnterCallbackToken.h"
 #import "OAuthCustom.h"
 #import "DirectoryList.h"
 #import "FeedList.h"
@@ -26,6 +25,7 @@
 @synthesize unseen_message_count_following, unseen_message_count_received, last_seen_message_id;
 @synthesize lastAutocomplete;
 @synthesize dateOfSelection;
+@synthesize lastStatusCode;
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   self.pushToken = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] 
@@ -126,16 +126,6 @@
   [autoreleasepool release];
 }
 
-- (void)showEnterCallbackTokenScreen {
-  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
-  [[[window subviews] objectAtIndex:0] removeFromSuperview];
-  
-  EnterCallbackToken* ecbt = [[EnterCallbackToken alloc] init];
-  UINavigationController* nav = [[UINavigationController alloc] init];
-  [nav setViewControllers:[NSArray arrayWithObject:ecbt]];
-  [window addSubview:nav.view];
-}
-
 - (void)enterAppWithAccess {  
   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 
@@ -181,6 +171,7 @@
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
+/*
 - (void)postFinishLaunch {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   usleep(500000);
@@ -194,43 +185,19 @@
     [LocalStorage removeRequestToken];
     [LocalStorage removeAccessToken];
     
-    /*
+ 
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please log in or sign up:"
                                                         delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil
                                                         otherButtonTitles:@"Log In", @"Sign Up", nil];
     actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     [actionSheet showInView:[[TTNavigator navigator] window]];
-    [actionSheet release];*/
+    [actionSheet release];
 		
 		
   }
   [autoreleasepool release];
 }
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-  self.createNewAccount = YES;
-  
-  if (buttonIndex == 0)
-    self.createNewAccount = NO;
-  
-  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
-  UIImageView* image = (UIImageView*)[[window subviews] objectAtIndex:0];
-  image.image = [UIImage imageNamed:@"no_text_splash.png"];
-  
-  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Yammer" message:@"This app will temporarily exit and the browser will open so you can authorize it.  The app will re-open when you are done."
-                                                 delegate:self cancelButtonTitle:nil otherButtonTitles:@"Open Browser", nil];
-  [alert show];
-  [alert release];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-  [OAuthGateway getRequestToken:self.createNewAccount];
-}
-
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-  self.launchURL = [url description];
-  return true;
-}
+*/
 
 - (void)setBadge:(FeedMessageList*)fml count:(int)count {
   fml.tabBarItem.badgeValue = [NetworkList badgeFromIntToString:count];

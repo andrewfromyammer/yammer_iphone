@@ -3,6 +3,8 @@
 #import "MainTabBar.h"
 #import "YammerAppDelegate.h"
 #import "OAuthGateway.h"
+#import "LocalStorage.h"
+#import "APIGateway.h"
 
 @interface LoginCenterButtonItem : TTTableTextItem;
 @end
@@ -99,7 +101,7 @@ static UITextField* thePassword = nil;
 	if ([thePassword isFirstResponder]) {
 		[thePassword resignFirstResponder];
 		
-		[LoginPanel handleLogin:theEmail.text password:thePassword.text];		
+		[LoginPanel handleLogin];
 	}
 	else
 	  [thePassword becomeFirstResponder];
@@ -164,7 +166,7 @@ static UITextField* thePassword = nil;
 		return;
 		
 	if ([item.text isEqualToString:@"Log In"]) {
-		[LoginPanel handleLogin:theEmail.text password:thePassword.text];
+		[LoginPanel handleLogin];
 	} else {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:
 																							 [NSString stringWithFormat:@"%@/users/new", 
@@ -194,40 +196,75 @@ static UITextField* thePassword = nil;
 		[self.tableView setScrollEnabled:NO];
 		[self.tableView setBackgroundColor:[UIColor clearColor]];
 		
-		NSMutableArray* sections = [NSMutableArray array];
-		NSMutableArray* items = [NSMutableArray array];
-		
-		[sections addObject:@" "];
-		[sections addObject:@" "];
-		[sections addObject:@" "];
-		
-		NSMutableArray* section1 = [NSMutableArray array];
-		[section1 addObject:[LoginTextFieldItem text:@"Email" isSecure:NO]];
-		[section1 addObject:[LoginTextFieldItem text:@"Password" isSecure:YES]];
-		[items addObject:section1];
-				
-		NSMutableArray* section2 = [NSMutableArray array];
-		[section2 addObject:[LoginCenterButtonItem itemWithText:@"Log In" URL:@"1"]];
-		[items addObject:section2];
-		
-		NSMutableArray* section3 = [NSMutableArray array];
-		[section3 addObject:[LoginCenterButtonItem itemWithText:@"Create New Account" URL:@"1"]];
-		[items addObject:section3];
-				
-		self.dataSource = [[LoginPanelDataSource alloc] initWithItems:items sections:sections];
+		[self createDataSource];
 	}  
   return self;
 }
 
-+ (void)handleLogin:(NSString*)email password:(NSString*)password {
-	//YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
-	//[yammer enterAppWithAccess];
+- (void)createDataSource {
+	NSMutableArray* sections = [NSMutableArray array];
+	NSMutableArray* items = [NSMutableArray array];
+	
+	[sections addObject:@" "];
+	[sections addObject:@" "];
+	[sections addObject:@" "];
+	
+	NSMutableArray* section1 = [NSMutableArray array];
+	[section1 addObject:[LoginTextFieldItem text:@"Email" isSecure:NO]];
+	[section1 addObject:[LoginTextFieldItem text:@"Password" isSecure:YES]];
+	[items addObject:section1];
+	
+	NSMutableArray* section2 = [NSMutableArray array];
+	[section2 addObject:[LoginCenterButtonItem itemWithText:@"Log In" URL:@"1"]];
+	[items addObject:section2];
+	
+	NSMutableArray* section3 = [NSMutableArray array];
+	[section3 addObject:[LoginCenterButtonItem itemWithText:@"Create New Account" URL:@"1"]];
+	[items addObject:section3];
+	
+	self.dataSource = [[LoginPanelDataSource alloc] initWithItems:items sections:sections];	
+}
+
++ (void)handleLogin {	
+	if ([theEmail.text length] < 1 || [thePassword.text length] < 1)
+		return;
+
   TTNavigator* navigator = [TTNavigator navigator];
 	LoginPanel* panel = (LoginPanel*)[navigator visibleViewController];
 	panel.dataSource = nil;
 	[panel showModel:YES];
 	
-	[OAuthGateway getWrapToken:email password:password];
+	[NSThread detachNewThreadSelector:@selector(startLoginThread) toTarget:panel withObject:nil];	
+}
+
+- (void)startLoginThread {
+	NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+	NSString* body = [OAuthGateway getWrapToken:theEmail.text password:thePassword.text];	
+	
+	if (body) {
+		[LocalStorage saveAccessToken:body];
+		if ([APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"]) {
+			[self performSelectorOnMainThread:@selector(goAheadWithLogin) withObject:nil waitUntilDone:NO];
+		}
+		else {
+			[YammerAppDelegate showError:@"Login error - this message will get better before release." style:nil];
+			[self performSelectorOnMainThread:@selector(resetDataSource) withObject:nil waitUntilDone:NO];			
+		}
+	} else {
+		[YammerAppDelegate showError:@"Login error - this message will get better before release." style:nil];
+		[self performSelectorOnMainThread:@selector(resetDataSource) withObject:nil waitUntilDone:NO];
+	}
+	
+  [autoreleasepool release];
+}
+
+- (void)resetDataSource {
+	[self createDataSource];
+}
+
+- (void)goAheadWithLogin {
+	YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+	[yammer enterAppWithAccess];
 }
 
 - (void)loadView {

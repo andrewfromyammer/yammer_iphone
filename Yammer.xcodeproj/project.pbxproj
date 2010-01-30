@@ -93,7 +93,6 @@
 		00BA7A751045F4FA0002AB75 /* MessageDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BA7A741045F4FA0002AB75 /* MessageDetail.m */; };
 		00BA99C610482A07006DE62B /* UserProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BA99C510482A07006DE62B /* UserProfile.m */; };
 		00BEE584106ABA57009B1678 /* OAuthCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BEE583106ABA57009B1678 /* OAuthCustom.m */; };
-		00BEE5D6106AD481009B1678 /* EnterCallbackToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BEE5D5106AD481009B1678 /* EnterCallbackToken.m */; };
 		00C08546104861CB00331BF5 /* dist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00C08545104861CB00331BF5 /* dist.plist */; };
 		00C4F7FA1088D60F0062F370 /* smile_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F7F91088D60F0062F370 /* smile_gray.png */; };
 		00C4F80D108916910062F370 /* smile12x12.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C4F80C108916910062F370 /* smile12x12.png */; };
@@ -290,8 +289,6 @@
 		00BA99C510482A07006DE62B /* UserProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProfile.m; sourceTree = "<group>"; };
 		00BEE580106AB9FB009B1678 /* OAuthCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthCustom.h; sourceTree = "<group>"; };
 		00BEE583106ABA57009B1678 /* OAuthCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthCustom.m; sourceTree = "<group>"; };
-		00BEE5D4106AD481009B1678 /* EnterCallbackToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterCallbackToken.h; sourceTree = "<group>"; };
-		00BEE5D5106AD481009B1678 /* EnterCallbackToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterCallbackToken.m; sourceTree = "<group>"; };
 		00C08545104861CB00331BF5 /* dist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dist.plist; sourceTree = "<group>"; };
 		00C4F7F91088D60F0062F370 /* smile_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile_gray.png; path = Images/smile_gray.png; sourceTree = "<group>"; };
 		00C4F80C108916910062F370 /* smile12x12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile12x12.png; path = Images/smile12x12.png; sourceTree = "<group>"; };
@@ -571,8 +568,6 @@
 				006ACA5F10456A220078A4BB /* MainTabBar.m */,
 				00BA7A731045F4FA0002AB75 /* MessageDetail.h */,
 				00BA7A741045F4FA0002AB75 /* MessageDetail.m */,
-				00BEE5D4106AD481009B1678 /* EnterCallbackToken.h */,
-				00BEE5D5106AD481009B1678 /* EnterCallbackToken.m */,
 				00855FF810B4B04B00E6AA8A /* NetworkList.h */,
 				00855FF910B4B04B00E6AA8A /* NetworkList.m */,
 			);
@@ -852,7 +847,6 @@
 				004B11A6104D9AE200590B22 /* ColorBackground.m in Sources */,
 				003B8A5E10505D6A002BA526 /* FeedDictionary.m in Sources */,
 				00BEE584106ABA57009B1678 /* OAuthCustom.m in Sources */,
-				00BEE5D6106AD481009B1678 /* EnterCallbackToken.m in Sources */,
 				00780FDB108FABEA00F6FA36 /* DirectorySearchDataSource.m in Sources */,
 				00FA2D161097A51300C6F2DF /* SettingsSwitchNetwork.m in Sources */,
 				00EDAF011099F56F00D3F5E9 /* Settings.m in Sources */,

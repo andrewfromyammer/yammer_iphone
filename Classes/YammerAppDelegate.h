@@ -14,6 +14,7 @@
   NSString* pushToken;
   NSString* fontSize;
   NSString* dateOfSelection;
+	NSInteger lastStatusCode;
   BOOL threading;
   BOOL createNewAccount;
   int unseen_message_count_following;
@@ -37,6 +38,7 @@
 @property (nonatomic, retain) NSDate* lastAutocomplete;
 @property BOOL threading;
 @property BOOL createNewAccount;
+@property NSInteger lastStatusCode;
 
 @property int unseen_message_count_following;
 @property int unseen_message_count_received;
@@ -48,7 +50,6 @@
 - (void)setBadge:(FeedMessageList*)fml count:(int)count;
 - (void)refreshMyFeed;
 - (NSString*)version;
-- (void)showEnterCallbackTokenScreen;
 - (void)reloadForFontSizeChange;
 - (int)countViewControllers;
 - (void)enterAppWithAccess;

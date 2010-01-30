@@ -4,6 +4,7 @@
 
 }
 
-+ (void)handleLogin:(NSString*)email password:(NSString*)password;
++ (void)handleLogin;
+- (void)createDataSource;
 
 @end

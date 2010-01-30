@@ -72,7 +72,7 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   [request setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
 }
 
-+ (void)getWrapToken:(NSString*)email password:(NSString*)password {
++ (NSString*)getWrapToken:(NSString*)email password:(NSString*)password {
   
 	NSMutableDictionary* params = [NSMutableDictionary dictionary];
 	[params setObject:email forKey:@"wrap_username"];
@@ -80,103 +80,12 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 	[params setObject:[OAuthCustom theKey] forKey:@"wrap_client_id"];
 	
 
-	NSString* body = [OAuthPostURLEncoded 
+	return [OAuthPostURLEncoded 
 										makeHTTPConnection:params 
 										path:@"/oauth_wrap/access_token" 
 										method:@"POST" 
 										addHeader:NO
-										style:nil];
-  
-	
-	
-	NSLog([body description]);
-}
-
-+ (void)getRequestToken:(BOOL)createNewAccount {
-  
-  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/oauth/request_token", [OAuthGateway baseURL]]];
-	
-	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-	[OAuthGateway addAuthHeader:request token:nil secret:nil verifier:nil];	
-	  
-  [request setHTTPMethod:@"POST"];
-  
-  NSURLResponse *response;
-  NSError *error;
-  NSData *responseData;
-  NSString *login = @"true";
-  if (createNewAccount)
-    login = @"false";
-  
-  responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-  
-  if (response == nil || responseData == nil || error != nil || [(NSHTTPURLResponse *)response statusCode] >= 400) {
-    [YammerAppDelegate showError:@"oauth getRequestToken" style:nil];
-  } else {
-    NSString *responseBody = [[NSString alloc] initWithData:responseData
-                                                   encoding:NSUTF8StringEncoding];
-
-    [LocalStorage saveRequestToken:responseBody];
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:
-                                                [NSString stringWithFormat:@"%@/oauth/authorize?oauth_token=%@&login=%@", 
-                                                 [OAuthGateway baseURL], 
-																								 [OAuthGateway extractToken:responseBody],
-                                                 login
-                                                 ]]];
-  }
-}
-
-+ (BOOL)getAccessToken:(NSString *)launchURL callbackToken:(NSString *)callbackToken {  
-  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/oauth/access_token", [OAuthGateway baseURL]]];
-  
-	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-
-	NSString* token = [OAuthGateway extractToken:[LocalStorage getRequestToken]];
-	NSString* secret = [OAuthGateway extractSecret:[LocalStorage getRequestToken]];	
-  
-  [request setHTTPMethod:@"POST"];
-  request.HTTPShouldHandleCookies = NO;
-  
-  NSString* verifier = @"";
-  if (launchURL) {
-    // yammer://verify?oauth_token=1111111111111&callback_token=AC45&more=true
-
-    NSRange range = [launchURL rangeOfString:@"?"];
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if (range.location != NSNotFound) {
-      NSArray *parts = [[launchURL substringFromIndex:range.location+1] componentsSeparatedByString:@"&"];
-      int i=0;
-      for (i=0; i<[parts count]; i++) {
-        NSArray *key_value = [[parts objectAtIndex:i] componentsSeparatedByString:@"="];
-        if ([key_value count] == 2)
-          [dict setObject:[key_value objectAtIndex:1] forKey:[key_value objectAtIndex:0]];
-      }
-    }
-    
-    verifier = [dict objectForKey:@"callback_token"];
-  } else if (callbackToken) {
-    verifier = callbackToken;
-  }  
-
-	[OAuthGateway addAuthHeader:request token:token secret:secret verifier:verifier];
-	
-  NSURLResponse *response;
-  NSError *error;
-  NSData *responseData;
-  
-  responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-  
-  if (response == nil || responseData == nil || error != nil || [(NSHTTPURLResponse *)response statusCode] >= 400)
-    return false;
-  else {
-    NSString *responseBody = [[NSString alloc] initWithData:responseData
-                                                   encoding:NSUTF8StringEncoding];
-    
-    [LocalStorage saveAccessToken:responseBody];
-    return true;
-  }  
-  
+										style:@"silent"];  
 }
 
 + (NSURL *)fixRelativeURL:(NSString *)path {
@@ -194,17 +103,14 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
 		[request setTimeoutInterval:10.0];
   
   responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-
+	YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  yammer.lastStatusCode = [response statusCode];
+	
   if ((response == nil || responseData == nil) && error == nil) {
     [YammerAppDelegate showError:ERROR_OUT_OF_RANGE style:style];
     return nil;
   } else if (error != nil) {
-    if ([error code] == -1012) {
-      [LocalStorage deleteAccountInfo];
-      exit(1);
-    }
-    else
-      [YammerAppDelegate showError:ERROR_OUT_OF_RANGE style:style];
+	  [YammerAppDelegate showError:ERROR_OUT_OF_RANGE style:style];
     return nil;
   } else if ([response statusCode] >= 400) {
 //    NSString *detail = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
