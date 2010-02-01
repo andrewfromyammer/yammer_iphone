@@ -83,10 +83,11 @@ static UITextField* thePassword = nil;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
   if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
-    _myField = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 275, 30)];
+    _myField = [[UITextField alloc] initWithFrame:CGRectMake(8, 8, 290, 32)];
 		[_myField setKeyboardType:UIKeyboardTypeEmailAddress];
-    _myField.font = [UIFont systemFontOfSize:14];
+    _myField.font = [UIFont systemFontOfSize:16];
 		_myField.delegate = self;
+//		_myField.backgroundColor = [UIColor greenColor];
 		_myField.secureTextEntry = NO;
     [self.contentView addSubview:_myField];
   }
@@ -191,7 +192,9 @@ static UITextField* thePassword = nil;
   if (self = [super init]) {
     self.variableHeightRows = YES;		
     self.navigationBarTintColor = [MainTabBar yammerGray];
-		self.title = @"Welcome to Yammer!";
+		//self.title = @"Welcome to Yammer!";
+		self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title.png"]];
+		
     _tableViewStyle = UITableViewStyleGrouped;
 		[self.tableView setScrollEnabled:NO];
 		[self.tableView setBackgroundColor:[UIColor clearColor]];
