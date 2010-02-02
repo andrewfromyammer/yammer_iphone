@@ -248,8 +248,21 @@ static UITextField* thePassword = nil;
 
 	// "Your network requires that you authenticate via single sign-on. To get your temporary password, please log in to Yammer on your computer and go to yammer.com/iphone."
 
-	if (body) {
-		[LocalStorage saveAccessToken:body];
+	if (body) {		
+		@try {
+			NSArray* pairs = [body componentsSeparatedByString:@"&"];
+			NSMutableDictionary* map = [NSMutableDictionary dictionary];
+			for (NSString* value in pairs) {
+				NSArray* tokens = [value componentsSeparatedByString:@"="];
+				[map setObject:[tokens objectAtIndex:1] forKey:[tokens objectAtIndex:0]];
+			}
+			
+			NSString* token = [map objectForKey:@"wrap_access_token"];
+			NSString* secret = [map objectForKey:@"wrap_refresh_token"];
+			
+			[LocalStorage saveAccessToken:[NSString stringWithFormat:@"t=%@&s=%@", token, secret]];
+		} @catch (NSException *e) {}
+		
 		if ([APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"])
 			[self performSelectorOnMainThread:@selector(goAheadWithLogin) withObject:nil waitUntilDone:NO];		
 		else {
