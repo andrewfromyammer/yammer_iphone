@@ -111,6 +111,8 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
     return nil;
   } else if (error != nil) {
 	  [YammerAppDelegate showError:ERROR_OUT_OF_RANGE style:style];
+		if ([error code] == NSURLErrorUserCancelledAuthentication)
+  		yammer.lastStatusCode = 401;
     return nil;
   } else if ([response statusCode] >= 400) {
 //    NSString *detail = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];

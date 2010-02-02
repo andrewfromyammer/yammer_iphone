@@ -48,6 +48,8 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
   [self dismissModalViewControllerAnimated:YES];
+	// Title: "Feedback Sent"
+  // Body: "Thanks for sending us feedback! If necessary, we may contact you about it."
 }
 
 

@@ -282,14 +282,14 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>7</integer>
-											<integer>5</integer>
+											<integer>14</integer>
+											<integer>8</integer>
 											<integer>4</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 908}, {268, 605}}</string>
+									<string>{{0, 0}, {268, 605}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -504,7 +504,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>LoginPanel.m</string>
+								<string>OAuthGateway.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -512,23 +512,23 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>LoginPanel.m</string>
+										<string>OAuthGateway.m</string>
 										<key>_historyCapacity</key>
 										<integer>10</integer>
 										<key>bookmark</key>
-										<string>006AAA5211176B3800128830</string>
+										<string>00C6F3E11118E89A009FA157</string>
 										<key>history</key>
 										<array>
-											<string>00A8CF801113F5DA000E5F14</string>
-											<string>00A8CF821113F5DA000E5F14</string>
-											<string>00A8CF8D1113F60B000E5F14</string>
-											<string>001615241113FBA3007C2C2F</string>
-											<string>00266E7F1113FF0500398295</string>
-											<string>006AAA1C111752B200128830</string>
-											<string>006AAA1D111752B200128830</string>
-											<string>006AAA4F11176B3800128830</string>
-											<string>006AAA5011176B3800128830</string>
-											<string>006AAA5111176B3800128830</string>
+											<string>00C6F3751118AC4A009FA157</string>
+											<string>00C6F3911118D258009FA157</string>
+											<string>00C6F3A51118D665009FA157</string>
+											<string>00C6F3A61118D665009FA157</string>
+											<string>00C6F3B41118DB12009FA157</string>
+											<string>00C6F3C81118E5B8009FA157</string>
+											<string>00C6F3DB1118E825009FA157</string>
+											<string>00C6F3DC1118E825009FA157</string>
+											<string>00C6F3DD1118E825009FA157</string>
+											<string>00C6F3DE1118E825009FA157</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -589,12 +589,12 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>006AAA1F111752B200128830</string>
-				<string>006AAA20111752B200128830</string>
+				<string>00C6F36D11189F3B009FA157</string>
+				<string>00C6F36E11189F3B009FA157</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>006AAA21111752B200128830</string>
+				<string>00C6F36F11189F3B009FA157</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -797,6 +797,8 @@
 							<string>429pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -836,7 +838,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>00901E4B10445F0F008E7C7D</string>
-				<string>006AAA22111752B200128830</string>
+				<string>00C6F37011189F3B009FA157</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -956,13 +958,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>006AAA23111752B200128830</string>
+				<string>00C6F3781118AC4A009FA157</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>006AAA24111752B200128830</string>
-				<string>006AAA25111752B200128830</string>
-				<string>006AAA26111752B200128830</string>
-				<string>006AAA27111752B200128830</string>
-				<string>006AAA28111752B200128830</string>
+				<string>00C6F3791118AC4A009FA157</string>
+				<string>00C6F37A1118AC4A009FA157</string>
+				<string>00C6F37B1118AC4A009FA157</string>
+				<string>00C6F37C1118AC4A009FA157</string>
+				<string>00C6F37D1118AC4A009FA157</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -1089,6 +1091,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1124,7 +1128,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>006AAA29111752B200128830</string>
+				<string>00C6F37E1118AC4A009FA157</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>

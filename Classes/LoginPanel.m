@@ -170,7 +170,7 @@ static UITextField* thePassword = nil;
 		[LoginPanel handleLogin];
 	} else {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:
-																							 [NSString stringWithFormat:@"%@/users/new", 
+																							 [NSString stringWithFormat:@"%@/", 
 																							 [OAuthGateway baseURL]]]];
 		
 	}
@@ -242,21 +242,32 @@ static UITextField* thePassword = nil;
 
 - (void)startLoginThread {
 	NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
+	YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSString* body = [OAuthGateway getWrapToken:theEmail.text password:thePassword.text];	
-	
+	BOOL error = NO;
+
+	// "Your network requires that you authenticate via single sign-on. To get your temporary password, please log in to Yammer on your computer and go to yammer.com/iphone."
+
 	if (body) {
 		[LocalStorage saveAccessToken:body];
-		if ([APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"]) {
-			[self performSelectorOnMainThread:@selector(goAheadWithLogin) withObject:nil waitUntilDone:NO];
-		}
+		if ([APIGateway usersCurrent:@"silent"] && [APIGateway networksCurrent:@"silent"])
+			[self performSelectorOnMainThread:@selector(goAheadWithLogin) withObject:nil waitUntilDone:NO];		
 		else {
-			[YammerAppDelegate showError:@"Login error - this message will get better before release." style:nil];
-			[self performSelectorOnMainThread:@selector(resetDataSource) withObject:nil waitUntilDone:NO];			
+			[YammerAppDelegate showError:@"There was a network error during login, please try again." style:nil];
+			error = YES;
 		}
 	} else {
-		[YammerAppDelegate showError:@"Login error - this message will get better before release." style:nil];
-		[self performSelectorOnMainThread:@selector(resetDataSource) withObject:nil waitUntilDone:NO];
+		error = YES;
+		if (yammer.lastStatusCode == 403)
+		  [YammerAppDelegate showError:@"Your network requires that you authenticate via single sign-on. To get your temporary password, please log in to Yammer on your computer and go to account/applications." style:nil];
+  	else if (yammer.lastStatusCode == 401)
+	  	[YammerAppDelegate showError:@"Invalid email or password." style:nil];
+		else
+		  [YammerAppDelegate showError:@"An error occurred and we have been notified.  Please try again later." style:nil];
 	}
+	
+	if (error)
+		[self performSelectorOnMainThread:@selector(resetDataSource) withObject:nil waitUntilDone:NO];
 	
   [autoreleasepool release];
 }
