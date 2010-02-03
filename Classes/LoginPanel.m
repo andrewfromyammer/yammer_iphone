@@ -85,6 +85,9 @@ static UITextField* thePassword = nil;
   if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
     _myField = [[UITextField alloc] initWithFrame:CGRectMake(8, 8, 290, 32)];
 		[_myField setKeyboardType:UIKeyboardTypeEmailAddress];
+		[_myField setAutocorrectionType:UITextAutocorrectionTypeNo];
+		[_myField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+		[_myField setEnablesReturnKeyAutomatically:YES];
     _myField.font = [UIFont systemFontOfSize:16];
 		_myField.delegate = self;
 //		_myField.backgroundColor = [UIColor greenColor];
@@ -121,6 +124,7 @@ static UITextField* thePassword = nil;
 		if (item.isSecure) {
 			thePassword = _myField;
   		_myField.returnKeyType = UIReturnKeyDone;
+			[_myField setKeyboardType:UIKeyboardTypeAlphabet];
 		}
 	  else {
 			theEmail = _myField;
