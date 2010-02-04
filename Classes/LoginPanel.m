@@ -127,6 +127,7 @@ static UITextField* thePassword = nil;
 		}
 	  else {
 			theEmail = _myField;
+			[theEmail becomeFirstResponder];
       _myField.returnKeyType = UIReturnKeyNext;
 		}
 		
@@ -191,6 +192,8 @@ static UITextField* thePassword = nil;
 
 @implementation LoginPanel
 
+@synthesize message = _message;
+
 - (id)init {
   if (self = [super init]) {
     self.variableHeightRows = YES;		
@@ -229,6 +232,7 @@ static UITextField* thePassword = nil;
   TTNavigator* navigator = [TTNavigator navigator];
 	LoginPanel* panel = (LoginPanel*)[navigator visibleViewController];
 	panel.dataSource = nil;
+	panel.message.hidden = YES;
 	[panel showModel:YES];
 	
 	[NSThread detachNewThreadSelector:@selector(startLoginThread) toTarget:panel withObject:nil];	
@@ -280,6 +284,7 @@ static UITextField* thePassword = nil;
 }
 
 - (void)resetDataSource {
+	_message.hidden = NO;
 	[self createDataSource];
 }
 
@@ -296,14 +301,19 @@ static UITextField* thePassword = nil;
 	[self.view addSubview:image];
 	
 	TTStyledText* theText = [TTStyledText textFromXHTML:@"     No account? Sign up on <a href=\"https://www.yammer.com/\">yammer.com</a>" lineBreaks:NO URLs:YES];
-  TTStyledTextLabel* message = [[TTStyledTextLabel alloc] initWithFrame:CGRectMake(10,130,300,30)];
-	[message setText:theText];
-	message.backgroundColor = [UIColor clearColor];
-	[self.view addSubview:message];
+  self.message = [[TTStyledTextLabel alloc] initWithFrame:CGRectMake(10,140,300,30)];
+	[_message setText:theText];
+	_message.backgroundColor = [UIColor clearColor];
+	[self.view addSubview:_message];
 }
 
 - (id<UITableViewDelegate>)createDelegate {
   return [[LoginPanelDelegate alloc] initWithController:self];
+}
+
+- (void)dealloc {
+	[super dealloc];
+  TT_RELEASE_SAFELY(_message);
 }
 
 @end
