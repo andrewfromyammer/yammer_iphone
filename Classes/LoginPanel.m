@@ -6,20 +6,20 @@
 #import "LocalStorage.h"
 #import "APIGateway.h"
 
-@interface LoginCenterButtonItem : TTTableTextItem;
+@interface TransparentTextItem : TTTableTextItem;
 @end
 
-@implementation LoginCenterButtonItem
+@implementation TransparentTextItem
 @end
 
-@interface LoginCenterButtonCell : TTTableTextItemCell {
+@interface TransparentTextCell : TTTableTextItemCell {
   UILabel* _myLabel;
 }
 @property (nonatomic, retain) UILabel *myLabel;
 
 @end
 
-@implementation LoginCenterButtonCell
+@implementation TransparentTextCell
 @synthesize myLabel = _myLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
@@ -37,7 +37,7 @@
 - (void)setObject:(id)object {
   if (_item != object) {
     
-    LoginCenterButtonItem* item = object;
+    TransparentTextItem* item = object;
     
 		_myLabel.text = item.text;
 	  self.accessoryType = UITableViewCellAccessoryNone;
@@ -90,7 +90,6 @@ static UITextField* thePassword = nil;
 		[_myField setEnablesReturnKeyAutomatically:YES];
     _myField.font = [UIFont systemFontOfSize:16];
 		_myField.delegate = self;
-//		_myField.backgroundColor = [UIColor greenColor];
 		_myField.secureTextEntry = NO;
     [self.contentView addSubview:_myField];
   }
@@ -123,7 +122,7 @@ static UITextField* thePassword = nil;
 		
 		if (item.isSecure) {
 			thePassword = _myField;
-  		_myField.returnKeyType = UIReturnKeyDone;
+  		_myField.returnKeyType = UIReturnKeyGo;
 			[_myField setKeyboardType:UIKeyboardTypeAlphabet];
 		}
 	  else {
@@ -147,8 +146,8 @@ static UITextField* thePassword = nil;
 
 @implementation LoginPanelDataSource
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
-  if ([object isKindOfClass:[LoginCenterButtonItem class]])
-    return [LoginCenterButtonCell class];
+  if ([object isKindOfClass:[TransparentTextItem class]])
+    return [TransparentTextCell class];
   if ([object isKindOfClass:[LoginTextFieldItem class]])
     return [LoginTextFieldCell class];
 	
@@ -167,7 +166,7 @@ static UITextField* thePassword = nil;
   
   TTTableTextItem* item = (TTTableTextItem*)[_controller.dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
 	
-  if (![item isKindOfClass:[LoginCenterButtonItem class]])
+  if (![item isKindOfClass:[TransparentTextItem class]])
 		return;
 		
 	if ([item.text isEqualToString:@"Log In"]) {
@@ -203,6 +202,7 @@ static UITextField* thePassword = nil;
 		[self.tableView setScrollEnabled:NO];
 		[self.tableView setBackgroundColor:[UIColor clearColor]];
 		
+		self.tableView.frame = CGRectMake(0, 0, 320, 120);
 		[self createDataSource];
 	}  
   return self;
@@ -213,22 +213,12 @@ static UITextField* thePassword = nil;
 	NSMutableArray* items = [NSMutableArray array];
 	
 	[sections addObject:@" "];
-	[sections addObject:@" "];
-	[sections addObject:@" "];
 	
 	NSMutableArray* section1 = [NSMutableArray array];
 	[section1 addObject:[LoginTextFieldItem text:@"Email" isSecure:NO]];
 	[section1 addObject:[LoginTextFieldItem text:@"Password" isSecure:YES]];
 	[items addObject:section1];
-	
-	NSMutableArray* section2 = [NSMutableArray array];
-	[section2 addObject:[LoginCenterButtonItem itemWithText:@"Log In" URL:@"1"]];
-	[items addObject:section2];
-	
-	NSMutableArray* section3 = [NSMutableArray array];
-	[section3 addObject:[LoginCenterButtonItem itemWithText:@"Create New Account" URL:@"1"]];
-	[items addObject:section3];
-	
+		
 	self.dataSource = [[LoginPanelDataSource alloc] initWithItems:items sections:sections];	
 }
 
@@ -305,7 +295,11 @@ static UITextField* thePassword = nil;
 	image.frame = CGRectMake(0, 0, 320, 417);
 	[self.view addSubview:image];
 	
-	
+	TTStyledText* theText = [TTStyledText textFromXHTML:@"     No account? Sign up on <a href=\"https://www.yammer.com/\">yammer.com</a>" lineBreaks:NO URLs:YES];
+  TTStyledTextLabel* message = [[TTStyledTextLabel alloc] initWithFrame:CGRectMake(10,130,300,30)];
+	[message setText:theText];
+	message.backgroundColor = [UIColor clearColor];
+	[self.view addSubview:message];
 }
 
 - (id<UITableViewDelegate>)createDelegate {
