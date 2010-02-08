@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "FeedDictionary.h"
 
-#define DIRECTORY_CACHE  @"/account/directory_cache.json"
 #define SETTINGS         @"/account/settngs.json"
 #define MESSAGE_CACHE    @"message_cache_v3.sqlite"
 
@@ -24,7 +23,10 @@
 
 }
 
-+ (NSString *)localPath;
++ (NSString*)localPath;
+
++ (NSString*)getDirectoryForNetwork;
++ (void)saveDirectoryForNetwork:(NSString*)data;
 
 + (NSString *)getRequestToken;
 + (NSString *)getAccessToken;

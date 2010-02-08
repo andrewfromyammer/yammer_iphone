@@ -83,7 +83,7 @@
   
   if (json) {
     if (page == 1)
-      [LocalStorage saveFile:DIRECTORY_CACHE data:json];
+			[LocalStorage saveDirectoryForNetwork:json];
     return (NSMutableArray *)[json JSONValue];
   }
   

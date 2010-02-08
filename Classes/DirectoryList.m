@@ -69,7 +69,6 @@
 }
 
 - (void)resetForNetworkSwitch {
-  [LocalStorage removeFile:DIRECTORY_CACHE];
   //SpinnerListDataSource* list = [[[SpinnerListDataSource alloc] init] autorelease];
   //[list.items addObject:[SpinnerWithTextItem item]];
   self.dataSource = nil;
@@ -176,7 +175,7 @@
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
   
   NSMutableArray *list;
-  NSString *cached = [LocalStorage getFile:DIRECTORY_CACHE];
+  NSString *cached = [LocalStorage getDirectoryForNetwork];
   if (cached && style != nil)
     list = (NSMutableArray *)[cached JSONValue];
   else {

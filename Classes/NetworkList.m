@@ -293,9 +293,7 @@
       yammer.network_id = [network objectForKey:@"id"];
       [LocalStorage saveSetting:@"current_network_id" value:yammer.network_id];
       [LocalStorage removeFile:[APIGateway push_file]];
-      
-      [LocalStorage removeFile:DIRECTORY_CACHE];
-      
+            
       if (yammer.pushToken && [APIGateway sendPushToken:yammer.pushToken] && pushSettingsJSON != nil) {
         // send existing push settings (if any) to server
         NSMutableDictionary* pushSettings = [pushSettingsJSON JSONValue];

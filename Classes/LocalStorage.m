@@ -233,19 +233,34 @@ static NSString *BASE_URL      = @"/base_url.txt";
   return nil;
 }
 
++ (NSString*)getDirectoryForNetwork {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  return [LocalStorage getFile:[NSString stringWithFormat:@"%@/directory_%@.json", 
+												 ACCOUNT_DIR,
+												 [yammer.network_id description]]];
+}
+
++ (void)saveDirectoryForNetwork:(NSString*)data {
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  [LocalStorage saveFile:[NSString stringWithFormat:@"%@/directory_%@.json", 
+													ACCOUNT_DIR,
+													[yammer.network_id description]] 
+										data:data];
+}
+
 + (NSString *)getNameField {
-  YammerAppDelegate *yam = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
+  YammerAppDelegate *yammer = (YammerAppDelegate *)[[UIApplication sharedApplication] delegate];
   
-  if (yam.showFullNames == nil) {  
+  if (yammer.showFullNames == nil) {  
     NSString *cached = [LocalStorage getFile:[APIGateway user_file]];
     if (cached) {
       NSMutableDictionary *dict = [(NSMutableDictionary *)[cached JSONValue] objectForKey:@"web_preferences"];
-      yam.showFullNames = [dict objectForKey:@"show_full_names"];
+      yammer.showFullNames = [dict objectForKey:@"show_full_names"];
     } else
-      yam.showFullNames = [[NSNumber alloc] initWithBool:true];
+      yammer.showFullNames = [[NSNumber alloc] initWithBool:true];
   }
   
-  if ([yam.showFullNames boolValue])
+  if ([yammer.showFullNames boolValue])
     return @"full_name";
   return @"name";
 }
