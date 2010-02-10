@@ -41,7 +41,8 @@
 
 
 - (void)loadView {
-  self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+	[super loadView];
+  //self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
   
   toggle = [UIButton buttonWithType:UIButtonTypeRoundedRect];
   toggle.frame = CGRectMake(20, 20, 200, 30);

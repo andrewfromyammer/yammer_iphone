@@ -313,6 +313,8 @@ static UITextField* thePassword = nil;
 
 - (void)dealloc {
 	[super dealloc];
+	theEmail = nil;
+	thePassword = nil;
   TT_RELEASE_SAFELY(_message);
 }
 
