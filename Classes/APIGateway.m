@@ -167,6 +167,17 @@
   return nil;
 }
 
++ (NSMutableArray*)networksCurrentWithTimeout {
+  NSString *json = [OAuthGateway httpGetWithTimeout:@"/api/v1/networks/current.json"];
+	
+  if (json) {
+    [LocalStorage saveFile:NETWORKS_CURRENT data:json];
+    return (NSMutableArray *)[json JSONValue];
+  }
+  
+  return nil;	
+}
+
 + (NSMutableArray*)getTokens {
   NSString *json = [OAuthGateway httpGet:@"/api/v1/oauth/tokens.json" style:nil];
   if (json) {

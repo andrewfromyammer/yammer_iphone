@@ -19,6 +19,8 @@
 + (NSString*)extractSecret:(NSString*)body;
 
 + (NSString *)httpGet:(NSString *)path style:(NSString *)style;
++ (NSString *)httpGetWithTimeout:(NSString *)path;
+
 + (NSString *)baseURL;
 + (void)logout;
 + (NSURL *)fixRelativeURL:(NSString *)path;

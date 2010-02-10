@@ -26,6 +26,7 @@
 
 + (NSMutableArray*)getTokens;
 + (NSMutableArray*)networksCurrent:(NSString*)style;
++ (NSMutableArray*)networksCurrentWithTimeout;
 
 + (BOOL)createMessage:(NSString*)body repliedToId:(NSNumber*)repliedToId 
               groupId:(NSNumber*)groupId

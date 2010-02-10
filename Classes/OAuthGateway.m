@@ -134,6 +134,33 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   return [OAuthGateway handleConnection:request style:style];  
 }
 
++ (NSString *)httpGetWithTimeout:(NSString *)path {
+  NSURL *url = [OAuthGateway fixRelativeURL:path];
+	
+  NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+  [OAuthGateway addAccessAuthHeader:request];
+  request.HTTPShouldHandleCookies = NO;
+  
+  NSHTTPURLResponse *response;
+  NSError *error;
+  NSData *responseData;
+	
+	[request setTimeoutInterval:5.0];
+  
+  responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+	
+  if ((response == nil || responseData == nil) && error == nil) {
+    return nil;
+  } else if (error != nil) {
+    return nil;
+  } else if ([response statusCode] >= 400) {
+    return nil;
+  }
+	
+  return [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+}
+
+
 + (BOOL)httpGet200vsError:(NSString *)path {  
   NSURL *url = [OAuthGateway fixRelativeURL:path];
   

@@ -103,7 +103,7 @@
 
 - (void)getNetworksThread {
   NSAutoreleasePool *autoreleasepool = [[NSAutoreleasePool alloc] init];
-  [APIGateway networksCurrent:@"silent"];
+  [APIGateway networksCurrentWithTimeout];
   //UIWindow* window = [[UIApplication sharedApplication] keyWindow];
   //[[[window subviews] objectAtIndex:0] removeFromSuperview];	
 	[self setupNavigator];
