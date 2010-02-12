@@ -22,7 +22,6 @@
 + (NSString *)httpGetWithTimeout:(NSString *)path;
 
 + (NSString *)baseURL;
-+ (void)logout;
 + (NSURL *)fixRelativeURL:(NSString *)path;
 + (NSString *)handleConnection:(NSMutableURLRequest *)request style:(NSString *)style;
 + (BOOL)httpGet200vsError:(NSString *)path;

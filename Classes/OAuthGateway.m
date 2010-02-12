@@ -26,11 +26,6 @@ static NSString *ERROR_OUT_OF_RANGE = @"Network out of range.";
   return [OAuthCustom baseURL];
 }
 
-+ (void)logout {
-  [LocalStorage deleteAccountInfo];
-  exit(0); 
-}
-
 + (NSString*)extractToken:(NSString*)body {
 	NSArray *pairs = [body componentsSeparatedByString:@"&"];
 	return [[[pairs objectAtIndex:0] componentsSeparatedByString:@"="] objectAtIndex:1];

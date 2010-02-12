@@ -68,8 +68,12 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-  if (buttonIndex == 1)
-    [OAuthGateway logout];
+  if (buttonIndex == 1) {
+    [LocalStorage deleteAccountInfo];
+		TTNavigator* navigator = [TTNavigator navigator];
+		[navigator removeAllViewControllers];
+		[navigator openURL:@"yammer://login" animated:NO];		
+  }
 }
 
 

@@ -36,7 +36,8 @@
   else 
     [LocalStorage saveBaseURL:[OAuthCustom devServer]];
   
-  [OAuthGateway logout];
+	[LocalStorage deleteAccountInfo];
+	exit(1);
 }
 
 
