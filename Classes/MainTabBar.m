@@ -43,7 +43,7 @@
 }
 
 - (void)addLogout {
-  UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
+  UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Log Out" style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
   self.navigationItem.rightBarButtonItem = logout;    
 }
 
